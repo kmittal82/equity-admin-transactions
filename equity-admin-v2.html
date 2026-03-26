@@ -1308,7 +1308,7 @@
       <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,18 15,12 9,6"/></svg>
     </div>
     <div class="nav-sub open" id="sub-txns">
-      <div class="nav-sub-item" onclick="switchView('grant-txns')">Grant Transactions</div>
+      <div class="nav-sub-item" onclick="switchView('grant-txns')">Equity Awards</div>
       <div class="nav-sub-item" onclick="switchView('long-share-txns')">Long Share Transactions</div>
       <div class="nav-sub-item" onclick="switchView('approvals')">Approvals & Actions</div>
     </div>
@@ -1712,15 +1712,11 @@
     <div class="view-section" id="view-grant-txns">
       <div class="page-head">
         <div>
-          <div class="page-title">Grant Transactions</div>
+          <div class="page-title">Equity Awards</div>
           <div class="page-sub">Ledger-based equity transaction management</div>
         </div>
         <div class="head-actions">
-          <button class="btn btn-danger" onclick="openModal('modal-terminate')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6h16z"/></svg>
-            Process Termination
-          </button>
-          <button class="btn btn-primary" onclick="openModal('modal-add-grant')">
+<button class="btn btn-primary" onclick="openModal('modal-add-grant')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Add Grant
           </button>
@@ -3051,7 +3047,7 @@ function renderGrantsTable() {
                 </button>
                 <button class="kebab-menu-item danger" onclick="event.stopPropagation(); closeAllKebabs(); openModal('modal-terminate')">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                  Cancel / Terminate
+                  ${isReleasable(g.type) ? 'Forfeiture' : 'Expire'}
                 </button>
               ` : ''}
             </div>
