@@ -3568,8 +3568,6 @@ const shareIssuanceData = [
   }
 ];
 
-let issActiveTab = 'all';
-
 // Approval actions
 const approvalsData = [
   { id: 'ACT-2026-0045', participant: 'Sarah Chen', type: 'Exercise', priority: 'HIGH', status: 'pending', requested: '2026-03-18', approver: 'Finance' },
@@ -4013,18 +4011,323 @@ function filterGrantsTable() {
 }
 
 function renderLongShareTable() {
-  const tbody = document.getElementById('long-share-body');
-  tbody.innerHTML = longShareData.map(t => `
-    <tr>
-      <td>${new Date(t.date).toLocaleDateString()}</td>
-      <td><div class="participant-name">${t.participant}</div></td>
-      <td><span class="txtype-badge txtype-${t.type.toLowerCase()}">${t.type}</span></td>
-      <td class="mono">${t.shares.toLocaleString()}</td>
-      <td class="mono">$${t.price.toFixed(2)}</td>
-      <td class="mono">$${(t.total / 1000).toFixed(1)}K</td>
-      <td><span class="sdot sdot-complete">${t.status}</span></td>
+  renderShareIssuanceTable();
+}
+
+function filterIssTab(btn, tab) {
+  issActiveTab = tab;
+  document.querySelectorAll('#iss-type-tabs .txtype-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderShareIssuanceTable();
+}
+
+function renderShareIssuanceTable() {
+  const tbody = document.getElementById('share-issuance-body');
+  if (!tbody) return;
+  const search = (document.getElementById('iss-search')?.value || '').toLowerCase();
+  const secClass = document.getElementById('iss-sec-class')?.value || '';
+  const statusF = document.getElementById('iss-status-filter')?.value || '';
+
+  const secTxnTypes = {
+    sale: ['Sale'], transfer: ['Transfer'], exchange: ['Exchange'],
+    repurchase: ['Repurchase'], other: ['Pledge', 'Gift']
+  };
+
+  let filtered = shareIssuanceData.filter(iss => {
+    if (search && !iss.id.toLowerCase().includes(search) &&
+        !iss.certId.toLowerCase().includes(search) &&
+        !iss.participant.toLowerCase().includes(search)) return false;
+    if (secClass && iss.securityClass !== secClass) return false;
+    if (statusF && iss.status !== statusF) return false;
+    if (issActiveTab !== 'all' && issActiveTab !== 'issuance') {
+      const types = secTxnTypes[issActiveTab] || [];
+      if (!iss.secondaryTxns.some(tx => types.includes(tx.type))) return false;
+    }
+    return true;
+  });
+
+  const countEl = document.getElementById('iss-result-count');
+  if (countEl) countEl.innerHTML = `Showing <strong>${filtered.length}</strong> issuance${filtered.length !== 1 ? 's' : ''}`;
+
+  const secClassMap = {
+    'Common Stock': 'sec-common',
+    'Class A Preferred': 'sec-preferred',
+    'Restricted Stock': 'sec-restricted',
+  };
+  const statusMap = {
+    'active': 'iss-active', 'partial': 'iss-partial', 'fully-sold': 'iss-fully-sold',
+    'transferred': 'iss-transferred', 'repurchased': 'iss-repurchased',
+  };
+  const statusLabel = {
+    'active': 'Active', 'partial': 'Partially Sold', 'fully-sold': 'Fully Sold',
+    'transferred': 'Transferred', 'repurchased': 'Repurchased',
+  };
+  const typeColorMap = {
+    'Sale': 'stxtype-sale', 'Transfer': 'stxtype-transfer', 'Exchange': 'stxtype-exchange',
+    'Repurchase': 'stxtype-repurchase', 'Pledge': 'stxtype-pledge', 'Gift': 'stxtype-gift',
+  };
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="12" style="text-align:center;padding:40px;color:var(--textm);font-size:13px">No issuances match the current filters.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(iss => {
+    const disposed = iss.secondaryTxns.reduce((s, t) => s + t.shares, 0);
+    const netHeld = iss.sharesIssued - disposed;
+    const secCls = secClassMap[iss.securityClass] || 'sec-common';
+    const stCls = statusMap[iss.status] || 'iss-active';
+    const stLbl = statusLabel[iss.status] || iss.status;
+    const hasSecTxns = iss.secondaryTxns.length > 0;
+
+    const secTxnRows = iss.secondaryTxns.map(tx => `
+      <tr class="sec-tx-row">
+        <td class="col-actions" onclick="event.stopPropagation()">
+          <div class="action-cell" style="padding-left:10px">
+            <div class="kebab-wrap">
+              <button class="kebab-btn" onclick="event.stopPropagation(); toggleKebab(this)" title="More actions">⋮</button>
+              <div class="kebab-menu">
+                <div class="kebab-menu-label">Transaction</div>
+                <button class="kebab-menu-item" onclick="closeAllKebabs()">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>
+                  Edit Transaction
+                </button>
+                <button class="kebab-menu-item danger" onclick="closeAllKebabs()">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+                  Void Transaction
+                </button>
+              </div>
+            </div>
+          </div>
+        </td>
+        <td colspan="2" style="padding-left:28px">
+          <div style="display:flex;align-items:center;gap:6px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:10px;height:10px;color:var(--textm);flex-shrink:0"><path d="M9 18l6-6-6-6"/></svg>
+            <span class="mono" style="font-size:11.5px;color:var(--text2)">${tx.id}</span>
+          </div>
+        </td>
+        <td></td>
+        <td></td>
+        <td style="text-align:right" class="mono">
+          <span style="color:#991b1b;font-weight:600">&#8722;${tx.shares.toLocaleString()}</span>
+        </td>
+        <td></td>
+        <td style="text-align:right" class="mono">$${tx.price.toFixed(2)}</td>
+        <td style="text-align:right" class="mono">$${(tx.total / 1000).toFixed(1)}K</td>
+        <td style="color:var(--text2);font-size:12.5px">${new Date(tx.date).toLocaleDateString()}</td>
+        <td style="text-align:center">
+          <span class="txtype-badge ${typeColorMap[tx.type] || ''}" style="font-size:11px">${tx.type}</span>
+        </td>
+        <td style="font-size:11.5px;color:var(--textm)">${tx.counterparty}</td>
+      </tr>
+    `).join('');
+
+    return `
+    <tr id="iss-row-${iss.id}">
+      <td class="col-actions" onclick="event.stopPropagation()">
+        <div class="action-cell">
+          <button class="row-expand-btn ${hasSecTxns ? '' : ''}"
+            id="expand-${iss.id}" onclick="event.stopPropagation(); toggleIssRow('${iss.id}')" title="Show secondary transactions"
+            ${hasSecTxns ? '' : 'disabled style=opacity:.3'}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+          <button class="action-icon-btn ledger-btn" onclick="event.stopPropagation(); openIssLedger('${iss.id}')" title="View Ledger">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </button>
+          <div class="kebab-wrap">
+            <button class="kebab-btn" onclick="event.stopPropagation(); toggleKebab(this)" title="More actions">&#8942;</button>
+            <div class="kebab-menu" id="kebab-iss-${iss.id}">
+              <div class="kebab-menu-label">Issuance</div>
+              <button class="kebab-menu-item" onclick="event.stopPropagation(); closeAllKebabs(); openIssLedger('${iss.id}')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+                View Ledger
+              </button>
+              <button class="kebab-menu-item" onclick="event.stopPropagation(); closeAllKebabs()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>
+                Edit Issuance
+              </button>
+              <div class="kebab-divider"></div>
+              <div class="kebab-menu-label">Record Transaction</div>
+              <button class="kebab-menu-item" onclick="event.stopPropagation(); closeAllKebabs(); openSecTxnModalFor('${iss.id}','Sale')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                Record Sale
+              </button>
+              <button class="kebab-menu-item" onclick="event.stopPropagation(); closeAllKebabs(); openSecTxnModalFor('${iss.id}','Transfer')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                Record Transfer
+              </button>
+              <button class="kebab-menu-item" onclick="event.stopPropagation(); closeAllKebabs(); openSecTxnModalFor('${iss.id}','Exchange')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17,1 21,5 17,9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7,23 3,19 7,15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                Record Exchange
+              </button>
+              <button class="kebab-menu-item" onclick="event.stopPropagation(); closeAllKebabs(); openSecTxnModalFor('${iss.id}','Repurchase')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
+                Record Repurchase
+              </button>
+              <div class="kebab-divider"></div>
+              <button class="kebab-menu-item" onclick="event.stopPropagation(); closeAllKebabs()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+                Generate Certificate
+              </button>
+              <button class="kebab-menu-item danger" onclick="event.stopPropagation(); closeAllKebabs()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                Void / Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="issuance-id" onclick="event.stopPropagation(); openIssLedger('${iss.id}')">${iss.id}</div>
+      </td>
+      <td><span class="cert-id">${iss.certId}</span></td>
+      <td>
+        <div class="participant-name">${iss.participant}</div>
+        <div class="participant-dept">${iss.dept}</div>
+      </td>
+      <td><span class="sec-class-badge ${secCls}">${iss.securityClass}</span></td>
+      <td class="mono" style="text-align:right;font-weight:600">${iss.sharesIssued.toLocaleString()}</td>
+      <td class="mono" style="text-align:right;color:${netHeld < iss.sharesIssued ? 'var(--amber)' : 'var(--green)'};font-weight:600">${netHeld.toLocaleString()}</td>
+      <td class="mono" style="text-align:right">$${iss.pricePerShare.toFixed(2)}</td>
+      <td class="mono" style="text-align:right">$${(iss.totalValue / 1000).toFixed(1)}K</td>
+      <td style="color:var(--text2);font-size:12.5px">${new Date(iss.issueDate).toLocaleDateString()}</td>
+      <td style="text-align:center">
+        ${hasSecTxns ? `
+          <span class="sec-txn-badge has-txns" onclick="event.stopPropagation(); toggleIssRow('${iss.id}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            ${iss.secondaryTxns.length}
+          </span>
+        ` : `<span style="color:var(--textm);font-size:12px">&#8212;</span>`}
+      </td>
+      <td><span class="iss-status ${stCls}">${stLbl}</span></td>
     </tr>
-  `).join('');
+    <tr id="sec-txns-${iss.id}" style="display:none" class="sec-tx-container">
+      <td colspan="12" style="padding:0;border:none">
+        <table style="width:100%;border-collapse:collapse">
+          <tbody>${secTxnRows}</tbody>
+        </table>
+      </td>
+    </tr>
+    `;
+  }).join('');
+}
+
+let _issLedgerCurrentId = null;
+let issActiveTab = 'all';
+let issSortCol = 'date', issSortDir = -1;
+
+function openIssLedger(issId) {
+  const iss = shareIssuanceData.find(i => i.id === issId);
+  if (!iss) return;
+  _issLedgerCurrentId = issId;
+
+  const disposed = iss.secondaryTxns.reduce((s, t) => s + t.shares, 0);
+  const netHeld = iss.sharesIssued - disposed;
+  const proceeds = iss.secondaryTxns.reduce((s, t) => s + t.total, 0);
+
+  document.getElementById('iss-ldg-title').textContent = iss.id;
+  document.getElementById('iss-ldg-meta').textContent = iss.participant + ' \u00b7 ' + iss.securityClass;
+  document.getElementById('iss-ldg-issued').textContent = iss.sharesIssued.toLocaleString();
+  document.getElementById('iss-ldg-disposed').textContent = disposed > 0 ? '-' + disposed.toLocaleString() : '0';
+  document.getElementById('iss-ldg-held').textContent = netHeld.toLocaleString();
+  document.getElementById('iss-ldg-proceeds').textContent = proceeds > 0 ? '$' + (proceeds/1000).toFixed(1) + 'K' : '\u2014';
+
+  const statusLabel = { active:'Active', partial:'Partially Sold', 'fully-sold':'Fully Sold', transferred:'Transferred', repurchased:'Repurchased' };
+  document.getElementById('iss-ldg-chips').innerHTML =
+    '<span class="iss-chip">' + iss.certId + '</span>' +
+    '<span class="iss-chip">' + iss.securityClass + '</span>' +
+    '<span class="iss-chip">' + (statusLabel[iss.status] || iss.status) + '</span>' +
+    '<span class="iss-chip">' + iss.dept + '</span>';
+
+  document.getElementById('iss-ldg-detail-grid').innerHTML =
+    '<div class="iss-detail-item"><div class="iss-detail-lbl">Participant</div><div class="iss-detail-val">' + iss.participant + '</div></div>' +
+    '<div class="iss-detail-item"><div class="iss-detail-lbl">Department</div><div class="iss-detail-val">' + iss.dept + '</div></div>' +
+    '<div class="iss-detail-item"><div class="iss-detail-lbl">Issue Date</div><div class="iss-detail-val">' + new Date(iss.issueDate).toLocaleDateString() + '</div></div>' +
+    '<div class="iss-detail-item"><div class="iss-detail-lbl">Certificate ID</div><div class="iss-detail-val" style="font-family:monospace">' + iss.certId + '</div></div>' +
+    '<div class="iss-detail-item"><div class="iss-detail-lbl">Issue Price</div><div class="iss-detail-val">$' + iss.pricePerShare.toFixed(2) + '</div></div>' +
+    '<div class="iss-detail-item"><div class="iss-detail-lbl">Total Consideration</div><div class="iss-detail-val">$' + iss.totalValue.toLocaleString() + '</div></div>';
+
+  const typeColorMap = { Sale:'stxtype-sale', Transfer:'stxtype-transfer', Exchange:'stxtype-exchange', Repurchase:'stxtype-repurchase', Pledge:'stxtype-pledge', Gift:'stxtype-gift' };
+
+  let txnRows = '<tr>' +
+    '<td>' + new Date(iss.issueDate).toLocaleDateString() + '</td>' +
+    '<td style="font-family:monospace;font-size:11.5px">' + iss.id + '</td>' +
+    '<td><span class="txtype-badge txtype-issuance" style="font-size:11px">Issuance</span></td>' +
+    '<td class="shares-credit" style="text-align:right">+' + iss.sharesIssued.toLocaleString() + '</td>' +
+    '<td style="text-align:right" class="mono">$' + iss.pricePerShare.toFixed(2) + '</td>' +
+    '<td style="text-align:right" class="mono">$' + (iss.totalValue/1000).toFixed(1) + 'K</td>' +
+    '<td style="font-size:11.5px;color:var(--textm)">Initial Grant</td>' +
+    '</tr>';
+
+  iss.secondaryTxns.forEach(function(tx) {
+    txnRows += '<tr>' +
+      '<td>' + new Date(tx.date).toLocaleDateString() + '</td>' +
+      '<td style="font-family:monospace;font-size:11.5px">' + tx.id + '</td>' +
+      '<td><span class="txtype-badge ' + (typeColorMap[tx.type]||'') + '" style="font-size:11px">' + tx.type + '</span></td>' +
+      '<td class="shares-debit" style="text-align:right">-' + tx.shares.toLocaleString() + '</td>' +
+      '<td style="text-align:right" class="mono">$' + tx.price.toFixed(2) + '</td>' +
+      '<td style="text-align:right" class="mono">$' + (tx.total/1000).toFixed(1) + 'K</td>' +
+      '<td style="font-size:11.5px;color:var(--textm)">' + tx.counterparty + '</td>' +
+      '</tr>';
+  });
+
+  txnRows += '<tr style="background:#f8fafc;border-top:2px solid var(--border)">' +
+    '<td colspan="3" style="font-weight:600;font-size:12px;color:var(--text2);padding:10px 14px">Net Balance</td>' +
+    '<td style="text-align:right;font-weight:700;font-size:14px;font-family:monospace;color:' + (netHeld > 0 ? 'var(--green)' : 'var(--red)') + '">' + netHeld.toLocaleString() + '</td>' +
+    '<td colspan="3"></td></tr>';
+
+  document.getElementById('iss-ldg-txn-body').innerHTML = txnRows;
+  document.getElementById('iss-ldg-cert-doc').textContent = iss.certId + ' \u2014 Stock Certificate.pdf';
+  document.getElementById('iss-ledger-overlay').classList.add('open');
+}
+
+function closeIssLedger(e) {
+  if (e && e.currentTarget !== e.target) return;
+  document.getElementById('iss-ledger-overlay').classList.remove('open');
+}
+
+function toggleIssRow(issId) {
+  const row = document.getElementById('sec-txns-' + issId);
+  const btn = document.getElementById('expand-' + issId);
+  if (!row) return;
+  const isOpen = row.style.display !== 'none';
+  row.style.display = isOpen ? 'none' : 'table-row';
+  if (btn) btn.classList.toggle('open', !isOpen);
+}
+
+function openIssModal() {
+  alert('New Issuance modal — wire up to full create flow.');
+}
+
+function openSecTxnModal() {
+  document.getElementById('modal-sec-txn').classList.add('open');
+}
+
+function openSecTxnModalFor(issId, type) {
+  const subEl = document.getElementById('sec-txn-modal-sub');
+  if (subEl) subEl.textContent = 'Issuance ' + issId;
+  document.querySelectorAll('.txn-type-option').forEach(function(el) {
+    el.classList.remove('selected');
+    var lbl = el.querySelector('.txn-type-option-label');
+    if (lbl && lbl.textContent === type) el.classList.add('selected');
+  });
+  document.getElementById('modal-sec-txn').classList.add('open');
+}
+
+function selectSecTxnType(el, type) {
+  document.querySelectorAll('.txn-type-option').forEach(function(o) { o.classList.remove('selected'); });
+  el.classList.add('selected');
+}
+
+function sortIssTable(col) {
+  if (issSortCol === col) issSortDir *= -1;
+  else { issSortCol = col; issSortDir = -1; }
+  shareIssuanceData.sort(function(a, b) {
+    if (col === 'id') return issSortDir * a.id.localeCompare(b.id);
+    if (col === 'date') return issSortDir * (new Date(a.issueDate) - new Date(b.issueDate));
+    return 0;
+  });
+  renderShareIssuanceTable();
 }
 
 function renderApprovalsTable() {
