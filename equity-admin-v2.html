@@ -1551,10 +1551,9 @@
       <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,18 15,12 9,6"/></svg>
     </div>
     <div class="nav-sub open" id="sub-plans">
-      <div class="nav-sub-item">Stock Options</div>
-      <div class="nav-sub-item">RSU / RSA</div>
-      <div class="nav-sub-item">ESPP</div>
-      <div class="nav-sub-item">SAR / Warrants</div>
+      <div class="nav-sub-item" onclick="switchView('plan-equity')">Equity</div>
+      <div class="nav-sub-item" onclick="switchView('plan-savings')">Savings</div>
+      <div class="nav-sub-item" onclick="switchView('plan-purchase')">Purchase</div>
     </div>
     <div class="nav-item" onclick="setActive(this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
@@ -2636,6 +2635,425 @@
       </div>
     </div><!-- /view-approvals -->
 
+    <!-- ═══════════════════════════════════════ -->
+    <!-- EQUITY PLANS VIEW                        -->
+    <!-- ═══════════════════════════════════════ -->
+    <div class="view-section" id="view-plan-equity">
+      <div class="page-head">
+        <div>
+          <div class="page-title">Equity Plans</div>
+          <div class="page-sub">Stock options, RSU/RSA, SARs &amp; Warrants — Board-approved share incentive programmes</div>
+        </div>
+        <div class="head-actions">
+          <button class="btn btn-ghost">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export
+          </button>
+          <button class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Plan
+          </button>
+        </div>
+      </div>
+
+      <div class="summary-row-6">
+        <div class="summary-card-sm"><div class="s-label">Active Plans</div><div class="s-value">6</div><div class="s-sub">Board approved</div></div>
+        <div class="summary-card-sm"><div class="s-label">Authorised Shares</div><div class="s-value">14.2M</div><div class="s-sub">Across all plans</div></div>
+        <div class="summary-card-sm"><div class="s-label">Shares Issued</div><div class="s-value" style="color:var(--accent)">6.45M</div><div class="s-sub">45.4% utilisation</div></div>
+        <div class="summary-card-sm"><div class="s-label">Available Pool</div><div class="s-value" style="color:var(--green)">7.75M</div><div class="s-sub">54.6% remaining</div></div>
+        <div class="summary-card-sm"><div class="s-label">Participants</div><div class="s-value">2,175</div><div class="s-sub">Active grantees</div></div>
+        <div class="summary-card-sm"><div class="s-label">Total Plan Value</div><div class="s-value" style="color:var(--green)">$84.2M</div><div class="s-sub">At $42.50 FMV</div></div>
+      </div>
+
+      <div class="txtype-tabs">
+        <button class="txtype-tab active" onclick="filterPlanTab(this,'all','eq-plan-body','eqPlansData')">All <span class="tab-count">6</span></button>
+        <button class="txtype-tab" onclick="filterPlanTab(this,'Options','eq-plan-body','eqPlansData')">Options <span class="tab-count">2</span></button>
+        <button class="txtype-tab" onclick="filterPlanTab(this,'Restricted','eq-plan-body','eqPlansData')">Restricted <span class="tab-count">2</span></button>
+        <button class="txtype-tab" onclick="filterPlanTab(this,'Performance','eq-plan-body','eqPlansData')">Performance <span class="tab-count">1</span></button>
+        <button class="txtype-tab" onclick="filterPlanTab(this,'Other','eq-plan-body','eqPlansData')">SAR / Warrants <span class="tab-count">1</span></button>
+      </div>
+
+      <div class="filter-row">
+        <div class="filter-search-wrap">
+          <span class="filter-search-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+          <input class="filter-search-input" placeholder="Search plans…" oninput="renderEqPlansTable()">
+        </div>
+        <select class="filter-select-sm" onchange="renderEqPlansTable()">
+          <option value="">All Statuses</option>
+          <option>Active</option><option>Closed</option><option>Expired</option>
+        </select>
+      </div>
+
+      <div class="ag-table-wrap">
+        <div class="table-toolbar">
+          <div class="table-result-count">Showing <strong>6</strong> plans</div>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="ag-table">
+            <thead>
+              <tr>
+                <th style="width:120px">Plan ID</th>
+                <th>Plan Name</th>
+                <th style="width:110px">Category</th>
+                <th style="width:105px">Instrument</th>
+                <th style="text-align:right;width:130px">Authorised</th>
+                <th style="text-align:right;width:110px">Issued</th>
+                <th style="text-align:right;width:110px">Available</th>
+                <th style="text-align:right;width:80px">Participants</th>
+                <th style="width:110px">Approved</th>
+                <th style="width:90px">Status</th>
+                <th style="width:80px">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="eq-plan-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div><!-- /view-plan-equity -->
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- SAVINGS PLANS VIEW                       -->
+    <!-- ═══════════════════════════════════════ -->
+    <div class="view-section" id="view-plan-savings">
+      <div class="page-head">
+        <div>
+          <div class="page-title">Savings Plans</div>
+          <div class="page-sub">SAYE &amp; SIP — Tax-advantaged employee share savings schemes</div>
+        </div>
+        <div class="head-actions">
+          <button class="btn btn-ghost">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export
+          </button>
+          <button class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Scheme
+          </button>
+        </div>
+      </div>
+
+      <div class="summary-row-6">
+        <div class="summary-card-sm"><div class="s-label">Active Schemes</div><div class="s-value">3</div><div class="s-sub">SAYE &amp; SIP</div></div>
+        <div class="summary-card-sm"><div class="s-label">Enrolled Employees</div><div class="s-value">1,048</div><div class="s-sub">61% participation rate</div></div>
+        <div class="summary-card-sm"><div class="s-label">Avg Monthly Saving</div><div class="s-value">£312</div><div class="s-sub">Per participant</div></div>
+        <div class="summary-card-sm"><div class="s-label">Total Pot Value</div><div class="s-value" style="color:var(--accent)">£3.87M</div><div class="s-sub">Accumulated savings</div></div>
+        <div class="summary-card-sm"><div class="s-label">Bonus Shares</div><div class="s-value" style="color:var(--green)">84,200</div><div class="s-sub">At maturity (est.)</div></div>
+        <div class="summary-card-sm"><div class="s-label">Next Maturity</div><div class="s-value" style="color:var(--amber)">Jun 2026</div><div class="s-sub">SAYE 2023-A · 342 members</div></div>
+      </div>
+
+      <!-- Scheme cards -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px">
+
+        <!-- SAYE 2023-A -->
+        <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--text)">SAYE 2023-A</div>
+              <div style="font-size:11px;color:var(--textm);margin-top:2px">Save As You Earn · 3-Year Scheme</div>
+            </div>
+            <span class="sdot sdot-active" style="font-size:11px">Active</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+            <div style="background:#f8fafc;border-radius:8px;padding:10px">
+              <div style="font-size:10px;color:var(--textm);font-weight:600;text-transform:uppercase;letter-spacing:.4px">Option Price</div>
+              <div style="font-size:16px;font-weight:700;color:var(--accent-dark);margin-top:2px">£28.40</div>
+              <div style="font-size:10px;color:var(--textm)">20% discount to FMV</div>
+            </div>
+            <div style="background:#f8fafc;border-radius:8px;padding:10px">
+              <div style="font-size:10px;color:var(--textm);font-weight:600;text-transform:uppercase;letter-spacing:.4px">Maturity</div>
+              <div style="font-size:16px;font-weight:700;color:var(--amber);margin-top:2px">Jun 2026</div>
+              <div style="font-size:10px;color:var(--textm)">92 days remaining</div>
+            </div>
+          </div>
+          <div style="margin-bottom:10px">
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--textm);margin-bottom:4px">
+              <span>Enrolment</span><span style="font-weight:600;color:var(--text)">342 / 560 eligible</span>
+            </div>
+            <div style="height:6px;background:#e2e8f0;border-radius:3px"><div style="height:100%;width:61%;background:var(--accent);border-radius:3px"></div></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:14px">
+            <button class="btn btn-ghost" style="flex:1;height:32px;font-size:12px">View Members</button>
+            <button class="btn btn-ghost" style="flex:1;height:32px;font-size:12px">Manage</button>
+          </div>
+        </div>
+
+        <!-- SAYE 2024-B -->
+        <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--text)">SAYE 2024-B</div>
+              <div style="font-size:11px;color:var(--textm);margin-top:2px">Save As You Earn · 5-Year Scheme</div>
+            </div>
+            <span class="sdot sdot-active" style="font-size:11px">Active</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+            <div style="background:#f8fafc;border-radius:8px;padding:10px">
+              <div style="font-size:10px;color:var(--textm);font-weight:600;text-transform:uppercase;letter-spacing:.4px">Option Price</div>
+              <div style="font-size:16px;font-weight:700;color:var(--accent-dark);margin-top:2px">£31.80</div>
+              <div style="font-size:10px;color:var(--textm)">20% discount to FMV</div>
+            </div>
+            <div style="background:#f8fafc;border-radius:8px;padding:10px">
+              <div style="font-size:10px;color:var(--textm);font-weight:600;text-transform:uppercase;letter-spacing:.4px">Maturity</div>
+              <div style="font-size:16px;font-weight:700;color:var(--text);margin-top:2px">Sep 2029</div>
+              <div style="font-size:10px;color:var(--textm)">3 yrs 6 mo remaining</div>
+            </div>
+          </div>
+          <div style="margin-bottom:10px">
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--textm);margin-bottom:4px">
+              <span>Enrolment</span><span style="font-weight:600;color:var(--text)">489 / 560 eligible</span>
+            </div>
+            <div style="height:6px;background:#e2e8f0;border-radius:3px"><div style="height:100%;width:87%;background:var(--green);border-radius:3px"></div></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:14px">
+            <button class="btn btn-ghost" style="flex:1;height:32px;font-size:12px">View Members</button>
+            <button class="btn btn-ghost" style="flex:1;height:32px;font-size:12px">Manage</button>
+          </div>
+        </div>
+
+        <!-- SIP 2024 -->
+        <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--text)">SIP 2024</div>
+              <div style="font-size:11px;color:var(--textm);margin-top:2px">Share Incentive Plan · Ongoing</div>
+            </div>
+            <span class="sdot sdot-active" style="font-size:11px">Active</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+            <div style="background:#f8fafc;border-radius:8px;padding:10px">
+              <div style="font-size:10px;color:var(--textm);font-weight:600;text-transform:uppercase;letter-spacing:.4px">Free Shares</div>
+              <div style="font-size:16px;font-weight:700;color:var(--accent-dark);margin-top:2px">£3,600/yr</div>
+              <div style="font-size:10px;color:var(--textm)">Per employee (tax-free)</div>
+            </div>
+            <div style="background:#f8fafc;border-radius:8px;padding:10px">
+              <div style="font-size:10px;color:var(--textm);font-weight:600;text-transform:uppercase;letter-spacing:.4px">Matching</div>
+              <div style="font-size:16px;font-weight:700;color:var(--green);margin-top:2px">2:1</div>
+              <div style="font-size:10px;color:var(--textm)">Partnership shares</div>
+            </div>
+          </div>
+          <div style="margin-bottom:10px">
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--textm);margin-bottom:4px">
+              <span>Enrolment</span><span style="font-weight:600;color:var(--text)">217 / 560 eligible</span>
+            </div>
+            <div style="height:6px;background:#e2e8f0;border-radius:3px"><div style="height:100%;width:39%;background:var(--cyan);border-radius:3px"></div></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:14px">
+            <button class="btn btn-ghost" style="flex:1;height:32px;font-size:12px">View Members</button>
+            <button class="btn btn-ghost" style="flex:1;height:32px;font-size:12px">Manage</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Participant table -->
+      <div class="filter-row">
+        <div class="filter-search-wrap">
+          <span class="filter-search-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+          <input class="filter-search-input" placeholder="Search by name or scheme…">
+        </div>
+        <select class="filter-select-sm">
+          <option value="">All Schemes</option>
+          <option>SAYE 2023-A</option><option>SAYE 2024-B</option><option>SIP 2024</option>
+        </select>
+        <select class="filter-select-sm">
+          <option value="">All Statuses</option>
+          <option>Active</option><option>Withdrawn</option><option>Matured</option>
+        </select>
+      </div>
+
+      <div class="ag-table-wrap">
+        <div class="table-toolbar">
+          <div class="table-result-count">Showing <strong>1,048</strong> participants</div>
+          <div class="table-toolbar-actions">
+            <button class="btn btn-ghost" style="height:32px;padding:0 10px;font-size:12px">Enrol Employee</button>
+          </div>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="ag-table">
+            <thead>
+              <tr>
+                <th style="width:160px">Participant</th>
+                <th style="width:110px">Scheme</th>
+                <th style="text-align:right;width:130px">Monthly Saving</th>
+                <th style="text-align:right;width:110px">Total Saved</th>
+                <th style="width:110px">Start Date</th>
+                <th style="width:110px">Maturity Date</th>
+                <th style="text-align:right;width:110px">Option Price</th>
+                <th style="text-align:right;width:120px">Shares at Maturity</th>
+                <th style="width:90px">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><div class="participant-name">Emma Clarke</div><div class="participant-dept">Engineering</div></td><td><span class="type-badge" style="background:#eef2ff;color:#4338ca">SAYE 2023-A</span></td><td style="text-align:right;font-weight:600">£350</td><td style="text-align:right">£12,600</td><td>Jul 2023</td><td>Jun 2026</td><td style="text-align:right;font-weight:600;color:var(--accent-dark)">£28.40</td><td style="text-align:right;font-weight:600">443</td><td><span class="sdot sdot-active">Active</span></td></tr>
+              <tr><td><div class="participant-name">Raj Patel</div><div class="participant-dept">Finance</div></td><td><span class="type-badge" style="background:#eef2ff;color:#4338ca">SAYE 2023-A</span></td><td style="text-align:right;font-weight:600">£500</td><td style="text-align:right">£18,000</td><td>Jul 2023</td><td>Jun 2026</td><td style="text-align:right;font-weight:600;color:var(--accent-dark)">£28.40</td><td style="text-align:right;font-weight:600">633</td><td><span class="sdot sdot-active">Active</span></td></tr>
+              <tr><td><div class="participant-name">Sophie Turner</div><div class="participant-dept">Sales</div></td><td><span class="type-badge" style="background:#ecfdf5;color:#065f46">SAYE 2024-B</span></td><td style="text-align:right;font-weight:600">£250</td><td style="text-align:right">£6,000</td><td>Oct 2024</td><td>Sep 2029</td><td style="text-align:right;font-weight:600;color:var(--accent-dark)">£31.80</td><td style="text-align:right;font-weight:600">188</td><td><span class="sdot sdot-active">Active</span></td></tr>
+              <tr><td><div class="participant-name">James Okafor</div><div class="participant-dept">Product</div></td><td><span class="type-badge" style="background:#fffbeb;color:#92400e">SIP 2024</span></td><td style="text-align:right;font-weight:600">£300</td><td style="text-align:right">£3,600</td><td>Jan 2024</td><td>Ongoing</td><td style="text-align:right;color:var(--textm)">—</td><td style="text-align:right;font-weight:600;color:var(--green)">Free + 2:1</td><td><span class="sdot sdot-active">Active</span></td></tr>
+              <tr><td><div class="participant-name">Nina Hartley</div><div class="participant-dept">Legal</div></td><td><span class="type-badge" style="background:#eef2ff;color:#4338ca">SAYE 2023-A</span></td><td style="text-align:right;font-weight:600">£150</td><td style="text-align:right">£5,400</td><td>Jul 2023</td><td>Jun 2026</td><td style="text-align:right;font-weight:600;color:var(--accent-dark)">£28.40</td><td style="text-align:right;font-weight:600">190</td><td><span class="sdot sdot-complete">Matured</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div><!-- /view-plan-savings -->
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- PURCHASE PLANS VIEW                      -->
+    <!-- ═══════════════════════════════════════ -->
+    <div class="view-section" id="view-plan-purchase">
+      <div class="page-head">
+        <div>
+          <div class="page-title">Purchase Plans</div>
+          <div class="page-sub">ESPP — Employee Stock Purchase Plan · Payroll-funded share purchase at a discount</div>
+        </div>
+        <div class="head-actions">
+          <button class="btn btn-ghost">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export
+          </button>
+          <button class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Offering
+          </button>
+        </div>
+      </div>
+
+      <div class="summary-row-6">
+        <div class="summary-card-sm"><div class="s-label">Active Offerings</div><div class="s-value">2</div><div class="s-sub">Current periods</div></div>
+        <div class="summary-card-sm"><div class="s-label">Enrolled</div><div class="s-value">1,204</div><div class="s-sub">65.2% of eligible</div></div>
+        <div class="summary-card-sm"><div class="s-label">Avg Contribution</div><div class="s-value">8.3%</div><div class="s-sub">Of base salary</div></div>
+        <div class="summary-card-sm"><div class="s-label">Total Funded</div><div class="s-value" style="color:var(--accent)">$2.14M</div><div class="s-sub">YTD contributions</div></div>
+        <div class="summary-card-sm"><div class="s-label">Next Purchase</div><div class="s-value" style="color:var(--amber)">Jun 30</div><div class="s-sub">2026 · 95 days away</div></div>
+        <div class="summary-card-sm"><div class="s-label">Est. Discount Value</div><div class="s-value" style="color:var(--green)">$321K</div><div class="s-sub">15% discount + lookback</div></div>
+      </div>
+
+      <!-- Offering period timeline cards -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
+
+        <!-- Offering 2025-B -->
+        <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--text)">Offering Period 2025-B</div>
+              <div style="font-size:11px;color:var(--textm);margin-top:2px">Jan 1, 2026 – Jun 30, 2026</div>
+            </div>
+            <span class="sdot sdot-active" style="font-size:11px">Active</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px">
+            <div style="background:#f8fafc;border-radius:8px;padding:10px;text-align:center">
+              <div style="font-size:10px;color:var(--textm);font-weight:600;text-transform:uppercase;letter-spacing:.4px">Discount</div>
+              <div style="font-size:18px;font-weight:700;color:var(--green);margin-top:2px">15%</div>
+            </div>
+            <div style="background:#f8fafc;border-radius:8px;padding:10px;text-align:center">
+              <div style="font-size:10px;color:var(--textm);font-weight:600;text-transform:uppercase;letter-spacing:.4px">Lookback</div>
+              <div style="font-size:18px;font-weight:700;color:var(--accent-dark);margin-top:2px">24 mo</div>
+            </div>
+            <div style="background:#f8fafc;border-radius:8px;padding:10px;text-align:center">
+              <div style="font-size:10px;color:var(--textm);font-weight:600;text-transform:uppercase;letter-spacing:.4px">Max Contrib.</div>
+              <div style="font-size:18px;font-weight:700;color:var(--text);margin-top:2px">15%</div>
+            </div>
+          </div>
+          <div style="margin-bottom:6px">
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--textm);margin-bottom:4px">
+              <span>Offering period progress</span><span style="font-weight:600;color:var(--text)">49% complete</span>
+            </div>
+            <div style="height:8px;background:#e2e8f0;border-radius:4px">
+              <div style="height:100%;width:49%;background:linear-gradient(90deg,var(--accent),var(--cyan));border-radius:4px"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--textm);margin-top:3px"><span>Jan 1</span><span>Purchase: Jun 30</span></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:14px">
+            <button class="btn btn-ghost" style="flex:1;height:32px;font-size:12px">Enrollments</button>
+            <button class="btn btn-ghost" style="flex:1;height:32px;font-size:12px">Contributions</button>
+            <button class="btn btn-primary" style="height:32px;font-size:12px">Process Purchase</button>
+          </div>
+        </div>
+
+        <!-- Offering 2025-A completed -->
+        <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--text)">Offering Period 2025-A</div>
+              <div style="font-size:11px;color:var(--textm);margin-top:2px">Jul 1, 2025 – Dec 31, 2025</div>
+            </div>
+            <span class="sdot sdot-complete" style="font-size:11px">Completed</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px">
+            <div style="background:#f8fafc;border-radius:8px;padding:10px;text-align:center">
+              <div style="font-size:10px;color:var(--textm);font-weight:600;text-transform:uppercase;letter-spacing:.4px">Shares Purchased</div>
+              <div style="font-size:18px;font-weight:700;color:var(--text);margin-top:2px">48,320</div>
+            </div>
+            <div style="background:#f8fafc;border-radius:8px;padding:10px;text-align:center">
+              <div style="font-size:10px;color:var(--textm);font-weight:600;text-transform:uppercase;letter-spacing:.4px">Purchase Price</div>
+              <div style="font-size:18px;font-weight:700;color:var(--accent-dark);margin-top:2px">$32.18</div>
+            </div>
+            <div style="background:#f8fafc;border-radius:8px;padding:10px;text-align:center">
+              <div style="font-size:10px;color:var(--textm);font-weight:600;text-transform:uppercase;letter-spacing:.4px">Total Discount</div>
+              <div style="font-size:18px;font-weight:700;color:var(--green);margin-top:2px">$270K</div>
+            </div>
+          </div>
+          <div style="margin-bottom:6px">
+            <div style="height:8px;background:#e2e8f0;border-radius:4px">
+              <div style="height:100%;width:100%;background:var(--green);border-radius:4px"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--textm);margin-top:3px"><span>Jul 1, 2025</span><span>Purchased: Dec 31, 2025</span></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:14px">
+            <button class="btn btn-ghost" style="flex:1;height:32px;font-size:12px">View History</button>
+            <button class="btn btn-ghost" style="flex:1;height:32px;font-size:12px">Tax Reports</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Participant table -->
+      <div class="filter-row">
+        <div class="filter-search-wrap">
+          <span class="filter-search-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+          <input class="filter-search-input" placeholder="Search by name or offering…">
+        </div>
+        <select class="filter-select-sm">
+          <option value="">All Offerings</option>
+          <option>2025-B (Active)</option><option>2025-A (Completed)</option>
+        </select>
+        <select class="filter-select-sm">
+          <option value="">All Statuses</option>
+          <option>Enrolled</option><option>Withdrawn</option><option>Completed</option>
+        </select>
+      </div>
+
+      <div class="ag-table-wrap">
+        <div class="table-toolbar">
+          <div class="table-result-count">Showing <strong>1,204</strong> participants — Offering 2025-B</div>
+          <div class="table-toolbar-actions">
+            <button class="btn btn-ghost" style="height:32px;padding:0 10px;font-size:12px">Enrol Employee</button>
+            <button class="btn btn-ghost" style="height:32px;padding:0 10px;font-size:12px">Change Contribution</button>
+          </div>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="ag-table">
+            <thead>
+              <tr>
+                <th style="width:160px">Participant</th>
+                <th style="width:120px">Offering Period</th>
+                <th style="text-align:right;width:110px">Contribution %</th>
+                <th style="text-align:right;width:120px">Monthly Amount</th>
+                <th style="text-align:right;width:110px">Total Funded</th>
+                <th style="text-align:right;width:110px">Est. Shares</th>
+                <th style="text-align:right;width:110px">Purchase Price</th>
+                <th style="text-align:right;width:110px">Market Price</th>
+                <th style="text-align:right;width:90px">Est. Gain</th>
+                <th style="width:90px">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><div class="participant-name">Sarah Chen</div><div class="participant-dept">Engineering</div></td><td>2025-B</td><td style="text-align:right">10%</td><td style="text-align:right;font-weight:600">$620</td><td style="text-align:right">$1,860</td><td style="text-align:right;font-weight:600;color:var(--accent)">52</td><td style="text-align:right;font-weight:600;color:var(--accent-dark)">$36.15</td><td style="text-align:right">$42.50</td><td style="text-align:right;color:var(--green);font-weight:700">+17.5%</td><td><span class="sdot sdot-active">Enrolled</span></td></tr>
+              <tr><td><div class="participant-name">Marcus Johnson</div><div class="participant-dept">Product</div></td><td>2025-B</td><td style="text-align:right">15%</td><td style="text-align:right;font-weight:600">$843</td><td style="text-align:right">$2,529</td><td style="text-align:right;font-weight:600;color:var(--accent)">70</td><td style="text-align:right;font-weight:600;color:var(--accent-dark)">$36.15</td><td style="text-align:right">$42.50</td><td style="text-align:right;color:var(--green);font-weight:700">+17.5%</td><td><span class="sdot sdot-active">Enrolled</span></td></tr>
+              <tr><td><div class="participant-name">Emma Davis</div><div class="participant-dept">Sales</div></td><td>2025-B</td><td style="text-align:right">5%</td><td style="text-align:right;font-weight:600">$290</td><td style="text-align:right">$870</td><td style="text-align:right;font-weight:600;color:var(--accent)">24</td><td style="text-align:right;font-weight:600;color:var(--accent-dark)">$36.15</td><td style="text-align:right">$42.50</td><td style="text-align:right;color:var(--green);font-weight:700">+17.5%</td><td><span class="sdot sdot-active">Enrolled</span></td></tr>
+              <tr><td><div class="participant-name">David Miller</div><div class="participant-dept">Legal</div></td><td>2025-B</td><td style="text-align:right">8%</td><td style="text-align:right;font-weight:600">$385</td><td style="text-align:right">$1,155</td><td style="text-align:right;font-weight:600;color:var(--accent)">31</td><td style="text-align:right;font-weight:600;color:var(--accent-dark)">$36.15</td><td style="text-align:right">$42.50</td><td style="text-align:right;color:var(--green);font-weight:700">+17.5%</td><td><span class="sdot sdot-active">Enrolled</span></td></tr>
+              <tr><td><div class="participant-name">Lisa Wong</div><div class="participant-dept">Engineering</div></td><td>2025-A</td><td style="text-align:right">12%</td><td style="text-align:right;font-weight:600">$630</td><td style="text-align:right">$3,780</td><td style="text-align:right;font-weight:600">118</td><td style="text-align:right;font-weight:600;color:var(--accent-dark)">$32.18</td><td style="text-align:right">$42.50</td><td style="text-align:right;color:var(--green);font-weight:700">+32.1%</td><td><span class="sdot sdot-complete">Purchased</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div><!-- /view-plan-purchase -->
+
   </div><!-- /content -->
 </div><!-- /main -->
 
@@ -3593,6 +4011,61 @@ function switchView(viewId) {
   if (viewId === 'grant-txns') renderGrantsTable();
   else if (viewId === 'long-share-txns') renderLongShareTable();
   else if (viewId === 'approvals') renderApprovalsTable();
+  else if (viewId === 'plan-equity') renderEqPlansTable();
+}
+
+// ── Equity Plans ──
+const eqPlansData = [
+  { id:'EQP-2019-001', name:'2019 Equity Incentive Plan', category:'Options', instrument:'ISO / NSO', authorised:4000000, issued:2180000, participants:1284, approved:'Mar 2019', status:'Active' },
+  { id:'EQP-2020-002', name:'2020 RSU / RSA Plan', category:'Restricted', instrument:'RSU / RSA', authorised:3000000, issued:1640000, participants:891, approved:'Jan 2020', status:'Active' },
+  { id:'EQP-2022-003', name:'2022 Performance Share Plan', category:'Performance', instrument:'PSU / PRSU', authorised:2000000, issued:480000, participants:210, approved:'Oct 2022', status:'Active' },
+  { id:'EQP-2023-004', name:'2023 Global Stock Option Plan', category:'Options', instrument:'NQSO', authorised:2500000, issued:890000, participants:640, approved:'Feb 2023', status:'Active' },
+  { id:'EQP-2018-001', name:'2018 Founder RSA Plan', category:'Restricted', instrument:'RSA', authorised:1500000, issued:1500000, participants:12, approved:'Apr 2018', status:'Active' },
+  { id:'EQP-2016-001', name:'2016 Warrant Plan', category:'Other', instrument:'Warrants / SAR', authorised:1200000, issued:750000, participants:38, approved:'Jun 2016', status:'Closed' },
+];
+
+function renderEqPlansTable(filter) {
+  const tbody = document.getElementById('eq-plan-body');
+  if (!tbody) return;
+  const rows = filter && filter !== 'all' ? eqPlansData.filter(p => p.category === filter) : eqPlansData;
+  const statusColor = s => s==='Active'?'sdot-active':s==='Closed'?'sdot-terminated':'sdot-complete';
+  tbody.innerHTML = rows.map(p => {
+    const avail = p.authorised - p.issued;
+    const pct = Math.round(p.issued/p.authorised*100);
+    return `<tr>
+      <td style="font-family:'SF Mono',monospace;font-size:12px;font-weight:700;color:var(--accent-dark)">${p.id}</td>
+      <td><div style="font-weight:600;font-size:13px">${p.name}</div></td>
+      <td><span class="type-badge type-${p.category==='Options'?'iso':p.category==='Restricted'?'rsu':p.category==='Performance'?'nqso':'sar'}">${p.category}</span></td>
+      <td style="font-size:12px;color:var(--textm)">${p.instrument}</td>
+      <td style="text-align:right;font-weight:600">${p.authorised.toLocaleString()}</td>
+      <td style="text-align:right">
+        <span style="font-weight:600;color:var(--accent)">${p.issued.toLocaleString()}</span>
+        <div style="height:4px;background:#e2e8f0;border-radius:2px;margin-top:3px;width:80px;margin-left:auto"><div style="height:100%;width:${pct}%;background:var(--accent);border-radius:2px"></div></div>
+      </td>
+      <td style="text-align:right;font-weight:600;color:var(--green)">${avail.toLocaleString()}</td>
+      <td style="text-align:right">${p.participants.toLocaleString()}</td>
+      <td style="font-size:12px;color:var(--textm)">${p.approved}</td>
+      <td><span class="sdot ${statusColor(p.status)}">${p.status}</span></td>
+      <td>
+        <div class="kebab-wrap">
+          <button class="kebab-btn" onclick="event.stopPropagation();toggleKebab(this)" title="More actions">⋮</button>
+          <div class="kebab-menu">
+            <div class="kebab-menu-label">Actions</div>
+            <button class="kebab-menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>Edit Plan</button>
+            <button class="kebab-menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Add Grant</button>
+            <div class="kebab-divider"></div>
+            <button class="kebab-menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export</button>
+          </div>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function filterPlanTab(btn, filter, tbodyId, dataKey) {
+  btn.closest('.txtype-tabs').querySelectorAll('.txtype-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderEqPlansTable(filter === 'all' ? null : filter);
 }
 
 // Grant Transactions
