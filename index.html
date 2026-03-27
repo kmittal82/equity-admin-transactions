@@ -1260,6 +1260,262 @@
     .kebab-menu-label { padding: 6px 14px; font-size: 10px; font-weight: 700; color: var(--textm); text-transform: uppercase; letter-spacing: 0.6px; }
 
 @media (max-width: 900px) { .summary-row { grid-template-columns: repeat(2, 1fr); } .form-grid { grid-template-columns: 1fr; } }
+
+    /* ════════════ LONG SHARE TXNS — REDESIGN ════════════ */
+
+    /* Transaction type tab filters */
+    .txtype-tabs {
+      display: flex; align-items: center; gap: 4px;
+      background: #f1f5f9; border-radius: 12px; padding: 4px;
+      margin-bottom: 20px; width: fit-content; flex-wrap: wrap;
+    }
+    .txtype-tab {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 8px; border: none; background: transparent;
+      font-size: 12.5px; font-weight: 500; color: var(--text2); cursor: pointer;
+      transition: all 0.14s; font-family: inherit; white-space: nowrap;
+    }
+    .txtype-tab:hover { background: rgba(255,255,255,0.7); color: var(--text); }
+    .txtype-tab.active { background: #fff; color: var(--text); font-weight: 600; box-shadow: 0 1px 4px rgba(15,23,42,0.1); }
+    .txtype-tab .tab-count {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 18px; height: 18px; padding: 0 5px;
+      background: var(--bg); border-radius: 10px;
+      font-size: 10.5px; font-weight: 700; color: var(--text2);
+      transition: all 0.14s;
+    }
+    .txtype-tab.active .tab-count { background: var(--accent); color: #fff; }
+    .txtype-tab.tab-sale.active .tab-count   { background: #f59e0b; }
+    .txtype-tab.tab-transfer.active .tab-count { background: #06b6d4; }
+    .txtype-tab.tab-exchange.active .tab-count { background: #8b5cf6; }
+    .txtype-tab.tab-repurchase.active .tab-count { background: #ef4444; }
+    .txtype-tab.tab-other.active .tab-count  { background: #64748b; }
+
+    /* Summary row — 6 cards */
+    .summary-row-6 {
+      display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; margin-bottom: 22px;
+    }
+    .summary-card-sm {
+      background: var(--card); border-radius: 12px; padding: 14px 18px; border: 1px solid var(--border);
+    }
+    .summary-card-sm .s-label { font-size: 10px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.6px; }
+    .summary-card-sm .s-value { font-size: 22px; font-weight: 800; letter-spacing: -0.8px; margin-top: 3px; line-height: 1; }
+    .summary-card-sm .s-sub { font-size: 11px; color: var(--textm); margin-top: 2px; }
+    @media (max-width: 1200px) { .summary-row-6 { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 900px)  { .summary-row-6 { grid-template-columns: repeat(2, 1fr); } }
+
+    /* Issuance table extras */
+    .ag-table .col-issuance-id { width: 130px; }
+    .ag-table .col-cert-id     { width: 110px; }
+    .ag-table .col-sec-class   { width: 120px; }
+    .ag-table .col-shares      { width: 100px; }
+    .ag-table .col-net-shares  { width: 110px; }
+    .ag-table .col-price       { width: 90px; }
+    .ag-table .col-total       { width: 105px; }
+    .ag-table .col-date        { width: 100px; }
+    .ag-table .col-secondary   { width: 100px; }
+    .ag-table .col-iss-status  { width: 120px; }
+
+    .issuance-id {
+      font-weight: 700; color: var(--accent-dark); cursor: pointer; font-family: 'SF Mono', monospace; font-size: 12.5px;
+    }
+    .issuance-id:hover { text-decoration: underline; }
+    .cert-id {
+      font-size: 11.5px; color: var(--text2); font-family: 'SF Mono', monospace; font-weight: 500;
+    }
+
+    /* Secondary transactions badge */
+    .sec-txn-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 9px; border-radius: 20px; font-size: 11.5px; font-weight: 600;
+      background: #f1f5f9; color: var(--text2); cursor: pointer; transition: all 0.12s;
+      border: 1px solid var(--border);
+    }
+    .sec-txn-badge:hover { background: #eff6ff; color: var(--accent); border-color: #bfdbfe; }
+    .sec-txn-badge.has-txns { background: #eef2ff; color: #4338ca; border-color: #c7d2fe; }
+    .sec-txn-badge svg { width: 11px; height: 11px; }
+
+    /* Expand/collapse chevron on row */
+    .row-expand-btn {
+      width: 22px; height: 22px; border: 1px solid var(--border); background: #fff;
+      border-radius: 5px; cursor: pointer; display: flex; align-items: center;
+      justify-content: center; color: var(--textm); transition: all 0.12s; flex-shrink: 0;
+    }
+    .row-expand-btn:hover { background: var(--bg); color: var(--text2); }
+    .row-expand-btn svg { width: 10px; height: 10px; transition: transform 0.2s; }
+    .row-expand-btn.open svg { transform: rotate(90deg); }
+
+    /* Secondary transaction sub-rows */
+    .sec-tx-group { display: none; }
+    .sec-tx-group.open { display: table-row-group; }
+    .sec-tx-row { background: #f8fafc !important; }
+    .sec-tx-row td { padding: 8px 12px 8px 30px !important; border-bottom: 1px solid #f0f4f8 !important; font-size: 12.5px; }
+    .sec-tx-row:last-child td { border-bottom: 2px solid var(--border) !important; }
+    .sec-tx-indent { padding-left: 12px !important; }
+
+    /* Security class badge */
+    .sec-class-badge {
+      display: inline-block; padding: 2px 9px; border-radius: 5px;
+      font-size: 11px; font-weight: 600;
+    }
+    .sec-common   { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+    .sec-preferred{ background: #faf5ff; color: #6d28d9; border: 1px solid #ddd6fe; }
+    .sec-restricted{ background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+    .sec-option   { background: #ecfeff; color: #155e75; border: 1px solid #a5f3fc; }
+
+    /* Status badge for issuances */
+    .iss-status {
+      display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px;
+      border-radius: 20px; font-size: 11px; font-weight: 600;
+    }
+    .iss-status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .iss-active     { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+    .iss-active::before     { background: #10b981; }
+    .iss-partial    { background: #fff7ed; color: #9a3412; border: 1px solid #fed7aa; }
+    .iss-partial::before    { background: #f59e0b; }
+    .iss-fully-sold { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+    .iss-fully-sold::before { background: #ef4444; }
+    .iss-transferred{ background: #f0f9ff; color: #0c4a6e; border: 1px solid #bae6fd; }
+    .iss-transferred::before{ background: #06b6d4; }
+    .iss-repurchased{ background: #faf5ff; color: #6d28d9; border: 1px solid #ddd6fe; }
+    .iss-repurchased::before{ background: #8b5cf6; }
+
+    /* Secondary txn type colors */
+    .stxtype-sale       { background: #fff7ed; color: #9a3412; border: 1px solid #fed7aa; }
+    .stxtype-transfer   { background: #f0f9ff; color: #0c4a6e; border: 1px solid #bae6fd; }
+    .stxtype-exchange   { background: #faf5ff; color: #6d28d9; border: 1px solid #ddd6fe; }
+    .stxtype-repurchase { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+    .stxtype-pledge     { background: #ecfeff; color: #155e75; border: 1px solid #a5f3fc; }
+    .stxtype-gift       { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+
+    /* Filter bar row */
+    .filter-row {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .filter-search-wrap {
+      position: relative; flex: 1; min-width: 220px; max-width: 300px;
+    }
+    .filter-search-ico {
+      position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+      color: var(--textm); pointer-events: none;
+    }
+    .filter-search-ico svg { width: 14px; height: 14px; }
+    .filter-search-input {
+      width: 100%; height: 36px; padding: 0 12px 0 32px;
+      border: 1.5px solid var(--border); border-radius: 9px;
+      font-size: 13px; font-family: inherit; color: var(--text); background: #fff;
+      outline: none; transition: all 0.14s;
+    }
+    .filter-search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+    .filter-select-sm {
+      height: 36px; padding: 0 10px; border: 1.5px solid var(--border); border-radius: 9px;
+      font-size: 12.5px; font-family: inherit; color: var(--text2); background: #fff;
+      cursor: pointer; outline: none; min-width: 130px;
+    }
+    .filter-right-actions { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+
+    /* Table result count */
+    .table-toolbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px; border-bottom: 1px solid var(--border); background: #f8fafc;
+    }
+    .table-result-count { font-size: 12.5px; color: var(--text2); }
+    .table-result-count strong { color: var(--text); font-weight: 600; }
+    .table-toolbar-actions { display: flex; gap: 6px; }
+
+    /* Share issuance ledger drawer */
+    .iss-ledger-overlay {
+      position: fixed; inset: 0; background: rgba(15,23,42,0.3);
+      z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    }
+    .iss-ledger-overlay.open { opacity: 1; pointer-events: all; }
+    .iss-ledger-drawer {
+      position: fixed; top: 0; right: 0; bottom: 0;
+      width: 560px; max-width: 94vw; background: var(--card);
+      border-left: 1px solid var(--border);
+      box-shadow: -8px 0 40px rgba(15,23,42,0.15);
+      z-index: 201; transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+      display: flex; flex-direction: column;
+    }
+    .iss-ledger-overlay.open .iss-ledger-drawer { transform: translateX(0); }
+    .iss-ledger-head {
+      padding: 20px 24px; background: linear-gradient(135deg, #0a1628 0%, #1e3a5f 100%);
+      flex-shrink: 0; color: #fff;
+    }
+    .iss-ledger-title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .iss-ledger-title { font-size: 17px; font-weight: 700; }
+    .iss-ledger-meta { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 3px; }
+    .iss-ledger-close {
+      width: 30px; height: 30px; border: none; background: rgba(255,255,255,0.1);
+      border-radius: 8px; cursor: pointer; display: flex; align-items: center;
+      justify-content: center; color: rgba(255,255,255,0.7); transition: all 0.14s; flex-shrink: 0;
+    }
+    .iss-ledger-close:hover { background: rgba(255,255,255,0.2); color: #fff; }
+    .iss-ledger-close svg { width: 16px; height: 16px; }
+    .iss-ledger-chips { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+    .iss-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
+      background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.85);
+    }
+
+    .iss-ledger-stats {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid var(--border); flex-shrink: 0; background: #f8fafc;
+    }
+    .iss-ledger-stat {
+      padding: 14px 16px; border-right: 1px solid var(--border); text-align: center;
+    }
+    .iss-ledger-stat:last-child { border-right: none; }
+    .iss-ledger-stat-lbl { font-size: 9.5px; font-weight: 600; color: var(--textm); text-transform: uppercase; letter-spacing: 0.5px; }
+    .iss-ledger-stat-val { font-size: 18px; font-weight: 700; font-family: 'SF Mono', monospace; margin-top: 3px; line-height: 1.2; }
+
+    .iss-ledger-body { flex: 1; overflow-y: auto; }
+    .iss-ledger-body::-webkit-scrollbar { width: 4px; }
+    .iss-ledger-body::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 2px; }
+
+    .iss-ledger-section { padding: 18px 24px; border-bottom: 1px solid var(--border); }
+    .iss-ledger-section-title {
+      font-size: 10.5px; font-weight: 700; color: var(--text2); text-transform: uppercase;
+      letter-spacing: 0.7px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+    }
+    .iss-ledger-section-title::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    .iss-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .iss-detail-item { padding: 10px 14px; background: var(--bg); border-radius: 9px; }
+    .iss-detail-lbl { font-size: 10.5px; font-weight: 600; color: var(--textm); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 3px; }
+    .iss-detail-val { font-size: 13.5px; font-weight: 600; color: var(--text); }
+
+    .iss-ledger-txn-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+    .iss-ledger-txn-table th {
+      padding: 9px 14px; text-align: left; font-weight: 600; color: var(--text2);
+      font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+      border-bottom: 2px solid var(--border); background: #f8fafc;
+    }
+    .iss-ledger-txn-table td { padding: 10px 14px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+    .iss-ledger-txn-table tr:hover td { background: #f8fafc; }
+    .shares-debit  { color: #991b1b; font-weight: 700; font-family: 'SF Mono', monospace; }
+    .shares-credit { color: #166534; font-weight: 700; font-family: 'SF Mono', monospace; }
+
+    .iss-ledger-actions {
+      padding: 14px 24px; border-top: 1px solid var(--border);
+      display: flex; gap: 8px; flex-shrink: 0; background: #fff; flex-wrap: wrap;
+    }
+
+    /* Record Secondary Txn modal extras */
+    .txn-type-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 8px; }
+    .txn-type-option {
+      border: 2px solid var(--border); border-radius: 10px; padding: 12px 10px; text-align: center;
+      cursor: pointer; transition: all 0.14s; background: #fff;
+    }
+    .txn-type-option:hover { border-color: var(--accent); background: #f8fafc; }
+    .txn-type-option.selected { border-color: var(--accent); background: #eff6ff; }
+    .txn-type-option svg { width: 20px; height: 20px; margin-bottom: 5px; }
+    .txn-type-option-label { font-size: 12px; font-weight: 600; color: var(--text); }
+
   </style>
 </head>
 <body>
@@ -1312,7 +1568,6 @@
       <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,18 15,12 9,6"/></svg>
     </div>
     <div class="nav-sub open" id="sub-txns">
-      <div class="nav-sub-item" onclick="switchView('grant-txns')">Equity Awards</div>
       <div class="nav-sub-item" onclick="switchView('long-share-txns')">Long Share Transactions</div>
       <div class="nav-sub-item" onclick="switchView('approvals')">Approvals & Actions</div>
     </div>
@@ -1992,60 +2247,324 @@
 
     <!-- LONG SHARE TRANSACTIONS VIEW -->
     <div class="view-section" id="view-long-share-txns">
+
+      <!-- Page header -->
       <div class="page-head">
         <div>
           <div class="page-title">Long Share Transactions</div>
-          <div class="page-sub">Post-issuance share activity</div>
+          <div class="page-sub">Share issuances and post-issuance activity — Exchange · Transfer · Repurchase · Sale</div>
         </div>
         <div class="head-actions">
-          <button class="btn btn-primary" onclick="openModal('modal-record-txn')">
+          <button class="btn btn-ghost" onclick="">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export
+          </button>
+          <button class="btn btn-primary" onclick="openIssModal()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Record Transaction
+            New Issuance
           </button>
         </div>
       </div>
 
-      <div class="summary-row">
-        <div class="summary-card">
-          <div class="s-label">Total Issued</div>
-          <div class="s-value">5,750</div>
-          <div class="s-sub">All activities</div>
+      <!-- Summary cards — 6 metrics -->
+      <div class="summary-row-6">
+        <div class="summary-card-sm">
+          <div class="s-label">Total Issuances</div>
+          <div class="s-value">12</div>
+          <div class="s-sub">Active certificates</div>
         </div>
-        <div class="summary-card">
-          <div class="s-label">Sold</div>
-          <div class="s-value">1,200</div>
-          <div class="s-sub">$48,500 realized</div>
+        <div class="summary-card-sm">
+          <div class="s-label">Shares Issued</div>
+          <div class="s-value">18,450</div>
+          <div class="s-sub">Across all participants</div>
         </div>
-        <div class="summary-card">
-          <div class="s-label">Held</div>
-          <div class="s-value">4,050</div>
-          <div class="s-sub">Current position</div>
+        <div class="summary-card-sm">
+          <div class="s-label">Net Shares Held</div>
+          <div class="s-value">13,820</div>
+          <div class="s-sub">After secondary txns</div>
         </div>
-        <div class="summary-card">
+        <div class="summary-card-sm">
+          <div class="s-label">Total Sold</div>
+          <div class="s-value" style="color:var(--amber)">2,630</div>
+          <div class="s-sub">$138.4K realized</div>
+        </div>
+        <div class="summary-card-sm">
+          <div class="s-label">Transferred / Exchanged</div>
+          <div class="s-value" style="color:var(--cyan)">2,000</div>
+          <div class="s-sub">6 secondary txns</div>
+        </div>
+        <div class="summary-card-sm">
           <div class="s-label">Unrealized Gain</div>
-          <div class="s-value" style="color:var(--green)">$148,200</div>
-          <div class="s-sub">Current market value</div>
+          <div class="s-value" style="color:var(--green)">$412K</div>
+          <div class="s-sub">At $72.50 / share</div>
         </div>
       </div>
 
-      <div class="table-card">
-        <table class="tx-table" id="long-share-table">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Participant</th>
-              <th>Transaction Type</th>
-              <th>Shares</th>
-              <th>Price</th>
-              <th>Total</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody id="long-share-body">
-          </tbody>
-        </table>
+      <!-- Transaction type filter tabs -->
+      <div class="txtype-tabs" id="iss-type-tabs">
+        <button class="txtype-tab active" onclick="filterIssTab(this,'all')">
+          All  <span class="tab-count">12</span>
+        </button>
+        <button class="txtype-tab" onclick="filterIssTab(this,'issuance')">
+          Issuances  <span class="tab-count">12</span>
+        </button>
+        <button class="txtype-tab tab-sale" onclick="filterIssTab(this,'sale')">
+          Sales  <span class="tab-count">5</span>
+        </button>
+        <button class="txtype-tab tab-transfer" onclick="filterIssTab(this,'transfer')">
+          Transfers  <span class="tab-count">4</span>
+        </button>
+        <button class="txtype-tab tab-exchange" onclick="filterIssTab(this,'exchange')">
+          Exchanges  <span class="tab-count">2</span>
+        </button>
+        <button class="txtype-tab tab-repurchase" onclick="filterIssTab(this,'repurchase')">
+          Repurchases  <span class="tab-count">2</span>
+        </button>
+        <button class="txtype-tab tab-other" onclick="filterIssTab(this,'other')">
+          Other  <span class="tab-count">3</span>
+        </button>
       </div>
+
+      <!-- Filter / search bar -->
+      <div class="filter-row">
+        <div class="filter-search-wrap">
+          <span class="filter-search-ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </span>
+          <input class="filter-search-input" id="iss-search" placeholder="Search by Issuance ID, Cert ID or participant…" oninput="renderShareIssuanceTable()">
+        </div>
+        <select class="filter-select-sm" id="iss-sec-class" onchange="renderShareIssuanceTable()">
+          <option value="">All Security Classes</option>
+          <option value="Common Stock">Common Stock</option>
+          <option value="Class A Preferred">Class A Preferred</option>
+          <option value="Restricted Stock">Restricted Stock</option>
+        </select>
+        <select class="filter-select-sm" id="iss-status-filter" onchange="renderShareIssuanceTable()">
+          <option value="">All Statuses</option>
+          <option value="active">Active</option>
+          <option value="partial">Partially Sold</option>
+          <option value="fully-sold">Fully Sold</option>
+          <option value="transferred">Transferred</option>
+          <option value="repurchased">Repurchased</option>
+        </select>
+        <div class="filter-right-actions">
+          <button class="btn btn-ghost" style="height:36px;padding:0 12px;font-size:12.5px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+            Columns
+          </button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="ag-table-wrap">
+        <div class="table-toolbar">
+          <div class="table-result-count" id="iss-result-count">Showing <strong>12</strong> issuances</div>
+          <div class="table-toolbar-actions">
+            <button class="btn btn-ghost" style="height:32px;padding:0 10px;font-size:12px">Bulk Select</button>
+          </div>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="ag-table" id="share-issuance-table">
+            <thead>
+              <tr>
+                <th class="col-actions">Actions</th>
+                <th class="col-issuance-id" style="cursor:pointer" onclick="sortIssTable('id')">Issuance ID ↕</th>
+                <th class="col-cert-id">Cert. ID</th>
+                <th class="col-participant">Participant</th>
+                <th class="col-sec-class">Security Class</th>
+                <th class="col-shares" style="text-align:right">Shares Issued</th>
+                <th class="col-net-shares" style="text-align:right">Net Held</th>
+                <th class="col-price" style="text-align:right">Issue Price</th>
+                <th class="col-total" style="text-align:right">Total Value</th>
+                <th class="col-date" style="cursor:pointer" onclick="sortIssTable('date')">Issue Date ↕</th>
+                <th class="col-secondary" style="text-align:center">Activity</th>
+                <th class="col-iss-status">Status</th>
+              </tr>
+            </thead>
+            <tbody id="share-issuance-body">
+            </tbody>
+          </table>
+        </div>
+      </div>
+
     </div><!-- /view-long-share-txns -->
+
+    <!-- ════ ISSUANCE LEDGER DRAWER ════ -->
+    <div class="iss-ledger-overlay" id="iss-ledger-overlay" onclick="closeIssLedger(event)">
+      <div class="iss-ledger-drawer" id="iss-ledger-drawer" onclick="event.stopPropagation()">
+        <div class="iss-ledger-head">
+          <div class="iss-ledger-title-row">
+            <div>
+              <div class="iss-ledger-title" id="iss-ldg-title">ISS-2025-0001</div>
+              <div class="iss-ledger-meta" id="iss-ldg-meta">Sarah Chen · Common Stock</div>
+            </div>
+            <button class="iss-ledger-close" onclick="closeIssLedger()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+          <div class="iss-ledger-chips" id="iss-ldg-chips">
+            <!-- populated by JS -->
+          </div>
+        </div>
+
+        <!-- Stats bar -->
+        <div class="iss-ledger-stats">
+          <div class="iss-ledger-stat">
+            <div class="iss-ledger-stat-lbl">Issued</div>
+            <div class="iss-ledger-stat-val" id="iss-ldg-issued">—</div>
+          </div>
+          <div class="iss-ledger-stat">
+            <div class="iss-ledger-stat-lbl">Disposed</div>
+            <div class="iss-ledger-stat-val" id="iss-ldg-disposed" style="color:var(--red)">—</div>
+          </div>
+          <div class="iss-ledger-stat">
+            <div class="iss-ledger-stat-lbl">Net Held</div>
+            <div class="iss-ledger-stat-val" id="iss-ldg-held" style="color:var(--green)">—</div>
+          </div>
+          <div class="iss-ledger-stat">
+            <div class="iss-ledger-stat-lbl">Total Proceeds</div>
+            <div class="iss-ledger-stat-val" id="iss-ldg-proceeds" style="color:var(--accent)">—</div>
+          </div>
+        </div>
+
+        <div class="iss-ledger-body">
+          <!-- Issuance Details section -->
+          <div class="iss-ledger-section">
+            <div class="iss-ledger-section-title">Issuance Details</div>
+            <div class="iss-detail-grid" id="iss-ldg-detail-grid">
+              <!-- populated by JS -->
+            </div>
+          </div>
+
+          <!-- Transaction history -->
+          <div class="iss-ledger-section">
+            <div class="iss-ledger-section-title">Transaction Ledger</div>
+            <table class="iss-ledger-txn-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Txn ID</th>
+                  <th>Type</th>
+                  <th style="text-align:right">Shares</th>
+                  <th style="text-align:right">Price</th>
+                  <th style="text-align:right">Proceeds</th>
+                  <th>Counterparty</th>
+                </tr>
+              </thead>
+              <tbody id="iss-ldg-txn-body">
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Documents section -->
+          <div class="iss-ledger-section">
+            <div class="iss-ledger-section-title">Documents</div>
+            <div class="doc-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:var(--accent);flex-shrink:0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+              <span class="doc-item-name" id="iss-ldg-cert-doc">CERT-0042 — Stock Certificate.pdf</span>
+              <span class="doc-item-action">View</span>
+              <span class="doc-item-action">Download</span>
+            </div>
+            <div class="doc-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:var(--text2);flex-shrink:0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+              <span class="doc-item-name">Board Approval — Share Issuance.pdf</span>
+              <span class="doc-item-action">View</span>
+              <span class="doc-item-action">Download</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="iss-ledger-actions">
+          <button class="btn btn-ghost" style="font-size:12.5px" onclick="openSecTxnModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Record Transaction
+          </button>
+          <button class="btn btn-ghost" style="font-size:12.5px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>
+            Edit Issuance
+          </button>
+          <button class="btn btn-ghost" style="font-size:12.5px;margin-left:auto">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export PDF
+          </button>
+        </div>
+      </div>
+    </div><!-- /iss-ledger-overlay -->
+
+    <!-- ════ RECORD SECONDARY TRANSACTION MODAL ════ -->
+    <div class="modal-overlay" id="modal-sec-txn">
+      <div class="modal-box" style="width:600px">
+        <div class="modal-head">
+          <div>
+            <div class="modal-title">Record Secondary Transaction</div>
+            <div style="font-size:12px;color:var(--textm);margin-top:2px" id="sec-txn-modal-sub">Issuance ISS-2025-0001</div>
+          </div>
+          <button class="modal-close" onclick="closeModal('modal-sec-txn')">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="drawer-section-title">Transaction Type</div>
+          <div class="txn-type-grid">
+            <div class="txn-type-option selected" onclick="selectSecTxnType(this,'Sale')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              <div class="txn-type-option-label">Sale</div>
+            </div>
+            <div class="txn-type-option" onclick="selectSecTxnType(this,'Transfer')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <div class="txn-type-option-label">Transfer</div>
+            </div>
+            <div class="txn-type-option" onclick="selectSecTxnType(this,'Exchange')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><polyline points="17,1 21,5 17,9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7,23 3,19 7,15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+              <div class="txn-type-option-label">Exchange</div>
+            </div>
+            <div class="txn-type-option" onclick="selectSecTxnType(this,'Repurchase')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+              <div class="txn-type-option-label">Repurchase</div>
+            </div>
+            <div class="txn-type-option" onclick="selectSecTxnType(this,'Pledge')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <div class="txn-type-option-label">Pledge</div>
+            </div>
+            <div class="txn-type-option" onclick="selectSecTxnType(this,'Gift')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><polyline points="20,12 20,22 4,22 4,12"/><rect x="2" y="7" width="20" height="5"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+              <div class="txn-type-option-label">Gift</div>
+            </div>
+          </div>
+          <div class="form-grid" style="margin-top:16px">
+            <div class="form-group">
+              <label class="form-label">Transaction Date <span class="req">*</span></label>
+              <input type="date" class="form-input" value="2026-03-27">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Number of Shares <span class="req">*</span></label>
+              <input type="number" class="form-input" placeholder="e.g. 500">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Price Per Share <span class="req">*</span></label>
+              <input type="number" step="0.01" class="form-input" placeholder="$0.00">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Counterparty / Buyer</label>
+              <input type="text" class="form-input" placeholder="Name or entity">
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Notes</label>
+              <textarea class="form-input form-textarea" placeholder="Optional notes or reference…"></textarea>
+            </div>
+          </div>
+          <div class="value-box">
+            <div class="value-grid">
+              <div><div class="value-item-label">Shares</div><div class="value-item-val" id="sec-txn-shares-preview">—</div></div>
+              <div><div class="value-item-label">Price</div><div class="value-item-val" id="sec-txn-price-preview">—</div></div>
+              <div><div class="value-item-label">Total Proceeds</div><div class="value-item-val" id="sec-txn-total-preview">—</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button class="btn btn-ghost" onclick="closeModal('modal-sec-txn')">Cancel</button>
+          <button class="btn btn-primary" onclick="closeModal('modal-sec-txn');alert('Transaction recorded successfully.')">Record Transaction</button>
+        </div>
+      </div>
+    </div><!-- /modal-sec-txn -->
 
     <!-- APPROVALS & ACTIONS VIEW -->
     <div class="view-section" id="view-approvals">
@@ -2932,16 +3451,124 @@ const ledgerData = {
   ]
 };
 
-// Long share transactions
-const longShareData = [
-  { date: '2025-03-15', participant: 'Sarah Chen', type: 'Issuance', shares: 1500, price: 45.20, total: 67800, status: 'complete' },
-  { date: '2025-03-10', participant: 'Marcus Johnson', type: 'Sale', shares: 500, price: 47.30, total: 23650, status: 'complete' },
-  { date: '2025-03-05', participant: 'Emma Davis', type: 'Transfer', shares: 1000, price: 46.50, total: 46500, status: 'complete' },
-  { date: '2025-03-01', participant: 'James Park', type: 'Issuance', shares: 800, price: 45.75, total: 36600, status: 'complete' },
-  { date: '2025-02-28', participant: 'Priya Sharma', type: 'Sale', shares: 300, price: 45.00, total: 13500, status: 'complete' },
-  { date: '2025-02-25', participant: 'Lisa Wong', type: 'Issuance', shares: 950, price: 44.80, total: 42560, status: 'complete' },
-  { date: '2025-02-20', participant: 'David Miller', type: 'Transfer', shares: 200, price: 43.50, total: 8700, status: 'complete' }
+// Share Issuance data (Long Share Transactions)
+const shareIssuanceData = [
+  {
+    id: 'ISS-2025-0001', certId: 'CERT-0042',
+    participant: 'Sarah Chen', dept: 'Engineering',
+    securityClass: 'Common Stock',
+    sharesIssued: 1500, pricePerShare: 45.20, totalValue: 67800,
+    issueDate: '2025-03-15', status: 'partial',
+    secondaryTxns: [
+      { id: 'STX-2025-0012', type: 'Sale', date: '2025-06-10', shares: 300, price: 52.10, total: 15630, counterparty: 'Open Market', status: 'complete' },
+      { id: 'STX-2025-0022', type: 'Transfer', date: '2025-10-04', shares: 200, price: 61.00, total: 12200, counterparty: 'J. Chen (Spouse)', status: 'complete' }
+    ]
+  },
+  {
+    id: 'ISS-2025-0002', certId: 'CERT-0043',
+    participant: 'Marcus Johnson', dept: 'Finance',
+    securityClass: 'Common Stock',
+    sharesIssued: 2000, pricePerShare: 46.80, totalValue: 93600,
+    issueDate: '2025-03-10', status: 'active',
+    secondaryTxns: []
+  },
+  {
+    id: 'ISS-2025-0003', certId: 'CERT-0044',
+    participant: 'Emma Davis', dept: 'Legal',
+    securityClass: 'Class A Preferred',
+    sharesIssued: 3000, pricePerShare: 55.00, totalValue: 165000,
+    issueDate: '2025-03-05', status: 'fully-sold',
+    secondaryTxns: [
+      { id: 'STX-2025-0008', type: 'Sale', date: '2025-05-22', shares: 1500, price: 64.50, total: 96750, counterparty: 'Open Market', status: 'complete' },
+      { id: 'STX-2025-0014', type: 'Sale', date: '2025-08-15', shares: 1500, price: 69.20, total: 103800, counterparty: 'Open Market', status: 'complete' }
+    ]
+  },
+  {
+    id: 'ISS-2025-0004', certId: 'CERT-0045',
+    participant: 'James Park', dept: 'Product',
+    securityClass: 'Common Stock',
+    sharesIssued: 800, pricePerShare: 45.75, totalValue: 36600,
+    issueDate: '2025-03-01', status: 'active',
+    secondaryTxns: []
+  },
+  {
+    id: 'ISS-2025-0005', certId: 'CERT-0046',
+    participant: 'Priya Sharma', dept: 'Engineering',
+    securityClass: 'Restricted Stock',
+    sharesIssued: 1200, pricePerShare: 44.80, totalValue: 53760,
+    issueDate: '2025-02-28', status: 'partial',
+    secondaryTxns: [
+      { id: 'STX-2025-0009', type: 'Repurchase', date: '2025-07-12', shares: 400, price: 30.00, total: 12000, counterparty: 'Company', status: 'complete' }
+    ]
+  },
+  {
+    id: 'ISS-2025-0006', certId: 'CERT-0047',
+    participant: 'Lisa Wong', dept: 'HR',
+    securityClass: 'Common Stock',
+    sharesIssued: 950, pricePerShare: 44.80, totalValue: 42560,
+    issueDate: '2025-02-25', status: 'transferred',
+    secondaryTxns: [
+      { id: 'STX-2025-0010', type: 'Exchange', date: '2025-09-30', shares: 950, price: 68.00, total: 64600, counterparty: 'Class B Preferred', status: 'complete' }
+    ]
+  },
+  {
+    id: 'ISS-2025-0007', certId: 'CERT-0048',
+    participant: 'David Miller', dept: 'Sales',
+    securityClass: 'Common Stock',
+    sharesIssued: 1800, pricePerShare: 43.50, totalValue: 78300,
+    issueDate: '2025-02-20', status: 'active',
+    secondaryTxns: []
+  },
+  {
+    id: 'ISS-2026-0001', certId: 'CERT-0055',
+    participant: 'Aiko Tanaka', dept: 'Engineering',
+    securityClass: 'Class A Preferred',
+    sharesIssued: 2500, pricePerShare: 68.00, totalValue: 170000,
+    issueDate: '2026-01-10', status: 'partial',
+    secondaryTxns: [
+      { id: 'STX-2026-0003', type: 'Sale', date: '2026-02-14', shares: 300, price: 71.50, total: 21450, counterparty: 'Open Market', status: 'complete' },
+      { id: 'STX-2026-0007', type: 'Pledge', date: '2026-03-01', shares: 500, price: 70.00, total: 35000, counterparty: 'Silicon Valley Bank', status: 'complete' }
+    ]
+  },
+  {
+    id: 'ISS-2026-0002', certId: 'CERT-0056',
+    participant: 'Carlos Mendez', dept: 'Operations',
+    securityClass: 'Common Stock',
+    sharesIssued: 1000, pricePerShare: 66.50, totalValue: 66500,
+    issueDate: '2026-01-22', status: 'active',
+    secondaryTxns: []
+  },
+  {
+    id: 'ISS-2026-0003', certId: 'CERT-0057',
+    participant: 'Rachel Kim', dept: 'Finance',
+    securityClass: 'Restricted Stock',
+    sharesIssued: 1500, pricePerShare: 67.20, totalValue: 100800,
+    issueDate: '2026-02-05', status: 'repurchased',
+    secondaryTxns: [
+      { id: 'STX-2026-0005', type: 'Repurchase', date: '2026-03-15', shares: 1500, price: 30.00, total: 45000, counterparty: 'Company', status: 'complete' }
+    ]
+  },
+  {
+    id: 'ISS-2026-0004', certId: 'CERT-0058',
+    participant: 'Tom Nguyen', dept: 'Engineering',
+    securityClass: 'Common Stock',
+    sharesIssued: 2200, pricePerShare: 70.00, totalValue: 154000,
+    issueDate: '2026-02-18', status: 'active',
+    secondaryTxns: []
+  },
+  {
+    id: 'ISS-2026-0005', certId: 'CERT-0059',
+    participant: 'Nina Patel', dept: 'Product',
+    securityClass: 'Class A Preferred',
+    sharesIssued: 1800, pricePerShare: 72.00, totalValue: 129600,
+    issueDate: '2026-03-01', status: 'partial',
+    secondaryTxns: [
+      { id: 'STX-2026-0009', type: 'Gift', date: '2026-03-20', shares: 200, price: 72.50, total: 14500, counterparty: 'N. Patel Trust', status: 'complete' }
+    ]
+  }
 ];
+
+let issActiveTab = 'all';
 
 // Approval actions
 const approvalsData = [
