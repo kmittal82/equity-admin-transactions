@@ -2430,6 +2430,8 @@
                 <th class="col-sec-class">Security Class</th>
                 <th class="col-shares" style="text-align:right">Shares Issued</th>
                 <th class="col-net-shares" style="text-align:right">Net Held</th>
+                <th class="col-retention">Retention</th>
+                <th class="col-holding">Holding Period</th>
                 <th class="col-price" style="text-align:right">Issue Price</th>
                 <th class="col-total" style="text-align:right">Total Value</th>
                 <th class="col-date" style="cursor:pointer" onclick="sortIssTable('date')">Issue Date ↕</th>
@@ -4038,7 +4040,7 @@ const shareIssuanceData = [
     participant: 'Sarah Chen', dept: 'Engineering',
     securityClass: 'Common Stock',
     sharesIssued: 1500, pricePerShare: 45.20, totalValue: 67800,
-    issueDate: '2025-03-15', status: 'partial',
+    issueDate: '2025-03-15', retentionMonths: 6, status: 'partial',
     secondaryTxns: [
       { id: 'STX-2025-0012', type: 'Sale', date: '2025-06-10', shares: 300, price: 52.10, total: 15630, counterparty: 'Open Market', status: 'complete' },
       { id: 'STX-2025-0022', type: 'Transfer', date: '2025-10-04', shares: 200, price: 61.00, total: 12200, counterparty: 'J. Chen (Spouse)', status: 'complete' }
@@ -4049,7 +4051,7 @@ const shareIssuanceData = [
     participant: 'Marcus Johnson', dept: 'Finance',
     securityClass: 'Common Stock',
     sharesIssued: 2000, pricePerShare: 46.80, totalValue: 93600,
-    issueDate: '2025-03-10', status: 'active',
+    issueDate: '2025-03-10', retentionMonths: 12, status: 'active',
     secondaryTxns: []
   },
   {
@@ -4057,7 +4059,7 @@ const shareIssuanceData = [
     participant: 'Emma Davis', dept: 'Legal',
     securityClass: 'Class A Preferred',
     sharesIssued: 3000, pricePerShare: 55.00, totalValue: 165000,
-    issueDate: '2025-03-05', status: 'fully-sold',
+    issueDate: '2025-03-05', retentionMonths: 6, status: 'fully-sold',
     secondaryTxns: [
       { id: 'STX-2025-0008', type: 'Sale', date: '2025-05-22', shares: 1500, price: 64.50, total: 96750, counterparty: 'Open Market', status: 'complete' },
       { id: 'STX-2025-0014', type: 'Sale', date: '2025-08-15', shares: 1500, price: 69.20, total: 103800, counterparty: 'Open Market', status: 'complete' }
@@ -4068,7 +4070,7 @@ const shareIssuanceData = [
     participant: 'James Park', dept: 'Product',
     securityClass: 'Common Stock',
     sharesIssued: 800, pricePerShare: 45.75, totalValue: 36600,
-    issueDate: '2025-03-01', status: 'reissued',
+    issueDate: '2025-03-01', retentionMonths: 12, status: 'reissued',
     cancelledAndReissuedAs: 'ISS-2025-0004R',
     secondaryTxns: [
       { id: 'STX-2025-0030', type: 'Cancel & Reissue', date: '2025-11-15', shares: 800, price: 0, total: 0, counterparty: 'Equity Admin', status: 'complete', note: 'Certificate error — security class correction. Reissued as CERT-0045R.' }
@@ -4079,7 +4081,7 @@ const shareIssuanceData = [
     participant: 'Priya Sharma', dept: 'Engineering',
     securityClass: 'Restricted Stock',
     sharesIssued: 1200, pricePerShare: 44.80, totalValue: 53760,
-    issueDate: '2025-02-28', status: 'partial',
+    issueDate: '2025-02-28', retentionMonths: 24, status: 'partial',
     secondaryTxns: [
       { id: 'STX-2025-0009', type: 'Repurchase', date: '2025-07-12', shares: 400, price: 30.00, total: 12000, counterparty: 'Company', status: 'complete' }
     ]
@@ -4089,7 +4091,7 @@ const shareIssuanceData = [
     participant: 'Lisa Wong', dept: 'HR',
     securityClass: 'Common Stock',
     sharesIssued: 950, pricePerShare: 44.80, totalValue: 42560,
-    issueDate: '2025-02-25', status: 'transferred',
+    issueDate: '2025-02-25', retentionMonths: 6, status: 'transferred',
     secondaryTxns: [
       { id: 'STX-2025-0010', type: 'Exchange', date: '2025-09-30', shares: 950, price: 68.00, total: 64600, counterparty: 'Class B Preferred', status: 'complete' }
     ]
@@ -4099,7 +4101,7 @@ const shareIssuanceData = [
     participant: 'David Miller', dept: 'Sales',
     securityClass: 'Common Stock',
     sharesIssued: 1800, pricePerShare: 43.50, totalValue: 78300,
-    issueDate: '2025-02-20', status: 'partial',
+    issueDate: '2025-02-20', retentionMonths: 12, status: 'partial',
     secondaryTxns: [
       { id: 'STX-2025-0028', type: 'Debit Policy', date: '2025-09-30', shares: 450, price: 0, total: 0, counterparty: 'Clawback Policy § 4.2', status: 'complete', note: 'Shares debited per executive clawback policy following restatement.' }
     ]
@@ -4109,7 +4111,7 @@ const shareIssuanceData = [
     participant: 'Aiko Tanaka', dept: 'Engineering',
     securityClass: 'Class A Preferred',
     sharesIssued: 2500, pricePerShare: 68.00, totalValue: 170000,
-    issueDate: '2026-01-10', status: 'partial',
+    issueDate: '2026-01-10', retentionMonths: 6, status: 'partial',
     secondaryTxns: [
       { id: 'STX-2026-0003', type: 'Sale', date: '2026-02-14', shares: 300, price: 71.50, total: 21450, counterparty: 'Open Market', status: 'complete' },
       { id: 'STX-2026-0007', type: 'Pledge', date: '2026-03-01', shares: 500, price: 70.00, total: 35000, counterparty: 'Silicon Valley Bank', status: 'complete' }
@@ -4120,7 +4122,7 @@ const shareIssuanceData = [
     participant: 'Carlos Mendez', dept: 'Operations',
     securityClass: 'Common Stock',
     sharesIssued: 1000, pricePerShare: 66.50, totalValue: 66500,
-    issueDate: '2026-01-22', status: 'active',
+    issueDate: '2026-01-22', retentionMonths: 12, status: 'active',
     secondaryTxns: []
   },
   {
@@ -4128,7 +4130,7 @@ const shareIssuanceData = [
     participant: 'Rachel Kim', dept: 'Finance',
     securityClass: 'Restricted Stock',
     sharesIssued: 1500, pricePerShare: 67.20, totalValue: 100800,
-    issueDate: '2026-02-05', status: 'repurchased',
+    issueDate: '2026-02-05', retentionMonths: 24, status: 'repurchased',
     secondaryTxns: [
       { id: 'STX-2026-0005', type: 'Repurchase', date: '2026-03-15', shares: 1500, price: 30.00, total: 45000, counterparty: 'Company', status: 'complete' }
     ]
@@ -4138,7 +4140,7 @@ const shareIssuanceData = [
     participant: 'Tom Nguyen', dept: 'Engineering',
     securityClass: 'Common Stock',
     sharesIssued: 2200, pricePerShare: 70.00, totalValue: 154000,
-    issueDate: '2026-02-18', status: 'active',
+    issueDate: '2026-02-18', retentionMonths: 12, status: 'active',
     secondaryTxns: []
   },
   {
@@ -4146,7 +4148,7 @@ const shareIssuanceData = [
     participant: 'Nina Patel', dept: 'Product',
     securityClass: 'Class A Preferred',
     sharesIssued: 1800, pricePerShare: 72.00, totalValue: 129600,
-    issueDate: '2026-03-01', status: 'partial',
+    issueDate: '2026-03-01', retentionMonths: 6, status: 'partial',
     secondaryTxns: [
       { id: 'STX-2026-0009', type: 'Gift', date: '2026-03-20', shares: 200, price: 72.50, total: 14500, counterparty: 'N. Patel Trust', status: 'complete' }
     ]
@@ -4156,7 +4158,7 @@ const shareIssuanceData = [
     participant: 'James Park', dept: 'Product',
     securityClass: 'Class A Preferred',
     sharesIssued: 800, pricePerShare: 45.75, totalValue: 36600,
-    issueDate: '2025-11-15', status: 'active',
+    issueDate: '2025-11-15', retentionMonths: 12, status: 'active',
     reissuedFrom: 'ISS-2025-0004',
     secondaryTxns: []
   }
@@ -4794,8 +4796,40 @@ function renderShareIssuanceTable() {
     'Debit Policy': 'stxtype-debit', 'Cancel & Reissue': 'stxtype-reissue',
   };
 
+  function issHoldingPeriod(dateStr) {
+    const start = new Date(dateStr);
+    const today = new Date();
+    let yrs = today.getFullYear() - start.getFullYear();
+    let mos = today.getMonth() - start.getMonth();
+    const days = today.getDate() - start.getDate();
+    if (days < 0) mos--;
+    if (mos < 0) { mos += 12; yrs--; }
+    if (yrs > 0) return `${yrs}yr ${mos}mo`;
+    if (mos > 0) return `${mos} mo`;
+    const diffDays = Math.floor((today - start) / 86400000);
+    return `${diffDays} days`;
+  }
+
+  function issRetentionCell(issueDate, retentionMonths) {
+    if (!retentionMonths) return `<span style="color:var(--textm);font-size:12px">—</span>`;
+    const start = new Date(issueDate);
+    const end = new Date(start);
+    end.setMonth(end.getMonth() + retentionMonths);
+    const today = new Date();
+    const met = today >= end;
+    const label = retentionMonths >= 12 ? `${retentionMonths / 12}yr` : `${retentionMonths}mo`;
+    if (met) {
+      return `<span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#166534;font-weight:500"><span style="width:6px;height:6px;border-radius:50%;background:#16a34a;display:inline-block"></span>${label} · Met</span>`;
+    } else {
+      const diffMs = end - today;
+      const diffMos = Math.ceil(diffMs / (1000 * 60 * 60 * 24 * 30.44));
+      const remaining = diffMos >= 12 ? `${Math.floor(diffMos / 12)}yr ${diffMos % 12}mo left` : `${diffMos}mo left`;
+      return `<span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#92400e;font-weight:500"><span style="width:6px;height:6px;border-radius:50%;background:#f59e0b;display:inline-block"></span>${label} · ${remaining}</span>`;
+    }
+  }
+
   if (filtered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="12" style="text-align:center;padding:40px;color:var(--textm);font-size:13px">No issuances match the current filters.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="14" style="text-align:center;padding:40px;color:var(--textm);font-size:13px">No issuances match the current filters.</td></tr>`;
     return;
   }
 
@@ -4936,6 +4970,8 @@ function renderShareIssuanceTable() {
       <td><span class="sec-class-badge ${secCls}">${iss.securityClass}</span></td>
       <td class="mono" style="text-align:right;font-weight:600">${iss.sharesIssued.toLocaleString()}</td>
       <td class="mono" style="text-align:right;color:${netHeld < iss.sharesIssued ? 'var(--amber)' : 'var(--green)'};font-weight:600">${netHeld.toLocaleString()}</td>
+      <td style="white-space:nowrap">${issRetentionCell(iss.issueDate, iss.retentionMonths)}</td>
+      <td style="font-size:12.5px;color:var(--text2);white-space:nowrap;font-family:'SF Mono',monospace">${issHoldingPeriod(iss.issueDate)}</td>
       <td class="mono" style="text-align:right">$${iss.pricePerShare.toFixed(2)}</td>
       <td class="mono" style="text-align:right">$${(iss.totalValue / 1000).toFixed(1)}K</td>
       <td style="color:var(--text2);font-size:12.5px">${new Date(iss.issueDate).toLocaleDateString()}</td>
@@ -4950,7 +4986,7 @@ function renderShareIssuanceTable() {
       <td><span class="iss-status ${stCls}">${stLbl}</span></td>
     </tr>
     <tr id="sec-txns-${iss.id}" style="display:none" class="sec-tx-container">
-      <td colspan="12" style="padding:0;border:none">
+      <td colspan="14" style="padding:0;border:none">
         <table style="width:100%;border-collapse:collapse">
           <tbody>${secTxnRows}</tbody>
         </table>
