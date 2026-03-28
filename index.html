@@ -1387,6 +1387,39 @@
     .stxtype-repurchase { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
     .stxtype-pledge     { background: #ecfeff; color: #155e75; border: 1px solid #a5f3fc; }
     .stxtype-gift       { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+    .stxtype-debit      { background: #fef2f2; color: #7f1d1d; border: 1px solid #fca5a5; }
+    .stxtype-reissue    { background: #fefce8; color: #78350f; border: 1px solid #fde68a; }
+
+    /* Reissued / Cancelled issuance statuses */
+    .iss-reissued  { background: #fefce8; color: #78350f; border: 1px solid #fde68a; }
+    .iss-reissued::before  { background: #f59e0b; }
+    .iss-cancelled { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+    .iss-cancelled::before { background: #94a3b8; }
+
+    /* Ledger: Cancel & Reissue / predecessor notice */
+    .ldg-policy-notice {
+      margin-bottom: 14px; border-radius: 8px; padding: 11px 14px;
+      display: flex; align-items: flex-start; gap: 10px; font-size: 12.5px;
+    }
+    .ldg-policy-notice.notice-reissue {
+      background: linear-gradient(135deg,#fff7ed,#fefce8);
+      border: 1px solid #fde68a;
+    }
+    .ldg-policy-notice.notice-predecessor {
+      background: linear-gradient(135deg,#f0f9ff,#eff6ff);
+      border: 1px solid #bae6fd;
+    }
+    .ldg-policy-notice-icon { width:18px;height:18px;flex-shrink:0;margin-top:1px; }
+    .ldg-policy-notice-title { font-weight:700;margin-bottom:2px; }
+    .ldg-policy-notice.notice-reissue .ldg-policy-notice-title { color:#92400e; }
+    .ldg-policy-notice.notice-reissue .ldg-policy-notice-sub   { color:#b45309;font-size:11.5px; }
+    .ldg-policy-notice.notice-predecessor .ldg-policy-notice-title { color:#0c4a6e; }
+    .ldg-policy-notice.notice-predecessor .ldg-policy-notice-sub   { color:#075985;font-size:11.5px; }
+    .ldg-policy-link { color:var(--accent);cursor:pointer;font-weight:600;text-decoration:underline; }
+
+    /* Ledger: special transaction rows */
+    .ldg-row-cancel td { background:#fef2f2 !important; color:#991b1b !important; font-weight:600; }
+    .ldg-row-debit  td { background:#fff7ed !important; }
 
     /* Filter bar row */
     .filter-row {
@@ -1555,10 +1588,15 @@
       <div class="nav-sub-item" onclick="switchView('plan-savings')">Savings</div>
       <div class="nav-sub-item" onclick="switchView('plan-purchase')">Purchase</div>
     </div>
-    <div class="nav-item" onclick="setActive(this)">
+    <div class="nav-item open" id="nav-events" onclick="toggleSub(this,'sub-events')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
       Equity Events
       <span class="nav-badge">12</span>
+      <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,18 15,12 9,6"/></svg>
+    </div>
+    <div class="nav-sub open" id="sub-events">
+      <div class="nav-sub-item" onclick="switchView('exercise-mgmt')">Exercise Management</div>
+      <div class="nav-sub-item" onclick="switchView('release-mgmt')">Release Management</div>
     </div>
     <div class="nav-item open" id="nav-txns" onclick="toggleSub(this,'sub-txns')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
@@ -2345,6 +2383,8 @@
           <option value="fully-sold">Fully Sold</option>
           <option value="transferred">Transferred</option>
           <option value="repurchased">Repurchased</option>
+          <option value="reissued">Cancelled &amp; Reissued</option>
+          <option value="cancelled">Cancelled</option>
         </select>
         <div class="filter-right-actions">
           <button class="btn btn-ghost" style="height:36px;padding:0 12px;font-size:12.5px">
@@ -2427,6 +2467,9 @@
         </div>
 
         <div class="iss-ledger-body">
+          <!-- Policy / predecessor notice (populated by JS) -->
+          <div id="iss-ldg-notice"></div>
+
           <!-- Issuance Details section -->
           <div class="iss-ledger-section">
             <div class="iss-ledger-section-title">Issuance Details</div>
@@ -3906,8 +3949,11 @@ const shareIssuanceData = [
     participant: 'James Park', dept: 'Product',
     securityClass: 'Common Stock',
     sharesIssued: 800, pricePerShare: 45.75, totalValue: 36600,
-    issueDate: '2025-03-01', status: 'active',
-    secondaryTxns: []
+    issueDate: '2025-03-01', status: 'reissued',
+    cancelledAndReissuedAs: 'ISS-2025-0004R',
+    secondaryTxns: [
+      { id: 'STX-2025-0030', type: 'Cancel & Reissue', date: '2025-11-15', shares: 800, price: 0, total: 0, counterparty: 'Equity Admin', status: 'complete', note: 'Certificate error — security class correction. Reissued as CERT-0045R.' }
+    ]
   },
   {
     id: 'ISS-2025-0005', certId: 'CERT-0046',
@@ -3934,8 +3980,10 @@ const shareIssuanceData = [
     participant: 'David Miller', dept: 'Sales',
     securityClass: 'Common Stock',
     sharesIssued: 1800, pricePerShare: 43.50, totalValue: 78300,
-    issueDate: '2025-02-20', status: 'active',
-    secondaryTxns: []
+    issueDate: '2025-02-20', status: 'partial',
+    secondaryTxns: [
+      { id: 'STX-2025-0028', type: 'Debit Policy', date: '2025-09-30', shares: 450, price: 0, total: 0, counterparty: 'Clawback Policy § 4.2', status: 'complete', note: 'Shares debited per executive clawback policy following restatement.' }
+    ]
   },
   {
     id: 'ISS-2026-0001', certId: 'CERT-0055',
@@ -3983,6 +4031,15 @@ const shareIssuanceData = [
     secondaryTxns: [
       { id: 'STX-2026-0009', type: 'Gift', date: '2026-03-20', shares: 200, price: 72.50, total: 14500, counterparty: 'N. Patel Trust', status: 'complete' }
     ]
+  },
+  {
+    id: 'ISS-2025-0004R', certId: 'CERT-0045R',
+    participant: 'James Park', dept: 'Product',
+    securityClass: 'Class A Preferred',
+    sharesIssued: 800, pricePerShare: 45.75, totalValue: 36600,
+    issueDate: '2025-11-15', status: 'active',
+    reissuedFrom: 'ISS-2025-0004',
+    secondaryTxns: []
   }
 ];
 
@@ -4503,7 +4560,7 @@ function renderShareIssuanceTable() {
 
   const secTxnTypes = {
     sale: ['Sale'], transfer: ['Transfer'], exchange: ['Exchange'],
-    repurchase: ['Repurchase'], other: ['Pledge', 'Gift']
+    repurchase: ['Repurchase'], other: ['Pledge', 'Gift', 'Debit Policy', 'Cancel & Reissue']
   };
 
   let filtered = shareIssuanceData.filter(iss => {
@@ -4530,14 +4587,17 @@ function renderShareIssuanceTable() {
   const statusMap = {
     'active': 'iss-active', 'partial': 'iss-partial', 'fully-sold': 'iss-fully-sold',
     'transferred': 'iss-transferred', 'repurchased': 'iss-repurchased',
+    'reissued': 'iss-reissued', 'cancelled': 'iss-cancelled',
   };
   const statusLabel = {
     'active': 'Active', 'partial': 'Partially Sold', 'fully-sold': 'Fully Sold',
     'transferred': 'Transferred', 'repurchased': 'Repurchased',
+    'reissued': 'Cancelled & Reissued', 'cancelled': 'Cancelled',
   };
   const typeColorMap = {
     'Sale': 'stxtype-sale', 'Transfer': 'stxtype-transfer', 'Exchange': 'stxtype-exchange',
     'Repurchase': 'stxtype-repurchase', 'Pledge': 'stxtype-pledge', 'Gift': 'stxtype-gift',
+    'Debit Policy': 'stxtype-debit', 'Cancel & Reissue': 'stxtype-reissue',
   };
 
   if (filtered.length === 0) {
@@ -4553,8 +4613,19 @@ function renderShareIssuanceTable() {
     const stLbl = statusLabel[iss.status] || iss.status;
     const hasSecTxns = iss.secondaryTxns.length > 0;
 
-    const secTxnRows = iss.secondaryTxns.map(tx => `
-      <tr class="sec-tx-row">
+    const isPolicy = tx => tx.type === 'Debit Policy' || tx.type === 'Cancel & Reissue';
+    const secTxnRows = iss.secondaryTxns.map(tx => {
+      const rowCls = tx.type === 'Cancel & Reissue' ? 'sec-tx-row ldg-row-cancel'
+                   : tx.type === 'Debit Policy'       ? 'sec-tx-row ldg-row-debit'
+                   : 'sec-tx-row';
+      const sharesCell = tx.type === 'Cancel & Reissue'
+        ? `<span style="color:#991b1b;font-weight:700">— ALL ${tx.shares.toLocaleString()} —</span>`
+        : `<span style="color:#991b1b;font-weight:600">&#8722;${tx.shares.toLocaleString()}</span>`;
+      const noteCell = tx.note
+        ? `<div style="font-size:10.5px;color:var(--textm);margin-top:2px;font-style:italic">${tx.note}</div>`
+        : '';
+      return `
+      <tr class="${rowCls}">
         <td class="col-actions" onclick="event.stopPropagation()">
           <div class="action-cell" style="padding-left:10px">
             <div class="kebab-wrap">
@@ -4576,24 +4647,25 @@ function renderShareIssuanceTable() {
         <td colspan="2" style="padding-left:28px">
           <div style="display:flex;align-items:center;gap:6px">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:10px;height:10px;color:var(--textm);flex-shrink:0"><path d="M9 18l6-6-6-6"/></svg>
-            <span class="mono" style="font-size:11.5px;color:var(--text2)">${tx.id}</span>
+            <div>
+              <span class="mono" style="font-size:11.5px;color:var(--text2)">${tx.id}</span>
+              ${noteCell}
+            </div>
           </div>
         </td>
         <td></td>
         <td></td>
-        <td style="text-align:right" class="mono">
-          <span style="color:#991b1b;font-weight:600">&#8722;${tx.shares.toLocaleString()}</span>
-        </td>
+        <td style="text-align:right" class="mono">${sharesCell}</td>
         <td></td>
-        <td style="text-align:right" class="mono">$${tx.price.toFixed(2)}</td>
-        <td style="text-align:right" class="mono">$${(tx.total / 1000).toFixed(1)}K</td>
+        <td style="text-align:right" class="mono">${tx.price > 0 ? '$' + tx.price.toFixed(2) : '—'}</td>
+        <td style="text-align:right" class="mono">${tx.total > 0 ? '$' + (tx.total/1000).toFixed(1) + 'K' : '—'}</td>
         <td style="color:var(--text2);font-size:12.5px">${new Date(tx.date).toLocaleDateString()}</td>
         <td style="text-align:center">
           <span class="txtype-badge ${typeColorMap[tx.type] || ''}" style="font-size:11px">${tx.type}</span>
         </td>
         <td style="font-size:11.5px;color:var(--textm)">${tx.counterparty}</td>
-      </tr>
-    `).join('');
+      </tr>`;
+    }).join('');
 
     return `
     <tr id="iss-row-${iss.id}">
@@ -4637,10 +4709,19 @@ function renderShareIssuanceTable() {
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
                 Record Repurchase
               </button>
+              <button class="kebab-menu-item" onclick="event.stopPropagation(); closeAllKebabs(); openSecTxnModalFor('${iss.id}','Debit Policy')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                Record Debit Policy
+              </button>
               <div class="kebab-divider"></div>
+              <div class="kebab-menu-label">Certificate</div>
               <button class="kebab-menu-item" onclick="event.stopPropagation(); closeAllKebabs()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
                 Generate Certificate
+              </button>
+              <button class="kebab-menu-item" style="color:var(--amber)" onclick="event.stopPropagation(); closeAllKebabs(); openSecTxnModalFor('${iss.id}','Cancel & Reissue')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+                Cancel &amp; Reissue
               </button>
               <button class="kebab-menu-item danger" onclick="event.stopPropagation(); closeAllKebabs()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
@@ -4705,12 +4786,35 @@ function openIssLedger(issId) {
   document.getElementById('iss-ldg-held').textContent = netHeld.toLocaleString();
   document.getElementById('iss-ldg-proceeds').textContent = proceeds > 0 ? '$' + (proceeds/1000).toFixed(1) + 'K' : '\u2014';
 
-  const statusLabel = { active:'Active', partial:'Partially Sold', 'fully-sold':'Fully Sold', transferred:'Transferred', repurchased:'Repurchased' };
+  const statusLblMap = { active:'Active', partial:'Partially Sold', 'fully-sold':'Fully Sold', transferred:'Transferred', repurchased:'Repurchased', reissued:'Cancelled & Reissued', cancelled:'Cancelled' };
   document.getElementById('iss-ldg-chips').innerHTML =
     '<span class="iss-chip">' + iss.certId + '</span>' +
     '<span class="iss-chip">' + iss.securityClass + '</span>' +
-    '<span class="iss-chip">' + (statusLabel[iss.status] || iss.status) + '</span>' +
-    '<span class="iss-chip">' + iss.dept + '</span>';
+    '<span class="iss-chip">' + (statusLblMap[iss.status] || iss.status) + '</span>' +
+    '<span class="iss-chip">' + iss.dept + '</span>' +
+    (iss.reissuedFrom ? '<span class="iss-chip" style="background:#eff6ff;color:var(--accent);border-color:#bfdbfe">Reissued from ' + iss.reissuedFrom + '</span>' : '') +
+    (iss.cancelledAndReissuedAs ? '<span class="iss-chip" style="background:#fefce8;color:#92400e;border-color:#fde68a">Successor: ' + iss.cancelledAndReissuedAs + '</span>' : '');
+
+  // Policy notices (Cancel & Reissue / Reissued predecessor)
+  var noticeHtml = '';
+  if (iss.cancelledAndReissuedAs) {
+    var successor = shareIssuanceData.find(function(x){ return x.id === iss.cancelledAndReissuedAs; });
+    var succLabel = successor ? (successor.certId + ' · ' + successor.securityClass) : iss.cancelledAndReissuedAs;
+    noticeHtml = '<div class="ldg-policy-notice notice-reissue">' +
+      '<svg class="ldg-policy-notice-icon" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>' +
+      '<div><div class="ldg-policy-notice-title">Certificate Cancelled &amp; Reissued</div>' +
+      '<div class="ldg-policy-notice-sub">This certificate was cancelled and reissued as ' +
+      '<span class="ldg-policy-link" onclick="closeIssLedger();setTimeout(()=>openIssLedger(\'' + iss.cancelledAndReissuedAs + '\'),150)">' + succLabel + '</span>. Balance zeroed out.</div></div></div>';
+  } else if (iss.reissuedFrom) {
+    var pred = shareIssuanceData.find(function(x){ return x.id === iss.reissuedFrom; });
+    var predLabel = pred ? (pred.certId + ' — ' + pred.participant) : iss.reissuedFrom;
+    noticeHtml = '<div class="ldg-policy-notice notice-predecessor">' +
+      '<svg class="ldg-policy-notice-icon" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2"><polyline points="17,1 21,5 17,9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7,23 3,19 7,15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>' +
+      '<div><div class="ldg-policy-notice-title">Reissued Certificate</div>' +
+      '<div class="ldg-policy-notice-sub">This is a replacement certificate for ' +
+      '<span class="ldg-policy-link" onclick="closeIssLedger();setTimeout(()=>openIssLedger(\'' + iss.reissuedFrom + '\'),150)">' + predLabel + '</span>.</div></div></div>';
+  }
+  document.getElementById('iss-ldg-notice').innerHTML = noticeHtml;
 
   document.getElementById('iss-ldg-detail-grid').innerHTML =
     '<div class="iss-detail-item"><div class="iss-detail-lbl">Participant</div><div class="iss-detail-val">' + iss.participant + '</div></div>' +
@@ -4718,36 +4822,65 @@ function openIssLedger(issId) {
     '<div class="iss-detail-item"><div class="iss-detail-lbl">Issue Date</div><div class="iss-detail-val">' + new Date(iss.issueDate).toLocaleDateString() + '</div></div>' +
     '<div class="iss-detail-item"><div class="iss-detail-lbl">Certificate ID</div><div class="iss-detail-val" style="font-family:monospace">' + iss.certId + '</div></div>' +
     '<div class="iss-detail-item"><div class="iss-detail-lbl">Issue Price</div><div class="iss-detail-val">$' + iss.pricePerShare.toFixed(2) + '</div></div>' +
-    '<div class="iss-detail-item"><div class="iss-detail-lbl">Total Consideration</div><div class="iss-detail-val">$' + iss.totalValue.toLocaleString() + '</div></div>';
+    '<div class="iss-detail-item"><div class="iss-detail-lbl">Total Consideration</div><div class="iss-detail-val">$' + iss.totalValue.toLocaleString() + '</div></div>' +
+    (iss.cancelledAndReissuedAs ? '<div class="iss-detail-item"><div class="iss-detail-lbl">Successor Cert</div><div class="iss-detail-val" style="font-family:monospace;color:var(--accent)">' + iss.cancelledAndReissuedAs + '</div></div>' : '') +
+    (iss.reissuedFrom ? '<div class="iss-detail-item"><div class="iss-detail-lbl">Predecessor Cert</div><div class="iss-detail-val" style="font-family:monospace;color:var(--accent)">' + iss.reissuedFrom + '</div></div>' : '');
 
-  const typeColorMap = { Sale:'stxtype-sale', Transfer:'stxtype-transfer', Exchange:'stxtype-exchange', Repurchase:'stxtype-repurchase', Pledge:'stxtype-pledge', Gift:'stxtype-gift' };
+  const typeColorMap = { Sale:'stxtype-sale', Transfer:'stxtype-transfer', Exchange:'stxtype-exchange', Repurchase:'stxtype-repurchase', Pledge:'stxtype-pledge', Gift:'stxtype-gift', 'Debit Policy':'stxtype-debit', 'Cancel & Reissue':'stxtype-reissue' };
+
+  let runningBalance = iss.sharesIssued;
 
   let txnRows = '<tr>' +
     '<td>' + new Date(iss.issueDate).toLocaleDateString() + '</td>' +
     '<td style="font-family:monospace;font-size:11.5px">' + iss.id + '</td>' +
     '<td><span class="txtype-badge txtype-issuance" style="font-size:11px">Issuance</span></td>' +
-    '<td class="shares-credit" style="text-align:right">+' + iss.sharesIssued.toLocaleString() + '</td>' +
+    '<td class="shares-credit" style="text-align:right;color:var(--green);font-weight:600">+' + iss.sharesIssued.toLocaleString() + '</td>' +
     '<td style="text-align:right" class="mono">$' + iss.pricePerShare.toFixed(2) + '</td>' +
     '<td style="text-align:right" class="mono">$' + (iss.totalValue/1000).toFixed(1) + 'K</td>' +
     '<td style="font-size:11.5px;color:var(--textm)">Initial Grant</td>' +
+    '<td style="text-align:right;font-weight:700;font-family:monospace;color:var(--green)">' + runningBalance.toLocaleString() + '</td>' +
     '</tr>';
 
   iss.secondaryTxns.forEach(function(tx) {
-    txnRows += '<tr>' +
+    runningBalance -= tx.shares;
+    var isCancelReissue = tx.type === 'Cancel & Reissue';
+    var isDebit = tx.type === 'Debit Policy';
+    var rowStyle = isCancelReissue ? ' class="ldg-row-cancel"' : isDebit ? ' class="ldg-row-debit"' : '';
+    var sharesDisp = isCancelReissue
+      ? '<span style="color:#991b1b;font-weight:700">ALL ' + tx.shares.toLocaleString() + '</span>'
+      : '<span style="color:var(--red)">-' + tx.shares.toLocaleString() + '</span>';
+    var priceDisp = tx.price > 0 ? '$' + tx.price.toFixed(2) : '—';
+    var totalDisp = tx.total > 0 ? '$' + (tx.total/1000).toFixed(1) + 'K' : '—';
+    var noteDisp = tx.note ? '<div style="font-size:10.5px;color:var(--textm);font-style:italic;margin-top:2px">' + tx.note + '</div>' : '';
+    var balColor = runningBalance > 0 ? 'var(--green)' : 'var(--red)';
+    txnRows += '<tr' + rowStyle + '>' +
       '<td>' + new Date(tx.date).toLocaleDateString() + '</td>' +
       '<td style="font-family:monospace;font-size:11.5px">' + tx.id + '</td>' +
       '<td><span class="txtype-badge ' + (typeColorMap[tx.type]||'') + '" style="font-size:11px">' + tx.type + '</span></td>' +
-      '<td class="shares-debit" style="text-align:right">-' + tx.shares.toLocaleString() + '</td>' +
-      '<td style="text-align:right" class="mono">$' + tx.price.toFixed(2) + '</td>' +
-      '<td style="text-align:right" class="mono">$' + (tx.total/1000).toFixed(1) + 'K</td>' +
-      '<td style="font-size:11.5px;color:var(--textm)">' + tx.counterparty + '</td>' +
+      '<td style="text-align:right">' + sharesDisp + '</td>' +
+      '<td style="text-align:right" class="mono">' + priceDisp + '</td>' +
+      '<td style="text-align:right" class="mono">' + totalDisp + '</td>' +
+      '<td style="font-size:11.5px;color:var(--textm)">' + tx.counterparty + noteDisp + '</td>' +
+      '<td style="text-align:right;font-weight:700;font-family:monospace;color:' + balColor + '">' + (isCancelReissue ? '0' : runningBalance.toLocaleString()) + '</td>' +
       '</tr>';
   });
 
   txnRows += '<tr style="background:#f8fafc;border-top:2px solid var(--border)">' +
     '<td colspan="3" style="font-weight:600;font-size:12px;color:var(--text2);padding:10px 14px">Net Balance</td>' +
-    '<td style="text-align:right;font-weight:700;font-size:14px;font-family:monospace;color:' + (netHeld > 0 ? 'var(--green)' : 'var(--red)') + '">' + netHeld.toLocaleString() + '</td>' +
-    '<td colspan="3"></td></tr>';
+    '<td colspan="2"></td>' +
+    '<td style="text-align:right;font-size:11px;color:var(--textm)">Proceeds</td>' +
+    '<td style="text-align:right;font-size:11px;color:var(--textm)">' + (proceeds > 0 ? '$' + (proceeds/1000).toFixed(1) + 'K' : '—') + '</td>' +
+    '<td style="text-align:right;font-weight:700;font-size:14px;font-family:monospace;color:' + (netHeld > 0 ? 'var(--green)' : '#94a3b8') + '">' + netHeld.toLocaleString() + '</td>' +
+    '</tr>';
+
+  // Update ledger table header to include Balance column
+  var ldgHead = document.querySelector('.iss-ledger-txn-table thead tr');
+  if (ldgHead && ldgHead.children.length < 8) {
+    var th = document.createElement('th');
+    th.textContent = 'Balance';
+    th.style.textAlign = 'right';
+    ldgHead.appendChild(th);
+  }
 
   document.getElementById('iss-ldg-txn-body').innerHTML = txnRows;
   document.getElementById('iss-ldg-cert-doc').textContent = iss.certId + ' \u2014 Stock Certificate.pdf';
