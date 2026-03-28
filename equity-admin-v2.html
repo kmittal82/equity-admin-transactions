@@ -957,6 +957,21 @@
     .ledger-tx-table tr:hover { background: #f8fafc; }
     .ledger-shares-credit { color: #166534; font-weight: 600; font-family: 'SF Mono', monospace; }
     .ledger-shares-debit { color: #991b1b; font-weight: 600; font-family: 'SF Mono', monospace; }
+    .ldg-expand-btn { background: none; border: 1px solid #cbd5e1; border-radius: 4px; cursor: pointer; font-size: 10px; padding: 1px 5px; color: var(--text2); margin-left: 6px; transition: all 0.1s; line-height: 1.4; }
+    .ldg-expand-btn:hover { background: var(--bg); border-color: #94a3b8; }
+    .ldg-settlement-row { display: none; }
+    .ldg-settlement-row.open { display: table-row; }
+    .ldg-settlement-row td { background: #f8fafc !important; padding: 0 !important; border-bottom: 1px solid #e2e8f0; }
+    .ldg-settlement-inner { padding: 10px 16px 10px 40px; display: flex; flex-direction: column; gap: 6px; }
+    .ldg-settlement-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text2); margin-bottom: 2px; }
+    .ldg-settlement-line { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+    .ldg-settlement-line .sline-label { color: var(--text2); min-width: 140px; }
+    .ldg-settlement-line .sline-val { font-family: 'SF Mono', monospace; font-weight: 600; }
+    .sline-gross { color: var(--text1); }
+    .sline-tax { color: #991b1b; }
+    .sline-net { color: #166534; }
+    .ldg-settlement-meta { display: flex; gap: 16px; margin-top: 4px; padding-top: 6px; border-top: 1px dashed #e2e8f0; flex-wrap: wrap; }
+    .ldg-settlement-meta span { font-size: 11px; color: var(--text2); }
 
     /* Action buttons */
     .act-btn {
@@ -3904,17 +3919,17 @@ const ledgerData = {
     { date: '2024-06-15', type: 'Vested',   shares: 6250,  note: 'Q2 quarterly vest (25% of annual tranche)' },
     { date: '2024-09-15', type: 'Vested',   shares: 6250,  note: 'Q3 quarterly vest' },
     { date: '2024-12-15', type: 'Vested',   shares: 6250,  note: 'Q4 quarterly vest' },
-    { date: '2025-01-10', type: 'Released', shares: 6250,  note: 'Net settlement — 4,812 delivered after tax withholding (23%)' },
+    { date: '2025-01-10', type: 'Released', shares: 6250,  note: 'Net settlement — 4,812 units delivered after tax withholding (23%)', settlement: { gross: 6250, taxRate: 23, taxUnits: 1438, netUnits: 4812, deliveryMethod: 'Net Settlement', deliveryDate: '2025-01-12', brokerAccount: '****-4821' } },
     { date: '2025-03-15', type: 'Vested',   shares: 6250,  note: '1-year cliff vest complete' },
-    { date: '2025-03-20', type: 'Released', shares: 6250,  note: 'Net settlement — 4,812 delivered after tax withholding (23%)' }
+    { date: '2025-03-20', type: 'Released', shares: 6250,  note: 'Net settlement — 4,812 units delivered after tax withholding (23%)', settlement: { gross: 6250, taxRate: 23, taxUnits: 1438, netUnits: 4812, deliveryMethod: 'Net Settlement', deliveryDate: '2025-03-22', brokerAccount: '****-4821' } }
   ],
   'GRT-2023-008': [
     { date: '2023-11-05', type: 'Granted',   shares: 45000, note: 'Initial ISO grant — Compensation Committee approval' },
     { date: '2024-11-05', type: 'Vested',    shares: 11250, note: '1-year cliff vest' },
     { date: '2024-12-15', type: 'Vested',    shares: 5625,  note: 'Q4 quarterly vest' },
-    { date: '2025-01-20', type: 'Exercised', shares: 5000,  note: 'Cashless exercise — 3,840 net shares delivered (strike $18.50, FMV $31.20)' },
+    { date: '2025-01-20', type: 'Exercised', shares: 5000,  note: 'Cashless exercise — 3,840 net shares delivered (strike $18.50, FMV $31.20)', settlement: { gross: 5000, taxRate: 23.2, taxUnits: 1160, netUnits: 3840, deliveryMethod: 'Cashless Exercise', strikePrice: 18.50, fmv: 31.20, deliveryDate: '2025-01-22', brokerAccount: '****-7734' } },
     { date: '2025-03-15', type: 'Vested',    shares: 5625,  note: 'Q1 quarterly vest' },
-    { date: '2025-03-22', type: 'Exercised', shares: 5625,  note: 'Same-day sale exercise — proceeds $28,406' },
+    { date: '2025-03-22', type: 'Exercised', shares: 5625,  note: 'Same-day sale exercise — proceeds $28,406', settlement: { gross: 5625, taxRate: 23, taxUnits: 1294, netUnits: 4331, deliveryMethod: 'Same-Day Sale', cashProceeds: 28406, deliveryDate: '2025-03-24', brokerAccount: '****-7734' } },
     { date: '2025-06-30', type: 'Forfeited', shares: 5625,  note: 'Unvested tranche cancelled — employee departure Jun 2025' },
     { date: '2025-09-30', type: 'Expired',   shares: 5625,  note: 'Option expiry — unexercised tranche lapsed (10-yr window)' }
   ]
@@ -4382,10 +4397,12 @@ function openLedgerDrawer(grantId) {
     const debitTypes  = new Set(['Released', 'Exercised', 'Forfeited', 'Expired']);
 
     let runningBalance = 0;
+    let rowIndex = 0;
     const rows = entries.map(e => {
       const isCredit  = creditTypes.has(e.type);
       const isDebit   = debitTypes.has(e.type);
       const isNeutral = !isCredit && !isDebit; // Vested, Amended, etc.
+      const hasSettlement = !!(e.settlement);
 
       if (isCredit) runningBalance += e.shares;
       if (isDebit)  runningBalance -= e.shares;
@@ -4398,14 +4415,53 @@ function openLedgerDrawer(grantId) {
 
       const balColor = runningBalance > 0 ? 'var(--green)' : runningBalance === 0 ? 'var(--textm)' : 'var(--red)';
       const typeClass = e.type.toLowerCase().replace(/\s+/g,'').replace(/&/g,'');
+      const idx = rowIndex++;
+
+      const expandBtn = hasSettlement
+        ? `<button class="ldg-expand-btn" id="ldg-expbtn-${idx}" onclick="toggleSettlementRow(${idx})">▸ Settlement</button>`
+        : '';
+
+      let settlementRow = '';
+      if (hasSettlement) {
+        const s = e.settlement;
+        const extraMeta = s.strikePrice
+          ? `<span>Strike: $${s.strikePrice.toFixed(2)}</span><span>FMV: $${s.fmv.toFixed(2)}</span>`
+          : s.cashProceeds
+          ? `<span>Cash Proceeds: $${s.cashProceeds.toLocaleString()}</span>`
+          : '';
+        settlementRow = `<tr class="ldg-settlement-row" id="ldg-srow-${idx}">
+          <td colspan="5">
+            <div class="ldg-settlement-inner">
+              <div class="ldg-settlement-title">Settlement Detail — ${s.deliveryMethod}</div>
+              <div class="ldg-settlement-line">
+                <span class="sline-label">Gross Units Released</span>
+                <span class="sline-val sline-gross">${s.gross.toLocaleString()} units</span>
+              </div>
+              <div class="ldg-settlement-line">
+                <span class="sline-label">Tax Withheld (${s.taxRate}%)</span>
+                <span class="sline-val sline-tax">&#8722;${s.taxUnits.toLocaleString()} units</span>
+              </div>
+              <div class="ldg-settlement-line" style="border-top:1px solid #e2e8f0;padding-top:5px;margin-top:1px">
+                <span class="sline-label" style="font-weight:700">Net to Participant</span>
+                <span class="sline-val sline-net">+${s.netUnits.toLocaleString()} units</span>
+              </div>
+              <div class="ldg-settlement-meta">
+                <span>Delivery: ${new Date(s.deliveryDate).toLocaleDateString()}</span>
+                <span>Broker Acct: ${s.brokerAccount}</span>
+                ${extraMeta}
+              </div>
+            </div>
+          </td>
+        </tr>`;
+      }
 
       return `<tr${isNeutral ? ' style="opacity:.85"' : ''}>
         <td style="white-space:nowrap">${new Date(e.date).toLocaleDateString()}</td>
-        <td><span class="txtype-badge txtype-${typeClass}">${e.type}</span></td>
+        <td><span class="txtype-badge txtype-${typeClass}">${e.type}</span>${expandBtn}</td>
         <td>${unitsDelta}</td>
         <td style="font-family:'SF Mono',monospace;font-weight:700;color:${isNeutral ? 'var(--textm)' : balColor}">${isNeutral ? '—' : runningBalance.toLocaleString()}</td>
         <td style="font-size:12px;color:var(--text2)">${e.note}</td>
-      </tr>`;
+      </tr>${settlementRow}`;
     }).join('');
 
     document.getElementById('drawer-body').innerHTML = `
@@ -4438,6 +4494,14 @@ function closeLedgerDrawer() {
   const overlay = document.getElementById('ledger-drawer-overlay');
   overlay.classList.remove('open');
   document.body.style.overflow = '';
+}
+
+function toggleSettlementRow(idx) {
+  const row = document.getElementById('ldg-srow-' + idx);
+  const btn = document.getElementById('ldg-expbtn-' + idx);
+  if (!row) return;
+  const isOpen = row.classList.toggle('open');
+  btn.textContent = isOpen ? '▾ Settlement' : '▸ Settlement';
 }
 
 // ═══════ RELEASE DRAWER ═══════
