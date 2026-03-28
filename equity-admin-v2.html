@@ -825,6 +825,8 @@
     .txtype-released  { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
     .txtype-exercised { background: #fff7ed; color: #9a3412; border: 1px solid #fed7aa; }
     .txtype-forfeited { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+    .txtype-expired   { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+    .txtype-amended   { background: #faf5ff; color: #6d28d9; border: 1px solid #ddd6fe; }
     .txtype-withheld  { background: #fdf4ff; color: #86198f; border: 1px solid #f5d0fe; }
     .txtype-terminated{ background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
     .txtype-enrolled  { background: #f0f9ff; color: #0c4a6e; border: 1px solid #bae6fd; }
@@ -3898,17 +3900,23 @@ const grantsData = [
 // Ledger entries for specific grants
 const ledgerData = {
   'GRT-2024-001': [
-    { date: '2024-03-15', type: 'Granted', shares: 25000, note: 'Initial grant', status: 'granted' },
-    { date: '2024-06-15', type: 'Vested', shares: 6250, note: '6-month quarterly vest', status: 'vested' },
-    { date: '2024-09-15', type: 'Vested', shares: 6250, note: 'Q3 quarterly vest', status: 'vested' },
-    { date: '2024-12-15', type: 'Vested', shares: 6250, note: 'Q4 quarterly vest', status: 'vested' },
-    { date: '2025-03-15', type: 'Vested', shares: 6250, note: '1-year cliff vest complete', status: 'vested' }
+    { date: '2024-03-15', type: 'Granted',  shares: 25000, note: 'Initial RSU grant — Board approval Mar 2024' },
+    { date: '2024-06-15', type: 'Vested',   shares: 6250,  note: 'Q2 quarterly vest (25% of annual tranche)' },
+    { date: '2024-09-15', type: 'Vested',   shares: 6250,  note: 'Q3 quarterly vest' },
+    { date: '2024-12-15', type: 'Vested',   shares: 6250,  note: 'Q4 quarterly vest' },
+    { date: '2025-01-10', type: 'Released', shares: 6250,  note: 'Net settlement — 4,812 delivered after tax withholding (23%)' },
+    { date: '2025-03-15', type: 'Vested',   shares: 6250,  note: '1-year cliff vest complete' },
+    { date: '2025-03-20', type: 'Released', shares: 6250,  note: 'Net settlement — 4,812 delivered after tax withholding (23%)' }
   ],
   'GRT-2023-008': [
-    { date: '2023-11-05', type: 'Granted', shares: 45000, note: 'Initial grant', status: 'granted' },
-    { date: '2024-11-05', type: 'Vested', shares: 11250, note: '1-year cliff vested', status: 'vested' },
-    { date: '2024-12-15', type: 'Vested', shares: 5625, note: 'Q4 quarterly vest', status: 'vested' },
-    { date: '2025-03-15', type: 'Vested', shares: 5625, note: 'Q1 quarterly vest', status: 'vested' }
+    { date: '2023-11-05', type: 'Granted',   shares: 45000, note: 'Initial ISO grant — Compensation Committee approval' },
+    { date: '2024-11-05', type: 'Vested',    shares: 11250, note: '1-year cliff vest' },
+    { date: '2024-12-15', type: 'Vested',    shares: 5625,  note: 'Q4 quarterly vest' },
+    { date: '2025-01-20', type: 'Exercised', shares: 5000,  note: 'Cashless exercise — 3,840 net shares delivered (strike $18.50, FMV $31.20)' },
+    { date: '2025-03-15', type: 'Vested',    shares: 5625,  note: 'Q1 quarterly vest' },
+    { date: '2025-03-22', type: 'Exercised', shares: 5625,  note: 'Same-day sale exercise — proceeds $28,406' },
+    { date: '2025-06-30', type: 'Forfeited', shares: 5625,  note: 'Unvested tranche cancelled — employee departure Jun 2025' },
+    { date: '2025-09-30', type: 'Expired',   shares: 5625,  note: 'Option expiry — unexercised tranche lapsed (10-yr window)' }
   ]
 };
 
@@ -4305,7 +4313,7 @@ function openLedgerDrawer(grantId) {
   const vestedPct = ((grant.vested / grant.shares) * 100).toFixed(0);
   document.getElementById('drawer-stats').innerHTML = `
     <div class="ledger-stat">
-      <div class="ledger-stat-label">Total Shares</div>
+      <div class="ledger-stat-label">Total Units</div>
       <div class="ledger-stat-value">${grant.shares.toLocaleString()}</div>
     </div>
     <div class="ledger-stat">
@@ -4366,33 +4374,58 @@ function openLedgerDrawer(grantId) {
       </div>
     `;
   } else {
-    const creditTypes = ['Granted', 'Vested'];
+    // Ledger rules:
+    // Granted   → credit (+units), balance increases
+    // Vested    → informational only, NO balance movement
+    // Released / Exercised / Forfeited / Expired → debit (−units), balance decreases
+    const creditTypes = new Set(['Granted']);
+    const debitTypes  = new Set(['Released', 'Exercised', 'Forfeited', 'Expired']);
+
+    let runningBalance = 0;
+    const rows = entries.map(e => {
+      const isCredit  = creditTypes.has(e.type);
+      const isDebit   = debitTypes.has(e.type);
+      const isNeutral = !isCredit && !isDebit; // Vested, Amended, etc.
+
+      if (isCredit) runningBalance += e.shares;
+      if (isDebit)  runningBalance -= e.shares;
+
+      const unitsDelta = isCredit
+        ? `<span class="ledger-shares-credit">+${e.shares.toLocaleString()}</span>`
+        : isDebit
+          ? `<span class="ledger-shares-debit">&#8722;${e.shares.toLocaleString()}</span>`
+          : `<span style="color:var(--textm);font-size:11.5px">${e.shares.toLocaleString()} <span style="font-weight:400;font-size:10.5px">(info)</span></span>`;
+
+      const balColor = runningBalance > 0 ? 'var(--green)' : runningBalance === 0 ? 'var(--textm)' : 'var(--red)';
+      const typeClass = e.type.toLowerCase().replace(/\s+/g,'').replace(/&/g,'');
+
+      return `<tr${isNeutral ? ' style="opacity:.85"' : ''}>
+        <td style="white-space:nowrap">${new Date(e.date).toLocaleDateString()}</td>
+        <td><span class="txtype-badge txtype-${typeClass}">${e.type}</span></td>
+        <td>${unitsDelta}</td>
+        <td style="font-family:'SF Mono',monospace;font-weight:700;color:${isNeutral ? 'var(--textm)' : balColor}">${isNeutral ? '—' : runningBalance.toLocaleString()}</td>
+        <td style="font-size:12px;color:var(--text2)">${e.note}</td>
+      </tr>`;
+    }).join('');
+
     document.getElementById('drawer-body').innerHTML = `
       <table class="ledger-tx-table">
         <thead>
           <tr>
             <th>Date</th>
-            <th>Type</th>
-            <th>Shares</th>
-            <th>Running Total</th>
+            <th>Event</th>
+            <th>Units</th>
+            <th>Balance</th>
             <th>Notes</th>
           </tr>
         </thead>
-        <tbody>
-          ${entries.map((e, i) => {
-            const isCredit = creditTypes.includes(e.type);
-            return `
-              <tr>
-                <td style="white-space:nowrap">${new Date(e.date).toLocaleDateString()}</td>
-                <td><span class="txtype-badge txtype-${e.type.toLowerCase()}">${e.type}</span></td>
-                <td class="${isCredit ? 'ledger-shares-credit' : 'ledger-shares-debit'}">${isCredit ? '+' : '-'}${e.shares.toLocaleString()}</td>
-                <td class="mono" style="color:var(--text2)">${grant.shares.toLocaleString()}</td>
-                <td style="font-size:12px;color:var(--text2)">${e.note}</td>
-              </tr>
-            `;
-          }).join('')}
-        </tbody>
+        <tbody>${rows}</tbody>
       </table>
+      <div style="padding:12px 16px 0;font-size:11px;color:var(--textm);border-top:1px solid var(--border);margin-top:4px;display:flex;gap:16px">
+        <span><span style="color:#166534;font-weight:700">+</span> Credit — units added to grant</span>
+        <span><span style="color:#991b1b;font-weight:700">−</span> Debit — units removed from grant</span>
+        <span style="color:var(--textm)">info — vesting event, no ledger movement</span>
+      </div>
     `;
   }
 
