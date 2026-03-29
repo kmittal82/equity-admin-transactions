@@ -3263,7 +3263,11 @@
         </select>
         <select class="filter-select-sm" id="ex-method-filter" onchange="renderExerciseTable()">
           <option value="">All Methods</option>
-          <option>Cashless</option><option>Same-Day Sale</option><option>Cash</option><option>Net Exercise</option>
+          <option>Hold – Bank Transfer</option>
+          <option>Hold – Payroll</option>
+          <option>Withhold-to-Cover</option>
+          <option>Sell to Cover</option>
+          <option>Sell All</option>
         </select>
         <div class="filter-right-actions">
           <button class="btn btn-ghost" style="height:36px;padding:0 12px;font-size:12.5px">
@@ -3995,6 +3999,16 @@
           <div><div style="font-size:10px;font-weight:600;color:var(--textm);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px">Shares</div><div id="ex-edit-shares" style="font-size:13px;font-weight:600;color:var(--text)"></div></div>
         </div>
       </div>
+      <div class="form-group full" style="margin-bottom:16px">
+        <label class="form-label">Settlement Method <span class="req">*</span></label>
+        <select id="ex-edit-method" class="form-select">
+          <option value="Hold – Bank Transfer">Exercise and Hold All (Bank Transfer) — Stakeholder pays via bank transfer</option>
+          <option value="Hold – Payroll">Exercise and Hold All (Cover via Payroll) — Paid via payroll deduction</option>
+          <option value="Withhold-to-Cover">Withhold-to-Cover — Cost paid by withholding shares</option>
+          <option value="Sell to Cover">Sell to Cover [Public] — Cost paid by selling shares on the market</option>
+          <option value="Sell All">Sell All — All shares sold; payments split to company and employee</option>
+        </select>
+      </div>
       <div class="form-grid">
         <div class="form-group">
           <label class="form-label">FMV at Exercise <span class="req">*</span></label>
@@ -4043,6 +4057,17 @@
       <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:12px 14px;margin-bottom:18px;display:flex;gap:10px;align-items:flex-start">
         <svg viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" style="width:16px;height:16px;flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         <div style="font-size:12.5px;color:#92400e">The values you enter will be applied to <strong id="ex-bulk-edit-count"></strong>. Leave a field blank to keep each exercise's existing value.</div>
+      </div>
+      <div class="form-group full" style="margin-bottom:16px">
+        <label class="form-label">Settlement Method</label>
+        <select id="ex-bulk-method" class="form-select">
+          <option value="">— Keep existing method for each exercise —</option>
+          <option value="Hold – Bank Transfer">Exercise and Hold All (Bank Transfer)</option>
+          <option value="Hold – Payroll">Exercise and Hold All (Cover via Payroll)</option>
+          <option value="Withhold-to-Cover">Withhold-to-Cover</option>
+          <option value="Sell to Cover">Sell to Cover [Public]</option>
+          <option value="Sell All">Sell All</option>
+        </select>
       </div>
       <div class="form-grid">
         <div class="form-group">
@@ -5653,25 +5678,25 @@ function openExerciseModal(grantId) {
 // EXERCISE MANAGEMENT
 // ─────────────────────────────────────────────
 const exerciseData = [
-  { id:'EX-2026-0047', participant:'Sarah Chen',     dept:'Engineering', grantId:'GRT-2024-001', type:'ISO',  shares:2500,  strike:28.75, fmv:42.50, taxCostFmv:42.50, method:'Cashless',      submitted:'2026-03-18', decided:null,         status:'submitted' },
-  { id:'EX-2026-0046', participant:'Marcus Johnson', dept:'Product',     grantId:'GRT-2024-002', type:'ISO',  shares:5000,  strike:28.75, fmv:42.50, taxCostFmv:42.50, method:'Same-Day Sale', submitted:'2026-03-15', decided:null,         status:'pending'   },
-  { id:'EX-2026-0045', participant:'Emma Davis',     dept:'Sales',       grantId:'GRT-2023-008', type:'NSO',  shares:8000,  strike:22.00, fmv:42.50, taxCostFmv:42.50, method:'Cashless',      submitted:'2026-03-14', decided:null,         status:'pending'   },
-  { id:'EX-2026-0044', participant:'James Park',     dept:'Engineering', grantId:'GRT-2024-003', type:'ISO',  shares:1500,  strike:25.00, fmv:42.50, taxCostFmv:42.50, method:'Cash',          submitted:'2026-03-12', decided:null,         status:'submitted' },
-  { id:'EX-2026-0043', participant:'Amanda Foster',  dept:'Operations',  grantId:'GRT-2023-003', type:'NSO',  shares:4200,  strike:16.00, fmv:42.50, taxCostFmv:42.50, method:'Net Exercise',  submitted:'2026-03-10', decided:null,         status:'submitted' },
-  { id:'EX-2026-0042', participant:'Lisa Wong',      dept:'Engineering', grantId:'GRT-2023-005', type:'ISO',  shares:6000,  strike:18.50, fmv:42.50, taxCostFmv:42.50, method:'Same-Day Sale', submitted:'2026-03-08', decided:'2026-03-11', status:'approved'  },
-  { id:'EX-2026-0041', participant:'Robert Chen',    dept:'Product',     grantId:'GRT-2023-004', type:'ISO',  shares:3500,  strike:17.25, fmv:42.50, taxCostFmv:42.50, method:'Cashless',      submitted:'2026-03-05', decided:'2026-03-07', status:'approved'  },
-  { id:'EX-2026-0040', participant:'Priya Sharma',   dept:'Finance',     grantId:'GRT-2023-007', type:'NSO',  shares:2000,  strike:20.50, fmv:42.50, taxCostFmv:42.50, method:'Cash',          submitted:'2026-03-01', decided:'2026-03-03', status:'approved'  },
-  { id:'EX-2026-0039', participant:'David Miller',   dept:'Legal',       grantId:'GRT-2023-006', type:'NSO',  shares:1800,  strike:19.75, fmv:42.50, taxCostFmv:42.50, method:'Cashless',      submitted:'2026-02-28', decided:'2026-03-02', status:'approved'  },
-  { id:'EX-2026-0038', participant:'Wei Zhang',      dept:'Engineering', grantId:'GRT-2022-018', type:'NQSO', shares:10000, strike:14.20, fmv:42.50, taxCostFmv:42.50, method:'Same-Day Sale', submitted:'2026-02-20', decided:'2026-02-22', status:'approved'  },
-  { id:'EX-2026-0037', participant:'Carlos Rivera',  dept:'Sales',       grantId:'GRT-2022-015', type:'NSO',  shares:3000,  strike:12.80, fmv:42.50, taxCostFmv:42.50, method:'Cashless',      submitted:'2026-02-15', decided:'2026-02-18', status:'approved'  },
-  { id:'EX-2026-0036', participant:'Nina Hartley',   dept:'Legal',       grantId:'GRT-2021-009', type:'NSO',  shares:2500,  strike:11.50, fmv:42.50, taxCostFmv:42.50, method:'Cash',          submitted:'2026-02-10', decided:'2026-02-12', status:'rejected'  },
-  { id:'EX-2026-0035', participant:'Tom Bradley',    dept:'Marketing',   grantId:'GRT-2021-007', type:'SAR',  shares:4000,  strike:10.00, fmv:42.50, taxCostFmv:42.50, method:'Net Exercise',  submitted:'2026-02-05', decided:'2026-02-07', status:'rejected'  },
-  { id:'EX-2025-0081', participant:'Sophie Turner',  dept:'Sales',       grantId:'GRT-2020-012', type:'ISO',  shares:5500,  strike:9.50,  fmv:38.20, taxCostFmv:38.20, method:'Same-Day Sale', submitted:'2025-12-01', decided:'2025-12-03', status:'approved'  },
-  { id:'EX-2025-0072', participant:'Alex Kim',       dept:'Engineering', grantId:'GRT-2020-008', type:'NQSO', shares:7500,  strike:8.75,  fmv:36.80, taxCostFmv:36.80, method:'Cashless',      submitted:'2025-11-10', decided:'2025-11-13', status:'approved'  },
-  { id:'EX-2025-0065', participant:'Rachel Green',   dept:'HR',          grantId:'GRT-2019-004', type:'ISO',  shares:3200,  strike:7.20,  fmv:35.50, taxCostFmv:35.50, method:'Cash',          submitted:'2025-09-15', decided:null,         status:'expired'   },
-  { id:'EX-2025-0058', participant:'Mark Torres',    dept:'Design',      grantId:'GRT-2019-002', type:'NSO',  shares:2800,  strike:6.80,  fmv:34.10, taxCostFmv:34.10, method:'Cashless',      submitted:'2025-08-20', decided:null,         status:'expired'   },
-  { id:'EX-2026-0050', participant:'Julia Ross',     dept:'Engineering', grantId:'GRT-2024-005', type:'ISO',  shares:1200,  strike:30.00, fmv:42.50, taxCostFmv:42.50, method:'Cash',          submitted:'2026-03-20', decided:null,         status:'submitted' },
-  { id:'EX-2026-0051', participant:'Kevin Park',     dept:'Product',     grantId:'GRT-2023-011', type:'NQSO', shares:3800,  strike:21.00, fmv:42.50, taxCostFmv:42.50, method:'Same-Day Sale', submitted:'2026-03-21', decided:null,         status:'submitted' },
+  { id:'EX-2026-0047', participant:'Sarah Chen',     dept:'Engineering', grantId:'GRT-2024-001', type:'ISO',  shares:2500,  strike:28.75, fmv:42.50, taxCostFmv:42.50, method:'Sell to Cover',          submitted:'2026-03-18', decided:null,         status:'submitted' },
+  { id:'EX-2026-0046', participant:'Marcus Johnson', dept:'Product',     grantId:'GRT-2024-002', type:'ISO',  shares:5000,  strike:28.75, fmv:42.50, taxCostFmv:42.50, method:'Sell All',                submitted:'2026-03-15', decided:null,         status:'pending'   },
+  { id:'EX-2026-0045', participant:'Emma Davis',     dept:'Sales',       grantId:'GRT-2023-008', type:'NSO',  shares:8000,  strike:22.00, fmv:42.50, taxCostFmv:42.50, method:'Withhold-to-Cover',       submitted:'2026-03-14', decided:null,         status:'pending'   },
+  { id:'EX-2026-0044', participant:'James Park',     dept:'Engineering', grantId:'GRT-2024-003', type:'ISO',  shares:1500,  strike:25.00, fmv:42.50, taxCostFmv:42.50, method:'Hold – Bank Transfer',    submitted:'2026-03-12', decided:null,         status:'submitted' },
+  { id:'EX-2026-0043', participant:'Amanda Foster',  dept:'Operations',  grantId:'GRT-2023-003', type:'NSO',  shares:4200,  strike:16.00, fmv:42.50, taxCostFmv:42.50, method:'Withhold-to-Cover',       submitted:'2026-03-10', decided:null,         status:'submitted' },
+  { id:'EX-2026-0042', participant:'Lisa Wong',      dept:'Engineering', grantId:'GRT-2023-005', type:'ISO',  shares:6000,  strike:18.50, fmv:42.50, taxCostFmv:42.50, method:'Sell All',                submitted:'2026-03-08', decided:'2026-03-11', status:'approved'  },
+  { id:'EX-2026-0041', participant:'Robert Chen',    dept:'Product',     grantId:'GRT-2023-004', type:'ISO',  shares:3500,  strike:17.25, fmv:42.50, taxCostFmv:42.50, method:'Sell to Cover',          submitted:'2026-03-05', decided:'2026-03-07', status:'approved'  },
+  { id:'EX-2026-0040', participant:'Priya Sharma',   dept:'Finance',     grantId:'GRT-2023-007', type:'NSO',  shares:2000,  strike:20.50, fmv:42.50, taxCostFmv:42.50, method:'Hold – Bank Transfer',    submitted:'2026-03-01', decided:'2026-03-03', status:'approved'  },
+  { id:'EX-2026-0039', participant:'David Miller',   dept:'Legal',       grantId:'GRT-2023-006', type:'NSO',  shares:1800,  strike:19.75, fmv:42.50, taxCostFmv:42.50, method:'Hold – Payroll',           submitted:'2026-02-28', decided:'2026-03-02', status:'approved'  },
+  { id:'EX-2026-0038', participant:'Wei Zhang',      dept:'Engineering', grantId:'GRT-2022-018', type:'NQSO', shares:10000, strike:14.20, fmv:42.50, taxCostFmv:42.50, method:'Sell All',                submitted:'2026-02-20', decided:'2026-02-22', status:'approved'  },
+  { id:'EX-2026-0037', participant:'Carlos Rivera',  dept:'Sales',       grantId:'GRT-2022-015', type:'NSO',  shares:3000,  strike:12.80, fmv:42.50, taxCostFmv:42.50, method:'Sell to Cover',          submitted:'2026-02-15', decided:'2026-02-18', status:'approved'  },
+  { id:'EX-2026-0036', participant:'Nina Hartley',   dept:'Legal',       grantId:'GRT-2021-009', type:'NSO',  shares:2500,  strike:11.50, fmv:42.50, taxCostFmv:42.50, method:'Hold – Bank Transfer',    submitted:'2026-02-10', decided:'2026-02-12', status:'rejected'  },
+  { id:'EX-2026-0035', participant:'Tom Bradley',    dept:'Marketing',   grantId:'GRT-2021-007', type:'SAR',  shares:4000,  strike:10.00, fmv:42.50, taxCostFmv:42.50, method:'Withhold-to-Cover',       submitted:'2026-02-05', decided:'2026-02-07', status:'rejected'  },
+  { id:'EX-2025-0081', participant:'Sophie Turner',  dept:'Sales',       grantId:'GRT-2020-012', type:'ISO',  shares:5500,  strike:9.50,  fmv:38.20, taxCostFmv:38.20, method:'Sell All',                submitted:'2025-12-01', decided:'2025-12-03', status:'approved'  },
+  { id:'EX-2025-0072', participant:'Alex Kim',       dept:'Engineering', grantId:'GRT-2020-008', type:'NQSO', shares:7500,  strike:8.75,  fmv:36.80, taxCostFmv:36.80, method:'Withhold-to-Cover',       submitted:'2025-11-10', decided:'2025-11-13', status:'approved'  },
+  { id:'EX-2025-0065', participant:'Rachel Green',   dept:'HR',          grantId:'GRT-2019-004', type:'ISO',  shares:3200,  strike:7.20,  fmv:35.50, taxCostFmv:35.50, method:'Hold – Bank Transfer',    submitted:'2025-09-15', decided:null,         status:'expired'   },
+  { id:'EX-2025-0058', participant:'Mark Torres',    dept:'Design',      grantId:'GRT-2019-002', type:'NSO',  shares:2800,  strike:6.80,  fmv:34.10, taxCostFmv:34.10, method:'Hold – Payroll',           submitted:'2025-08-20', decided:null,         status:'expired'   },
+  { id:'EX-2026-0050', participant:'Julia Ross',     dept:'Engineering', grantId:'GRT-2024-005', type:'ISO',  shares:1200,  strike:30.00, fmv:42.50, taxCostFmv:42.50, method:'Hold – Bank Transfer',    submitted:'2026-03-20', decided:null,         status:'submitted' },
+  { id:'EX-2026-0051', participant:'Kevin Park',     dept:'Product',     grantId:'GRT-2023-011', type:'NQSO', shares:3800,  strike:21.00, fmv:42.50, taxCostFmv:42.50, method:'Sell All',                submitted:'2026-03-21', decided:null,         status:'submitted' },
 ];
 
 let exStatusFilter = 'all';
@@ -5757,6 +5782,7 @@ function openExEditModal(id) {
   document.getElementById('ex-edit-participant').textContent = ex.participant;
   document.getElementById('ex-edit-grant').textContent  = ex.grantId;
   document.getElementById('ex-edit-shares').textContent = ex.shares.toLocaleString() + ' shares';
+  document.getElementById('ex-edit-method').value        = ex.method;
   document.getElementById('ex-edit-fmv').value          = ex.fmv;
   document.getElementById('ex-edit-taxcostfmv').value   = ex.taxCostFmv;
   updateExEditPreview();
@@ -5784,6 +5810,7 @@ function saveExEdit() {
   const tcfmv = parseFloat(document.getElementById('ex-edit-taxcostfmv').value);
   if (isNaN(fmv) || fmv <= 0)   { alert('Please enter a valid FMV'); return; }
   if (isNaN(tcfmv) || tcfmv <= 0) { alert('Please enter a valid Tax Cost FMV'); return; }
+  ex.method     = document.getElementById('ex-edit-method').value;
   ex.fmv        = fmv;
   ex.taxCostFmv = tcfmv;
   closeModal('modal-ex-edit');
@@ -5817,17 +5844,20 @@ function openExBulkEditModal() {
 }
 
 function saveBulkExEdit() {
-  const fmvRaw   = document.getElementById('ex-bulk-fmv').value.trim();
-  const tcfmvRaw = document.getElementById('ex-bulk-taxcostfmv').value.trim();
-  const fmv      = fmvRaw   ? parseFloat(fmvRaw)   : null;
-  const tcfmv    = tcfmvRaw ? parseFloat(tcfmvRaw) : null;
+  const methodVal = document.getElementById('ex-bulk-method').value;
+  const fmvRaw    = document.getElementById('ex-bulk-fmv').value.trim();
+  const tcfmvRaw  = document.getElementById('ex-bulk-taxcostfmv').value.trim();
+  const fmv       = fmvRaw   ? parseFloat(fmvRaw)   : null;
+  const tcfmv     = tcfmvRaw ? parseFloat(tcfmvRaw) : null;
   if (fmv   !== null && (isNaN(fmv)   || fmv <= 0))   { alert('Invalid FMV value'); return; }
   if (tcfmv !== null && (isNaN(tcfmv) || tcfmv <= 0)) { alert('Invalid Tax Cost FMV value'); return; }
+  if (!methodVal && !fmvRaw && !tcfmvRaw) { alert('Please enter at least one value to update'); return; }
   let changed = 0;
   exSelected.forEach(id => {
     const ex = exerciseData.find(e => e.id === id);
     if (!ex) return;
-    if (fmv   !== null) { ex.fmv        = fmv;   changed++; }
+    if (methodVal)      { ex.method     = methodVal; changed++; }
+    if (fmv   !== null) { ex.fmv        = fmv;   if (!methodVal) changed++; }
     if (tcfmv !== null) { ex.taxCostFmv = tcfmv; }
   });
   closeModal('modal-ex-bulk-edit');
@@ -5888,9 +5918,16 @@ function renderExerciseTable(forceStatus) {
     expired:   { dot:'',                label:'Expired',   color:'var(--textm)' },
   };
 
+  const methodCfg = {
+    'Hold – Bank Transfer': { bg:'#eff6ff', color:'#1d4ed8', title:'Exercise and Hold All (Bank Transfer) — Stakeholder pays exercising costs via bank transfer as part of the exercise request.' },
+    'Hold – Payroll':       { bg:'#f5f3ff', color:'#6d28d9', title:'Exercise and Hold All (Cover via Payroll) — Stakeholder pays exercising costs via a payroll deduction. A payroll deduction is created when the exercise request is finished.' },
+    'Withhold-to-Cover':    { bg:'#fffbeb', color:'#b45309', title:'Withhold-to-Cover — Cost of exercise is paid by withholding shares. If not evenly divisible, shares are rounded up and a payroll addition is created.' },
+    'Sell to Cover':        { bg:'#ecfdf5', color:'#065f46', title:'Sell to Cover [Public] — Cost of exercise is paid by selling shares on the market. A market order is created for the cost of exercise after approval.' },
+    'Sell All':             { bg:'#fff1f2', color:'#be123c', title:'Sell All — Cost is paid by selling all shares on the market. One market order is generated; two payments are produced on completion — one to the company and one to the employee.' },
+  };
   const methodBadge = m => {
-    const cfg = { 'Cashless':{bg:'#eef2ff',color:'#4338ca'}, 'Same-Day Sale':{bg:'#fff7ed',color:'#c2410c'}, 'Cash':{bg:'#f0fdf4',color:'#166534'}, 'Net Exercise':{bg:'#f5f3ff',color:'#6d28d9'} }[m] || {bg:'#f1f5f9',color:'#475569'};
-    return `<span class="type-badge" style="background:${cfg.bg};color:${cfg.color}">${m}</span>`;
+    const cfg = methodCfg[m] || { bg:'#f1f5f9', color:'#475569', title:m };
+    return `<span class="type-badge" style="background:${cfg.bg};color:${cfg.color};cursor:default" title="${cfg.title}">${m}</span>`;
   };
 
   const typeBadge = t => {
