@@ -5832,7 +5832,7 @@ const releaseMgmtData = [
 ];
 
 let currentRelTab = 'pending';
-const relExpandedGroups = new Set(['EQP-2020-002','EQP-2023-004','EQP-2022-003','EQP-2019-001']);
+const relExpandedGroups = new Set(); // keyed by vestingDate string; populated on first render
 
 function switchRelTab(tab) {
   currentRelTab = tab;
@@ -5848,10 +5848,10 @@ function toggleRelGroup(planId) {
 
 function toggleRelExpandAll() {
   const tab = currentRelTab;
-  const plans = [...new Set(releaseMgmtData.filter(r => r.tab === tab).map(r => r.planId))];
-  const allOpen = plans.every(id => relExpandedGroups.has(id));
-  if (allOpen) plans.forEach(id => relExpandedGroups.delete(id));
-  else plans.forEach(id => relExpandedGroups.add(id));
+  const dates = [...new Set(releaseMgmtData.filter(r => r.tab === tab).map(r => r.vestingDate))];
+  const allOpen = dates.every(d => relExpandedGroups.has(d));
+  if (allOpen) dates.forEach(d => relExpandedGroups.delete(d));
+  else dates.forEach(d => relExpandedGroups.add(d));
   renderReleaseMgmt();
 }
 
@@ -5891,6 +5891,9 @@ function renderReleaseMgmt() {
   const planF  = document.getElementById('rel-plan-filter')?.value || '';
   const methF  = document.getElementById('rel-method-filter')?.value || '';
 
+  // Seed all vest dates as expanded on first visit to this tab
+  releaseMgmtData.filter(r => r.tab === tab).forEach(r => relExpandedGroups.add(r.vestingDate));
+
   let rows = releaseMgmtData.filter(r => {
     if (r.tab !== tab) return false;
     if (planF && r.planId !== planF) return false;
@@ -5899,12 +5902,15 @@ function renderReleaseMgmt() {
     return true;
   });
 
-  // Group by plan
+  // Group by vest date (sorted chronologically)
   const groupMap = {};
   rows.forEach(r => {
-    if (!groupMap[r.planId]) groupMap[r.planId] = { name:r.plan, planId:r.planId, releases:[] };
-    groupMap[r.planId].releases.push(r);
+    const key = r.vestingDate;
+    if (!groupMap[key]) groupMap[key] = { vestingDate:key, releases:[] };
+    groupMap[key].releases.push(r);
   });
+  // Sort groups by date
+  const sortedGroups = Object.values(groupMap).sort((a, b) => new Date(a.vestingDate) - new Date(b.vestingDate));
 
   const stMap   = { ready:'rel-st-ready', awaiting:'rel-st-awaiting', processing:'rel-st-processing', upcoming:'rel-st-upcoming', completed:'rel-st-completed', onhold:'rel-st-onhold' };
   const stLabel = { ready:'Release ready', awaiting:'Awaiting employee', processing:'Processing', upcoming:'Upcoming', completed:'Completed', onhold:'On hold' };
@@ -5918,19 +5924,21 @@ function renderReleaseMgmt() {
   }
 
   let html = '';
-  Object.values(groupMap).forEach(g => {
-    const isOpen = relExpandedGroups.has(g.planId);
-    // Collect unique currencies for group
+  sortedGroups.forEach(g => {
+    const isOpen = relExpandedGroups.has(g.vestingDate);
     const currencies = [...new Set(g.releases.map(r => r.currency))];
-    html += `<tr class="rel-group-tr" onclick="toggleRelGroup('${g.planId}')">
+    const plans      = [...new Set(g.releases.map(r => r.plan))];
+    const totalUnits = g.releases.reduce((s, r) => s + r.units, 0);
+    html += `<tr class="rel-group-tr" onclick="toggleRelGroup('${g.vestingDate}')">
       <td colspan="9">
         <div class="rel-group-inner">
           <span class="rel-group-chevron ${isOpen ? 'open' : ''}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,18 15,12 9,6"/></svg>
           </span>
-          <span class="rel-group-name">${g.name}</span>
+          <span class="rel-group-name">Vest Date — ${relFmtDate(g.vestingDate)}</span>
           <span class="rel-group-count">${g.releases.length}</span>
           ${currencies.map(c => `<span class="rel-group-cur">${c}</span>`).join('')}
+          <span style="margin-left:auto;font-size:12px;color:var(--text2);font-weight:500;padding-right:4px">${totalUnits.toLocaleString()} units · ${plans.join(', ')}</span>
         </div>
       </td>
     </tr>`;
