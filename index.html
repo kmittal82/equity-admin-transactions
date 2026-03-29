@@ -3132,9 +3132,9 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Export
           </button>
-          <button class="btn btn-ghost" onclick="renderExerciseTable('pending')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
-            Bulk Approve
+          <button class="btn btn-ghost" onclick="toggleExBulkMode()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="4" height="4" rx="1"/><line x1="10" y1="7" x2="21" y2="7"/><rect x="3" y="11" width="4" height="4" rx="1"/><line x1="10" y1="13" x2="21" y2="13"/><rect x="3" y="17" width="4" height="4" rx="1"/><line x1="10" y1="19" x2="21" y2="19"/></svg>
+            Select
           </button>
         </div>
       </div>
@@ -3180,18 +3180,36 @@
         </div>
       </div>
 
+      <!-- Bulk action bar (hidden until rows selected) -->
+      <div id="ex-bulk-bar" style="display:none;align-items:center;gap:10px;padding:10px 16px;background:#1e293b;border-radius:10px;margin-bottom:10px">
+        <span id="ex-bulk-count" style="font-size:13px;font-weight:600;color:#fff;min-width:120px"></span>
+        <button onclick="bulkExerciseAction('approved')" style="height:32px;padding:0 14px;font-size:12.5px;font-weight:600;border-radius:7px;border:none;background:#22c55e;color:#fff;cursor:pointer;display:flex;align-items:center;gap:6px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:13px;height:13px"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+          Approve Selected
+        </button>
+        <button onclick="bulkExerciseAction('rejected')" style="height:32px;padding:0 14px;font-size:12.5px;font-weight:600;border-radius:7px;border:none;background:#ef4444;color:#fff;cursor:pointer;display:flex;align-items:center;gap:6px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:13px;height:13px"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          Reject Selected
+        </button>
+        <button onclick="clearExSelection()" style="height:32px;padding:0 12px;font-size:12px;font-weight:500;border-radius:7px;border:1px solid #475569;background:transparent;color:#94a3b8;cursor:pointer;margin-left:4px">
+          Clear
+        </button>
+      </div>
+
       <!-- Table -->
       <div class="ag-table-wrap">
         <div class="table-toolbar">
           <div class="table-result-count" id="ex-result-count">Showing <strong>47</strong> exercises</div>
-          <div class="table-toolbar-actions">
-            <button class="btn btn-ghost" style="height:32px;padding:0 10px;font-size:12px">Bulk Select</button>
+          <div class="table-toolbar-actions" id="ex-toolbar-actions">
           </div>
         </div>
         <div style="overflow-x:auto">
           <table class="ag-table" id="exercise-table">
             <thead>
               <tr>
+                <th style="width:36px;text-align:center" id="ex-select-all-th" class="ex-select-col" style="display:none">
+                  <input type="checkbox" id="ex-select-all" onchange="toggleSelectAllEx(this)" style="cursor:pointer;width:14px;height:14px">
+                </th>
                 <th style="width:44px">Actions</th>
                 <th style="width:130px;cursor:pointer">Exercise ID ↕</th>
                 <th style="width:170px">Participant</th>
@@ -5274,6 +5292,90 @@ const exerciseData = [
 ];
 
 let exStatusFilter = 'all';
+let exBulkMode     = false;
+let exSelected     = new Set();
+
+function toggleExBulkMode() {
+  exBulkMode = !exBulkMode;
+  exSelected.clear();
+  updateExBulkBar();
+  renderExerciseTable();
+}
+
+function toggleSelectAllEx(cb) {
+  document.querySelectorAll('.ex-row-cb:not(:disabled)').forEach(c => {
+    c.checked = cb.checked;
+    cb.checked ? exSelected.add(c.dataset.id) : exSelected.delete(c.dataset.id);
+  });
+  updateExBulkBar();
+}
+
+function toggleExRow(cb) {
+  cb.checked ? exSelected.add(cb.dataset.id) : exSelected.delete(cb.dataset.id);
+  const all = document.querySelectorAll('.ex-row-cb:not(:disabled)');
+  const sa  = document.getElementById('ex-select-all');
+  if (sa) sa.checked = all.length > 0 && [...all].every(c => c.checked);
+  updateExBulkBar();
+}
+
+function updateExBulkBar() {
+  const bar = document.getElementById('ex-bulk-bar');
+  if (!bar) return;
+  const n = exSelected.size;
+  if (exBulkMode && n > 0) {
+    bar.style.display = 'flex';
+    document.getElementById('ex-bulk-count').textContent = `${n} exercise${n !== 1 ? 's' : ''} selected`;
+  } else {
+    bar.style.display = 'none';
+  }
+}
+
+function clearExSelection() {
+  exSelected.clear();
+  document.querySelectorAll('.ex-row-cb').forEach(c => c.checked = false);
+  const sa = document.getElementById('ex-select-all');
+  if (sa) sa.checked = false;
+  updateExBulkBar();
+}
+
+function bulkExerciseAction(action) {
+  if (!exSelected.size) return;
+  const today = new Date().toISOString().slice(0,10);
+  let changed = 0;
+  exSelected.forEach(id => {
+    const ex = exerciseData.find(e => e.id === id);
+    if (ex && (ex.status === 'submitted' || ex.status === 'pending')) {
+      ex.status = action; ex.decided = today; changed++;
+    }
+  });
+  exSelected.clear();
+  exBulkMode = false;
+  updateExBulkBar();
+  renderExerciseTable();
+  showExToast(action === 'approved'
+    ? `✓ ${changed} exercise${changed !== 1 ? 's' : ''} approved`
+    : `✗ ${changed} exercise${changed !== 1 ? 's' : ''} rejected`, action);
+}
+
+function singleExAction(id, action) {
+  const ex = exerciseData.find(e => e.id === id);
+  if (!ex) return;
+  ex.status = action;
+  ex.decided = new Date().toISOString().slice(0,10);
+  renderExerciseTable();
+  showExToast(action === 'approved' ? `✓ ${id} approved` : `✗ ${id} rejected`, action);
+}
+
+function showExToast(msg, type) {
+  const t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = `position:fixed;bottom:32px;left:50%;transform:translateX(-50%);
+    padding:12px 24px;border-radius:10px;font-size:13px;font-weight:600;z-index:9999;
+    color:#fff;background:${type==='approved'?'#16a34a':'#dc2626'};
+    box-shadow:0 4px 20px rgba(0,0,0,.18);pointer-events:none;`;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2800);
+}
 
 function filterExTab(btn, status) {
   document.querySelectorAll('#ex-status-tabs .txtype-tab').forEach(t => t.classList.remove('active'));
@@ -5304,21 +5406,19 @@ function renderExerciseTable(forceStatus) {
   document.getElementById('ex-result-count').innerHTML =
     `Showing <strong>${filtered.length}</strong> exercise${filtered.length !== 1 ? 's' : ''}`;
 
+  const saTh = document.getElementById('ex-select-all-th');
+  if (saTh) saTh.style.display = exBulkMode ? '' : 'none';
+
   const statusCfg = {
-    submitted: { cls:'',           dot:'sdot-active',     label:'Submitted',  color:'#2563eb' },
-    pending:   { cls:'',           dot:'',                label:'Pending',    color:'var(--amber)' },
-    approved:  { cls:'',           dot:'sdot-active',     label:'Approved',   color:'var(--green)' },
-    rejected:  { cls:'danger',     dot:'sdot-terminated', label:'Rejected',   color:'var(--red)'   },
-    expired:   { cls:'',           dot:'',                label:'Expired',    color:'var(--textm)' },
+    submitted: { dot:'',                label:'Submitted', color:'#2563eb'      },
+    pending:   { dot:'',                label:'Pending',   color:'var(--amber)' },
+    approved:  { dot:'sdot-complete',   label:'Approved',  color:'var(--green)' },
+    rejected:  { dot:'sdot-terminated', label:'Rejected',  color:'var(--red)'   },
+    expired:   { dot:'',                label:'Expired',   color:'var(--textm)' },
   };
 
   const methodBadge = m => {
-    const cfg = {
-      'Cashless':      { bg:'#eef2ff', color:'#4338ca' },
-      'Same-Day Sale': { bg:'#fff7ed', color:'#c2410c' },
-      'Cash':          { bg:'#f0fdf4', color:'#166534' },
-      'Net Exercise':  { bg:'#f5f3ff', color:'#6d28d9' },
-    }[m] || { bg:'#f1f5f9', color:'#475569' };
+    const cfg = { 'Cashless':{bg:'#eef2ff',color:'#4338ca'}, 'Same-Day Sale':{bg:'#fff7ed',color:'#c2410c'}, 'Cash':{bg:'#f0fdf4',color:'#166534'}, 'Net Exercise':{bg:'#f5f3ff',color:'#6d28d9'} }[m] || {bg:'#f1f5f9',color:'#475569'};
     return `<span class="type-badge" style="background:${cfg.bg};color:${cfg.color}">${m}</span>`;
   };
 
@@ -5327,76 +5427,68 @@ function renderExerciseTable(forceStatus) {
     return `<span class="type-badge ${cls}">${t}</span>`;
   };
 
+  const canAct = e => e.status === 'submitted' || e.status === 'pending';
+
   tbody.innerHTML = filtered.map(e => {
-    const grossValue = (e.fmv * e.shares).toLocaleString('en-US', { style:'currency', currency:'USD', maximumFractionDigits:0 });
-    const gain       = ((e.fmv - e.strike) * e.shares).toLocaleString('en-US', { style:'currency', currency:'USD', maximumFractionDigits:0 });
+    const grossValue = (e.fmv * e.shares).toLocaleString('en-US', {style:'currency',currency:'USD',maximumFractionDigits:0});
+    const gain       = ((e.fmv - e.strike) * e.shares).toLocaleString('en-US', {style:'currency',currency:'USD',maximumFractionDigits:0});
     const gainPct    = (((e.fmv - e.strike) / e.strike) * 100).toFixed(1);
     const sc         = statusCfg[e.status] || statusCfg.submitted;
-    const dot        = e.status === 'approved' ? 'sdot-complete' : e.status === 'submitted' ? '' : sc.dot;
+    const isChecked  = exSelected.has(e.id);
 
-    return `<tr>
+    return `<tr style="${isChecked ? 'background:#eff6ff' : ''}">
+      ${exBulkMode ? `<td style="text-align:center;width:36px" onclick="event.stopPropagation()">
+        <input type="checkbox" class="ex-row-cb" data-id="${e.id}" ${isChecked?'checked':''}
+          onchange="toggleExRow(this)" style="cursor:pointer;width:14px;height:14px"
+          ${!canAct(e)?'disabled style="opacity:.35;cursor:not-allowed;width:14px;height:14px"':''}></td>` : ''}
       <td onclick="event.stopPropagation()">
         <div class="kebab-wrap">
           <button class="kebab-btn" onclick="event.stopPropagation();toggleKebab(this)" title="More actions">⋮</button>
           <div class="kebab-menu">
             <div class="kebab-menu-label">Grant</div>
             <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();openLedgerDrawer('${e.grantId}')">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
-              View Source Grant
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>View Source Grant
             </button>
             <div class="kebab-divider"></div>
             <div class="kebab-menu-label">Actions</div>
-            ${e.status === 'submitted' || e.status === 'pending' ? `
-            <button class="kebab-menu-item" style="color:var(--green)" onclick="event.stopPropagation();closeAllKebabs();">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
-              Approve Exercise
+            ${canAct(e) ? `
+            <button class="kebab-menu-item" style="color:var(--green)" onclick="event.stopPropagation();closeAllKebabs();singleExAction('${e.id}','approved')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>Approve Exercise
             </button>
             <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              Request Information
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Request Information
             </button>
-            <button class="kebab-menu-item danger" onclick="event.stopPropagation();closeAllKebabs();">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-              Reject
+            <button class="kebab-menu-item danger" onclick="event.stopPropagation();closeAllKebabs();singleExAction('${e.id}','rejected')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Reject
             </button>` : ''}
             <div class="kebab-divider"></div>
             <div class="kebab-menu-label">Documents</div>
             <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              Download Exercise Form
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download Exercise Form
             </button>
-            ${e.type === 'ISO' ? `
-            <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13,2 13,9 20,9"/></svg>
-              Form 3921 (ISO)
+            ${e.type === 'ISO' ? `<button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13,2 13,9 20,9"/></svg>Form 3921 (ISO)
             </button>` : ''}
           </div>
         </div>
       </td>
       <td style="font-family:'SF Mono',monospace;font-size:12px;font-weight:700;color:var(--accent-dark)">${e.id}</td>
       <td><div class="participant-name">${e.participant}</div><div class="participant-dept">${e.dept}</div></td>
-      <td>
-        <button onclick="openLedgerDrawer('${e.grantId}')" style="background:none;border:none;cursor:pointer;padding:0;text-align:left">
-          <span style="font-family:'SF Mono',monospace;font-size:11.5px;font-weight:700;color:var(--accent);border-bottom:1px dashed var(--accent)">${e.grantId}</span>
-        </button>
-      </td>
+      <td><button onclick="openLedgerDrawer('${e.grantId}')" style="background:none;border:none;cursor:pointer;padding:0;text-align:left">
+        <span style="font-family:'SF Mono',monospace;font-size:11.5px;font-weight:700;color:var(--accent);border-bottom:1px dashed var(--accent)">${e.grantId}</span>
+      </button></td>
       <td>${typeBadge(e.type)}</td>
       <td style="text-align:right;font-weight:600">${e.shares.toLocaleString()}</td>
       <td style="text-align:right;font-weight:600;color:var(--accent-dark)">$${e.strike.toFixed(2)}</td>
       <td style="text-align:right;font-weight:600">$${e.fmv.toFixed(2)}</td>
       <td style="text-align:right;font-weight:600">${grossValue}</td>
-      <td style="text-align:right;font-weight:700;color:var(--green)">
-        ${gain}
-        <div style="font-size:10px;color:var(--textm);font-weight:400">+${gainPct}%</div>
-      </td>
+      <td style="text-align:right;font-weight:700;color:var(--green)">${gain}<div style="font-size:10px;color:var(--textm);font-weight:400">+${gainPct}%</div></td>
       <td>${methodBadge(e.method)}</td>
       <td style="font-size:12px;color:var(--text2)">${e.submitted}</td>
-      <td style="font-size:12px;color:var(--text2)">${e.decided || '<span style="color:var(--textm)">—</span>'}</td>
-      <td>
-        <span class="sdot ${dot}" style="color:${sc.color};font-size:12px">${sc.label}</span>
-      </td>
+      <td style="font-size:12px;color:var(--text2)">${e.decided||'<span style="color:var(--textm)">—</span>'}</td>
+      <td><span class="sdot ${sc.dot}" style="color:${sc.color};font-size:12px">${sc.label}</span></td>
     </tr>`;
-  }).join('') || `<tr><td colspan="14" style="text-align:center;padding:32px;color:var(--textm)">No exercises found</td></tr>`;
+  }).join('') || `<tr><td colspan="15" style="text-align:center;padding:32px;color:var(--textm)">No exercises found</td></tr>`;
 }
 
 function openEditModal(grantId) {
