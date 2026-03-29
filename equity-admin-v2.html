@@ -3276,6 +3276,10 @@
       <!-- Bulk action bar (hidden until rows selected) -->
       <div id="ex-bulk-bar" style="display:none;align-items:center;gap:10px;padding:10px 16px;background:#1e293b;border-radius:10px;margin-bottom:10px">
         <span id="ex-bulk-count" style="font-size:13px;font-weight:600;color:#fff;min-width:120px"></span>
+        <button onclick="openExBulkEditModal()" style="height:32px;padding:0 14px;font-size:12.5px;font-weight:600;border-radius:7px;border:1px solid #475569;background:#334155;color:#e2e8f0;cursor:pointer;display:flex;align-items:center;gap:6px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:13px;height:13px"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>
+          Edit Selected
+        </button>
         <button onclick="bulkExerciseAction('approved')" style="height:32px;padding:0 14px;font-size:12.5px;font-weight:600;border-radius:7px;border:none;background:#22c55e;color:#fff;cursor:pointer;display:flex;align-items:center;gap:6px">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:13px;height:13px"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
           Approve Selected
@@ -3968,6 +3972,104 @@
         <button class="btn btn-ghost" onclick="closeModal('modal-action-detail')">Close</button>
         <button class="btn btn-primary">Approve & Continue</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXERCISE EDIT MODAL (single) -->
+<div class="modal-overlay" id="modal-ex-edit">
+  <div class="modal-box" style="width:480px">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title">Edit Exercise</div>
+        <div id="ex-edit-subtitle" style="font-size:12px;color:var(--textm);margin-top:2px"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modal-ex-edit')">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="ex-edit-id">
+      <div style="background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:20px">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+          <div><div style="font-size:10px;font-weight:600;color:var(--textm);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px">Participant</div><div id="ex-edit-participant" style="font-size:13px;font-weight:600;color:var(--text)"></div></div>
+          <div><div style="font-size:10px;font-weight:600;color:var(--textm);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px">Grant</div><div id="ex-edit-grant" style="font-size:13px;font-weight:600;color:var(--accent)"></div></div>
+          <div><div style="font-size:10px;font-weight:600;color:var(--textm);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px">Shares</div><div id="ex-edit-shares" style="font-size:13px;font-weight:600;color:var(--text)"></div></div>
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">FMV at Exercise <span class="req">*</span></label>
+          <div style="position:relative">
+            <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--textm);font-weight:600">$</span>
+            <input type="number" id="ex-edit-fmv" class="form-input" step="0.01" min="0" style="padding-left:24px" placeholder="0.00" oninput="updateExEditPreview()">
+          </div>
+          <div style="font-size:11px;color:var(--textm);margin-top:4px">Market value per share on exercise date</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tax Cost FMV <span class="req">*</span></label>
+          <div style="position:relative">
+            <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--textm);font-weight:600">$</span>
+            <input type="number" id="ex-edit-taxcostfmv" class="form-input" step="0.01" min="0" style="padding-left:24px" placeholder="0.00" oninput="updateExEditPreview()">
+          </div>
+          <div style="font-size:11px;color:var(--textm);margin-top:4px">FMV used for tax / AMT calculation</div>
+        </div>
+      </div>
+      <div id="ex-edit-preview" style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:14px;margin-top:4px">
+        <div style="font-size:11px;font-weight:600;color:#166534;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px">Recalculated Values</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+          <div><div style="font-size:10px;color:#166534;margin-bottom:2px">Gross Value</div><div id="ex-edit-calc-gross" style="font-size:14px;font-weight:700;color:#15803d"></div></div>
+          <div><div style="font-size:10px;color:#166534;margin-bottom:2px">Gain</div><div id="ex-edit-calc-gain" style="font-size:14px;font-weight:700;color:#15803d"></div></div>
+          <div><div style="font-size:10px;color:#166534;margin-bottom:2px">Tax Spread</div><div id="ex-edit-calc-spread" style="font-size:14px;font-weight:700;color:#15803d"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('modal-ex-edit')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveExEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- EXERCISE BULK EDIT MODAL -->
+<div class="modal-overlay" id="modal-ex-bulk-edit">
+  <div class="modal-box" style="width:520px">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title">Bulk Edit Exercises</div>
+        <div id="ex-bulk-edit-subtitle" style="font-size:12px;color:var(--textm);margin-top:2px"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modal-ex-bulk-edit')">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:12px 14px;margin-bottom:18px;display:flex;gap:10px;align-items:flex-start">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" style="width:16px;height:16px;flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div style="font-size:12.5px;color:#92400e">The values you enter will be applied to <strong id="ex-bulk-edit-count"></strong>. Leave a field blank to keep each exercise's existing value.</div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">FMV at Exercise</label>
+          <div style="position:relative">
+            <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--textm);font-weight:600">$</span>
+            <input type="number" id="ex-bulk-fmv" class="form-input" step="0.01" min="0" style="padding-left:24px" placeholder="Leave blank to keep existing">
+          </div>
+          <div style="font-size:11px;color:var(--textm);margin-top:4px">Market value per share on exercise date</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tax Cost FMV</label>
+          <div style="position:relative">
+            <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--textm);font-weight:600">$</span>
+            <input type="number" id="ex-bulk-taxcostfmv" class="form-input" step="0.01" min="0" style="padding-left:24px" placeholder="Leave blank to keep existing">
+          </div>
+          <div style="font-size:11px;color:var(--textm);margin-top:4px">FMV used for tax / AMT calculation</div>
+        </div>
+      </div>
+      <div style="margin-top:8px">
+        <div style="font-size:11px;font-weight:600;color:var(--textm);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px">Exercises to be updated</div>
+        <div id="ex-bulk-edit-list" style="max-height:200px;overflow-y:auto;border:1px solid var(--border);border-radius:8px"></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('modal-ex-bulk-edit')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveBulkExEdit()">Apply to Selected</button>
     </div>
   </div>
 </div>
@@ -5551,25 +5653,25 @@ function openExerciseModal(grantId) {
 // EXERCISE MANAGEMENT
 // ─────────────────────────────────────────────
 const exerciseData = [
-  { id:'EX-2026-0047', participant:'Sarah Chen',     dept:'Engineering', grantId:'GRT-2024-001', type:'ISO',  shares:2500,  strike:28.75, fmv:42.50, method:'Cashless',      submitted:'2026-03-18', decided:null,         status:'submitted' },
-  { id:'EX-2026-0046', participant:'Marcus Johnson', dept:'Product',     grantId:'GRT-2024-002', type:'ISO',  shares:5000,  strike:28.75, fmv:42.50, method:'Same-Day Sale', submitted:'2026-03-15', decided:null,         status:'pending'   },
-  { id:'EX-2026-0045', participant:'Emma Davis',     dept:'Sales',       grantId:'GRT-2023-008', type:'NSO',  shares:8000,  strike:22.00, fmv:42.50, method:'Cashless',      submitted:'2026-03-14', decided:null,         status:'pending'   },
-  { id:'EX-2026-0044', participant:'James Park',     dept:'Engineering', grantId:'GRT-2024-003', type:'ISO',  shares:1500,  strike:25.00, fmv:42.50, method:'Cash',          submitted:'2026-03-12', decided:null,         status:'submitted' },
-  { id:'EX-2026-0043', participant:'Amanda Foster',  dept:'Operations',  grantId:'GRT-2023-003', type:'NSO',  shares:4200,  strike:16.00, fmv:42.50, method:'Net Exercise',  submitted:'2026-03-10', decided:null,         status:'submitted' },
-  { id:'EX-2026-0042', participant:'Lisa Wong',      dept:'Engineering', grantId:'GRT-2023-005', type:'ISO',  shares:6000,  strike:18.50, fmv:42.50, method:'Same-Day Sale', submitted:'2026-03-08', decided:'2026-03-11', status:'approved'  },
-  { id:'EX-2026-0041', participant:'Robert Chen',    dept:'Product',     grantId:'GRT-2023-004', type:'ISO',  shares:3500,  strike:17.25, fmv:42.50, method:'Cashless',      submitted:'2026-03-05', decided:'2026-03-07', status:'approved'  },
-  { id:'EX-2026-0040', participant:'Priya Sharma',   dept:'Finance',     grantId:'GRT-2023-007', type:'NSO',  shares:2000,  strike:20.50, fmv:42.50, method:'Cash',          submitted:'2026-03-01', decided:'2026-03-03', status:'approved'  },
-  { id:'EX-2026-0039', participant:'David Miller',   dept:'Legal',       grantId:'GRT-2023-006', type:'NSO',  shares:1800,  strike:19.75, fmv:42.50, method:'Cashless',      submitted:'2026-02-28', decided:'2026-03-02', status:'approved'  },
-  { id:'EX-2026-0038', participant:'Wei Zhang',      dept:'Engineering', grantId:'GRT-2022-018', type:'NQSO', shares:10000, strike:14.20, fmv:42.50, method:'Same-Day Sale', submitted:'2026-02-20', decided:'2026-02-22', status:'approved'  },
-  { id:'EX-2026-0037', participant:'Carlos Rivera',  dept:'Sales',       grantId:'GRT-2022-015', type:'NSO',  shares:3000,  strike:12.80, fmv:42.50, method:'Cashless',      submitted:'2026-02-15', decided:'2026-02-18', status:'approved'  },
-  { id:'EX-2026-0036', participant:'Nina Hartley',   dept:'Legal',       grantId:'GRT-2021-009', type:'NSO',  shares:2500,  strike:11.50, fmv:42.50, method:'Cash',          submitted:'2026-02-10', decided:'2026-02-12', status:'rejected'  },
-  { id:'EX-2026-0035', participant:'Tom Bradley',    dept:'Marketing',   grantId:'GRT-2021-007', type:'SAR',  shares:4000,  strike:10.00, fmv:42.50, method:'Net Exercise',  submitted:'2026-02-05', decided:'2026-02-07', status:'rejected'  },
-  { id:'EX-2025-0081', participant:'Sophie Turner',  dept:'Sales',       grantId:'GRT-2020-012', type:'ISO',  shares:5500,  strike:9.50,  fmv:38.20, method:'Same-Day Sale', submitted:'2025-12-01', decided:'2025-12-03', status:'approved'  },
-  { id:'EX-2025-0072', participant:'Alex Kim',       dept:'Engineering', grantId:'GRT-2020-008', type:'NQSO', shares:7500,  strike:8.75,  fmv:36.80, method:'Cashless',      submitted:'2025-11-10', decided:'2025-11-13', status:'approved'  },
-  { id:'EX-2025-0065', participant:'Rachel Green',   dept:'HR',          grantId:'GRT-2019-004', type:'ISO',  shares:3200,  strike:7.20,  fmv:35.50, method:'Cash',          submitted:'2025-09-15', decided:null,         status:'expired'   },
-  { id:'EX-2025-0058', participant:'Mark Torres',    dept:'Design',      grantId:'GRT-2019-002', type:'NSO',  shares:2800,  strike:6.80,  fmv:34.10, method:'Cashless',      submitted:'2025-08-20', decided:null,         status:'expired'   },
-  { id:'EX-2026-0050', participant:'Julia Ross',     dept:'Engineering', grantId:'GRT-2024-005', type:'ISO',  shares:1200,  strike:30.00, fmv:42.50, method:'Cash',          submitted:'2026-03-20', decided:null,         status:'submitted' },
-  { id:'EX-2026-0051', participant:'Kevin Park',     dept:'Product',     grantId:'GRT-2023-011', type:'NQSO', shares:3800,  strike:21.00, fmv:42.50, method:'Same-Day Sale', submitted:'2026-03-21', decided:null,         status:'submitted' },
+  { id:'EX-2026-0047', participant:'Sarah Chen',     dept:'Engineering', grantId:'GRT-2024-001', type:'ISO',  shares:2500,  strike:28.75, fmv:42.50, taxCostFmv:42.50, method:'Cashless',      submitted:'2026-03-18', decided:null,         status:'submitted' },
+  { id:'EX-2026-0046', participant:'Marcus Johnson', dept:'Product',     grantId:'GRT-2024-002', type:'ISO',  shares:5000,  strike:28.75, fmv:42.50, taxCostFmv:42.50, method:'Same-Day Sale', submitted:'2026-03-15', decided:null,         status:'pending'   },
+  { id:'EX-2026-0045', participant:'Emma Davis',     dept:'Sales',       grantId:'GRT-2023-008', type:'NSO',  shares:8000,  strike:22.00, fmv:42.50, taxCostFmv:42.50, method:'Cashless',      submitted:'2026-03-14', decided:null,         status:'pending'   },
+  { id:'EX-2026-0044', participant:'James Park',     dept:'Engineering', grantId:'GRT-2024-003', type:'ISO',  shares:1500,  strike:25.00, fmv:42.50, taxCostFmv:42.50, method:'Cash',          submitted:'2026-03-12', decided:null,         status:'submitted' },
+  { id:'EX-2026-0043', participant:'Amanda Foster',  dept:'Operations',  grantId:'GRT-2023-003', type:'NSO',  shares:4200,  strike:16.00, fmv:42.50, taxCostFmv:42.50, method:'Net Exercise',  submitted:'2026-03-10', decided:null,         status:'submitted' },
+  { id:'EX-2026-0042', participant:'Lisa Wong',      dept:'Engineering', grantId:'GRT-2023-005', type:'ISO',  shares:6000,  strike:18.50, fmv:42.50, taxCostFmv:42.50, method:'Same-Day Sale', submitted:'2026-03-08', decided:'2026-03-11', status:'approved'  },
+  { id:'EX-2026-0041', participant:'Robert Chen',    dept:'Product',     grantId:'GRT-2023-004', type:'ISO',  shares:3500,  strike:17.25, fmv:42.50, taxCostFmv:42.50, method:'Cashless',      submitted:'2026-03-05', decided:'2026-03-07', status:'approved'  },
+  { id:'EX-2026-0040', participant:'Priya Sharma',   dept:'Finance',     grantId:'GRT-2023-007', type:'NSO',  shares:2000,  strike:20.50, fmv:42.50, taxCostFmv:42.50, method:'Cash',          submitted:'2026-03-01', decided:'2026-03-03', status:'approved'  },
+  { id:'EX-2026-0039', participant:'David Miller',   dept:'Legal',       grantId:'GRT-2023-006', type:'NSO',  shares:1800,  strike:19.75, fmv:42.50, taxCostFmv:42.50, method:'Cashless',      submitted:'2026-02-28', decided:'2026-03-02', status:'approved'  },
+  { id:'EX-2026-0038', participant:'Wei Zhang',      dept:'Engineering', grantId:'GRT-2022-018', type:'NQSO', shares:10000, strike:14.20, fmv:42.50, taxCostFmv:42.50, method:'Same-Day Sale', submitted:'2026-02-20', decided:'2026-02-22', status:'approved'  },
+  { id:'EX-2026-0037', participant:'Carlos Rivera',  dept:'Sales',       grantId:'GRT-2022-015', type:'NSO',  shares:3000,  strike:12.80, fmv:42.50, taxCostFmv:42.50, method:'Cashless',      submitted:'2026-02-15', decided:'2026-02-18', status:'approved'  },
+  { id:'EX-2026-0036', participant:'Nina Hartley',   dept:'Legal',       grantId:'GRT-2021-009', type:'NSO',  shares:2500,  strike:11.50, fmv:42.50, taxCostFmv:42.50, method:'Cash',          submitted:'2026-02-10', decided:'2026-02-12', status:'rejected'  },
+  { id:'EX-2026-0035', participant:'Tom Bradley',    dept:'Marketing',   grantId:'GRT-2021-007', type:'SAR',  shares:4000,  strike:10.00, fmv:42.50, taxCostFmv:42.50, method:'Net Exercise',  submitted:'2026-02-05', decided:'2026-02-07', status:'rejected'  },
+  { id:'EX-2025-0081', participant:'Sophie Turner',  dept:'Sales',       grantId:'GRT-2020-012', type:'ISO',  shares:5500,  strike:9.50,  fmv:38.20, taxCostFmv:38.20, method:'Same-Day Sale', submitted:'2025-12-01', decided:'2025-12-03', status:'approved'  },
+  { id:'EX-2025-0072', participant:'Alex Kim',       dept:'Engineering', grantId:'GRT-2020-008', type:'NQSO', shares:7500,  strike:8.75,  fmv:36.80, taxCostFmv:36.80, method:'Cashless',      submitted:'2025-11-10', decided:'2025-11-13', status:'approved'  },
+  { id:'EX-2025-0065', participant:'Rachel Green',   dept:'HR',          grantId:'GRT-2019-004', type:'ISO',  shares:3200,  strike:7.20,  fmv:35.50, taxCostFmv:35.50, method:'Cash',          submitted:'2025-09-15', decided:null,         status:'expired'   },
+  { id:'EX-2025-0058', participant:'Mark Torres',    dept:'Design',      grantId:'GRT-2019-002', type:'NSO',  shares:2800,  strike:6.80,  fmv:34.10, taxCostFmv:34.10, method:'Cashless',      submitted:'2025-08-20', decided:null,         status:'expired'   },
+  { id:'EX-2026-0050', participant:'Julia Ross',     dept:'Engineering', grantId:'GRT-2024-005', type:'ISO',  shares:1200,  strike:30.00, fmv:42.50, taxCostFmv:42.50, method:'Cash',          submitted:'2026-03-20', decided:null,         status:'submitted' },
+  { id:'EX-2026-0051', participant:'Kevin Park',     dept:'Product',     grantId:'GRT-2023-011', type:'NQSO', shares:3800,  strike:21.00, fmv:42.50, taxCostFmv:42.50, method:'Same-Day Sale', submitted:'2026-03-21', decided:null,         status:'submitted' },
 ];
 
 let exStatusFilter = 'all';
@@ -5645,6 +5747,94 @@ function singleExAction(id, action) {
   ex.decided = new Date().toISOString().slice(0,10);
   renderExerciseTable();
   showExToast(action === 'approved' ? `✓ ${id} approved` : `✗ ${id} rejected`, action);
+}
+
+function openExEditModal(id) {
+  const ex = exerciseData.find(e => e.id === id);
+  if (!ex) return;
+  document.getElementById('ex-edit-id').value          = id;
+  document.getElementById('ex-edit-subtitle').textContent = ex.id + ' · ' + ex.type;
+  document.getElementById('ex-edit-participant').textContent = ex.participant;
+  document.getElementById('ex-edit-grant').textContent  = ex.grantId;
+  document.getElementById('ex-edit-shares').textContent = ex.shares.toLocaleString() + ' shares';
+  document.getElementById('ex-edit-fmv').value          = ex.fmv;
+  document.getElementById('ex-edit-taxcostfmv').value   = ex.taxCostFmv;
+  updateExEditPreview();
+  openModal('modal-ex-edit');
+}
+
+function updateExEditPreview() {
+  const ex = exerciseData.find(e => e.id === document.getElementById('ex-edit-id').value);
+  if (!ex) return;
+  const fmv  = parseFloat(document.getElementById('ex-edit-fmv').value) || ex.fmv;
+  const tcfmv = parseFloat(document.getElementById('ex-edit-taxcostfmv').value) || ex.taxCostFmv;
+  const gross  = (fmv * ex.shares).toLocaleString('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});
+  const gain   = ((fmv - ex.strike) * ex.shares).toLocaleString('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});
+  const spread = ((tcfmv - ex.strike) * ex.shares).toLocaleString('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});
+  document.getElementById('ex-edit-calc-gross').textContent  = gross;
+  document.getElementById('ex-edit-calc-gain').textContent   = gain;
+  document.getElementById('ex-edit-calc-spread').textContent = spread;
+}
+
+function saveExEdit() {
+  const id    = document.getElementById('ex-edit-id').value;
+  const ex    = exerciseData.find(e => e.id === id);
+  if (!ex) return;
+  const fmv   = parseFloat(document.getElementById('ex-edit-fmv').value);
+  const tcfmv = parseFloat(document.getElementById('ex-edit-taxcostfmv').value);
+  if (isNaN(fmv) || fmv <= 0)   { alert('Please enter a valid FMV'); return; }
+  if (isNaN(tcfmv) || tcfmv <= 0) { alert('Please enter a valid Tax Cost FMV'); return; }
+  ex.fmv        = fmv;
+  ex.taxCostFmv = tcfmv;
+  closeModal('modal-ex-edit');
+  renderExerciseTable();
+  showExToast(`✓ ${id} updated`, 'approved');
+}
+
+function openExBulkEditModal() {
+  if (!exSelected.size) return;
+  const ids = [...exSelected];
+  document.getElementById('ex-bulk-edit-count').textContent =
+    `${ids.length} exercise${ids.length !== 1 ? 's' : ''}`;
+  document.getElementById('ex-bulk-fmv').value        = '';
+  document.getElementById('ex-bulk-taxcostfmv').value = '';
+  // Build the list of selected exercises
+  const list = document.getElementById('ex-bulk-edit-list');
+  list.innerHTML = ids.map(id => {
+    const ex = exerciseData.find(e => e.id === id);
+    if (!ex) return '';
+    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-bottom:1px solid var(--border)">
+      <div>
+        <span style="font-family:'SF Mono',monospace;font-size:11.5px;font-weight:700;color:var(--accent-dark)">${ex.id}</span>
+        <span style="font-size:12px;color:var(--textm);margin-left:8px">${ex.participant}</span>
+      </div>
+      <div style="font-size:11.5px;color:var(--text2)">
+        FMV: <strong>$${ex.fmv.toFixed(2)}</strong> &nbsp;·&nbsp; Tax FMV: <strong>$${ex.taxCostFmv.toFixed(2)}</strong>
+      </div>
+    </div>`;
+  }).join('');
+  openModal('modal-ex-bulk-edit');
+}
+
+function saveBulkExEdit() {
+  const fmvRaw   = document.getElementById('ex-bulk-fmv').value.trim();
+  const tcfmvRaw = document.getElementById('ex-bulk-taxcostfmv').value.trim();
+  const fmv      = fmvRaw   ? parseFloat(fmvRaw)   : null;
+  const tcfmv    = tcfmvRaw ? parseFloat(tcfmvRaw) : null;
+  if (fmv   !== null && (isNaN(fmv)   || fmv <= 0))   { alert('Invalid FMV value'); return; }
+  if (tcfmv !== null && (isNaN(tcfmv) || tcfmv <= 0)) { alert('Invalid Tax Cost FMV value'); return; }
+  let changed = 0;
+  exSelected.forEach(id => {
+    const ex = exerciseData.find(e => e.id === id);
+    if (!ex) return;
+    if (fmv   !== null) { ex.fmv        = fmv;   changed++; }
+    if (tcfmv !== null) { ex.taxCostFmv = tcfmv; }
+  });
+  closeModal('modal-ex-bulk-edit');
+  clearExSelection();
+  exBulkMode = false;
+  renderExerciseTable();
+  showExToast(`✓ ${changed} exercise${changed !== 1 ? 's' : ''} updated`, 'approved');
 }
 
 function showExToast(msg, type) {
@@ -5733,6 +5923,9 @@ function renderExerciseTable(forceStatus) {
             <div class="kebab-divider"></div>
             <div class="kebab-menu-label">Actions</div>
             ${canAct(e) ? `
+            <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();openExEditModal('${e.id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>Edit FMV / Tax Cost FMV
+            </button>
             <button class="kebab-menu-item" style="color:var(--green)" onclick="event.stopPropagation();closeAllKebabs();singleExAction('${e.id}','approved')">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>Approve Exercise
             </button>
