@@ -1045,6 +1045,99 @@
     .release-info-item { font-size: 12px; }
     .release-info-item span { font-weight: 600; color: var(--text); }
     .release-info-item em { font-style: normal; color: var(--text2); }
+
+    /* ── Release Management Page ── */
+    .rel-tab-bar { display:flex; gap:0; border-bottom:2px solid var(--border); margin-bottom:16px; }
+    .rel-tab { display:flex; align-items:center; gap:8px; padding:11px 20px; font-size:13px; font-weight:500; color:var(--text2); border:none; background:none; cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-2px; transition:all 0.15s; font-family:inherit; }
+    .rel-tab:hover { color:var(--text); }
+    .rel-tab.active { color:var(--accent); border-bottom-color:var(--accent); font-weight:600; }
+    .rel-tab-badge { display:inline-flex; align-items:center; justify-content:center; min-width:20px; height:19px; padding:0 5px; border-radius:9px; font-size:11px; font-weight:700; }
+    .rel-tab-badge.red  { background:#fee2e2; color:#991b1b; }
+    .rel-tab-badge.blue { background:#dbeafe; color:#1d4ed8; }
+    .rel-topbar { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; flex-wrap:wrap; }
+    .rel-chips { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+    .rel-chip { display:inline-flex; align-items:center; gap:5px; padding:5px 10px; border-radius:7px; border:1px solid var(--border); font-size:12px; color:var(--text2); background:#fff; white-space:nowrap; }
+    .rel-chip-icon { display:inline-flex; color:#94a3b8; }
+    .rel-chip-icon svg { width:12px; height:12px; }
+    .rel-chip-val { color:var(--text); font-weight:500; }
+    .rel-chip-x { color:#94a3b8; cursor:pointer; font-size:16px; line-height:1; padding-left:2px; }
+    .rel-chip-x:hover { color:var(--red); }
+    .rel-topbar-right { display:flex; align-items:center; gap:8px; }
+    .rel-filter-row { display:flex; align-items:center; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
+    .rel-search-wrap { position:relative; flex:1; min-width:220px; max-width:320px; }
+    .rel-search-wrap svg { position:absolute; left:10px; top:50%; transform:translateY(-50%); width:13px; height:13px; color:#94a3b8; pointer-events:none; }
+    .rel-search-input { width:100%; padding:8px 12px 8px 32px; border:1px solid var(--border); border-radius:8px; font-size:12.5px; font-family:inherit; color:var(--text); background:#fff; outline:none; box-sizing:border-box; }
+    .rel-search-input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(99,102,241,0.08); }
+    /* Release table */
+    .rel-table-outer { border:1px solid var(--border); border-radius:12px; overflow:hidden; background:#fff; }
+    .rel-table { width:100%; border-collapse:collapse; font-size:12.5px; }
+    .rel-table th { padding:10px 14px; text-align:left; font-size:11px; font-weight:600; color:var(--text2); background:#f8fafc; border-bottom:1px solid var(--border); white-space:nowrap; }
+    .rel-table td { padding:10px 14px; border-bottom:1px solid #f1f5f9; vertical-align:middle; }
+    .rel-table tbody tr:last-child td { border-bottom:none; }
+    .rel-table tbody tr:not(.rel-group-tr):hover td { background:#fafafa; }
+    .rel-col-group   { width:200px; }
+    .rel-col-method  { width:180px; }
+    .rel-col-status  { width:145px; }
+    .rel-col-grant   { width:160px; }
+    .rel-col-cur     { width:80px; }
+    .rel-col-vest    { width:110px; }
+    .rel-col-eff     { width:130px; }
+    .rel-col-units   { width:120px; }
+    .rel-col-actions { width:120px; }
+    /* Group header rows */
+    .rel-group-tr { cursor:pointer; }
+    .rel-group-tr td { background:#f8fafc !important; border-bottom:1px solid #e2e8f0 !important; padding:9px 14px; }
+    .rel-group-tr:hover td { background:#f1f5f9 !important; }
+    .rel-group-inner { display:flex; align-items:center; gap:6px; }
+    .rel-group-chevron { display:inline-flex; width:16px; height:16px; align-items:center; justify-content:center; color:#94a3b8; transition:transform 0.15s; flex-shrink:0; }
+    .rel-group-chevron.open { transform:rotate(90deg); }
+    .rel-group-chevron svg { width:12px; height:12px; }
+    .rel-group-name { font-weight:700; font-size:13px; color:var(--text); }
+    .rel-group-count { display:inline-flex; align-items:center; justify-content:center; min-width:22px; height:18px; padding:0 6px; background:#e2e8f0; color:#475569; border-radius:9px; font-size:11px; font-weight:600; }
+    .rel-group-cur { font-size:11px; font-weight:500; color:var(--text2); background:#f1f5f9; border:1px solid #e2e8f0; padding:2px 7px; border-radius:4px; }
+    /* Child rows */
+    .rel-child-tr td:first-child { padding-left:40px; }
+    .rel-participant-name { font-weight:600; color:var(--text); font-size:13px; }
+    .rel-participant-dept { font-size:11px; color:var(--textm); }
+    /* Settlement method */
+    .rel-method-wrap { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+    .rel-fallback { font-size:10px; font-weight:600; color:#92400e; background:#fef3c7; border:1px solid #fde68a; border-radius:4px; padding:1px 6px; }
+    /* Status badges */
+    .rel-st { display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:500; padding:3px 9px; border-radius:6px; white-space:nowrap; }
+    .rel-st::before { content:''; width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+    .rel-st-ready     { background:#f0fdf4; color:#166534; border:1px solid #bbf7d0; }
+    .rel-st-ready::before     { background:#16a34a; }
+    .rel-st-awaiting  { background:#fefce8; color:#854d0e; border:1px solid #fde68a; }
+    .rel-st-awaiting::before  { background:#ca8a04; }
+    .rel-st-processing{ background:#eff6ff; color:#1e40af; border:1px solid #bfdbfe; }
+    .rel-st-processing::before{ background:#2563eb; }
+    .rel-st-upcoming  { background:#f5f3ff; color:#4c1d95; border:1px solid #ddd6fe; }
+    .rel-st-upcoming::before  { background:#7c3aed; }
+    .rel-st-completed { background:#f8fafc; color:#475569; border:1px solid #e2e8f0; }
+    .rel-st-completed::before { background:#94a3b8; }
+    .rel-st-onhold    { background:#fff7ed; color:#92400e; border:1px solid #fed7aa; }
+    .rel-st-onhold::before    { background:#f97316; }
+    /* Simulate panel */
+    .rel-sim-overlay { position:fixed; inset:0; background:rgba(15,23,42,0.35); z-index:900; opacity:0; pointer-events:none; transition:opacity 0.2s; }
+    .rel-sim-overlay.open { opacity:1; pointer-events:all; }
+    .rel-sim-panel { position:absolute; right:0; top:0; bottom:0; width:420px; max-width:100vw; background:#fff; box-shadow:-8px 0 40px rgba(15,23,42,0.12); display:flex; flex-direction:column; transform:translateX(100%); transition:transform 0.25s cubic-bezier(0.4,0,0.2,1); }
+    .rel-sim-overlay.open .rel-sim-panel { transform:translateX(0); }
+    .rel-sim-head { display:flex; align-items:center; justify-content:space-between; padding:18px 20px; border-bottom:1px solid var(--border); flex-shrink:0; }
+    .rel-sim-body { flex:1; overflow-y:auto; padding:20px; }
+    .rel-sim-section-title { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; color:var(--text2); margin-bottom:10px; }
+    .rel-sim-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+    .rel-sim-item label { font-size:11px; color:var(--text2); display:block; margin-bottom:3px; }
+    .rel-sim-item span { font-size:13px; font-weight:600; color:var(--text); }
+    .rel-sim-field { margin-bottom:12px; }
+    .rel-sim-field label { display:block; font-size:11.5px; color:var(--text2); margin-bottom:4px; font-weight:500; }
+    .rel-sim-input { width:100%; padding:8px 10px; border:1px solid var(--border); border-radius:7px; font-size:13px; font-family:inherit; outline:none; box-sizing:border-box; }
+    .rel-sim-input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(99,102,241,0.08); }
+    .rel-sim-result { background:linear-gradient(135deg,#f0fdf4,#f0f9ff); border:1px solid #a7f3d0; border-radius:10px; padding:16px; margin-top:16px; }
+    .rel-sim-result-row { display:flex; justify-content:space-between; align-items:center; padding:5px 0; }
+    .rel-sim-result-row.total-row { border-top:1px solid #bbf7d0; margin-top:6px; padding-top:10px; }
+    .rel-sim-result-label { font-size:12.5px; color:var(--text2); }
+    .rel-sim-result-val { font-size:13px; font-weight:600; font-family:'SF Mono',monospace; }
+    .rel-sim-foot { padding:16px 20px; border-top:1px solid var(--border); flex-shrink:0; display:flex; gap:8px; }
     .wh-summary-card {
       background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; padding: 16px; margin-top: 16px;
     }
@@ -3232,6 +3325,193 @@
       </div>
     </div><!-- /view-exercise-mgmt -->
 
+    <!-- ════ RELEASE MANAGEMENT ════ -->
+    <div class="view-section" id="view-release-mgmt">
+      <div class="page-head">
+        <div>
+          <div class="page-title">Release Management</div>
+          <div class="page-sub">Manage RSU / RSA / PSU vesting releases — Pending · Upcoming · Historic</div>
+        </div>
+        <div class="head-actions">
+          <button class="btn btn-ghost">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export
+          </button>
+          <button class="btn btn-ghost">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+            Columns
+          </button>
+        </div>
+      </div>
+
+      <!-- Summary stats -->
+      <div class="summary-row-6">
+        <div class="summary-card-sm"><div class="s-label">Pending Releases</div><div class="s-value" style="color:#dc2626">4</div><div class="s-sub">Awaiting action</div></div>
+        <div class="summary-card-sm"><div class="s-label">Release Ready</div><div class="s-value" style="color:var(--green)">2</div><div class="s-sub">Ready to process</div></div>
+        <div class="summary-card-sm"><div class="s-label">Awaiting Employee</div><div class="s-value" style="color:#ca8a04">1</div><div class="s-sub">Info required</div></div>
+        <div class="summary-card-sm"><div class="s-label">Upcoming (90 days)</div><div class="s-value" style="color:#7c3aed">4</div><div class="s-sub">Next vest events</div></div>
+        <div class="summary-card-sm"><div class="s-label">Units Releasing</div><div class="s-value">10,050</div><div class="s-sub">Pending + upcoming</div></div>
+        <div class="summary-card-sm"><div class="s-label">Est. Net Delivery</div><div class="s-value" style="color:var(--green)">7,892</div><div class="s-sub">After tax withhold</div></div>
+      </div>
+
+      <!-- Tab bar -->
+      <div class="rel-tab-bar">
+        <button class="rel-tab active" data-tab="pending" onclick="switchRelTab('pending')">
+          Pending <span class="rel-tab-badge red">4</span>
+        </button>
+        <button class="rel-tab" data-tab="upcoming" onclick="switchRelTab('upcoming')">
+          Upcoming <span class="rel-tab-badge blue">4</span>
+        </button>
+        <button class="rel-tab" data-tab="historic" onclick="switchRelTab('historic')">
+          Historic
+        </button>
+      </div>
+
+      <!-- Ledgy-style top toolbar -->
+      <div class="rel-topbar">
+        <div class="rel-chips">
+          <div class="rel-chip">
+            <span class="rel-chip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg></span>
+            <span>Equity plan</span>
+            <span style="color:#cbd5e1">›</span>
+            <span class="rel-chip-val" id="rel-chip-plan-val">All plans</span>
+            <span class="rel-chip-x" onclick="clearRelPlanFilter()">×</span>
+          </div>
+          <div class="rel-chip">
+            <span class="rel-chip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+            <span>Stakeholder</span>
+            <span style="color:#cbd5e1">›</span>
+            <span class="rel-chip-val" id="rel-chip-participant-val">All</span>
+            <span class="rel-chip-x" onclick="clearRelParticipantFilter()">×</span>
+          </div>
+        </div>
+        <div class="rel-topbar-right">
+          <button class="btn btn-ghost" style="height:34px;padding:0 12px;font-size:12.5px" onclick="toggleRelExpandAll()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><polyline points="7,13 12,18 17,13"/><polyline points="7,6 12,11 17,6"/></svg>
+            Expand all
+          </button>
+          <button class="btn btn-ghost" style="height:34px;padding:0 12px;font-size:12.5px" onclick="clearRelFilters()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Clear filters
+          </button>
+        </div>
+      </div>
+
+      <!-- Filter row -->
+      <div class="rel-filter-row">
+        <div class="rel-search-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input class="rel-search-input" id="rel-search" placeholder="Search participant, grant ID…" oninput="renderReleaseMgmt()">
+        </div>
+        <select class="filter-select-sm" id="rel-plan-filter" onchange="updateRelPlanChip(); renderReleaseMgmt()">
+          <option value="">All Plans</option>
+          <option value="EQP-2020-002">RSU Plan 2020</option>
+          <option value="EQP-2019-001">2019 Equity Incentive Plan</option>
+          <option value="EQP-2022-003">2022 Performance Share Plan</option>
+          <option value="EQP-2023-004">2023 Global Stock Option Plan</option>
+        </select>
+        <select class="filter-select-sm" id="rel-method-filter" onchange="renderReleaseMgmt()">
+          <option value="">All Settlement Methods</option>
+          <option>Withhold to cover</option>
+          <option>Sell to cover</option>
+          <option>Hold all (Payroll)</option>
+          <option>Net exercise</option>
+          <option>Cash</option>
+        </select>
+      </div>
+
+      <!-- Table -->
+      <div class="rel-table-outer">
+        <div style="overflow-x:auto">
+          <table class="rel-table">
+            <thead>
+              <tr>
+                <th class="rel-col-group">Group</th>
+                <th class="rel-col-method">Settlement method
+                  <button class="act-btn" style="padding:0 4px;border:none;background:none;margin-left:2px" title="Filter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px;color:#94a3b8"><polygon points="22,3 2,3 10,12.46 10,19 14,21 14,12.46"/></svg></button>
+                </th>
+                <th class="rel-col-status">Status
+                  <button class="act-btn" style="padding:0 4px;border:none;background:none;margin-left:2px" title="Filter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px;color:#94a3b8"><polygon points="22,3 2,3 10,12.46 10,19 14,21 14,12.46"/></svg></button>
+                </th>
+                <th class="rel-col-grant">Grant name
+                  <button class="act-btn" style="padding:0 4px;border:none;background:none;margin-left:2px" title="Filter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px;color:#94a3b8"><polygon points="22,3 2,3 10,12.46 10,19 14,21 14,12.46"/></svg></button>
+                </th>
+                <th class="rel-col-cur">Grant currency
+                  <button class="act-btn" style="padding:0 4px;border:none;background:none;margin-left:2px" title="Filter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px;color:#94a3b8"><polygon points="22,3 2,3 10,12.46 10,19 14,21 14,12.46"/></svg></button>
+                </th>
+                <th class="rel-col-vest">Vesting date
+                  <button class="act-btn" style="padding:0 4px;border:none;background:none;margin-left:2px" title="Filter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px;color:#94a3b8"><polygon points="22,3 2,3 10,12.46 10,19 14,21 14,12.46"/></svg></button>
+                </th>
+                <th class="rel-col-eff">Effective vesting date
+                  <button class="act-btn" style="padding:0 4px;border:none;background:none;margin-left:2px" title="Filter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px;color:#94a3b8"><polygon points="22,3 2,3 10,12.46 10,19 14,21 14,12.46"/></svg></button>
+                </th>
+                <th class="rel-col-units" style="text-align:right">Units to settle</th>
+                <th class="rel-col-actions"></th>
+              </tr>
+            </thead>
+            <tbody id="rel-mgmt-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /view-release-mgmt -->
+
+    <!-- Simulate panel (outside view-section, fullscreen overlay) -->
+    <div class="rel-sim-overlay" id="rel-sim-overlay" onclick="closeRelSimulate(event)">
+      <div class="rel-sim-panel" onclick="event.stopPropagation()">
+        <div class="rel-sim-head">
+          <div>
+            <div style="font-size:16px;font-weight:700;color:var(--text)">Release Simulation</div>
+            <div id="rel-sim-sub" style="font-size:12px;color:var(--text2);margin-top:2px"></div>
+          </div>
+          <button class="ledger-drawer-close" onclick="closeRelSimulate()">×</button>
+        </div>
+        <div class="rel-sim-body">
+          <div style="margin-bottom:16px">
+            <div class="rel-sim-section-title">Grant Details</div>
+            <div class="rel-sim-grid" id="rel-sim-grant-info"></div>
+          </div>
+          <div>
+            <div class="rel-sim-section-title">Simulation Inputs</div>
+            <div class="rel-sim-field">
+              <label>FMV per share at vest ($)</label>
+              <input class="rel-sim-input" id="rel-sim-fmv" type="number" step="0.01" oninput="calcRelSim()">
+            </div>
+            <div class="rel-sim-field">
+              <label>Withholding tax rate (%)</label>
+              <input class="rel-sim-input" id="rel-sim-taxrate" type="number" step="0.1" oninput="calcRelSim()">
+            </div>
+            <div class="rel-sim-result" id="rel-sim-result">
+              <div class="rel-sim-result-row">
+                <span class="rel-sim-result-label">Gross Units Vesting</span>
+                <span class="rel-sim-result-val" id="rsim-gross">—</span>
+              </div>
+              <div class="rel-sim-result-row">
+                <span class="rel-sim-result-label">Tax Withheld</span>
+                <span class="rel-sim-result-val" style="color:#991b1b" id="rsim-tax">—</span>
+              </div>
+              <div class="rel-sim-result-row total-row">
+                <span class="rel-sim-result-label" style="font-weight:700;color:var(--text)">Net to Participant</span>
+                <span class="rel-sim-result-val" style="color:#166534" id="rsim-net">—</span>
+              </div>
+              <div class="rel-sim-result-row" style="margin-top:8px;border-top:1px dashed #a7f3d0;padding-top:10px">
+                <span class="rel-sim-result-label">Estimated Total Value</span>
+                <span class="rel-sim-result-val" id="rsim-value">—</span>
+              </div>
+              <div class="rel-sim-result-row">
+                <span class="rel-sim-result-label">Tax Cash Value</span>
+                <span class="rel-sim-result-val" style="color:#991b1b" id="rsim-taxval">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="rel-sim-foot">
+          <button class="btn" style="background:var(--accent);color:#fff;border-color:var(--accent);flex:1;font-weight:600" onclick="alert('Simulation saved — release scheduled.')">Schedule Release</button>
+          <button class="btn btn-ghost" onclick="closeRelSimulate()">Close</button>
+        </div>
+      </div>
+    </div>
+
   </div><!-- /content -->
 </div><!-- /main -->
 
@@ -4211,6 +4491,7 @@ function switchView(viewId) {
   else if (viewId === 'approvals') renderApprovalsTable();
   else if (viewId === 'plan-equity') renderEqPlansTable();
   else if (viewId === 'exercise-mgmt') renderExerciseTable();
+  else if (viewId === 'release-mgmt') renderReleaseMgmt();
 }
 
 // ── Equity Plans ──
@@ -5527,6 +5808,251 @@ window.addEventListener('load', () => {
   renderLongShareTable();
   renderApprovalsTable();
 });
+
+// ═══════════ RELEASE MANAGEMENT ═══════════
+
+const releaseMgmtData = [
+  // ── PENDING ──
+  { tab:'pending', plan:'RSU Plan 2020', planId:'EQP-2020-002', currency:'USD', id:'REL-2026-P001', participant:'Sarah Chen',     dept:'Engineering', grantId:'GRT-2024-001', grantName:'Grant (24-001)', settlementMethod:'Withhold to cover', fallback:false, vestingDate:'2026-03-01', effectiveDate:'2026-03-15', units:1250, taxRate:22, fmv:48.75, status:'ready' },
+  { tab:'pending', plan:'RSU Plan 2020', planId:'EQP-2020-002', currency:'USD', id:'REL-2026-P002', participant:'Marcus Johnson', dept:'Finance',     grantId:'GRT-2022-003', grantName:'Grant (22-003)', settlementMethod:'Sell to cover',     fallback:false, vestingDate:'2026-03-15', effectiveDate:'2026-03-28', units:875,  taxRate:24, fmv:48.75, status:'awaiting' },
+  { tab:'pending', plan:'RSU Plan 2020', planId:'EQP-2020-002', currency:'GBP', id:'REL-2026-P003', participant:'Emma Davis',     dept:'Legal',       grantId:'GRT-2023-002', grantName:'Grant (23-002)', settlementMethod:'Hold all (Payroll)', fallback:true,  vestingDate:'2026-03-01', effectiveDate:'2026-03-20', units:2100, taxRate:20, fmv:38.40, status:'processing' },
+  { tab:'pending', plan:'2023 Global Stock Option Plan', planId:'EQP-2023-004', currency:'USD', id:'REL-2026-P004', participant:'Priya Sharma',   dept:'Engineering', grantId:'NSO-2023-005', grantName:'Grant (23-005)', settlementMethod:'Net exercise', fallback:false, vestingDate:'2026-03-20', effectiveDate:'2026-04-01', units:3750, taxRate:22, fmv:48.75, status:'ready' },
+  // ── UPCOMING ──
+  { tab:'upcoming', plan:'RSU Plan 2020', planId:'EQP-2020-002', currency:'USD', id:'REL-2026-U001', participant:'Tom Nguyen',  dept:'Engineering', grantId:'GRT-2024-002', grantName:'Grant (24-002)', settlementMethod:'Withhold to cover', fallback:false, vestingDate:'2026-05-01', effectiveDate:'2026-05-21', units:2500, taxRate:22, fmv:48.75, status:'upcoming' },
+  { tab:'upcoming', plan:'RSU Plan 2020', planId:'EQP-2020-002', currency:'GBP', id:'REL-2026-U002', participant:'Aiko Tanaka', dept:'Engineering', grantId:'GRT-2024-003', grantName:'Grant (24-003)', settlementMethod:'Hold all (Payroll)', fallback:true,  vestingDate:'2026-05-01', effectiveDate:'2026-05-21', units:1800, taxRate:20, fmv:38.40, status:'upcoming' },
+  { tab:'upcoming', plan:'2022 Performance Share Plan', planId:'EQP-2022-003', currency:'USD', id:'REL-2026-U003', participant:'Nina Patel',   dept:'Product',     grantId:'PSU-2022-007', grantName:'Grant (22-007)', settlementMethod:'Sell to cover',     fallback:false, vestingDate:'2026-06-15', effectiveDate:'2026-06-30', units:4200, taxRate:23, fmv:48.75, status:'upcoming' },
+  { tab:'upcoming', plan:'2019 Equity Incentive Plan',  planId:'EQP-2019-001', currency:'USD', id:'REL-2026-U004', participant:'Kevin Taylor', dept:'Marketing',   grantId:'SAR-2023-001', grantName:'Grant (23-001)', settlementMethod:'Cash',              fallback:false, vestingDate:'2026-07-01', effectiveDate:'2026-07-15', units:1500, taxRate:22, fmv:48.75, status:'upcoming' },
+  // ── HISTORIC ──
+  { tab:'historic', plan:'RSU Plan 2020', planId:'EQP-2020-002', currency:'USD', id:'REL-2025-H001', participant:'Sarah Chen',     dept:'Engineering', grantId:'GRT-2024-001', grantName:'Grant (24-001)', settlementMethod:'Withhold to cover', fallback:false, vestingDate:'2025-01-01', effectiveDate:'2025-01-10', units:6250, taxUnits:1438, netUnits:4812, taxRate:23, fmv:44.20, status:'completed', completedDate:'2025-01-12' },
+  { tab:'historic', plan:'RSU Plan 2020', planId:'EQP-2020-002', currency:'USD', id:'REL-2025-H002', participant:'Sarah Chen',     dept:'Engineering', grantId:'GRT-2024-001', grantName:'Grant (24-001)', settlementMethod:'Withhold to cover', fallback:false, vestingDate:'2025-03-15', effectiveDate:'2025-03-20', units:6250, taxUnits:1438, netUnits:4812, taxRate:23, fmv:46.50, status:'completed', completedDate:'2025-03-22' },
+  { tab:'historic', plan:'RSU Plan 2020', planId:'EQP-2020-002', currency:'USD', id:'REL-2025-H003', participant:'Marcus Johnson', dept:'Finance',     grantId:'GRT-2022-003', grantName:'Grant (22-003)', settlementMethod:'Sell to cover',     fallback:false, vestingDate:'2025-06-01', effectiveDate:'2025-06-15', units:2000, taxUnits:480,  netUnits:1540, taxRate:24, fmv:47.80, status:'completed', completedDate:'2025-06-17' },
+  { tab:'historic', plan:'RSU Plan 2020', planId:'EQP-2020-002', currency:'GBP', id:'REL-2025-H004', participant:'Emma Davis',     dept:'Legal',       grantId:'GRT-2023-002', grantName:'Grant (23-002)', settlementMethod:'Hold all (Payroll)', fallback:false, vestingDate:'2025-09-01', effectiveDate:'2025-09-01', units:3000, taxUnits:600,  netUnits:2400, taxRate:20, fmv:38.10, status:'completed', completedDate:'2025-09-03' },
+  { tab:'historic', plan:'2019 Equity Incentive Plan', planId:'EQP-2019-001', currency:'USD', id:'REL-2025-H005', participant:'Amanda Foster', dept:'Operations', grantId:'GRT-2023-003', grantName:'Grant (23-003)', settlementMethod:'Cash',              fallback:false, vestingDate:'2025-02-14', effectiveDate:'2025-02-14', units:5500, taxUnits:1155, netUnits:4345, taxRate:21, fmv:42.60, status:'completed', completedDate:'2025-02-16' },
+  { tab:'historic', plan:'2019 Equity Incentive Plan', planId:'EQP-2019-001', currency:'USD', id:'REL-2024-H006', participant:'Robert Chen',   dept:'Product',    grantId:'GRT-2023-004', grantName:'Grant (23-004)', settlementMethod:'Withhold to cover', fallback:false, vestingDate:'2024-11-30', effectiveDate:'2024-11-30', units:5500, taxUnits:1210, netUnits:4290, taxRate:22, fmv:39.80, status:'completed', completedDate:'2024-12-02' },
+];
+
+let currentRelTab = 'pending';
+const relExpandedGroups = new Set(['EQP-2020-002','EQP-2023-004','EQP-2022-003','EQP-2019-001']);
+
+function switchRelTab(tab) {
+  currentRelTab = tab;
+  document.querySelectorAll('.rel-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  renderReleaseMgmt();
+}
+
+function toggleRelGroup(planId) {
+  if (relExpandedGroups.has(planId)) relExpandedGroups.delete(planId);
+  else relExpandedGroups.add(planId);
+  renderReleaseMgmt();
+}
+
+function toggleRelExpandAll() {
+  const tab = currentRelTab;
+  const plans = [...new Set(releaseMgmtData.filter(r => r.tab === tab).map(r => r.planId))];
+  const allOpen = plans.every(id => relExpandedGroups.has(id));
+  if (allOpen) plans.forEach(id => relExpandedGroups.delete(id));
+  else plans.forEach(id => relExpandedGroups.add(id));
+  renderReleaseMgmt();
+}
+
+function clearRelFilters() {
+  const s = document.getElementById('rel-search'); if (s) s.value = '';
+  const p = document.getElementById('rel-plan-filter'); if (p) p.value = '';
+  const m = document.getElementById('rel-method-filter'); if (m) m.value = '';
+  updateRelPlanChip();
+  renderReleaseMgmt();
+}
+
+function clearRelPlanFilter() {
+  const p = document.getElementById('rel-plan-filter'); if (p) p.value = '';
+  updateRelPlanChip();
+  renderReleaseMgmt();
+}
+
+function clearRelParticipantFilter() {
+  const s = document.getElementById('rel-search'); if (s) s.value = '';
+  renderReleaseMgmt();
+}
+
+function updateRelPlanChip() {
+  const p = document.getElementById('rel-plan-filter');
+  const chip = document.getElementById('rel-chip-plan-val');
+  if (!p || !chip) return;
+  chip.textContent = p.options[p.selectedIndex]?.text || 'All plans';
+}
+
+function relFmtDate(d) {
+  return new Date(d).toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
+}
+
+function renderReleaseMgmt() {
+  const tab = currentRelTab;
+  const search = (document.getElementById('rel-search')?.value || '').toLowerCase();
+  const planF  = document.getElementById('rel-plan-filter')?.value || '';
+  const methF  = document.getElementById('rel-method-filter')?.value || '';
+
+  let rows = releaseMgmtData.filter(r => {
+    if (r.tab !== tab) return false;
+    if (planF && r.planId !== planF) return false;
+    if (methF && !r.settlementMethod.toLowerCase().includes(methF.toLowerCase())) return false;
+    if (search && !(r.participant.toLowerCase().includes(search) || r.grantId.toLowerCase().includes(search) || r.grantName.toLowerCase().includes(search))) return false;
+    return true;
+  });
+
+  // Group by plan
+  const groupMap = {};
+  rows.forEach(r => {
+    if (!groupMap[r.planId]) groupMap[r.planId] = { name:r.plan, planId:r.planId, releases:[] };
+    groupMap[r.planId].releases.push(r);
+  });
+
+  const stMap   = { ready:'rel-st-ready', awaiting:'rel-st-awaiting', processing:'rel-st-processing', upcoming:'rel-st-upcoming', completed:'rel-st-completed', onhold:'rel-st-onhold' };
+  const stLabel = { ready:'Release ready', awaiting:'Awaiting employee', processing:'Processing', upcoming:'Upcoming', completed:'Completed', onhold:'On hold' };
+
+  const tbody = document.getElementById('rel-mgmt-body');
+  if (!tbody) return;
+
+  if (rows.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:48px 24px;color:var(--textm);font-size:13px">No releases found for this view.</td></tr>`;
+    return;
+  }
+
+  let html = '';
+  Object.values(groupMap).forEach(g => {
+    const isOpen = relExpandedGroups.has(g.planId);
+    // Collect unique currencies for group
+    const currencies = [...new Set(g.releases.map(r => r.currency))];
+    html += `<tr class="rel-group-tr" onclick="toggleRelGroup('${g.planId}')">
+      <td colspan="9">
+        <div class="rel-group-inner">
+          <span class="rel-group-chevron ${isOpen ? 'open' : ''}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,18 15,12 9,6"/></svg>
+          </span>
+          <span class="rel-group-name">${g.name}</span>
+          <span class="rel-group-count">${g.releases.length}</span>
+          ${currencies.map(c => `<span class="rel-group-cur">${c}</span>`).join('')}
+        </div>
+      </td>
+    </tr>`;
+
+    if (isOpen) {
+      g.releases.forEach(r => {
+        const methodCell = `<div class="rel-method-wrap">
+          <span style="font-size:12.5px">${r.settlementMethod}</span>
+          ${r.fallback ? '<span class="rel-fallback">Fallback</span>' : ''}
+        </div>`;
+
+        const unitsCell = tab === 'historic'
+          ? `<div style="text-align:right;font-family:'SF Mono',monospace;font-size:12px;line-height:1.6">
+               <div style="color:var(--text2)">${r.units.toLocaleString()} gross</div>
+               <div style="color:#991b1b;font-size:11px">&#8722;${r.taxUnits.toLocaleString()} tax</div>
+               <div style="color:#166534;font-weight:600">+${r.netUnits.toLocaleString()} net</div>
+             </div>`
+          : `<div style="text-align:right;font-family:'SF Mono',monospace;font-weight:600">${r.units.toLocaleString()}</div>`;
+
+        let actions = '';
+        if (tab === 'pending') {
+          actions = `<div style="display:flex;gap:5px;align-items:center">
+            <button class="btn" style="background:var(--green);color:#fff;border-color:var(--green);height:28px;padding:0 10px;font-size:11.5px;font-weight:600;border-radius:7px" onclick="event.stopPropagation(); relReleaseAction('${r.id}','approve')">Release</button>
+            <button class="btn btn-ghost" style="height:28px;padding:0 8px;font-size:11.5px;color:#92400e;border-color:#fde68a;background:#fefce8" onclick="event.stopPropagation(); relReleaseAction('${r.id}','hold')">Hold</button>
+          </div>`;
+        } else if (tab === 'upcoming') {
+          actions = `<button class="btn" style="background:#f5f3ff;color:#6d28d9;border-color:#ddd6fe;height:28px;padding:0 10px;font-size:11.5px;font-weight:600;border-radius:7px;display:flex;align-items:center;gap:4px" onclick="event.stopPropagation(); openRelSimulate('${r.id}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
+            Simulate
+          </button>`;
+        } else {
+          actions = `<div style="display:flex;gap:4px">
+            <button class="btn btn-ghost" style="height:28px;padding:0 8px;font-size:11.5px" onclick="event.stopPropagation()">View</button>
+            <button class="btn btn-ghost" style="height:28px;padding:0 8px;font-size:11.5px" onclick="event.stopPropagation()" title="Download statement">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </button>
+          </div>`;
+        }
+
+        html += `<tr class="rel-child-tr">
+          <td>
+            <div class="rel-participant-name">${r.participant}</div>
+            <div class="rel-participant-dept">${r.dept}</div>
+          </td>
+          <td>${methodCell}</td>
+          <td><span class="rel-st ${stMap[r.status]}">${stLabel[r.status]}</span></td>
+          <td>
+            <div style="font-size:12.5px;font-weight:500;color:var(--text)">${r.grantName}</div>
+            <div style="font-size:11px;color:var(--textm)">${r.grantId}</div>
+          </td>
+          <td><span class="rel-group-cur">${r.currency}</span></td>
+          <td style="font-size:12.5px;color:var(--text2);white-space:nowrap">${relFmtDate(r.vestingDate)}</td>
+          <td style="font-size:12.5px;color:var(--text2);white-space:nowrap">${relFmtDate(r.effectiveDate)}</td>
+          <td>${unitsCell}</td>
+          <td>${actions}</td>
+        </tr>`;
+      });
+    }
+  });
+
+  tbody.innerHTML = html;
+}
+
+function relReleaseAction(id, action) {
+  const r = releaseMgmtData.find(x => x.id === id);
+  if (!r) return;
+  if (action === 'approve') {
+    r.status = 'processing';
+    renderReleaseMgmt();
+  } else if (action === 'hold') {
+    r.status = 'onhold';
+    renderReleaseMgmt();
+  }
+}
+
+let relSimReleaseId = null;
+
+function openRelSimulate(id) {
+  const r = releaseMgmtData.find(x => x.id === id);
+  if (!r) return;
+  relSimReleaseId = id;
+
+  document.getElementById('rel-sim-sub').textContent = r.participant + ' · ' + r.grantId + ' · ' + r.plan;
+  document.getElementById('rel-sim-grant-info').innerHTML = `
+    <div class="rel-sim-item"><label>Vesting Date</label><span>${relFmtDate(r.vestingDate)}</span></div>
+    <div class="rel-sim-item"><label>Effective Date</label><span>${relFmtDate(r.effectiveDate)}</span></div>
+    <div class="rel-sim-item"><label>Gross Units</label><span>${r.units.toLocaleString()}</span></div>
+    <div class="rel-sim-item"><label>Settlement</label><span>${r.settlementMethod}</span></div>
+    <div class="rel-sim-item"><label>Currency</label><span>${r.currency}</span></div>
+    <div class="rel-sim-item"><label>Grant Name</label><span>${r.grantName}</span></div>
+  `;
+  document.getElementById('rel-sim-fmv').value     = r.fmv.toFixed(2);
+  document.getElementById('rel-sim-taxrate').value = r.taxRate;
+  calcRelSim();
+
+  document.getElementById('rel-sim-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function calcRelSim() {
+  const r = releaseMgmtData.find(x => x.id === relSimReleaseId);
+  if (!r) return;
+  const fmv     = parseFloat(document.getElementById('rel-sim-fmv')?.value) || r.fmv;
+  const taxRate = parseFloat(document.getElementById('rel-sim-taxrate')?.value) || r.taxRate;
+  const gross   = r.units;
+  const taxUnits = Math.round(gross * taxRate / 100);
+  const net     = gross - taxUnits;
+  const totalVal = (gross * fmv).toLocaleString('en-US', { style:'currency', currency:'USD', maximumFractionDigits:0 });
+  const taxVal   = (taxUnits * fmv).toLocaleString('en-US', { style:'currency', currency:'USD', maximumFractionDigits:0 });
+  document.getElementById('rsim-gross').textContent = gross.toLocaleString() + ' units';
+  document.getElementById('rsim-tax').textContent   = '−' + taxUnits.toLocaleString() + ' units (' + taxRate + '%)';
+  document.getElementById('rsim-net').textContent   = '+' + net.toLocaleString() + ' units';
+  document.getElementById('rsim-value').textContent = totalVal;
+  document.getElementById('rsim-taxval').textContent = taxVal;
+}
+
+function closeRelSimulate(e) {
+  if (e && e.target !== document.getElementById('rel-sim-overlay')) return;
+  document.getElementById('rel-sim-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  relSimReleaseId = null;
+}
 </script>
 </body>
 </html>
