@@ -4936,56 +4936,52 @@ function openLedgerDrawer(grantId) {
         ? `<span class="ledger-shares-credit">+${e.shares.toLocaleString()}</span>`
         : isDebit
           ? `<span class="ledger-shares-debit">&#8722;${e.shares.toLocaleString()}</span>`
-          : `<span style="color:var(--textm);font-size:11.5px">${e.shares.toLocaleString()} <span style="font-weight:400;font-size:10.5px">(info)</span></span>`;
+          : `<span style="color:var(--textm);font-family:'SF Mono',monospace;font-weight:600">${e.shares.toLocaleString()}</span>`;
 
       const balColor = runningBalance > 0 ? 'var(--green)' : runningBalance === 0 ? 'var(--textm)' : 'var(--red)';
       const typeClass = e.type.toLowerCase().replace(/\s+/g,'').replace(/&/g,'');
       const idx = rowIndex++;
 
-      const expandBtn = hasSettlement
-        ? `<button class="ldg-expand-btn" id="ldg-expbtn-${idx}" onclick="toggleSettlementRow(${idx})">▸ Settlement</button>`
-        : '';
+      // Row accent: left border by event type
+      const rowAccent = isCredit  ? 'border-left:3px solid #22c55e'
+                      : isDebit   ? 'border-left:3px solid #f87171'
+                      : 'border-left:3px solid #94a3b8';
 
       let settlementRow = '';
       if (hasSettlement) {
         const s = e.settlement;
-        const extraMeta = s.strikePrice
-          ? `<span>Strike: $${s.strikePrice.toFixed(2)}</span><span>FMV: $${s.fmv.toFixed(2)}</span>`
+        const strikeInfo = s.strikePrice
+          ? `<div class="ldg-settlement-line"><span class="sline-label">Strike Price</span><span class="sline-val" style="color:var(--text1)">$${s.strikePrice.toFixed(2)}</span></div>
+             <div class="ldg-settlement-line"><span class="sline-label">FMV at Exercise</span><span class="sline-val" style="color:var(--text1)">$${s.fmv.toFixed(2)}</span></div>`
           : s.cashProceeds
-          ? `<span>Cash Proceeds: $${s.cashProceeds.toLocaleString()}</span>`
+          ? `<div class="ldg-settlement-line"><span class="sline-label">Cash Proceeds</span><span class="sline-val sline-net">$${s.cashProceeds.toLocaleString()}</span></div>`
           : '';
-        settlementRow = `<tr class="ldg-settlement-row" id="ldg-srow-${idx}">
-          <td colspan="5">
+        settlementRow = `<tr class="ldg-settlement-row open" id="ldg-srow-${idx}">
+          <td colspan="4">
             <div class="ldg-settlement-inner">
-              <div class="ldg-settlement-title">Settlement Detail — ${s.deliveryMethod}</div>
-              <div class="ldg-settlement-line">
-                <span class="sline-label">Gross Units Released</span>
-                <span class="sline-val sline-gross">${s.gross.toLocaleString()} units</span>
-              </div>
-              <div class="ldg-settlement-line">
-                <span class="sline-label">Tax Withheld (${s.taxRate}%)</span>
-                <span class="sline-val sline-tax">&#8722;${s.taxUnits.toLocaleString()} units</span>
-              </div>
-              <div class="ldg-settlement-line" style="border-top:1px solid #e2e8f0;padding-top:5px;margin-top:1px">
-                <span class="sline-label" style="font-weight:700">Net to Participant</span>
-                <span class="sline-val sline-net">+${s.netUnits.toLocaleString()} units</span>
-              </div>
-              <div class="ldg-settlement-meta">
-                <span>Delivery: ${new Date(s.deliveryDate).toLocaleDateString()}</span>
-                <span>Broker Acct: ${s.brokerAccount}</span>
-                ${extraMeta}
+              <div class="ldg-settlement-title">Settlement — ${s.deliveryMethod}</div>
+              <div style="display:flex;gap:24px;flex-wrap:wrap">
+                <div>
+                  <div class="ldg-settlement-line"><span class="sline-label">Gross Units</span><span class="sline-val sline-gross">${s.gross.toLocaleString()}</span></div>
+                  <div class="ldg-settlement-line"><span class="sline-label">Tax Withheld (${s.taxRate}%)</span><span class="sline-val sline-tax">&#8722;${s.taxUnits.toLocaleString()}</span></div>
+                  <div class="ldg-settlement-line" style="border-top:1px solid #e2e8f0;padding-top:4px;margin-top:2px"><span class="sline-label" style="font-weight:700">Net to Participant</span><span class="sline-val sline-net">+${s.netUnits.toLocaleString()}</span></div>
+                </div>
+                <div style="border-left:1px solid #e2e8f0;padding-left:24px">
+                  ${strikeInfo}
+                  <div class="ldg-settlement-line"><span class="sline-label">Delivery Date</span><span class="sline-val" style="color:var(--text1)">${new Date(s.deliveryDate).toLocaleDateString()}</span></div>
+                  <div class="ldg-settlement-line"><span class="sline-label">Broker Account</span><span class="sline-val" style="color:var(--text1)">${s.brokerAccount}</span></div>
+                </div>
               </div>
             </div>
           </td>
         </tr>`;
       }
 
-      return `<tr${isNeutral ? ' style="opacity:.85"' : ''}>
+      return `<tr style="${rowAccent}">
         <td style="white-space:nowrap">${new Date(e.date).toLocaleDateString()}</td>
-        <td><span class="txtype-badge txtype-${typeClass}">${e.type}</span>${expandBtn}</td>
+        <td><span class="txtype-badge txtype-${typeClass}">${e.type}</span></td>
         <td>${unitsDelta}</td>
         <td style="font-family:'SF Mono',monospace;font-weight:700;color:${isNeutral ? 'var(--textm)' : balColor}">${isNeutral ? '—' : runningBalance.toLocaleString()}</td>
-        <td style="font-size:12px;color:var(--text2)">${e.note}</td>
       </tr>${settlementRow}`;
     }).join('');
 
@@ -4993,19 +4989,18 @@ function openLedgerDrawer(grantId) {
       <table class="ledger-tx-table">
         <thead>
           <tr>
-            <th>Date</th>
+            <th style="width:100px">Date</th>
             <th>Event</th>
             <th>Units</th>
             <th>Balance</th>
-            <th>Notes</th>
           </tr>
         </thead>
         <tbody>${rows}</tbody>
       </table>
-      <div style="padding:12px 16px 0;font-size:11px;color:var(--textm);border-top:1px solid var(--border);margin-top:4px;display:flex;gap:16px">
-        <span><span style="color:#166534;font-weight:700">+</span> Credit — units added to grant</span>
-        <span><span style="color:#991b1b;font-weight:700">−</span> Debit — units removed from grant</span>
-        <span style="color:var(--textm)">info — vesting event, no ledger movement</span>
+      <div style="padding:10px 16px;font-size:11px;color:var(--textm);border-top:1px solid var(--border);display:flex;gap:20px;flex-wrap:wrap">
+        <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:#22c55e;display:inline-block"></span> Credit · units added</span>
+        <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:#f87171;display:inline-block"></span> Debit · units removed</span>
+        <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:#94a3b8;display:inline-block"></span> Informational · no movement</span>
       </div>
     `;
   }
