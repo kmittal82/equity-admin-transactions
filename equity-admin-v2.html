@@ -918,60 +918,84 @@
     .ledger-drawer-meta { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 4px; }
     .ledger-drawer-badges { display: flex; gap: 8px; margin-top: 10px; }
 
+    /* Ledger stats */
     .ledger-stats-bar {
-      display: flex; gap: 0; padding: 0; background: #f8fafc;
-      border-bottom: 1px solid var(--border); flex-shrink: 0;
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      background: #fff; border-bottom: 1px solid #f1f5f9; flex-shrink: 0;
     }
-    .ledger-stat {
-      flex: 1; text-align: center; padding: 14px 10px;
-      border-right: 1px solid var(--border);
-    }
+    .ledger-stat { padding: 14px 16px; border-right: 1px solid #f1f5f9; }
     .ledger-stat:last-child { border-right: none; }
-    .ledger-stat-label { font-size: 9.5px; color: var(--textm); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-    .ledger-stat-value { font-size: 18px; font-weight: 700; font-family: 'SF Mono', monospace; line-height: 1.3; margin-top: 2px; }
+    .ledger-stat-label { font-size: 9px; color: var(--textm); font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; }
+    .ledger-stat-value { font-size: 16px; font-weight: 700; font-family: 'SF Mono', monospace; margin-top: 5px; line-height: 1; }
 
-    .ledger-progress-section { padding: 14px 24px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
-    .progress-bar { display: flex; height: 8px; border-radius: 4px; overflow: hidden; background: var(--bg); }
-    .progress-bar div { height: 100%; }
-    .progress-legend { display: flex; gap: 14px; margin-top: 8px; font-size: 10.5px; color: var(--text2); }
-    .progress-legend-item { display: flex; align-items: center; gap: 5px; }
-    .progress-legend-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+    /* Vesting progress strip */
+    .ledger-progress-section {
+      padding: 10px 20px; border-bottom: 1px solid #f1f5f9;
+      flex-shrink: 0; display: flex; align-items: center; gap: 12px;
+    }
+    .progress-bar { flex: 1; display: flex; height: 5px; border-radius: 10px; overflow: hidden; background: #f1f5f9; }
+    .progress-bar div { height: 100%; transition: width 0.4s ease; }
+    .progress-legend { display: flex; gap: 14px; font-size: 10px; color: var(--textm); white-space: nowrap; flex-shrink: 0; }
+    .progress-legend-item { display: flex; align-items: center; gap: 4px; }
+    .progress-legend-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
 
     .ledger-drawer-body { flex: 1; overflow-y: auto; }
     .ledger-drawer-body::-webkit-scrollbar { width: 4px; }
     .ledger-drawer-body::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 2px; }
 
     .ledger-actions-bar {
-      padding: 14px 24px; border-bottom: 1px solid var(--border);
+      padding: 10px 20px; border-bottom: 1px solid #f1f5f9;
       display: flex; gap: 8px; flex-shrink: 0; background: #fff;
     }
 
-    .ledger-tx-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
-    .ledger-tx-table th {
-      padding: 10px 16px; text-align: left; font-weight: 600; color: var(--text2);
-      font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px;
-      border-bottom: 2px solid var(--border); background: #f8fafc;
-      position: sticky; top: 0; z-index: 1;
+    /* Timeline */
+    .ldg-timeline { padding: 8px 0 20px; }
+    .ldg-tl-row { display: flex; }
+    .ldg-tl-spine {
+      width: 44px; display: flex; flex-direction: column;
+      align-items: center; flex-shrink: 0;
     }
-    .ledger-tx-table td { padding: 10px 16px; border-bottom: 1px solid #f1f5f9; }
-    .ledger-tx-table tr:hover { background: #f8fafc; }
-    .ledger-shares-credit { color: #166534; font-weight: 600; font-family: 'SF Mono', monospace; }
-    .ledger-shares-debit { color: #991b1b; font-weight: 600; font-family: 'SF Mono', monospace; }
-    .ldg-expand-btn { background: none; border: 1px solid #cbd5e1; border-radius: 4px; cursor: pointer; font-size: 10px; padding: 1px 5px; color: var(--text2); margin-left: 6px; transition: all 0.1s; line-height: 1.4; }
-    .ldg-expand-btn:hover { background: var(--bg); border-color: #94a3b8; }
-    .ldg-settlement-row { display: none; }
-    .ldg-settlement-row.open { display: table-row; }
-    .ldg-settlement-row td { background: #f8fafc !important; padding: 0 !important; border-bottom: 1px solid #e2e8f0; }
-    .ldg-settlement-inner { padding: 10px 16px 10px 40px; display: flex; flex-direction: column; gap: 6px; }
-    .ldg-settlement-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text2); margin-bottom: 2px; }
-    .ldg-settlement-line { display: flex; align-items: center; gap: 8px; font-size: 12px; }
-    .ldg-settlement-line .sline-label { color: var(--text2); min-width: 140px; }
-    .ldg-settlement-line .sline-val { font-family: 'SF Mono', monospace; font-weight: 600; }
-    .sline-gross { color: var(--text1); }
-    .sline-tax { color: #991b1b; }
-    .sline-net { color: #166534; }
-    .ldg-settlement-meta { display: flex; gap: 16px; margin-top: 4px; padding-top: 6px; border-top: 1px dashed #e2e8f0; flex-wrap: wrap; }
-    .ldg-settlement-meta span { font-size: 11px; color: var(--text2); }
+    .ldg-tl-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      flex-shrink: 0; margin-top: 17px; position: relative; z-index: 1;
+    }
+    .ldg-tl-dot-credit  { background: #16a34a; box-shadow: 0 0 0 3px #dcfce7; }
+    .ldg-tl-dot-debit   { background: #dc2626; box-shadow: 0 0 0 3px #fee2e2; }
+    .ldg-tl-dot-neutral { background: #94a3b8; box-shadow: 0 0 0 3px #f1f5f9; }
+    .ldg-tl-line { width: 1.5px; flex: 1; background: #e8ecf0; margin-top: 5px; }
+    .ldg-tl-row:last-child .ldg-tl-line { visibility: hidden; }
+    .ldg-tl-content {
+      flex: 1; padding: 12px 20px 16px 0;
+      border-bottom: 1px solid #f8fafc;
+    }
+    .ldg-tl-row:last-child .ldg-tl-content { border-bottom: none; }
+    .ldg-tl-main { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+    .ldg-tl-left { flex: 1; min-width: 0; }
+    .ldg-tl-event { font-size: 13px; font-weight: 600; color: var(--text1); }
+    .ldg-tl-date { font-size: 11px; color: var(--textm); margin-top: 2px; }
+    .ldg-tl-right { text-align: right; flex-shrink: 0; }
+    .ldg-tl-delta-credit  { font-family: 'SF Mono', monospace; font-weight: 700; font-size: 13px; color: #16a34a; }
+    .ldg-tl-delta-debit   { font-family: 'SF Mono', monospace; font-weight: 700; font-size: 13px; color: #dc2626; }
+    .ldg-tl-delta-neutral { font-family: 'SF Mono', monospace; font-weight: 600; font-size: 13px; color: var(--textm); }
+    .ldg-tl-bal { font-family: 'SF Mono', monospace; font-size: 11px; color: var(--textm); margin-top: 3px; }
+
+    /* Settlement card */
+    .ldg-settle-card {
+      margin-top: 10px; background: #f8fafc; border: 1px solid #e8ecf0;
+      border-radius: 8px; padding: 11px 14px;
+    }
+    .ldg-settle-label {
+      font-size: 9.5px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.6px; color: var(--text2); margin-bottom: 8px;
+    }
+    .ldg-settle-flow { display: flex; align-items: center; gap: 6px; font-size: 12px; flex-wrap: wrap; }
+    .ldg-sf-gross { font-family: 'SF Mono', monospace; font-weight: 600; color: var(--text1); }
+    .ldg-sf-arr { color: #cbd5e1; font-size: 14px; }
+    .ldg-sf-tax { font-family: 'SF Mono', monospace; font-weight: 600; color: #dc2626; }
+    .ldg-sf-eq { color: #cbd5e1; font-size: 14px; }
+    .ldg-sf-net { font-family: 'SF Mono', monospace; font-weight: 700; color: #16a34a; }
+    .ldg-settle-meta { display: flex; gap: 14px; margin-top: 8px; padding-top: 8px; border-top: 1px solid #edf1f5; flex-wrap: wrap; }
+    .ldg-settle-meta span { font-size: 11px; color: var(--text2); display: flex; align-items: center; gap: 4px; }
 
     /* Action buttons */
     .act-btn {
@@ -4847,38 +4871,45 @@ function openLedgerDrawer(grantId) {
     <span style="font-size:11px;color:rgba(255,255,255,0.55)">${grant.vesting}</span>
   `;
 
+  // Compute balance from ledger
+  const _cTypes = new Set(['Granted']);
+  const _dTypes = new Set(['Released','Exercised','Forfeited','Expired']);
+  let grantBalance = 0;
+  entries.forEach(e => {
+    if (_cTypes.has(e.type)) grantBalance += e.shares;
+    if (_dTypes.has(e.type)) grantBalance -= e.shares;
+  });
+
   // Stats bar
-  const totalValue = grant.shares * grant.price;
-  const vestedValue = grant.vested * grant.price;
   const vestedPct = ((grant.vested / grant.shares) * 100).toFixed(0);
   document.getElementById('drawer-stats').innerHTML = `
     <div class="ledger-stat">
-      <div class="ledger-stat-label">Total Units</div>
+      <div class="ledger-stat-label">Granted</div>
       <div class="ledger-stat-value">${grant.shares.toLocaleString()}</div>
     </div>
     <div class="ledger-stat">
-      <div class="ledger-stat-label">Grant Value</div>
-      <div class="ledger-stat-value">$${(totalValue / 1000).toFixed(0)}K</div>
-    </div>
-    <div class="ledger-stat">
       <div class="ledger-stat-label">Vested</div>
-      <div class="ledger-stat-value" style="color:var(--green)">${vestedPct}%</div>
+      <div class="ledger-stat-value" style="color:#16a34a">${grant.vested.toLocaleString()}</div>
     </div>
     <div class="ledger-stat">
-      <div class="ledger-stat-label">Vested Value</div>
-      <div class="ledger-stat-value">$${(vestedValue / 1000).toFixed(0)}K</div>
+      <div class="ledger-stat-label">Unvested</div>
+      <div class="ledger-stat-value" style="color:var(--textm)">${grant.unvested.toLocaleString()}</div>
+    </div>
+    <div class="ledger-stat">
+      <div class="ledger-stat-label">Balance</div>
+      <div class="ledger-stat-value" style="color:#1d4ed8">${grantBalance.toLocaleString()}</div>
     </div>
   `;
 
-  // Progress
+  // Vesting progress
   document.getElementById('drawer-progress').innerHTML = `
     <div class="progress-bar">
-      <div style="width:${vestedPct}%;background:var(--green)"></div>
-      <div style="width:${100 - vestedPct}%;background:#e2e8f0"></div>
+      <div style="width:${vestedPct}%;background:#16a34a"></div>
+      <div style="width:${100 - vestedPct}%;background:#f1f5f9"></div>
     </div>
     <div class="progress-legend">
-      <div class="progress-legend-item"><div class="progress-legend-dot" style="background:var(--green)"></div>Vested (${grant.vested.toLocaleString()})</div>
-      <div class="progress-legend-item"><div class="progress-legend-dot" style="background:#e2e8f0"></div>Unvested (${grant.unvested.toLocaleString()})</div>
+      <div class="progress-legend-item"><div class="progress-legend-dot" style="background:#16a34a"></div>${vestedPct}% vested</div>
+      <div class="progress-legend-item"><div class="progress-legend-dot" style="background:#cbd5e1"></div>${(100 - vestedPct)}% unvested</div>
     </div>
   `;
 
@@ -4922,86 +4953,68 @@ function openLedgerDrawer(grantId) {
     const debitTypes  = new Set(['Released', 'Exercised', 'Forfeited', 'Expired']);
 
     let runningBalance = 0;
-    let rowIndex = 0;
     const rows = entries.map(e => {
       const isCredit  = creditTypes.has(e.type);
       const isDebit   = debitTypes.has(e.type);
-      const isNeutral = !isCredit && !isDebit; // Vested, Amended, etc.
-      const hasSettlement = !!(e.settlement);
+      const isNeutral = !isCredit && !isDebit;
 
       if (isCredit) runningBalance += e.shares;
       if (isDebit)  runningBalance -= e.shares;
 
-      const unitsDelta = isCredit
-        ? `<span class="ledger-shares-credit">+${e.shares.toLocaleString()}</span>`
-        : isDebit
-          ? `<span class="ledger-shares-debit">&#8722;${e.shares.toLocaleString()}</span>`
-          : `<span style="color:var(--textm);font-family:'SF Mono',monospace;font-weight:600">${e.shares.toLocaleString()}</span>`;
+      const dotClass = isCredit ? 'ldg-tl-dot-credit' : isDebit ? 'ldg-tl-dot-debit' : 'ldg-tl-dot-neutral';
+      const deltaClass = isCredit ? 'ldg-tl-delta-credit' : isDebit ? 'ldg-tl-delta-debit' : 'ldg-tl-delta-neutral';
+      const deltaSign = isCredit ? '+' : isDebit ? '−' : '';
+      const balDisplay = isNeutral ? '—' : runningBalance.toLocaleString();
 
-      const balColor = runningBalance > 0 ? 'var(--green)' : runningBalance === 0 ? 'var(--textm)' : 'var(--red)';
-      const typeClass = e.type.toLowerCase().replace(/\s+/g,'').replace(/&/g,'');
-      const idx = rowIndex++;
-
-      // Row accent: left border by event type
-      const rowAccent = isCredit  ? 'border-left:3px solid #22c55e'
-                      : isDebit   ? 'border-left:3px solid #f87171'
-                      : 'border-left:3px solid #94a3b8';
-
-      let settlementRow = '';
-      if (hasSettlement) {
+      let settleCard = '';
+      if (e.settlement) {
         const s = e.settlement;
-        const strikeInfo = s.strikePrice
-          ? `<div class="ldg-settlement-line"><span class="sline-label">Strike Price</span><span class="sline-val" style="color:var(--text1)">$${s.strikePrice.toFixed(2)}</span></div>
-             <div class="ldg-settlement-line"><span class="sline-label">FMV at Exercise</span><span class="sline-val" style="color:var(--text1)">$${s.fmv.toFixed(2)}</span></div>`
+        const priceLine = s.strikePrice
+          ? `<span>Strike <strong>$${s.strikePrice.toFixed(2)}</strong></span><span>FMV <strong>$${s.fmv.toFixed(2)}</strong></span>`
           : s.cashProceeds
-          ? `<div class="ldg-settlement-line"><span class="sline-label">Cash Proceeds</span><span class="sline-val sline-net">$${s.cashProceeds.toLocaleString()}</span></div>`
-          : '';
-        settlementRow = `<tr class="ldg-settlement-row open" id="ldg-srow-${idx}">
-          <td colspan="4">
-            <div class="ldg-settlement-inner">
-              <div class="ldg-settlement-title">Settlement — ${s.deliveryMethod}</div>
-              <div style="display:flex;gap:24px;flex-wrap:wrap">
-                <div>
-                  <div class="ldg-settlement-line"><span class="sline-label">Gross Units</span><span class="sline-val sline-gross">${s.gross.toLocaleString()}</span></div>
-                  <div class="ldg-settlement-line"><span class="sline-label">Tax Withheld (${s.taxRate}%)</span><span class="sline-val sline-tax">&#8722;${s.taxUnits.toLocaleString()}</span></div>
-                  <div class="ldg-settlement-line" style="border-top:1px solid #e2e8f0;padding-top:4px;margin-top:2px"><span class="sline-label" style="font-weight:700">Net to Participant</span><span class="sline-val sline-net">+${s.netUnits.toLocaleString()}</span></div>
-                </div>
-                <div style="border-left:1px solid #e2e8f0;padding-left:24px">
-                  ${strikeInfo}
-                  <div class="ldg-settlement-line"><span class="sline-label">Delivery Date</span><span class="sline-val" style="color:var(--text1)">${new Date(s.deliveryDate).toLocaleDateString()}</span></div>
-                  <div class="ldg-settlement-line"><span class="sline-label">Broker Account</span><span class="sline-val" style="color:var(--text1)">${s.brokerAccount}</span></div>
-                </div>
-              </div>
+          ? `<span>Proceeds <strong>$${s.cashProceeds.toLocaleString()}</strong></span>` : '';
+        settleCard = `
+          <div class="ldg-settle-card">
+            <div class="ldg-settle-label">${s.deliveryMethod}</div>
+            <div class="ldg-settle-flow">
+              <span class="ldg-sf-gross">${s.gross.toLocaleString()} gross</span>
+              <span class="ldg-sf-arr">→</span>
+              <span class="ldg-sf-tax">−${s.taxUnits.toLocaleString()} tax (${s.taxRate}%)</span>
+              <span class="ldg-sf-eq">=</span>
+              <span class="ldg-sf-net">+${s.netUnits.toLocaleString()} net</span>
             </div>
-          </td>
-        </tr>`;
+            <div class="ldg-settle-meta">
+              <span>📅 ${new Date(s.deliveryDate).toLocaleDateString()}</span>
+              <span>🏦 ${s.brokerAccount}</span>
+              ${priceLine}
+            </div>
+          </div>`;
       }
 
-      return `<tr style="${rowAccent}">
-        <td style="white-space:nowrap">${new Date(e.date).toLocaleDateString()}</td>
-        <td><span class="txtype-badge txtype-${typeClass}">${e.type}</span></td>
-        <td>${unitsDelta}</td>
-        <td style="font-family:'SF Mono',monospace;font-weight:700;color:${isNeutral ? 'var(--textm)' : balColor}">${isNeutral ? '—' : runningBalance.toLocaleString()}</td>
-      </tr>${settlementRow}`;
+      return `
+        <div class="ldg-tl-row">
+          <div class="ldg-tl-spine">
+            <div class="ldg-tl-dot ${dotClass}"></div>
+            <div class="ldg-tl-line"></div>
+          </div>
+          <div class="ldg-tl-content">
+            <div class="ldg-tl-main">
+              <div class="ldg-tl-left">
+                <div class="ldg-tl-event">${e.type}</div>
+                <div class="ldg-tl-date">${new Date(e.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div>
+              </div>
+              <div class="ldg-tl-right">
+                <div class="${deltaClass}">${deltaSign}${e.shares.toLocaleString()}</div>
+                <div class="ldg-tl-bal">${isNeutral ? '—' : 'Bal ' + balDisplay}</div>
+              </div>
+            </div>
+            ${settleCard}
+          </div>
+        </div>`;
     }).join('');
 
     document.getElementById('drawer-body').innerHTML = `
-      <table class="ledger-tx-table">
-        <thead>
-          <tr>
-            <th style="width:100px">Date</th>
-            <th>Event</th>
-            <th>Units</th>
-            <th>Balance</th>
-          </tr>
-        </thead>
-        <tbody>${rows}</tbody>
-      </table>
-      <div style="padding:10px 16px;font-size:11px;color:var(--textm);border-top:1px solid var(--border);display:flex;gap:20px;flex-wrap:wrap">
-        <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:#22c55e;display:inline-block"></span> Credit · units added</span>
-        <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:#f87171;display:inline-block"></span> Debit · units removed</span>
-        <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:#94a3b8;display:inline-block"></span> Informational · no movement</span>
-      </div>
+      <div class="ldg-timeline">${rows}</div>
     `;
   }
 
