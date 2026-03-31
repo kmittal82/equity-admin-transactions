@@ -4449,14 +4449,12 @@ const ledgerData = {
     { date: '2026-03-15', type: 'Vested',   shares: 1562,  note: 'Q1 2026 quarterly vest · Cumulative vested: 12,500 · Unvested remaining: 12,500' }
   ],
   'GRT-2023-008': [
-    { date: '2023-11-05', type: 'Granted',   shares: 45000, note: 'Initial ISO grant — Compensation Committee approval' },
-    { date: '2024-11-05', type: 'Vested',    shares: 11250, note: '1-year cliff vest' },
-    { date: '2024-12-15', type: 'Vested',    shares: 5625,  note: 'Q4 quarterly vest' },
-    { date: '2025-01-20', type: 'Exercised', shares: 5000,  note: 'Cashless exercise — 3,840 net shares delivered (strike $18.50, FMV $31.20)', settlement: { gross: 5000, taxRate: 23.2, taxUnits: 1160, netUnits: 3840, deliveryMethod: 'Cashless Exercise', strikePrice: 18.50, fmv: 31.20, deliveryDate: '2025-01-22', brokerAccount: '****-7734' } },
-    { date: '2025-03-15', type: 'Vested',    shares: 5625,  note: 'Q1 quarterly vest' },
-    { date: '2025-03-22', type: 'Exercised', shares: 5625,  note: 'Same-day sale exercise — proceeds $28,406', settlement: { gross: 5625, taxRate: 23, taxUnits: 1294, netUnits: 4331, deliveryMethod: 'Same-Day Sale', cashProceeds: 28406, deliveryDate: '2025-03-24', brokerAccount: '****-7734' } },
-    { date: '2025-06-30', type: 'Forfeited', shares: 5625,  note: 'Unvested tranche cancelled — employee departure Jun 2025' },
-    { date: '2025-09-30', type: 'Expired',   shares: 5625,  note: 'Option expiry — unexercised tranche lapsed (10-yr window)' }
+    { date: '2023-11-05', type: 'Granted',   shares: 45000, note: 'Initial NSO grant — Compensation Committee approval · 4-year vest, 1-year cliff' },
+    { date: '2024-11-05', type: 'Vested',    shares: 11250, note: '1-year cliff vest — 25% of total grant (11,250 of 45,000 shares)' },
+    { date: '2025-01-20', type: 'Exercised', shares: 5000,  note: 'Sell to Cover — 3,840 net shares delivered after tax (strike $22.00, FMV $38.50)', settlement: { gross: 5000, taxRate: 23.2, taxUnits: 1160, netUnits: 3840, deliveryMethod: 'Sell to Cover', strikePrice: 22.00, fmv: 38.50, deliveryDate: '2025-01-22', brokerAccount: '****-7734' } },
+    { date: '2025-02-05', type: 'Vested',    shares: 2250,  note: 'Q1 post-cliff quarterly vest — 2,250 shares (33,750 remaining ÷ 15 quarters)' },
+    { date: '2025-05-05', type: 'Vested',    shares: 2250,  note: 'Q2 post-cliff quarterly vest · Cumulative vested: 15,750' },
+    { date: '2025-08-05', type: 'Vested',    shares: 2250,  note: 'Q3 post-cliff quarterly vest · Cumulative vested: 18,000 · Unvested remaining: 27,000' }
   ]
 };
 
