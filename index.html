@@ -4425,7 +4425,7 @@ document.addEventListener('keydown', e => {
 
 // Sample grant data
 const grantsData = [
-  { id: 'GRT-2024-001', participant: 'Sarah Chen', dept: 'Engineering', type: 'RSU', date: '2024-03-15', shares: 25000, price: 32.50, status: 'active', vesting: '4yr/1yr cliff', vested: 10000, unvested: 15000 },
+  { id: 'GRT-2024-001', participant: 'Sarah Chen', dept: 'Engineering', type: 'RSU', date: '2024-03-15', shares: 25000, price: 32.50, status: 'active', vesting: '4yr/1yr cliff', vested: 12500, unvested: 12500 },
   { id: 'GRT-2024-002', participant: 'Marcus Johnson', dept: 'Product', type: 'ISO', date: '2024-02-20', shares: 30000, price: 28.75, status: 'active', vesting: '4yr/1yr cliff', vested: 8500, unvested: 21500 },
   { id: 'GRT-2024-003', participant: 'James Park', dept: 'Engineering', type: 'RSU', date: '2024-01-10', shares: 18000, price: 25.00, status: 'active', vesting: '4yr/1yr cliff', vested: 6300, unvested: 11700 },
   { id: 'GRT-2023-008', participant: 'Emma Davis', dept: 'Sales', type: 'NSO', date: '2023-11-05', shares: 45000, price: 22.00, status: 'active', vesting: '4yr/1yr cliff', vested: 18000, unvested: 27000 },
@@ -4440,13 +4440,13 @@ const grantsData = [
 // Ledger entries for specific grants
 const ledgerData = {
   'GRT-2024-001': [
-    { date: '2024-03-15', type: 'Granted',  shares: 25000, note: 'Initial RSU grant — Board approval Mar 2024' },
-    { date: '2024-06-15', type: 'Vested',   shares: 6250,  note: 'Q2 quarterly vest (25% of annual tranche)' },
-    { date: '2024-09-15', type: 'Vested',   shares: 6250,  note: 'Q3 quarterly vest' },
-    { date: '2024-12-15', type: 'Vested',   shares: 6250,  note: 'Q4 quarterly vest' },
-    { date: '2025-01-10', type: 'Released', shares: 6250,  note: 'Net settlement — 4,812 units delivered after tax withholding (23%)', settlement: { gross: 6250, taxRate: 23, taxUnits: 1438, netUnits: 4812, deliveryMethod: 'Net Settlement', deliveryDate: '2025-01-12', brokerAccount: '****-4821' } },
-    { date: '2025-03-15', type: 'Vested',   shares: 6250,  note: '1-year cliff vest complete' },
-    { date: '2025-03-20', type: 'Released', shares: 6250,  note: 'Net settlement — 4,812 units delivered after tax withholding (23%)', settlement: { gross: 6250, taxRate: 23, taxUnits: 1438, netUnits: 4812, deliveryMethod: 'Net Settlement', deliveryDate: '2025-03-22', brokerAccount: '****-4821' } }
+    { date: '2024-03-15', type: 'Granted',  shares: 25000, note: 'Initial RSU grant — Board approval Mar 2024 · 4-year vest, 1-year cliff' },
+    { date: '2025-03-15', type: 'Vested',   shares: 6250,  note: '1-year cliff vest — 25% of total grant (6,250 of 25,000 shares)' },
+    { date: '2025-03-20', type: 'Released', shares: 6250,  note: 'Net settlement — 4,812 units delivered after 23% tax withholding', settlement: { gross: 6250, taxRate: 23, taxUnits: 1438, netUnits: 4812, deliveryMethod: 'Net Settlement', deliveryDate: '2025-03-22', brokerAccount: '****-4821' } },
+    { date: '2025-06-15', type: 'Vested',   shares: 1563,  note: 'Q2 2025 quarterly vest — 1,563 of 18,750 remaining shares (1/12 post-cliff)' },
+    { date: '2025-09-15', type: 'Vested',   shares: 1563,  note: 'Q3 2025 quarterly vest' },
+    { date: '2025-12-15', type: 'Vested',   shares: 1562,  note: 'Q4 2025 quarterly vest' },
+    { date: '2026-03-15', type: 'Vested',   shares: 1562,  note: 'Q1 2026 quarterly vest · Cumulative vested: 12,500 · Unvested remaining: 12,500' }
   ],
   'GRT-2023-008': [
     { date: '2023-11-05', type: 'Granted',   shares: 45000, note: 'Initial ISO grant — Compensation Committee approval' },
