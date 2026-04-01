@@ -1685,6 +1685,101 @@
     .txn-type-option svg { width: 20px; height: 20px; margin-bottom: 5px; }
     .txn-type-option-label { font-size: 12px; font-weight: 600; color: var(--text); }
 
+    /* ════════════ PARTICIPANTS VIEW ════════════ */
+    .p-avatar { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .p-cell-name { display: flex; align-items: center; gap: 10px; }
+    .p-name { font-weight: 600; color: var(--text); font-size: 13px; }
+    .p-id   { font-size: 11px; color: var(--textm); }
+
+    /* ════════════ TERMINATION MODEL MODAL ════════════ */
+    .term-overlay {
+      position: fixed; inset: 0; background: rgba(15,23,42,0.55); z-index: 800;
+      display: none; align-items: flex-start; justify-content: center;
+      padding: 24px 16px 60px; overflow-y: auto;
+    }
+    .term-overlay.open { display: flex; }
+    .term-panel {
+      background: #f0f4fb; border-radius: 16px; width: 100%; max-width: 1020px;
+      box-shadow: 0 24px 80px rgba(15,23,42,0.3); position: relative;
+    }
+    .term-panel-head {
+      background: #fff; border-radius: 16px 16px 0 0; padding: 18px 24px;
+      border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;
+    }
+    .term-panel-title { font-size: 17px; font-weight: 800; color: var(--text); letter-spacing: -0.4px; }
+    .term-panel-sub   { font-size: 12px; color: var(--text2); margin-top: 2px; }
+    .term-panel-body  { padding: 22px 24px 28px; }
+    .tm-input-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+      background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 16px;
+    }
+    .tm-field { display: flex; flex-direction: column; gap: 4px; }
+    .tm-field label { font-size: 10px; color: var(--text2); text-transform: uppercase; letter-spacing: .06em; font-weight: 600; }
+    .tm-field input, .tm-field select {
+      font-family: inherit; font-size: 13px; padding: 7px 10px; border-radius: 6px;
+      border: 1.5px solid var(--border); background: #f8fafc; color: var(--text); width: 100%; transition: border .15s;
+    }
+    .tm-field input:focus, .tm-field select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+    .tm-agg {
+      background: linear-gradient(135deg,#0f1b2d 0%,#1a3a5c 100%);
+      border-radius: 10px; padding: 18px; margin-bottom: 16px; color: #fff;
+    }
+    .tm-agg-title { font-size: 13px; font-weight: 600; margin-bottom: 12px; opacity: .85; }
+    .tm-agg-grid  { display: grid; grid-template-columns: repeat(5,1fr); gap: 10px; }
+    .tm-agg-item  { background: rgba(255,255,255,.08); border-radius: 8px; padding: 12px; border: 1px solid rgba(255,255,255,.1); }
+    .tm-agg-label { font-size: 10px; text-transform: uppercase; letter-spacing: .06em; opacity: .6; font-weight: 500; }
+    .tm-agg-val   { font-size: 17px; font-weight: 700; margin-top: 3px; letter-spacing: -.02em; }
+    .tm-agg-sub   { font-size: 10px; opacity: .5; margin-top: 1px; }
+    .tm-agg-val.v-red{color:#ff6b6b}.tm-agg-val.v-amber{color:#ffc078}.tm-agg-val.v-green{color:#69db7c}.tm-agg-val.v-blue{color:#74c0fc}.tm-agg-val.v-purple{color:#b197fc}
+    .tm-plans { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 16px; }
+    .tm-plan-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 14px; position: relative; overflow: hidden; }
+    .tm-plan-card::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%; }
+    .tm-plan-card.pc-espp::before{background:#10b981}.tm-plan-card.pc-savings::before{background:#8b5cf6}.tm-plan-card.pc-options::before{background:#f59e0b}
+    .tm-plan-title { font-size: 12px; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 7px; }
+    .tm-plan-icon { width: 22px; height: 22px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .tm-plan-icon.pi-espp{background:#10b981}.tm-plan-icon.pi-savings{background:#8b5cf6}.tm-plan-icon.pi-options{background:#f59e0b}
+    .tm-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 14px; margin-bottom: 14px; }
+    .tm-section-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+    .tm-row { display: flex; justify-content: space-between; font-size: 12px; padding: 4px 0; border-bottom: 1px solid #f1f5f9; }
+    .tm-row:last-child{border-bottom:none} .tm-row-label{color:var(--text2)} .tm-row-val{font-weight:500}
+    .tm-status{display:inline-block;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600;letter-spacing:.03em}
+    .tm-st-forfeited{background:#fee2e2;color:#ef4444}.tm-st-retained{background:#dbeafe;color:#2563eb}
+    .tm-st-expired{background:#fef3c7;color:#d97706}.tm-st-refunded{background:#d1fae5;color:#059669}
+    .tm-st-withdrawn{background:#d1fae5;color:#059669}.tm-st-accelerated{background:#d1fae5;color:#059669}
+    .tm-g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+    .tm-grant-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+    .tm-grant-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .tm-grant-id { font-size: 12px; font-weight: 700; color: var(--accent-dark); }
+    .tm-grant-plan { font-size: 11px; color: var(--text2); margin-bottom: 8px; }
+    .tm-prog-track { height: 7px; background: #fee2e2; border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
+    .tm-prog-fill  { height: 100%; background: var(--accent); border-radius: 4px; transition: width .4s; }
+    .tm-bar-chart { display: flex; flex-direction: column; gap: 7px; }
+    .tm-bar-row { display: flex; align-items: center; gap: 9px; font-size: 11px; }
+    .tm-bar-label { width: 80px; text-align: right; color: var(--text2); flex-shrink: 0; }
+    .tm-bar-track { flex:1; height:18px; background:#f1f5f9; border-radius:4px; overflow:hidden; display:flex; }
+    .tm-bar-seg { height:100%; display:flex; align-items:center; justify-content:center; font-size:9px; color:#fff; font-weight:600; }
+    .tm-bar-seg.bs-vested{background:var(--accent)}.tm-bar-seg.bs-forfeited{background:var(--red)}.tm-bar-seg.bs-expired{background:var(--amber)}
+    .tm-timeline { padding-left: 16px; border-left: 2px solid var(--border); }
+    .tm-tl-item { position: relative; padding: 0 0 14px 14px; }
+    .tm-tl-item:last-child{padding-bottom:0}
+    .tm-tl-dot { position:absolute; left:-19px; top:3px; width:9px; height:9px; border-radius:50%; border:2px solid #f0f4fb; }
+    .tm-tl-date { font-size: 10px; color: var(--text2); font-weight: 500; }
+    .tm-tl-text { font-size: 12px; margin-top: 1px; }
+    .tm-tl-text.neg{color:var(--red)}.tm-tl-text.pos{color:var(--accent)}.tm-tl-text.warn{color:var(--amber)}
+    .tm-rules-tbl { width:100%; border-collapse:collapse; font-size:12px; }
+    .tm-rules-tbl th { text-align:left; padding:7px 9px; background:#f8fafc; color:var(--text2); font-weight:600; text-transform:uppercase; font-size:10px; letter-spacing:.04em; border-bottom:1px solid var(--border); }
+    .tm-rules-tbl td { padding:7px 9px; border-bottom:1px solid #f1f5f9; }
+    .tm-rules-tbl tr.tm-active-rule { background:#fef3c7; font-weight:500; }
+    .tm-legend-row { display:flex; gap:12px; margin-top:8px; font-size:11px; color:var(--text2); }
+    .tm-legend-dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:3px; vertical-align:middle; }
+    .tm-close-btn {
+      width: 32px; height: 32px; border: 1px solid var(--border); background: var(--bg);
+      border-radius: 8px; cursor: pointer; display: flex; align-items: center;
+      justify-content: center; color: var(--text2); font-size: 18px; line-height: 1;
+      transition: all 0.12s; flex-shrink: 0;
+    }
+    .tm-close-btn:hover { background: var(--red-l); border-color: var(--red); color: var(--red); }
+
   </style>
 </head>
 <body>
@@ -1706,7 +1801,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
       Dashboard
     </div>
-    <div class="nav-item" onclick="setActive(this)">
+    <div class="nav-item" id="nav-participants" onclick="setActive(this); switchView('participants')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       Participants
     </div>
@@ -3488,6 +3583,162 @@
 
     </div><!-- /view-release-mgmt -->
 
+    <!-- ════ PARTICIPANTS VIEW ════ -->
+    <div class="view-section" id="view-participants">
+      <div class="page-head">
+        <div>
+          <div class="page-title">Participants</div>
+          <div class="page-sub">All equity plan participants — active and terminated</div>
+        </div>
+        <div class="head-actions">
+          <button class="btn btn-ghost">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export
+          </button>
+          <button class="btn btn-primary" onclick="openModal('modal-add-grant')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Participant
+          </button>
+        </div>
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-card">
+          <div class="s-label">Total Participants</div>
+          <div class="s-value">2,391</div>
+          <div class="s-sub">All plan participants</div>
+        </div>
+        <div class="summary-card">
+          <div class="s-label">Active</div>
+          <div class="s-value" style="color:var(--green)">2,348</div>
+          <div class="s-sub">With active equity</div>
+        </div>
+        <div class="summary-card">
+          <div class="s-label">New This Month</div>
+          <div class="s-value" style="color:var(--accent)">38</div>
+          <div class="s-sub">Added in March 2026</div>
+        </div>
+        <div class="summary-card">
+          <div class="s-label">Terminated</div>
+          <div class="s-value" style="color:var(--red)">43</div>
+          <div class="s-sub">Post-termination window</div>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <input type="text" class="filter-input" id="p-search" placeholder="Search by name, ID, department..." onkeyup="filterParticipants()" style="flex:1;max-width:340px">
+        <select class="filter-select" id="p-dept-filter" onchange="filterParticipants()">
+          <option value="">All Departments</option>
+          <option value="Engineering">Engineering</option>
+          <option value="Product">Product</option>
+          <option value="Sales">Sales</option>
+          <option value="Finance">Finance</option>
+          <option value="Legal">Legal</option>
+          <option value="Operations">Operations</option>
+          <option value="Marketing">Marketing</option>
+        </select>
+        <select class="filter-select" id="p-status-filter" onchange="filterParticipants()">
+          <option value="">All Status</option>
+          <option value="active">Active</option>
+          <option value="terminated">Terminated</option>
+        </select>
+        <span class="filter-count" id="p-count"></span>
+      </div>
+
+      <div class="ag-table-wrap" style="overflow-x:auto">
+        <table class="ag-table" id="participants-table">
+          <thead>
+            <tr>
+              <th class="col-actions">Actions</th>
+              <th style="min-width:200px">Participant</th>
+              <th style="min-width:120px">Department</th>
+              <th style="min-width:110px">Title</th>
+              <th style="min-width:110px">Hire Date</th>
+              <th style="min-width:70px;text-align:right">Grants</th>
+              <th style="min-width:110px;text-align:right">Total Shares</th>
+              <th style="min-width:100px;text-align:right">Vested</th>
+              <th style="min-width:100px;text-align:right">Unvested</th>
+              <th style="min-width:90px">Status</th>
+            </tr>
+          </thead>
+          <tbody id="participants-body"></tbody>
+        </table>
+      </div>
+    </div><!-- /view-participants -->
+
+    <!-- ════ TERMINATION MODEL MODAL ════ -->
+    <div class="term-overlay" id="term-overlay" onclick="closeTermModal(event)">
+      <div class="term-panel" onclick="event.stopPropagation()">
+        <div class="term-panel-head">
+          <div>
+            <div class="term-panel-title" id="tm-panel-title">Equity Termination Model</div>
+            <div class="term-panel-sub">Model termination impact — units forfeited, expired, ESPP, savings plan, and grant-level detail</div>
+          </div>
+          <button class="tm-close-btn" onclick="closeTermModal()">×</button>
+        </div>
+        <div class="term-panel-body">
+          <div class="tm-input-grid">
+            <div class="tm-field"><label>Participant name</label><input id="tm-pName" /></div>
+            <div class="tm-field"><label>Employee ID</label><input id="tm-empId" /></div>
+            <div class="tm-field"><label>Hire date</label><input type="date" id="tm-hireDate" /></div>
+            <div class="tm-field"><label>Termination date</label><input type="date" id="tm-termDate" value="2025-06-30" oninput="tmRender()" /></div>
+            <div class="tm-field">
+              <label>Termination type</label>
+              <select id="tm-termType" oninput="tmRender()">
+                <option value="voluntary">Voluntary resignation</option>
+                <option value="involuntary">Involuntary (without cause)</option>
+                <option value="cause">Involuntary (with cause)</option>
+                <option value="retirement">Retirement</option>
+                <option value="death">Death / Disability</option>
+              </select>
+            </div>
+            <div class="tm-field"><label>Stock price on term date ($)</label><input type="number" id="tm-stockPrice" value="42.50" step="0.5" oninput="tmRender()" /></div>
+          </div>
+
+          <div class="tm-agg" id="tm-aggBanner"></div>
+          <div class="tm-plans" id="tm-planImpacts"></div>
+
+          <div class="tm-card" style="margin-bottom:16px">
+            <div class="tm-section-title" style="margin-top:0">Termination rules matrix</div>
+            <table class="tm-rules-tbl">
+              <thead><tr><th>Type</th><th>RSU / RSA</th><th>Options</th><th>ESPP</th><th>Savings Plan</th></tr></thead>
+              <tbody id="tm-rulesBody"></tbody>
+            </table>
+          </div>
+
+          <div class="tm-section-title">Grant-level impact</div>
+          <div class="tm-g2" id="tm-grantsGrid"></div>
+
+          <div class="tm-g2">
+            <div class="tm-card" style="margin-bottom:0">
+              <div class="tm-section-title" style="margin-top:0">Vested vs forfeited vs expired</div>
+              <div class="tm-bar-chart" id="tm-barChart"></div>
+              <div class="tm-legend-row">
+                <span><span class="tm-legend-dot" style="background:var(--accent)"></span>Vested</span>
+                <span><span class="tm-legend-dot" style="background:var(--red)"></span>Forfeited</span>
+                <span><span class="tm-legend-dot" style="background:var(--amber)"></span>Expired</span>
+              </div>
+            </div>
+            <div class="tm-card" style="margin-bottom:0">
+              <div class="tm-section-title" style="margin-top:0">Post-termination exercise window</div>
+              <div id="tm-exerciseDetail"></div>
+            </div>
+          </div>
+          <div style="height:14px"></div>
+          <div class="tm-g2">
+            <div class="tm-card" style="margin-bottom:0">
+              <div class="tm-section-title" style="margin-top:0">Share issuance reconciliation</div>
+              <div id="tm-issuanceDetail"></div>
+            </div>
+            <div class="tm-card" style="margin-bottom:0">
+              <div class="tm-section-title" style="margin-top:0">Impact timeline</div>
+              <div class="tm-timeline" id="tm-timeline"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /term-overlay -->
+
     <!-- Simulate panel (outside view-section, fullscreen overlay) -->
     <div class="rel-sim-overlay" id="rel-sim-overlay" onclick="closeRelSimulate(event)">
       <div class="rel-sim-panel" onclick="event.stopPropagation()">
@@ -4628,6 +4879,286 @@ const historyData = [
 
 let currentStep = 1;
 
+// ══════════════════════════════════════════════
+// PARTICIPANTS DATA
+// ══════════════════════════════════════════════
+const DEPT_COLORS = {
+  Engineering: '#3b82f6', Product: '#8b5cf6', Sales: '#10b981',
+  Finance: '#f59e0b', Legal: '#ef4444', Operations: '#06b6d4', Marketing: '#f97316'
+};
+const participantsData = [
+  { id:'EMP-20481', name:'Sarah Chen',     dept:'Engineering', title:'Sr. Software Engineer', hireDate:'2021-03-15', status:'active',     grants:1, totalShares:25000, vested:12500, unvested:12500 },
+  { id:'EMP-20482', name:'Marcus Johnson', dept:'Product',     title:'Product Manager',       hireDate:'2020-08-10', status:'active',     grants:1, totalShares:30000, vested:8500,  unvested:21500 },
+  { id:'EMP-20483', name:'James Park',     dept:'Engineering', title:'Software Engineer',     hireDate:'2022-01-05', status:'active',     grants:1, totalShares:18000, vested:6300,  unvested:11700 },
+  { id:'EMP-20484', name:'Emma Davis',     dept:'Sales',       title:'Account Executive',     hireDate:'2020-05-20', status:'active',     grants:1, totalShares:45000, vested:18000, unvested:27000 },
+  { id:'EMP-20485', name:'Priya Sharma',   dept:'Finance',     title:'Finance Director',      hireDate:'2019-11-12', status:'active',     grants:1, totalShares:12000, vested:12000, unvested:0 },
+  { id:'EMP-20486', name:'David Miller',   dept:'Legal',       title:'General Counsel',       hireDate:'2021-06-01', status:'active',     grants:1, totalShares:8000,  vested:3500,  unvested:4500 },
+  { id:'EMP-20487', name:'Lisa Wong',      dept:'Engineering', title:'Lead Engineer',         hireDate:'2020-02-28', status:'active',     grants:1, totalShares:35000, vested:14000, unvested:21000 },
+  { id:'EMP-20488', name:'Robert Chen',    dept:'Product',     title:'Product Director',      hireDate:'2018-07-15', status:'terminated', grants:1, totalShares:22000, vested:5500,  unvested:0 },
+  { id:'EMP-20489', name:'Amanda Foster',  dept:'Operations',  title:'Operations Manager',    hireDate:'2021-09-20', status:'active',     grants:1, totalShares:28000, vested:7000,  unvested:21000 },
+  { id:'EMP-20490', name:'Kevin Taylor',   dept:'Marketing',   title:'Marketing VP',          hireDate:'2019-04-08', status:'active',     grants:1, totalShares:15000, vested:5000,  unvested:10000 }
+];
+
+function avatarColor(name) {
+  const c = ['#3b82f6','#8b5cf6','#10b981','#f59e0b','#ef4444','#06b6d4','#f97316','#6366f1','#14b8a6','#ec4899'];
+  let h = 0; for (let i = 0; i < name.length; i++) h = name.charCodeAt(i) + ((h << 5) - h);
+  return c[Math.abs(h) % c.length];
+}
+function initials(name) { return name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase(); }
+
+function renderParticipantsTable() {
+  filterParticipants();
+}
+
+function filterParticipants() {
+  const search = (document.getElementById('p-search')?.value || '').toLowerCase();
+  const dept   = document.getElementById('p-dept-filter')?.value || '';
+  const status = document.getElementById('p-status-filter')?.value || '';
+  const rows = participantsData.filter(p => {
+    const matchSearch = !search || p.name.toLowerCase().includes(search) || p.id.toLowerCase().includes(search) || p.dept.toLowerCase().includes(search);
+    const matchDept   = !dept   || p.dept === dept;
+    const matchStatus = !status || p.status === status;
+    return matchSearch && matchDept && matchStatus;
+  });
+  const el = document.getElementById('p-count');
+  if (el) el.textContent = rows.length + ' participant' + (rows.length !== 1 ? 's' : '');
+  const tbody = document.getElementById('participants-body');
+  if (!tbody) return;
+  tbody.innerHTML = rows.map(p => {
+    const sc = p.status === 'active'
+      ? '<span class="sdot sdot-active">Active</span>'
+      : '<span class="sdot sdot-terminated">Terminated</span>';
+    const vestPct = p.totalShares > 0 ? Math.round(p.vested / p.totalShares * 100) : 0;
+    return `<tr>
+      <td>
+        <div class="kebab-wrap">
+          <button class="kebab-btn" onclick="event.stopPropagation();toggleKebab(this)" title="More actions">⋮</button>
+          <div class="kebab-menu" id="p-kebab-${p.id}">
+            <div class="kebab-menu-label">Actions</div>
+            <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>
+              Edit Participant
+            </button>
+            <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+              View Grants
+            </button>
+            <div class="kebab-divider"></div>
+            <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();openTermModal('${p.id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              Model Termination
+            </button>
+            <div class="kebab-divider"></div>
+            <button class="kebab-menu-item danger" onclick="event.stopPropagation();closeAllKebabs()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14a2,2,0,0,1-2,2H8a2,2,0,0,1-2-2L5,6"/><path d="M10,11v6"/><path d="M14,11v6"/></svg>
+              Delete
+            </button>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="p-cell-name">
+          <div class="p-avatar" style="background:${avatarColor(p.name)}">${initials(p.name)}</div>
+          <div>
+            <div class="p-name">${p.name}</div>
+            <div class="p-id">${p.id}</div>
+          </div>
+        </div>
+      </td>
+      <td><span style="font-size:12px;font-weight:500;color:${DEPT_COLORS[p.dept]||'var(--text2)'}">${p.dept}</span></td>
+      <td style="font-size:12px;color:var(--text2)">${p.title}</td>
+      <td style="font-size:12px;color:var(--text2)">${new Date(p.hireDate+'T00:00:00').toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'})}</td>
+      <td style="text-align:right;font-size:13px;font-weight:600">${p.grants}</td>
+      <td style="text-align:right;font-size:13px;font-weight:600">${p.totalShares.toLocaleString()}</td>
+      <td style="text-align:right;font-size:13px;font-weight:600;color:var(--accent)">${p.vested.toLocaleString()} <span style="font-size:10px;font-weight:400;color:var(--textm)">(${vestPct}%)</span></td>
+      <td style="text-align:right;font-size:13px;font-weight:600;color:var(--text2)">${p.unvested.toLocaleString()}</td>
+      <td>${sc}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════
+// TERMINATION MODEL MODAL
+// ══════════════════════════════════════════════
+const TM_GRANTS = [
+  {id:"G-001",type:"RSU",plan:"2021 Equity Plan",grantDate:"2021-03-15",grantShares:4000,strikePrice:0,expirationDate:null,vestSchedule:[
+    {date:"2022-03-15",shares:1000},{date:"2023-03-15",shares:1000},{date:"2024-03-15",shares:1000},{date:"2025-03-15",shares:1000}]},
+  {id:"G-002",type:"Options",plan:"2021 Equity Plan",grantDate:"2021-06-01",grantShares:6000,strikePrice:18,expirationDate:"2031-06-01",vestSchedule:[
+    {date:"2022-06-01",shares:1500},{date:"2023-06-01",shares:1500},{date:"2024-06-01",shares:1500},{date:"2025-06-01",shares:1500}]},
+  {id:"G-003",type:"RSU",plan:"2023 Performance Plan",grantDate:"2023-01-10",grantShares:2000,strikePrice:0,expirationDate:null,vestSchedule:[
+    {date:"2024-01-10",shares:500},{date:"2025-01-10",shares:500},{date:"2026-01-10",shares:500},{date:"2027-01-10",shares:500}]},
+  {id:"G-004",type:"Options",plan:"2023 Option Grant",grantDate:"2023-07-01",grantShares:3000,strikePrice:38,expirationDate:"2033-07-01",vestSchedule:[
+    {date:"2024-07-01",shares:750},{date:"2025-07-01",shares:750},{date:"2026-07-01",shares:750},{date:"2027-07-01",shares:750}]}
+];
+const TM_ESPP = {plan:"2024 ESPP — Section 423",enrollDate:"2024-01-01",offeringEnd:"2024-12-31",contribPerPay:250,paychecksToDate:12,discount:.15,lookbackPrice:35,sharesReserved:120};
+const TM_SAV  = {plan:"Employee Savings Plan (DCPP)",enrollDate:"2022-06-01",empContribMo:500,matchPct:.5,balance:22500,matchAccum:11250,vestDate:"2025-06-01"};
+const TM_RULES = [
+  {key:"voluntary",  label:"Voluntary",            rsu:"Unvested forfeited",    options:"90-day window",          espp:"Withdrawn — refunded",savings:"Unvested match forfeited"},
+  {key:"involuntary",label:"Involuntary (no cause)",rsu:"Unvested forfeited",   options:"90-day window",          espp:"Withdrawn — refunded",savings:"Unvested match forfeited"},
+  {key:"cause",      label:"With cause",            rsu:"All shares forfeited", options:"Immediate cancellation", espp:"Withdrawn — refunded",savings:"Match fully forfeited"},
+  {key:"retirement", label:"Retirement",            rsu:"Unvested forfeited",   options:"12-month window",        espp:"Withdrawn — refunded",savings:"Match fully vested"},
+  {key:"death",      label:"Death / Disability",    rsu:"Accelerated vesting",  options:"12-month window",        espp:"Withdrawn — refunded",savings:"Match fully vested"}
+];
+const TM_WINS = {voluntary:90,involuntary:90,cause:0,retirement:365,death:365};
+
+function openTermModal(participantId) {
+  const p = participantsData.find(x => x.id === participantId);
+  if (!p) return;
+  document.getElementById('tm-panel-title').textContent = 'Equity Termination Model — ' + p.name;
+  document.getElementById('tm-pName').value    = p.name;
+  document.getElementById('tm-empId').value    = p.id;
+  document.getElementById('tm-hireDate').value = p.hireDate;
+  document.getElementById('tm-termDate').value = '2025-06-30';
+  document.getElementById('tm-stockPrice').value = '42.50';
+  document.getElementById('term-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  tmRender();
+}
+function closeTermModal(e) {
+  if (e && e.target !== document.getElementById('term-overlay')) return;
+  document.getElementById('term-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function tmG(id) { return document.getElementById(id); }
+function tmFD(s) { return new Date(s+'T00:00:00').toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}); }
+function tmAD(s,d) { var t=new Date(s+'T00:00:00'); t.setDate(t.getDate()+d); return t.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}); }
+function tmFN(n) { return n.toLocaleString(); }
+function tmFM(n) { return '$'+Math.round(n).toLocaleString(); }
+
+function tmCalcG(g,ts,tt) {
+  var td=new Date(ts+'T00:00:00'),v=0,u=0;
+  g.vestSchedule.forEach(function(x){new Date(x.date+'T00:00:00')<=td?v+=x.shares:u+=x.shares});
+  var a='standard',fV=v,fF=u,fE=0;
+  if(tt==='cause'){a='forfeited-all';}
+  else if(tt==='death'){a='accelerated';}
+  if(a==='forfeited-all'){fV=0;fF=g.grantShares;fE=0;}
+  if(a==='accelerated'){fV=g.grantShares;fF=0;fE=0;}
+  if(a!=='forfeited-all'&&a!=='accelerated'&&g.type==='Options'&&TM_WINS[tt]===0){fE=fV;fV=0;}
+  return Object.assign({},g,{vested:fV,forfeited:fF,expired:fE,action:a,pct:Math.round(fV/g.grantShares*100)});
+}
+function tmCalcE() { var tc=TM_ESPP.contribPerPay*TM_ESPP.paychecksToDate; return{status:"Withdrawn",totalC:tc,refund:tc,sharesF:TM_ESPP.sharesReserved,disc:TM_ESPP.discount,lbp:TM_ESPP.lookbackPrice,unDisc:Math.round(TM_ESPP.sharesReserved*TM_ESPP.lookbackPrice*TM_ESPP.discount)}; }
+function tmCalcS(ts,tt) {
+  var td=new Date(ts+'T00:00:00'),vd=new Date(TM_SAV.vestDate+'T00:00:00'),iv=td>=vd,ek=0,ef=0,st='';
+  if(tt==='cause'){ef=TM_SAV.matchAccum;st='Employer match fully forfeited';}
+  else if(tt==='retirement'||tt==='death'){ek=TM_SAV.matchAccum;st='Match fully vested (special provision)';}
+  else if(iv){ek=TM_SAV.matchAccum;st='Match vested — retained';}
+  else{ef=TM_SAV.matchAccum;st='Match unvested — forfeited';}
+  return{empBal:TM_SAV.balance,ek:ek,ef:ef,st:st,iv:iv,payout:TM_SAV.balance+ek};
+}
+
+function tmRender() {
+  var ts=tmG('tm-termDate').value, tt=tmG('tm-termType').value,
+      pr=parseFloat(tmG('tm-stockPrice').value)||42.5,
+      nm=tmG('tm-pName').value||'Participant',
+      hd=tmG('tm-hireDate').value;
+  if(!ts) return;
+  var res=TM_GRANTS.map(function(g){return tmCalcG(g,ts,tt)});
+  var ep=tmCalcE(), sv=tmCalcS(ts,tt), wn=TM_WINS[tt]||90;
+  var tV=0,tF=0,tE=0; res.forEach(function(r){tV+=r.vested;tF+=r.forfeited;tE+=r.expired;});
+  var fVal=tF*pr, eVal=tE*pr;
+
+  tmG('tm-aggBanner').innerHTML='<div class="tm-agg-title">Aggregated Termination Impact — '+nm+'</div><div class="tm-agg-grid">'+
+    '<div class="tm-agg-item"><div class="tm-agg-label">Units Forfeited</div><div class="tm-agg-val v-red">'+tmFN(tF)+'</div><div class="tm-agg-sub">'+tmFM(fVal)+' value</div></div>'+
+    '<div class="tm-agg-item"><div class="tm-agg-label">Units Expired</div><div class="tm-agg-val v-amber">'+tmFN(tE)+'</div><div class="tm-agg-sub">'+tmFM(eVal)+' value</div></div>'+
+    '<div class="tm-agg-item"><div class="tm-agg-label">ESPP Impact</div><div class="tm-agg-val v-green">'+ep.status+'</div><div class="tm-agg-sub">'+tmFM(ep.refund)+' refunded</div></div>'+
+    '<div class="tm-agg-item"><div class="tm-agg-label">Savings Plan</div><div class="tm-agg-val '+(sv.ef>0?'v-purple':'v-green')+'">'+(sv.ef>0?'Match Forfeited':'Match Retained')+'</div><div class="tm-agg-sub">'+(sv.ef>0?tmFM(sv.ef)+' lost':tmFM(sv.ek)+' kept')+'</div></div>'+
+    '<div class="tm-agg-item"><div class="tm-agg-label">Units Retained</div><div class="tm-agg-val v-blue">'+tmFN(tV)+'</div><div class="tm-agg-sub">'+tmFM(tV*pr)+' value</div></div>'+
+    '</div>';
+
+  var opts=res.filter(function(r){return r.type==='Options';});
+  tmG('tm-planImpacts').innerHTML=
+    '<div class="tm-plan-card pc-espp"><div class="tm-plan-title"><span class="tm-plan-icon pi-espp">E</span>ESPP Plan Impact</div>'+
+    '<div class="tm-row"><span class="tm-row-label">Plan</span><span class="tm-row-val">'+TM_ESPP.plan+'</span></div>'+
+    '<div class="tm-row"><span class="tm-row-label">Enrollment status</span><span class="tm-status tm-st-withdrawn">Withdrawn</span></div>'+
+    '<div class="tm-row"><span class="tm-row-label">Total contributions</span><span class="tm-row-val">'+tmFM(ep.totalC)+'</span></div>'+
+    '<div class="tm-row"><span class="tm-row-label">Refund amount</span><span class="tm-row-val" style="color:#10b981">'+tmFM(ep.refund)+'</span></div>'+
+    '<div class="tm-row"><span class="tm-row-label">Shares reserved (forfeited)</span><span class="tm-row-val" style="color:var(--red)">'+tmFN(ep.sharesF)+'</span></div>'+
+    '<div class="tm-row"><span class="tm-row-label">Unrealized discount lost</span><span class="tm-row-val" style="color:var(--amber)">'+tmFM(ep.unDisc)+'</span></div>'+
+    '<div class="tm-row"><span class="tm-row-label">Purchase discount</span><span class="tm-row-val">'+(ep.disc*100)+'%</span></div></div>'+
+
+    '<div class="tm-plan-card pc-savings"><div class="tm-plan-title"><span class="tm-plan-icon pi-savings">S</span>Savings Plan Impact</div>'+
+    '<div class="tm-row"><span class="tm-row-label">Plan</span><span class="tm-row-val">'+TM_SAV.plan+'</span></div>'+
+    '<div class="tm-row"><span class="tm-row-label">Status</span><span class="tm-status '+(sv.ef>0?'tm-st-forfeited':'tm-st-retained')+'">'+(sv.ef>0?'Match Forfeited':'Match Retained')+'</span></div>'+
+    '<div class="tm-row"><span class="tm-row-label">Employee balance</span><span class="tm-row-val">'+tmFM(sv.empBal)+'</span></div>'+
+    '<div class="tm-row"><span class="tm-row-label">Employer match accumulated</span><span class="tm-row-val">'+tmFM(TM_SAV.matchAccum)+'</span></div>'+
+    '<div class="tm-row"><span class="tm-row-label">Employer match kept</span><span class="tm-row-val" style="color:'+(sv.ek>0?'#10b981':'var(--red)')+'">'+tmFM(sv.ek)+'</span></div>'+
+    '<div class="tm-row"><span class="tm-row-label">Employer match forfeited</span><span class="tm-row-val" style="color:'+(sv.ef>0?'var(--red)':'var(--text2)')+'">'+tmFM(sv.ef)+'</span></div>'+
+    '<div class="tm-row"><span class="tm-row-label">Total payout</span><span class="tm-row-val" style="color:var(--accent);font-weight:700">'+tmFM(sv.payout)+'</span></div></div>'+
+
+    '<div class="tm-plan-card pc-options"><div class="tm-plan-title"><span class="tm-plan-icon pi-options">O</span>Options Expiration</div>'+
+    opts.map(function(o){return '<div class="tm-row"><span class="tm-row-label">'+o.id+'</span><span class="tm-status '+(o.expired>0?'tm-st-expired':o.forfeited>0?'tm-st-forfeited':'tm-st-retained')+'">'+(o.expired>0?'Expired':o.forfeited>0?'Forfeited':'Active')+'</span></div>'+
+      '<div class="tm-row"><span class="tm-row-label">Vested (exercisable)</span><span class="tm-row-val" style="color:var(--accent)">'+tmFN(o.vested)+'</span></div>'+
+      '<div class="tm-row"><span class="tm-row-label">Unvested (forfeited)</span><span class="tm-row-val" style="color:var(--red)">'+tmFN(o.forfeited)+'</span></div>'+
+      '<div class="tm-row"><span class="tm-row-label">Expired (post-term)</span><span class="tm-row-val" style="color:var(--amber)">'+tmFN(o.expired)+'</span></div>'+
+      '<div class="tm-row"><span class="tm-row-label">Exercise window</span><span class="tm-row-val">'+(wn===0?'None — cancelled':wn+' days')+'</span></div>'+
+      '<div class="tm-row"><span class="tm-row-label">Expiration date</span><span class="tm-row-val">'+(o.expirationDate?tmFD(o.expirationDate):'N/A')+'</span></div>'
+    }).join('<div style="border-top:1px solid #f1f5f9;margin:6px 0"></div>')+'</div>';
+
+  tmG('tm-rulesBody').innerHTML=TM_RULES.map(function(r){
+    return '<tr class="'+(r.key===tt?'tm-active-rule':'')+'"><td>'+r.label+'</td><td>'+r.rsu+'</td><td>'+r.options+'</td><td>'+r.espp+'</td><td>'+r.savings+'</td></tr>';
+  }).join('');
+
+  var gg=tmG('tm-grantsGrid'); gg.innerHTML='';
+  res.forEach(function(r){
+    var aL=r.action==='forfeited-all'?'All Forfeited':r.action==='accelerated'?'Accelerated':'Standard';
+    var aB=r.action==='forfeited-all'?'tm-st-forfeited':r.action==='accelerated'?'tm-st-accelerated':'tm-st-retained';
+    var stk=r.type==='Options'?'<div class="tm-row"><span class="tm-row-label">Strike price</span><span class="tm-row-val">$'+r.strikePrice.toFixed(2)+'</span></div>':'';
+    var itm=r.type==='Options'&&pr>r.strikePrice&&r.vested>0?'<div class="tm-row"><span class="tm-row-label">In-the-money value</span><span class="tm-row-val" style="color:#10b981">'+tmFM((pr-r.strikePrice)*r.vested)+'</span></div>':'';
+    var exp=r.expired>0?'<div class="tm-row"><span class="tm-row-label">Expired</span><span class="tm-row-val" style="color:var(--amber)">'+tmFN(r.expired)+'</span></div>':'';
+    gg.innerHTML+='<div class="tm-grant-card"><div class="tm-grant-hdr"><span class="tm-grant-id">'+r.id+' — '+r.type+'</span><span class="tm-status '+aB+'">'+aL+'</span></div>'+
+      '<div class="tm-grant-plan">'+r.plan+' · Granted '+tmFD(r.grantDate)+'</div>'+
+      '<div class="tm-prog-track"><div class="tm-prog-fill" style="width:'+r.pct+'%"></div></div>'+
+      '<div class="tm-row"><span class="tm-row-label">Total granted</span><span class="tm-row-val">'+tmFN(r.grantShares)+'</span></div>'+
+      '<div class="tm-row"><span class="tm-row-label">Vested</span><span class="tm-row-val" style="color:var(--accent)">'+tmFN(r.vested)+' ('+r.pct+'%)</span></div>'+
+      '<div class="tm-row"><span class="tm-row-label">Forfeited</span><span class="tm-row-val" style="color:var(--red)">'+tmFN(r.forfeited)+'</span></div>'+
+      exp+'<div class="tm-row"><span class="tm-row-label">Forfeiture value</span><span class="tm-row-val" style="color:var(--amber)">'+tmFM(r.forfeited*pr)+'</span></div>'+stk+itm+'</div>';
+  });
+
+  var mx=Math.max.apply(null,res.map(function(r){return r.grantShares;}))||1;
+  tmG('tm-barChart').innerHTML=res.map(function(r){
+    var vW=Math.round(r.vested/mx*100),fW=Math.round(r.forfeited/mx*100),eW=Math.round(r.expired/mx*100);
+    return '<div class="tm-bar-row"><span class="tm-bar-label">'+r.id+' '+r.type+'</span><div class="tm-bar-track">'+
+      (vW>0?'<div class="tm-bar-seg bs-vested" style="width:'+vW+'%">'+(r.vested>0?tmFN(r.vested):'')+'</div>':'')+
+      (fW>0?'<div class="tm-bar-seg bs-forfeited" style="width:'+fW+'%">'+(r.forfeited>0?tmFN(r.forfeited):'')+'</div>':'')+
+      (eW>0?'<div class="tm-bar-seg bs-expired" style="width:'+eW+'%">'+(r.expired>0?tmFN(r.expired):'')+'</div>':'')+
+      '</div></div>';
+  }).join('');
+
+  tmG('tm-exerciseDetail').innerHTML=opts.length?opts.map(function(o){
+    var dl=wn>0?tmAD(ts,wn):'N/A — cancelled';
+    return '<div class="tm-row"><span class="tm-row-label">'+o.id+' — Options</span><span class="tm-row-val">'+(wn>0?wn+' days':'Cancelled')+'</span></div>'+
+      '<div class="tm-row"><span class="tm-row-label">Exercisable shares</span><span class="tm-row-val">'+tmFN(o.vested)+'</span></div>'+
+      '<div class="tm-row"><span class="tm-row-label">Exercise deadline</span><span class="tm-row-val">'+dl+'</span></div>'+
+      (o.vested>0&&pr>o.strikePrice?'<div class="tm-row"><span class="tm-row-label">In-the-money value</span><span class="tm-row-val" style="color:#10b981">'+tmFM((pr-o.strikePrice)*o.vested)+'</span></div>':'')+
+      '<div style="border-top:1px solid #f1f5f9;margin:5px 0"></div>';
+  }).join(''):'<div style="font-size:12px;color:var(--text2)">No option grants.</div>';
+
+  tmG('tm-issuanceDetail').innerHTML=
+    '<div class="tm-row"><span class="tm-row-label">Units vested &amp; retained</span><span class="tm-row-val" style="color:var(--accent)">'+tmFN(tV)+'</span></div>'+
+    '<div class="tm-row"><span class="tm-row-label">Units forfeited (unvested)</span><span class="tm-row-val" style="color:var(--red)">'+tmFN(tF)+'</span></div>'+
+    '<div class="tm-row"><span class="tm-row-label">Units expired (options)</span><span class="tm-row-val" style="color:var(--amber)">'+tmFN(tE)+'</span></div>'+
+    '<div class="tm-row"><span class="tm-row-label">Forfeiture + expiration value</span><span class="tm-row-val" style="color:var(--amber)">'+tmFM(fVal+eVal)+'</span></div>'+
+    '<div class="tm-row"><span class="tm-row-label">Net units returned to pool</span><span class="tm-row-val" style="color:var(--accent)">+'+tmFN(tF+tE)+'</span></div>'+
+    '<div class="tm-row"><span class="tm-row-label">ESPP contributions refunded</span><span class="tm-row-val" style="color:#10b981">'+tmFM(ep.refund)+'</span></div>'+
+    '<div class="tm-row"><span class="tm-row-label">Savings plan payout</span><span class="tm-row-val" style="color:var(--accent)">'+tmFM(sv.payout)+'</span></div>';
+
+  var ev=[
+    {d:hd?tmFD(hd):'—',c:'var(--accent)',t:nm+' hired — equity & benefits enrollment begins',cl:'pos'},
+    {d:tmFD(ts),c:'var(--red)',t:'Termination ('+tt.replace(/-/g,' ')+') — all vesting stops',cl:'neg'},
+    {d:tmFD(ts),c:'var(--red)',t:tmFN(tF)+' unvested units forfeited ('+tmFM(fVal)+')',cl:'neg'}
+  ];
+  if(tE>0) ev.push({d:tmFD(ts),c:'var(--amber)',t:tmFN(tE)+' vested options expired ('+tmFM(eVal)+')',cl:'warn'});
+  ev.push({d:tmFD(ts),c:'#10b981',t:'ESPP enrollment withdrawn — '+tmFM(ep.refund)+' contributions refunded',cl:''});
+  ev.push({d:tmFD(ts),c:sv.ef>0?'var(--purple)':'#10b981',t:'Savings plan: '+sv.st,cl:''});
+  if(opts.length&&wn>0) ev.push({d:tmAD(ts,wn),c:'var(--amber)',t:'Option exercise window closes ('+wn+' days post-termination)',cl:'warn'});
+  ev.push({d:tmFD(ts),c:'var(--accent)',t:tmFN(tF+tE)+' units returned to equity plan pool',cl:'pos'});
+
+  tmG('tm-timeline').innerHTML=ev.map(function(e,i){
+    return '<div class="tm-tl-item"'+(i===ev.length-1?' style="padding-bottom:0"':'')+'><div class="tm-tl-dot" style="background:'+e.c+'"></div><div class="tm-tl-date">'+e.d+'</div><div class="tm-tl-text '+e.cl+'">'+e.t+'</div></div>';
+  }).join('');
+}
+
 // View management
 function switchView(viewId) {
   document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
@@ -4641,6 +5172,7 @@ function switchView(viewId) {
   else if (viewId === 'plan-equity') renderEqPlansTable();
   else if (viewId === 'exercise-mgmt') renderExerciseTable();
   else if (viewId === 'release-mgmt') renderReleaseMgmt();
+  else if (viewId === 'participants') renderParticipantsTable();
 }
 
 // ── Equity Plans ──
