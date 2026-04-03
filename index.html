@@ -1685,6 +1685,89 @@
     .txn-type-option svg { width: 20px; height: 20px; margin-bottom: 5px; }
     .txn-type-option-label { font-size: 12px; font-weight: 600; color: var(--text); }
 
+    /* ════════════ EXERCISE DETAIL VIEW ════════════ */
+    .ex-detail-layout { display: flex; gap: 20px; align-items: flex-start; }
+    .ex-detail-sidebar { width: 260px; flex-shrink: 0; position: sticky; top: calc(var(--topbar-h) + 16px); }
+    .ex-detail-main { flex: 1; min-width: 0; }
+    .ex-sidebar-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 14px; }
+    .ex-sidebar-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: var(--textm); margin-bottom: 14px; }
+    .ex-p-avatar { width: 42px; height: 42px; border-radius: 50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; margin-bottom:10px; }
+    .ex-p-name  { font-size: 15px; font-weight: 700; color: var(--text); letter-spacing:-0.3px; }
+    .ex-p-meta  { font-size: 12px; color: var(--text2); margin-top: 2px; }
+    .ex-divider { height:1px; background:var(--border); margin:14px 0; }
+    .ex-param   { display:flex; justify-content:space-between; align-items:center; font-size:12px; padding:5px 0; border-bottom:1px solid #f1f5f9; }
+    .ex-param:last-child { border-bottom:none; }
+    .ex-param-label { color:var(--text2); }
+    .ex-param-val   { font-weight:600; color:var(--text); }
+    .ex-status-chip { margin-top:14px; display:flex; align-items:center; gap:8px; padding:10px 12px; border-radius:8px; font-size:12px; font-weight:600; }
+
+    /* Hero */
+    .ex-hero { background:linear-gradient(135deg,#0f1b2d 0%,#1a3a5c 100%); border-radius:14px; padding:22px 24px; margin-bottom:18px; color:#fff; }
+    .ex-hero-label { font-size:10px; font-weight:600; opacity:.5; text-transform:uppercase; letter-spacing:.7px; margin-bottom:16px; }
+    .ex-hero-grid { display:grid; grid-template-columns:repeat(4,1fr); }
+    .ex-hero-stat { padding:0 16px; border-right:1px solid rgba(255,255,255,.1); }
+    .ex-hero-stat:first-child { padding-left:0; }
+    .ex-hero-stat:last-child  { border-right:none; }
+    .ex-hero-stat-label { font-size:10px; opacity:.55; text-transform:uppercase; letter-spacing:.5px; white-space:nowrap; }
+    .ex-hero-stat-val { font-size:22px; font-weight:800; letter-spacing:-.8px; margin-top:6px; line-height:1; }
+    .ex-hero-stat-sub { font-size:10px; opacity:.45; margin-top:4px; }
+
+    /* Calculation card */
+    .ex-calc-card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:20px; margin-bottom:18px; }
+    .ex-calc-title { font-size:13px; font-weight:700; color:var(--text); margin-bottom:16px; }
+    .ex-calc-row { display:flex; justify-content:space-between; align-items:center; font-size:13px; padding:8px 0; border-bottom:1px solid #f8fafc; }
+    .ex-calc-row:last-child { border-bottom:none; }
+    .ex-calc-label { color:var(--text2); }
+    .ex-calc-val { font-weight:600; color:var(--text); font-size:13px; }
+    .ex-calc-divider { height:1px; background:var(--border); margin:6px 0; }
+    .ex-calc-total { display:flex; justify-content:space-between; align-items:center; font-size:14px; font-weight:700; padding:10px 0 4px; }
+    .ex-calc-total-label { color:var(--text); }
+    .ex-calc-highlight { background:linear-gradient(135deg,#eff6ff,#f0fdf4); border-radius:10px; padding:14px 16px; margin-top:14px; display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .ex-calc-hl-item { }
+    .ex-calc-hl-label { font-size:10px; color:var(--textm); font-weight:600; text-transform:uppercase; letter-spacing:.5px; }
+    .ex-calc-hl-val   { font-size:20px; font-weight:800; letter-spacing:-.5px; margin-top:4px; line-height:1; }
+
+    /* Settlement card */
+    .ex-settle-card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:20px; margin-bottom:18px; }
+    .ex-settle-method-hd { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+    .ex-settle-icon { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .ex-settle-icon svg { width:18px; height:18px; }
+    .ex-settle-name { font-size:14px; font-weight:700; color:var(--text); }
+    .ex-settle-desc { font-size:11px; color:var(--text2); margin-top:2px; line-height:1.4; }
+    .ex-settle-flow { display:flex; align-items:stretch; gap:0; margin-top:4px; border-radius:10px; overflow:hidden; border:1px solid var(--border); }
+    .ex-settle-step { flex:1; padding:14px 12px; background:var(--card); border-right:1px solid var(--border); text-align:center; }
+    .ex-settle-step:last-child { border-right:none; }
+    .ex-settle-step-num { font-size:10px; font-weight:700; color:var(--textm); text-transform:uppercase; letter-spacing:.5px; }
+    .ex-settle-step-val { font-size:16px; font-weight:800; color:var(--text); letter-spacing:-.4px; margin-top:4px; line-height:1; }
+    .ex-settle-step-sub { font-size:10px; color:var(--textm); margin-top:3px; }
+    .ex-settle-arrow { display:flex; align-items:center; justify-content:center; width:28px; color:var(--textm); flex-shrink:0; background:#f8fafc; font-size:14px; border-right:1px solid var(--border); }
+
+    /* ISO / AMT card */
+    .ex-iso-card { background:linear-gradient(135deg,#f5f3ff,#ede9fe); border:1px solid #ddd6fe; border-radius:14px; padding:20px; margin-bottom:18px; }
+    .ex-iso-head { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+    .ex-iso-badge { background:#7c3aed; color:#fff; font-size:10px; font-weight:700; padding:3px 8px; border-radius:6px; letter-spacing:.3px; }
+    .ex-iso-title { font-size:13px; font-weight:700; color:#3b0764; }
+
+    /* Approval timeline */
+    .ex-timeline-card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:20px; }
+    .ex-tl-item { display:flex; gap:14px; padding-bottom:16px; position:relative; }
+    .ex-tl-item:last-child { padding-bottom:0; }
+    .ex-tl-item:not(:last-child)::before { content:''; position:absolute; left:17px; top:36px; bottom:0; width:2px; background:var(--border); }
+    .ex-tl-dot { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; border:2px solid var(--border); background:var(--card); }
+    .ex-tl-dot svg { width:15px; height:15px; }
+    .ex-tl-dot.done { border-color:var(--green); background:var(--green-l); }
+    .ex-tl-dot.done svg { stroke:var(--green); }
+    .ex-tl-dot.active { border-color:var(--accent); background:#eff6ff; }
+    .ex-tl-dot.active svg { stroke:var(--accent); }
+    .ex-tl-dot.pending { border-color:var(--border); background:#f8fafc; }
+    .ex-tl-dot.pending svg { stroke:var(--textm); }
+    .ex-tl-dot.rejected { border-color:var(--red); background:var(--red-l); }
+    .ex-tl-dot.rejected svg { stroke:var(--red); }
+    .ex-tl-body { flex:1; padding-top:6px; }
+    .ex-tl-title { font-size:13px; font-weight:600; color:var(--text); }
+    .ex-tl-date  { font-size:11px; color:var(--textm); margin-top:2px; }
+    .ex-tl-note  { font-size:12px; color:var(--text2); margin-top:4px; line-height:1.4; }
+
     /* ════════════ PARTICIPANTS VIEW ════════════ */
     .p-avatar { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0; }
     .p-cell-name { display: flex; align-items: center; gap: 10px; }
@@ -3372,6 +3455,9 @@
     <!-- EXERCISE MANAGEMENT VIEW                 -->
     <!-- ═══════════════════════════════════════ -->
     <div class="view-section" id="view-exercise-mgmt">
+
+      <!-- LIST SECTION -->
+      <div id="ex-list-section">
       <div class="page-head">
         <div>
           <div class="page-title">Exercise Management</div>
@@ -3488,6 +3574,63 @@
           </table>
         </div>
       </div>
+      </div><!-- /ex-list-section -->
+
+      <!-- EXERCISE DETAIL SECTION -->
+      <div id="ex-detail-section" style="display:none">
+        <div class="tm-back-bar">
+          <button class="tm-back-btn" onclick="closeExDetail()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><polyline points="15,18 9,12 15,6"/></svg>
+            Exercise Management
+          </button>
+          <div class="tm-back-title" id="ex-detail-title">Exercise Details</div>
+          <div id="ex-detail-status-badge"></div>
+        </div>
+
+        <div class="ex-detail-layout">
+
+          <!-- Sidebar -->
+          <div class="ex-detail-sidebar">
+            <div class="ex-sidebar-card">
+              <div class="ex-sidebar-title">Participant</div>
+              <div class="ex-p-avatar" id="ex-d-avatar"></div>
+              <div class="ex-p-name"  id="ex-d-name"></div>
+              <div class="ex-p-meta"  id="ex-d-meta"></div>
+              <div class="ex-divider"></div>
+              <div class="ex-param"><span class="ex-param-label">Employee Dept</span><span class="ex-param-val" id="ex-d-dept"></span></div>
+              <div class="ex-param"><span class="ex-param-label">Source Grant</span><span class="ex-param-val" id="ex-d-grantid" style="color:var(--accent-dark);font-family:'SF Mono',monospace;font-size:11px"></span></div>
+              <div class="ex-param"><span class="ex-param-label">Option Type</span><span class="ex-param-val" id="ex-d-type"></span></div>
+              <div class="ex-param"><span class="ex-param-label">Submitted</span><span class="ex-param-val" id="ex-d-submitted" style="font-size:11px"></span></div>
+              <div class="ex-param"><span class="ex-param-label">Decided</span><span class="ex-param-val" id="ex-d-decided" style="font-size:11px"></span></div>
+              <div class="ex-status-chip" id="ex-d-status-chip"></div>
+            </div>
+
+            <div class="ex-sidebar-card">
+              <div class="ex-sidebar-title">Exercise Parameters</div>
+              <div class="ex-param"><span class="ex-param-label">Shares</span><span class="ex-param-val" id="ex-d-shares"></span></div>
+              <div class="ex-param"><span class="ex-param-label">Strike Price</span><span class="ex-param-val" id="ex-d-strike" style="color:var(--accent-dark)"></span></div>
+              <div class="ex-param"><span class="ex-param-label">FMV</span><span class="ex-param-val" id="ex-d-fmv" style="color:var(--green)"></span></div>
+              <div class="ex-param"><span class="ex-param-label">Tax Cost FMV</span><span class="ex-param-val" id="ex-d-taxfmv"></span></div>
+              <div class="ex-param"><span class="ex-param-label">Spread / Share</span><span class="ex-param-val" id="ex-d-spread-per" style="color:var(--green)"></span></div>
+              <div class="ex-param"><span class="ex-param-label">Settlement</span><span class="ex-param-val" id="ex-d-method" style="font-size:11px"></span></div>
+            </div>
+          </div><!-- /sidebar -->
+
+          <!-- Main -->
+          <div class="ex-detail-main">
+            <div class="ex-hero" id="ex-d-hero"></div>
+            <div class="ex-calc-card" id="ex-d-calc"></div>
+            <div class="ex-settle-card" id="ex-d-settle"></div>
+            <div id="ex-d-iso"></div>
+            <div class="ex-timeline-card">
+              <div class="ex-calc-title" style="margin-bottom:20px">Approval Workflow</div>
+              <div id="ex-d-timeline"></div>
+            </div>
+          </div><!-- /main -->
+
+        </div><!-- /ex-detail-layout -->
+      </div><!-- /ex-detail-section -->
+
     </div><!-- /view-exercise-mgmt -->
 
     <!-- ════ RELEASE MANAGEMENT ════ -->
@@ -6495,6 +6638,273 @@ function filterExTab(btn, status) {
   renderExerciseTable();
 }
 
+// ══════════════════════════════════════════════
+// EXERCISE DETAIL VIEW
+// ══════════════════════════════════════════════
+function openExDetail(id) {
+  const ex = exerciseData.find(e => e.id === id);
+  if (!ex) return;
+  document.getElementById('ex-list-section').style.display = 'none';
+  document.getElementById('ex-detail-section').style.display = 'block';
+  renderExDetail(ex);
+}
+
+function closeExDetail() {
+  document.getElementById('ex-list-section').style.display = '';
+  document.getElementById('ex-detail-section').style.display = 'none';
+}
+
+function renderExDetail(ex) {
+  const fmt  = n => n.toLocaleString('en-US', {style:'currency', currency:'USD', maximumFractionDigits:0});
+  const fmtN = n => n.toLocaleString();
+  const fmtD = s => s ? new Date(s+'T00:00:00').toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}) : '—';
+  const fmtP = n => '$' + n.toFixed(2);
+
+  const gross     = ex.fmv * ex.shares;
+  const cost      = ex.strike * ex.shares;
+  const gain      = gross - cost;
+  const gainPct   = ((gain / cost) * 100).toFixed(1);
+  const spreadSh  = ex.fmv - ex.strike;
+
+  // Status config
+  const statusCfg = {
+    submitted: { label:'Submitted',  bg:'#eff6ff', color:'#2563eb'      },
+    pending:   { label:'Pending',    bg:'#fef3c7', color:'#d97706'      },
+    approved:  { label:'Approved',   bg:'#d1fae5', color:'#059669'      },
+    rejected:  { label:'Rejected',   bg:'#fee2e2', color:'#ef4444'      },
+    expired:   { label:'Expired',    bg:'#f1f5f9', color:'#64748b'      },
+  };
+  const sc = statusCfg[ex.status] || statusCfg.submitted;
+
+  // Back-bar title + badge
+  document.getElementById('ex-detail-title').textContent = ex.id;
+  document.getElementById('ex-detail-status-badge').innerHTML =
+    `<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:${sc.bg};color:${sc.color}">${sc.label}</span>`;
+
+  // Avatar + sidebar
+  const av = document.getElementById('ex-d-avatar');
+  av.textContent   = initials(ex.participant);
+  av.style.background = avatarColor(ex.participant);
+  document.getElementById('ex-d-name').textContent = ex.participant;
+  document.getElementById('ex-d-meta').textContent = ex.dept;
+  document.getElementById('ex-d-dept').textContent = ex.dept;
+  document.getElementById('ex-d-grantid').textContent = ex.grantId;
+  document.getElementById('ex-d-type').innerHTML =
+    `<span class="type-badge ${({ISO:'type-iso',NSO:'type-nqso',NQSO:'type-nqso',SAR:'type-sar'}[ex.type]||'')}">${ex.type}</span>`;
+  document.getElementById('ex-d-submitted').textContent = fmtD(ex.submitted);
+  document.getElementById('ex-d-decided').textContent   = fmtD(ex.decided);
+  document.getElementById('ex-d-status-chip').innerHTML =
+    `<span style="width:9px;height:9px;border-radius:50%;background:${sc.color};flex-shrink:0"></span>` +
+    `<span style="color:${sc.color}">${sc.label}</span>`;
+  document.getElementById('ex-d-status-chip').style.cssText =
+    `margin-top:14px;display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:8px;font-size:12px;font-weight:600;background:${sc.bg}`;
+  document.getElementById('ex-d-shares').textContent      = fmtN(ex.shares) + ' shares';
+  document.getElementById('ex-d-strike').textContent      = fmtP(ex.strike);
+  document.getElementById('ex-d-fmv').textContent         = fmtP(ex.fmv);
+  document.getElementById('ex-d-taxfmv').textContent      = fmtP(ex.taxCostFmv);
+  document.getElementById('ex-d-spread-per').textContent  = fmtP(spreadSh) + '/sh';
+  document.getElementById('ex-d-method').textContent      = ex.method;
+
+  // Settlement method calculations
+  let sharesDelivered = ex.shares, sharesSold = 0, sharesSoldForTax = 0, cashOut = 0;
+  let proceedsToParticipant = 0, exerciseCashPayment = 0;
+  const m = ex.method;
+  if (m === 'Sell All') {
+    sharesSold = ex.shares; sharesDelivered = 0;
+    proceedsToParticipant = gain;
+  } else if (m === 'Sell to Cover') {
+    sharesSold = Math.ceil(cost / ex.fmv);
+    sharesDelivered = ex.shares - sharesSold;
+    proceedsToParticipant = sharesDelivered * ex.fmv;
+  } else if (m === 'Withhold-to-Cover') {
+    const withheld = Math.ceil(cost / ex.fmv);
+    sharesDelivered = ex.shares - withheld;
+    sharesSold = withheld;
+    proceedsToParticipant = sharesDelivered * ex.fmv;
+  } else {
+    // Hold – Bank Transfer / Hold – Payroll
+    exerciseCashPayment = cost;
+    sharesDelivered = ex.shares;
+    proceedsToParticipant = gross;
+  }
+
+  // Hero
+  document.getElementById('ex-d-hero').innerHTML =
+    `<div class="ex-hero-label">${ex.id} — ${ex.participant}</div>` +
+    `<div class="ex-hero-grid">` +
+    `<div class="ex-hero-stat"><div class="ex-hero-stat-label">Gross Value</div><div class="ex-hero-stat-val" style="color:#74c0fc">${fmt(gross)}</div><div class="ex-hero-stat-sub">${fmtN(ex.shares)} sh × ${fmtP(ex.fmv)}</div></div>` +
+    `<div class="ex-hero-stat"><div class="ex-hero-stat-label">Total Gain</div><div class="ex-hero-stat-val" style="color:#69db7c">${fmt(gain)}</div><div class="ex-hero-stat-sub">+${gainPct}% over strike</div></div>` +
+    `<div class="ex-hero-stat"><div class="ex-hero-stat-label">Exercise Cost</div><div class="ex-hero-stat-val" style="color:#ffc078">${fmt(cost)}</div><div class="ex-hero-stat-sub">${fmtN(ex.shares)} sh × ${fmtP(ex.strike)}</div></div>` +
+    `<div class="ex-hero-stat"><div class="ex-hero-stat-label">${m === 'Sell All' || m === 'Sell to Cover' ? 'Net Proceeds' : 'Shares Delivered'}</div><div class="ex-hero-stat-val" style="color:#b197fc">${m === 'Hold – Bank Transfer' || m === 'Hold – Payroll' ? fmtN(sharesDelivered)+' sh' : fmt(proceedsToParticipant)}</div><div class="ex-hero-stat-sub">${m}</div></div>` +
+    `</div>`;
+
+  // Calculation breakdown
+  let calcRows = `
+    <div class="ex-calc-row"><span class="ex-calc-label">Shares exercised</span><span class="ex-calc-val">${fmtN(ex.shares)}</span></div>
+    <div class="ex-calc-row"><span class="ex-calc-label">Strike price (exercise price)</span><span class="ex-calc-val">${fmtP(ex.strike)}</span></div>
+    <div class="ex-calc-row"><span class="ex-calc-label">FMV at exercise date</span><span class="ex-calc-val">${fmtP(ex.fmv)}</span></div>
+    <div class="ex-calc-row"><span class="ex-calc-label">Spread per share (FMV − Strike)</span><span class="ex-calc-val" style="color:var(--green)">${fmtP(spreadSh)}</span></div>
+    <div class="ex-calc-divider"></div>
+    <div class="ex-calc-row"><span class="ex-calc-label">Gross value (Shares × FMV)</span><span class="ex-calc-val">${fmt(gross)}</span></div>
+    <div class="ex-calc-row"><span class="ex-calc-label">Exercise cost (Shares × Strike)</span><span class="ex-calc-val" style="color:var(--text2)">(${fmt(cost)})</span></div>
+    <div class="ex-calc-divider"></div>
+    <div class="ex-calc-total"><span class="ex-calc-total-label">Total gain (spread)</span><span style="color:var(--green);font-size:16px">${fmt(gain)}</span></div>`;
+
+  calcRows += `<div class="ex-calc-highlight">
+    <div class="ex-calc-hl-item"><div class="ex-calc-hl-label">Taxable Gain</div><div class="ex-calc-hl-val" style="color:var(--accent-dark)">${fmt(gain)}</div></div>
+    <div class="ex-calc-hl-item"><div class="ex-calc-hl-label">Tax Cost FMV</div><div class="ex-calc-hl-val" style="color:var(--text)">${fmtP(ex.taxCostFmv)}/sh</div></div>
+  </div>`;
+
+  document.getElementById('ex-d-calc').innerHTML =
+    `<div class="ex-calc-title">Value Calculation</div>${calcRows}`;
+
+  // Settlement method card
+  const methodMeta = {
+    'Hold – Bank Transfer': { icon:'🏦', color:'#1d4ed8', bg:'#eff6ff', desc:'Employee pays the exercise cost via bank transfer. All shares are delivered upon receipt of payment.' },
+    'Hold – Payroll':       { icon:'💼', color:'#6d28d9', bg:'#f5f3ff', desc:'Exercise cost is deducted through payroll. A payroll deduction is created when the exercise is completed.' },
+    'Withhold-to-Cover':    { icon:'⚖️', color:'#b45309', bg:'#fffbeb', desc:'Shares are withheld to cover the exercise cost. Remaining shares are delivered to the participant.' },
+    'Sell to Cover':        { icon:'📈', color:'#065f46', bg:'#ecfdf5', desc:'Sufficient shares are sold on the market to cover the exercise cost. Remaining shares are delivered.' },
+    'Sell All':             { icon:'💰', color:'#be123c', bg:'#fff1f2', desc:'All shares are sold on the market. Net proceeds (gain minus exercise cost) are paid to the participant.' },
+  };
+  const mm = methodMeta[m] || { icon:'◉', color:'#0f172a', bg:'#f1f5f9', desc:m };
+
+  let flowHtml = '';
+  if (m === 'Sell All') {
+    flowHtml = `<div class="ex-settle-flow">
+      <div class="ex-settle-step"><div class="ex-settle-step-num">Exercise</div><div class="ex-settle-step-val">${fmtN(ex.shares)}</div><div class="ex-settle-step-sub">Options exercised</div></div>
+      <div class="ex-settle-arrow">→</div>
+      <div class="ex-settle-step"><div class="ex-settle-step-num">Sell All</div><div class="ex-settle-step-val">${fmtN(sharesSold)}</div><div class="ex-settle-step-sub">Shares sold</div></div>
+      <div class="ex-settle-arrow">→</div>
+      <div class="ex-settle-step"><div class="ex-settle-step-num">Company</div><div class="ex-settle-step-val">${fmt(cost)}</div><div class="ex-settle-step-sub">Strike payment</div></div>
+      <div class="ex-settle-arrow">→</div>
+      <div class="ex-settle-step" style="background:#f0fdf4"><div class="ex-settle-step-num">Participant</div><div class="ex-settle-step-val" style="color:var(--green)">${fmt(proceedsToParticipant)}</div><div class="ex-settle-step-sub">Net proceeds</div></div>
+    </div>`;
+  } else if (m === 'Sell to Cover') {
+    flowHtml = `<div class="ex-settle-flow">
+      <div class="ex-settle-step"><div class="ex-settle-step-num">Exercise</div><div class="ex-settle-step-val">${fmtN(ex.shares)}</div><div class="ex-settle-step-sub">Options exercised</div></div>
+      <div class="ex-settle-arrow">→</div>
+      <div class="ex-settle-step"><div class="ex-settle-step-num">Sell to Cover</div><div class="ex-settle-step-val">${fmtN(sharesSold)}</div><div class="ex-settle-step-sub">Shares sold (${fmt(cost)})</div></div>
+      <div class="ex-settle-arrow">→</div>
+      <div class="ex-settle-step" style="background:#f0fdf4"><div class="ex-settle-step-num">Delivered</div><div class="ex-settle-step-val" style="color:var(--accent)">${fmtN(sharesDelivered)}</div><div class="ex-settle-step-sub">Net shares to employee</div></div>
+    </div>`;
+  } else if (m === 'Withhold-to-Cover') {
+    flowHtml = `<div class="ex-settle-flow">
+      <div class="ex-settle-step"><div class="ex-settle-step-num">Exercise</div><div class="ex-settle-step-val">${fmtN(ex.shares)}</div><div class="ex-settle-step-sub">Options exercised</div></div>
+      <div class="ex-settle-arrow">→</div>
+      <div class="ex-settle-step"><div class="ex-settle-step-num">Withheld</div><div class="ex-settle-step-val" style="color:var(--amber)">${fmtN(sharesSold)}</div><div class="ex-settle-step-sub">Shares withheld (${fmt(cost)})</div></div>
+      <div class="ex-settle-arrow">→</div>
+      <div class="ex-settle-step" style="background:#f0fdf4"><div class="ex-settle-step-num">Delivered</div><div class="ex-settle-step-val" style="color:var(--accent)">${fmtN(sharesDelivered)}</div><div class="ex-settle-step-sub">Net shares to employee</div></div>
+    </div>`;
+  } else {
+    flowHtml = `<div class="ex-settle-flow">
+      <div class="ex-settle-step"><div class="ex-settle-step-num">Payment</div><div class="ex-settle-step-val">${fmt(exerciseCashPayment)}</div><div class="ex-settle-step-sub">${m === 'Hold – Payroll' ? 'Via payroll deduction' : 'Via bank transfer'}</div></div>
+      <div class="ex-settle-arrow">→</div>
+      <div class="ex-settle-step" style="background:#f0fdf4"><div class="ex-settle-step-num">Delivered</div><div class="ex-settle-step-val" style="color:var(--accent)">${fmtN(sharesDelivered)}</div><div class="ex-settle-step-sub">All shares delivered</div></div>
+    </div>`;
+  }
+
+  document.getElementById('ex-d-settle').innerHTML =
+    `<div class="ex-settle-method-hd">
+      <div class="ex-settle-icon" style="background:${mm.bg}"><span style="font-size:18px">${mm.icon}</span></div>
+      <div><div class="ex-settle-name" style="color:${mm.color}">${m}</div><div class="ex-settle-desc">${mm.desc}</div></div>
+    </div>
+    <div class="ex-calc-title" style="margin-bottom:12px">Settlement Flow</div>
+    ${flowHtml}`;
+
+  // ISO / AMT callout
+  const isoEl = document.getElementById('ex-d-iso');
+  if (ex.type === 'ISO') {
+    const amtItem = gain;
+    isoEl.innerHTML = `<div class="ex-iso-card">
+      <div class="ex-iso-head">
+        <span class="ex-iso-badge">ISO</span>
+        <span class="ex-iso-title">Alternative Minimum Tax (AMT) Considerations</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px">
+        <div style="background:rgba(124,58,237,.08);border-radius:8px;padding:12px">
+          <div style="font-size:10px;color:#6d28d9;font-weight:600;text-transform:uppercase;letter-spacing:.5px">AMT Preference Item</div>
+          <div style="font-size:18px;font-weight:800;color:#3b0764;margin-top:4px">${fmt(amtItem)}</div>
+          <div style="font-size:10px;color:#7c3aed;margin-top:2px">Spread at exercise</div>
+        </div>
+        <div style="background:rgba(124,58,237,.08);border-radius:8px;padding:12px">
+          <div style="font-size:10px;color:#6d28d9;font-weight:600;text-transform:uppercase;letter-spacing:.5px">Regular Tax Basis</div>
+          <div style="font-size:18px;font-weight:800;color:#3b0764;margin-top:4px">${fmtP(ex.strike)}/sh</div>
+          <div style="font-size:10px;color:#7c3aed;margin-top:2px">Strike price paid</div>
+        </div>
+        <div style="background:rgba(124,58,237,.08);border-radius:8px;padding:12px">
+          <div style="font-size:10px;color:#6d28d9;font-weight:600;text-transform:uppercase;letter-spacing:.5px">AMT Basis</div>
+          <div style="font-size:18px;font-weight:800;color:#3b0764;margin-top:4px">${fmtP(ex.fmv)}/sh</div>
+          <div style="font-size:10px;color:#7c3aed;margin-top:2px">FMV at exercise</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:#6d28d9;background:rgba(124,58,237,.06);border-radius:8px;padding:10px 12px;line-height:1.5">
+        <strong>Note:</strong> ISO exercises may trigger AMT. The spread (${fmt(amtItem)}) is an AMT preference item. Holding shares for &gt;1 year from exercise date and &gt;2 years from grant date qualifies for long-term capital gains treatment. Participant should consult their tax advisor.
+      </div>
+    </div>`;
+  } else if (ex.type === 'NSO' || ex.type === 'NQSO') {
+    isoEl.innerHTML = `<div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px;margin-bottom:18px;display:flex;align-items:flex-start;gap:12px">
+      <div style="width:32px;height:32px;background:#fef3c7;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px">⚠</div>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:var(--text)">Ordinary Income Tax — ${ex.type}</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:4px;line-height:1.5">The full spread of <strong>${fmt(gain)}</strong> (${fmtP(spreadSh)}/sh × ${fmtN(ex.shares)} shares) is treated as ordinary income in the year of exercise and subject to income tax withholding and FICA. Employer must report on W-2. Tax cost basis for any retained shares is <strong>${fmtP(ex.taxCostFmv)}/sh</strong>.</div>
+      </div>
+    </div>`;
+  } else {
+    isoEl.innerHTML = '';
+  }
+
+  // Approval timeline
+  const tlSteps = [
+    {
+      label: 'Exercise Submitted',
+      date: fmtD(ex.submitted),
+      note: `${ex.participant} submitted exercise request for ${fmtN(ex.shares)} ${ex.type} options via ${ex.method}.`,
+      state: 'done'
+    },
+    {
+      label: 'Under Review',
+      date: ex.status === 'submitted' ? 'In progress' : ex.decided ? fmtD(ex.decided) : fmtD(ex.submitted),
+      note: 'FMV validated, settlement method confirmed, compliance review completed.',
+      state: ex.status === 'submitted' ? 'active' : 'done'
+    },
+    {
+      label: ex.status === 'rejected' ? 'Rejected' : 'Approval Decision',
+      date: ex.decided ? fmtD(ex.decided) : (ex.status === 'submitted' || ex.status === 'pending' ? 'Pending' : '—'),
+      note: ex.status === 'approved' ? 'Exercise approved. Settlement processing initiated.' :
+            ex.status === 'rejected' ? 'Exercise rejected. Participant notified.' :
+            ex.status === 'expired'  ? 'Exercise window lapsed. Request expired.' :
+            'Awaiting approval decision from equity admin.',
+      state: ex.status === 'approved' ? 'done' : ex.status === 'rejected' ? 'rejected' : ex.status === 'expired' ? 'rejected' : 'pending'
+    },
+    {
+      label: 'Settlement',
+      date: ex.status === 'approved' ? 'Processing' : '—',
+      note: ex.status === 'approved'
+        ? (m === 'Sell All' || m === 'Sell to Cover' ? `Market order created. ${fmt(proceedsToParticipant)} net proceeds to participant.` : `${fmtN(sharesDelivered)} shares to be delivered upon payment receipt.`)
+        : 'Settlement pending approval.',
+      state: ex.status === 'approved' ? 'active' : 'pending'
+    }
+  ];
+
+  const tlIcons = {
+    done:     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>`,
+    active:   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>`,
+    pending:  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
+    rejected: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`,
+  };
+
+  document.getElementById('ex-d-timeline').innerHTML = tlSteps.map(s =>
+    `<div class="ex-tl-item">
+      <div class="ex-tl-dot ${s.state}">${tlIcons[s.state]}</div>
+      <div class="ex-tl-body">
+        <div class="ex-tl-title">${s.label}</div>
+        <div class="ex-tl-date">${s.date}</div>
+        <div class="ex-tl-note">${s.note}</div>
+      </div>
+    </div>`
+  ).join('');
+}
+
 function renderExerciseTable(forceStatus) {
   if (forceStatus) exStatusFilter = forceStatus;
   const tbody = document.getElementById('exercise-body');
@@ -6563,6 +6973,11 @@ function renderExerciseTable(forceStatus) {
         <div class="kebab-wrap">
           <button class="kebab-btn" onclick="event.stopPropagation();toggleKebab(this)" title="More actions">⋮</button>
           <div class="kebab-menu">
+            <div class="kebab-menu-label">Exercise</div>
+            <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();openExDetail('${e.id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>View Details
+            </button>
+            <div class="kebab-divider"></div>
             <div class="kebab-menu-label">Grant</div>
             <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();openLedgerDrawer('${e.grantId}')">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>View Source Grant
