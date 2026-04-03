@@ -2760,16 +2760,17 @@
               <tr>
                 <th class="col-actions">Actions</th>
                 <th class="col-issuance-id" style="cursor:pointer" onclick="sortIssTable('id')">Issuance ID ↕</th>
-                <th class="col-cert-id">Cert. ID</th>
+                <th class="col-cert-id">Cert. / Ext. PPT</th>
                 <th class="col-participant">Participant</th>
                 <th class="col-sec-class">Security Class</th>
                 <th class="col-shares" style="text-align:right">Shares Issued</th>
+                <th class="col-disposed" style="text-align:right">Disposed</th>
                 <th class="col-net-shares" style="text-align:right">Net Held</th>
                 <th class="col-retention">Retention</th>
                 <th class="col-holding">Holding Period</th>
-                <th class="col-price" style="text-align:right">Issue Price</th>
+                <th class="col-price" style="text-align:right">Cost Basis</th>
                 <th class="col-total" style="text-align:right">Total Value</th>
-                <th class="col-date" style="cursor:pointer" onclick="sortIssTable('date')">Issue Date ↕</th>
+                <th class="col-date" style="cursor:pointer" onclick="sortIssTable('date')">Issue / Settlement ↕</th>
                 <th class="col-secondary" style="text-align:center">Activity</th>
                 <th class="col-iss-status">Status</th>
               </tr>
@@ -4937,130 +4938,142 @@ const ledgerData = {
 // Share Issuance data (Long Share Transactions)
 const shareIssuanceData = [
   {
-    id: 'ISS-2025-0001', certId: 'CERT-0042',
+    id: 'ISS-2025-0001', certId: 'CERT-0042', externalPptId: 'EXT-PPT-4281',
     participant: 'Sarah Chen', dept: 'Engineering',
-    securityClass: 'Common Stock',
-    sharesIssued: 1500, pricePerShare: 45.20, totalValue: 67800,
-    issueDate: '2025-03-15', retentionMonths: 6, status: 'partial',
+    securityClass: 'Common Stock', issuanceType: 'RSU Release',
+    sharesIssued: 1500, originalCostBasis: 32.50, pricePerShare: 45.20, totalValue: 67800,
+    issueDate: '2025-03-15', settlementDate: '2025-03-17', retentionMonths: 6, status: 'partial',
+    sourceRef: 'REL-2025-0042',
     secondaryTxns: [
       { id: 'STX-2025-0012', type: 'Sale', date: '2025-06-10', shares: 300, price: 52.10, total: 15630, counterparty: 'Open Market', status: 'complete' },
       { id: 'STX-2025-0022', type: 'Transfer', date: '2025-10-04', shares: 200, price: 61.00, total: 12200, counterparty: 'J. Chen (Spouse)', status: 'complete' }
     ]
   },
   {
-    id: 'ISS-2025-0002', certId: 'CERT-0043',
+    id: 'ISS-2025-0002', certId: 'CERT-0043', externalPptId: 'EXT-PPT-4282',
     participant: 'Marcus Johnson', dept: 'Finance',
-    securityClass: 'Common Stock',
-    sharesIssued: 2000, pricePerShare: 46.80, totalValue: 93600,
-    issueDate: '2025-03-10', retentionMonths: 12, status: 'active',
+    securityClass: 'Common Stock', issuanceType: 'Option Exercise',
+    sharesIssued: 2000, originalCostBasis: 28.75, pricePerShare: 46.80, totalValue: 93600,
+    issueDate: '2025-03-10', settlementDate: '2025-03-12', retentionMonths: 12, status: 'active',
+    sourceRef: 'EX-2025-0038',
     secondaryTxns: []
   },
   {
-    id: 'ISS-2025-0003', certId: 'CERT-0044',
+    id: 'ISS-2025-0003', certId: 'CERT-0044', externalPptId: 'EXT-PPT-4283',
     participant: 'Emma Davis', dept: 'Legal',
-    securityClass: 'Class A Preferred',
-    sharesIssued: 3000, pricePerShare: 55.00, totalValue: 165000,
-    issueDate: '2025-03-05', retentionMonths: 6, status: 'fully-sold',
+    securityClass: 'Class A Preferred', issuanceType: 'ESPP Purchase',
+    sharesIssued: 3000, originalCostBasis: 46.75, pricePerShare: 55.00, totalValue: 165000,
+    issueDate: '2025-03-05', settlementDate: '2025-03-07', retentionMonths: 6, status: 'fully-sold',
+    sourceRef: 'ESPP-2025-A-003',
     secondaryTxns: [
       { id: 'STX-2025-0008', type: 'Sale', date: '2025-05-22', shares: 1500, price: 64.50, total: 96750, counterparty: 'Open Market', status: 'complete' },
       { id: 'STX-2025-0014', type: 'Sale', date: '2025-08-15', shares: 1500, price: 69.20, total: 103800, counterparty: 'Open Market', status: 'complete' }
     ]
   },
   {
-    id: 'ISS-2025-0004', certId: 'CERT-0045',
+    id: 'ISS-2025-0004', certId: 'CERT-0045', externalPptId: 'EXT-PPT-4284',
     participant: 'James Park', dept: 'Product',
-    securityClass: 'Common Stock',
-    sharesIssued: 800, pricePerShare: 45.75, totalValue: 36600,
-    issueDate: '2025-03-01', retentionMonths: 12, status: 'reissued',
+    securityClass: 'Common Stock', issuanceType: 'RSU Release',
+    sharesIssued: 800, originalCostBasis: 45.75, pricePerShare: 45.75, totalValue: 36600,
+    issueDate: '2025-03-01', settlementDate: '2025-03-03', retentionMonths: 12, status: 'reissued',
+    sourceRef: 'REL-2025-0031',
     cancelledAndReissuedAs: 'ISS-2025-0004R',
     secondaryTxns: [
       { id: 'STX-2025-0030', type: 'Cancel & Reissue', date: '2025-11-15', shares: 800, price: 0, total: 0, counterparty: 'Equity Admin', status: 'complete', note: 'Certificate error — security class correction. Reissued as CERT-0045R.' }
     ]
   },
   {
-    id: 'ISS-2025-0005', certId: 'CERT-0046',
+    id: 'ISS-2025-0005', certId: 'CERT-0046', externalPptId: 'EXT-PPT-4285',
     participant: 'Priya Sharma', dept: 'Engineering',
-    securityClass: 'Restricted Stock',
-    sharesIssued: 1200, pricePerShare: 44.80, totalValue: 53760,
-    issueDate: '2025-02-28', retentionMonths: 24, status: 'partial',
+    securityClass: 'Restricted Stock', issuanceType: 'Direct Issuance',
+    sharesIssued: 1200, originalCostBasis: 44.80, pricePerShare: 44.80, totalValue: 53760,
+    issueDate: '2025-02-28', settlementDate: '2025-03-02', retentionMonths: 24, status: 'partial',
+    sourceRef: null,
     secondaryTxns: [
       { id: 'STX-2025-0009', type: 'Repurchase', date: '2025-07-12', shares: 400, price: 30.00, total: 12000, counterparty: 'Company', status: 'complete' }
     ]
   },
   {
-    id: 'ISS-2025-0006', certId: 'CERT-0047',
+    id: 'ISS-2025-0006', certId: 'CERT-0047', externalPptId: 'EXT-PPT-4286',
     participant: 'Lisa Wong', dept: 'HR',
-    securityClass: 'Common Stock',
-    sharesIssued: 950, pricePerShare: 44.80, totalValue: 42560,
-    issueDate: '2025-02-25', retentionMonths: 6, status: 'transferred',
+    securityClass: 'Common Stock', issuanceType: 'Transfer In',
+    sharesIssued: 950, originalCostBasis: 38.20, pricePerShare: 44.80, totalValue: 42560,
+    issueDate: '2025-02-25', settlementDate: '2025-02-27', retentionMonths: 6, status: 'transferred',
+    sourceRef: null,
     secondaryTxns: [
       { id: 'STX-2025-0010', type: 'Exchange', date: '2025-09-30', shares: 950, price: 68.00, total: 64600, counterparty: 'Class B Preferred', status: 'complete' }
     ]
   },
   {
-    id: 'ISS-2025-0007', certId: 'CERT-0048',
+    id: 'ISS-2025-0007', certId: 'CERT-0048', externalPptId: 'EXT-PPT-4287',
     participant: 'David Miller', dept: 'Sales',
-    securityClass: 'Common Stock',
-    sharesIssued: 1800, pricePerShare: 43.50, totalValue: 78300,
-    issueDate: '2025-02-20', retentionMonths: 12, status: 'partial',
+    securityClass: 'Common Stock', issuanceType: 'Option Exercise',
+    sharesIssued: 1800, originalCostBasis: 19.75, pricePerShare: 43.50, totalValue: 78300,
+    issueDate: '2025-02-20', settlementDate: '2025-02-22', retentionMonths: 12, status: 'partial',
+    sourceRef: 'EX-2025-0029',
     secondaryTxns: [
       { id: 'STX-2025-0028', type: 'Debit Policy', date: '2025-09-30', shares: 450, price: 0, total: 0, counterparty: 'Clawback Policy § 4.2', status: 'complete', note: 'Shares debited per executive clawback policy following restatement.' }
     ]
   },
   {
-    id: 'ISS-2026-0001', certId: 'CERT-0055',
+    id: 'ISS-2026-0001', certId: 'CERT-0055', externalPptId: 'EXT-PPT-5501',
     participant: 'Aiko Tanaka', dept: 'Engineering',
-    securityClass: 'Class A Preferred',
-    sharesIssued: 2500, pricePerShare: 68.00, totalValue: 170000,
-    issueDate: '2026-01-10', retentionMonths: 6, status: 'partial',
+    securityClass: 'Class A Preferred', issuanceType: 'RSU Release',
+    sharesIssued: 2500, originalCostBasis: 62.40, pricePerShare: 68.00, totalValue: 170000,
+    issueDate: '2026-01-10', settlementDate: '2026-01-13', retentionMonths: 6, status: 'partial',
+    sourceRef: 'REL-2026-0008',
     secondaryTxns: [
       { id: 'STX-2026-0003', type: 'Sale', date: '2026-02-14', shares: 300, price: 71.50, total: 21450, counterparty: 'Open Market', status: 'complete' },
       { id: 'STX-2026-0007', type: 'Pledge', date: '2026-03-01', shares: 500, price: 70.00, total: 35000, counterparty: 'Silicon Valley Bank', status: 'complete' }
     ]
   },
   {
-    id: 'ISS-2026-0002', certId: 'CERT-0056',
+    id: 'ISS-2026-0002', certId: 'CERT-0056', externalPptId: 'EXT-PPT-5502',
     participant: 'Carlos Mendez', dept: 'Operations',
-    securityClass: 'Common Stock',
-    sharesIssued: 1000, pricePerShare: 66.50, totalValue: 66500,
-    issueDate: '2026-01-22', retentionMonths: 12, status: 'active',
+    securityClass: 'Common Stock', issuanceType: 'Option Exercise',
+    sharesIssued: 1000, originalCostBasis: 21.00, pricePerShare: 66.50, totalValue: 66500,
+    issueDate: '2026-01-22', settlementDate: '2026-01-24', retentionMonths: 12, status: 'active',
+    sourceRef: 'EX-2026-0039',
     secondaryTxns: []
   },
   {
-    id: 'ISS-2026-0003', certId: 'CERT-0057',
+    id: 'ISS-2026-0003', certId: 'CERT-0057', externalPptId: 'EXT-PPT-5503',
     participant: 'Rachel Kim', dept: 'Finance',
-    securityClass: 'Restricted Stock',
-    sharesIssued: 1500, pricePerShare: 67.20, totalValue: 100800,
-    issueDate: '2026-02-05', retentionMonths: 24, status: 'repurchased',
+    securityClass: 'Restricted Stock', issuanceType: 'RSU Release',
+    sharesIssued: 1500, originalCostBasis: 67.20, pricePerShare: 67.20, totalValue: 100800,
+    issueDate: '2026-02-05', settlementDate: '2026-02-07', retentionMonths: 24, status: 'repurchased',
+    sourceRef: 'REL-2026-0012',
     secondaryTxns: [
       { id: 'STX-2026-0005', type: 'Repurchase', date: '2026-03-15', shares: 1500, price: 30.00, total: 45000, counterparty: 'Company', status: 'complete' }
     ]
   },
   {
-    id: 'ISS-2026-0004', certId: 'CERT-0058',
+    id: 'ISS-2026-0004', certId: 'CERT-0058', externalPptId: 'EXT-PPT-5504',
     participant: 'Tom Nguyen', dept: 'Engineering',
-    securityClass: 'Common Stock',
-    sharesIssued: 2200, pricePerShare: 70.00, totalValue: 154000,
-    issueDate: '2026-02-18', retentionMonths: 12, status: 'active',
+    securityClass: 'Common Stock', issuanceType: 'ESPP Purchase',
+    sharesIssued: 2200, originalCostBasis: 59.50, pricePerShare: 70.00, totalValue: 154000,
+    issueDate: '2026-02-18', settlementDate: '2026-02-20', retentionMonths: 12, status: 'active',
+    sourceRef: 'ESPP-2026-A-011',
     secondaryTxns: []
   },
   {
-    id: 'ISS-2026-0005', certId: 'CERT-0059',
+    id: 'ISS-2026-0005', certId: 'CERT-0059', externalPptId: 'EXT-PPT-5505',
     participant: 'Nina Patel', dept: 'Product',
-    securityClass: 'Class A Preferred',
-    sharesIssued: 1800, pricePerShare: 72.00, totalValue: 129600,
-    issueDate: '2026-03-01', retentionMonths: 6, status: 'partial',
+    securityClass: 'Class A Preferred', issuanceType: 'Direct Issuance',
+    sharesIssued: 1800, originalCostBasis: 72.00, pricePerShare: 72.00, totalValue: 129600,
+    issueDate: '2026-03-01', settlementDate: '2026-03-03', retentionMonths: 6, status: 'partial',
+    sourceRef: null,
     secondaryTxns: [
       { id: 'STX-2026-0009', type: 'Gift', date: '2026-03-20', shares: 200, price: 72.50, total: 14500, counterparty: 'N. Patel Trust', status: 'complete' }
     ]
   },
   {
-    id: 'ISS-2025-0004R', certId: 'CERT-0045R',
+    id: 'ISS-2025-0004R', certId: 'CERT-0045R', externalPptId: 'EXT-PPT-4284R',
     participant: 'James Park', dept: 'Product',
-    securityClass: 'Class A Preferred',
-    sharesIssued: 800, pricePerShare: 45.75, totalValue: 36600,
-    issueDate: '2025-11-15', retentionMonths: 12, status: 'active',
-    reissuedFrom: 'ISS-2025-0004',
+    securityClass: 'Class A Preferred', issuanceType: 'RSU Release',
+    sharesIssued: 800, originalCostBasis: 45.75, pricePerShare: 45.75, totalValue: 36600,
+    issueDate: '2025-11-15', settlementDate: '2025-11-17', retentionMonths: 12, status: 'active',
+    reissuedFrom: 'ISS-2025-0004', sourceRef: 'REL-2025-0031',
     secondaryTxns: []
   }
 ];
@@ -6010,7 +6023,7 @@ function renderShareIssuanceTable() {
   }
 
   if (filtered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="14" style="text-align:center;padding:40px;color:var(--textm);font-size:13px">No issuances match the current filters.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="15" style="text-align:center;padding:40px;color:var(--textm);font-size:13px">No issuances match the current filters.</td></tr>`;
     return;
   }
 
@@ -6053,7 +6066,7 @@ function renderShareIssuanceTable() {
             </div>
           </div>
         </td>
-        <td colspan="2" style="padding-left:28px">
+        <td style="padding-left:28px">
           <div style="display:flex;align-items:center;gap:6px">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:10px;height:10px;color:var(--textm);flex-shrink:0"><path d="M9 18l6-6-6-6"/></svg>
             <div>
@@ -6064,11 +6077,15 @@ function renderShareIssuanceTable() {
         </td>
         <td></td>
         <td></td>
+        <td></td>
         <td style="text-align:right" class="mono">${sharesCell}</td>
+        <td></td>
+        <td></td>
         <td></td>
         <td style="text-align:right" class="mono">${tx.price > 0 ? '$' + tx.price.toFixed(2) : '—'}</td>
         <td style="text-align:right" class="mono">${tx.total > 0 ? '$' + (tx.total/1000).toFixed(1) + 'K' : '—'}</td>
-        <td style="color:var(--text2);font-size:12.5px">${new Date(tx.date).toLocaleDateString()}</td>
+        <td></td>
+        <td style="color:var(--text2);font-size:12px">${new Date(tx.date).toLocaleDateString()}</td>
         <td style="text-align:center">
           <span class="txtype-badge ${typeColorMap[tx.type] || ''}" style="font-size:11px">${tx.type}</span>
         </td>
@@ -6102,9 +6119,10 @@ function renderShareIssuanceTable() {
               </button>
               <div class="kebab-divider"></div>
               <div class="kebab-menu-label">Record Transaction</div>
-              <button class="kebab-menu-item" onclick="event.stopPropagation(); closeAllKebabs(); openSecTxnModalFor('${iss.id}','Sale')">
+              <button class="kebab-menu-item" onclick="event.stopPropagation(); closeAllKebabs(); openSecTxnModalFor('${iss.id}','Sale')" title="Public company clients: direct sale input requires compliance approval">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
                 Record Sale
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px;margin-left:auto;color:var(--amber)" title="Requires compliance approval for public clients"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
               </button>
               <button class="kebab-menu-item" onclick="event.stopPropagation(); closeAllKebabs(); openSecTxnModalFor('${iss.id}','Transfer')">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -6142,20 +6160,34 @@ function renderShareIssuanceTable() {
       </td>
       <td>
         <div class="issuance-id" onclick="event.stopPropagation(); openIssLedger('${iss.id}')">${iss.id}</div>
+        ${iss.sourceRef ? `<div style="margin-top:3px"><a onclick="event.stopPropagation()" style="font-size:10px;color:var(--accent);font-family:'SF Mono',monospace;text-decoration:none;cursor:pointer" title="Trace to origin">↗ ${iss.sourceRef}</a></div>` : ''}
       </td>
-      <td><span class="cert-id">${iss.certId}</span></td>
+      <td>
+        <span class="cert-id">${iss.certId}</span>
+        <div style="font-size:10px;color:var(--textm);margin-top:2px;font-family:'SF Mono',monospace">${iss.externalPptId || '—'}</div>
+      </td>
       <td>
         <div class="participant-name">${iss.participant}</div>
         <div class="participant-dept">${iss.dept}</div>
       </td>
-      <td><span class="sec-class-badge ${secCls}">${iss.securityClass}</span></td>
+      <td>
+        <span class="sec-class-badge ${secCls}">${iss.securityClass}</span>
+        <div style="font-size:10px;color:var(--textm);margin-top:3px">${iss.issuanceType || '—'}</div>
+      </td>
       <td class="mono" style="text-align:right;font-weight:600">${iss.sharesIssued.toLocaleString()}</td>
+      <td class="mono" style="text-align:right;font-weight:600;color:${disposed > 0 ? 'var(--amber)' : 'var(--textm)'}">${disposed > 0 ? disposed.toLocaleString() : '—'}</td>
       <td class="mono" style="text-align:right;color:${netHeld < iss.sharesIssued ? 'var(--amber)' : 'var(--green)'};font-weight:600">${netHeld.toLocaleString()}</td>
       <td style="white-space:nowrap">${issRetentionCell(iss.issueDate, iss.retentionMonths)}</td>
       <td style="font-size:12.5px;color:var(--text2);white-space:nowrap;font-family:'SF Mono',monospace">${issHoldingPeriod(iss.issueDate)}</td>
-      <td class="mono" style="text-align:right">$${iss.pricePerShare.toFixed(2)}</td>
+      <td class="mono" style="text-align:right">
+        <div>$${iss.pricePerShare.toFixed(2)}</div>
+        ${iss.originalCostBasis && iss.originalCostBasis !== iss.pricePerShare ? `<div style="font-size:10px;color:var(--textm);margin-top:1px">Orig: $${iss.originalCostBasis.toFixed(2)}</div>` : ''}
+      </td>
       <td class="mono" style="text-align:right">$${(iss.totalValue / 1000).toFixed(1)}K</td>
-      <td style="color:var(--text2);font-size:12.5px">${new Date(iss.issueDate).toLocaleDateString()}</td>
+      <td style="color:var(--text2);font-size:12px">
+        <div>${new Date(iss.issueDate).toLocaleDateString()}</div>
+        ${iss.settlementDate ? `<div style="font-size:10px;color:var(--textm);margin-top:1px">Settled: ${new Date(iss.settlementDate).toLocaleDateString()}</div>` : ''}
+      </td>
       <td style="text-align:center">
         ${hasSecTxns ? `
           <span class="sec-txn-badge has-txns" onclick="event.stopPropagation(); toggleIssRow('${iss.id}')">
@@ -6167,7 +6199,7 @@ function renderShareIssuanceTable() {
       <td><span class="iss-status ${stCls}">${stLbl}</span></td>
     </tr>
     <tr id="sec-txns-${iss.id}" style="display:none" class="sec-tx-container">
-      <td colspan="14" style="padding:0;border:none">
+      <td colspan="15" style="padding:0;border:none">
         <table style="width:100%;border-collapse:collapse">
           <tbody>${secTxnRows}</tbody>
         </table>
