@@ -3560,15 +3560,18 @@
                 <th style="width:170px">Participant</th>
                 <th style="width:130px">Source Grant</th>
                 <th style="width:70px">Type</th>
-                <th style="text-align:right;width:110px">Shares</th>
-                <th style="text-align:right;width:95px">Strike</th>
+                <th style="text-align:right;width:90px">Shares</th>
+                <th style="text-align:right;width:100px">Cost Basis</th>
                 <th style="text-align:right;width:95px">FMV</th>
-                <th style="text-align:right;width:110px">Gross Value</th>
+                <th style="text-align:right;width:115px">Gross Value</th>
+                <th style="text-align:right;width:90px">Disposed</th>
+                <th style="text-align:right;width:90px">Net Held</th>
                 <th style="text-align:right;width:95px">Gain</th>
-                <th style="width:110px">Method</th>
-                <th style="width:105px">Submitted</th>
-                <th style="width:105px">Decided</th>
-                <th style="width:105px">Status</th>
+                <th style="width:130px">Method</th>
+                <th style="width:95px">Submitted</th>
+                <th style="width:95px">Decided</th>
+                <th style="width:110px">Settlement Date</th>
+                <th style="width:95px">Status</th>
               </tr>
             </thead>
             <tbody id="exercise-body"></tbody>
@@ -3599,21 +3602,26 @@
               <div class="ex-p-meta"  id="ex-d-meta"></div>
               <div class="ex-divider"></div>
               <div class="ex-param"><span class="ex-param-label">Employee Dept</span><span class="ex-param-val" id="ex-d-dept"></span></div>
+              <div class="ex-param"><span class="ex-param-label">Ext. PPT ID</span><span class="ex-param-val" id="ex-d-extpptid" style="font-family:'SF Mono',monospace;font-size:11px;color:var(--text2)"></span></div>
               <div class="ex-param"><span class="ex-param-label">Source Grant</span><span class="ex-param-val" id="ex-d-grantid" style="color:var(--accent-dark);font-family:'SF Mono',monospace;font-size:11px"></span></div>
               <div class="ex-param"><span class="ex-param-label">Option Type</span><span class="ex-param-val" id="ex-d-type"></span></div>
               <div class="ex-param"><span class="ex-param-label">Submitted</span><span class="ex-param-val" id="ex-d-submitted" style="font-size:11px"></span></div>
               <div class="ex-param"><span class="ex-param-label">Decided</span><span class="ex-param-val" id="ex-d-decided" style="font-size:11px"></span></div>
+              <div class="ex-param"><span class="ex-param-label">Settlement Date</span><span class="ex-param-val" id="ex-d-settlement" style="font-size:11px;color:var(--green);font-weight:600"></span></div>
               <div class="ex-status-chip" id="ex-d-status-chip"></div>
             </div>
 
             <div class="ex-sidebar-card">
               <div class="ex-sidebar-title">Exercise Parameters</div>
               <div class="ex-param"><span class="ex-param-label">Shares</span><span class="ex-param-val" id="ex-d-shares"></span></div>
-              <div class="ex-param"><span class="ex-param-label">Strike Price</span><span class="ex-param-val" id="ex-d-strike" style="color:var(--accent-dark)"></span></div>
-              <div class="ex-param"><span class="ex-param-label">FMV</span><span class="ex-param-val" id="ex-d-fmv" style="color:var(--green)"></span></div>
+              <div class="ex-param"><span class="ex-param-label">Cost Basis</span><span class="ex-param-val" id="ex-d-strike" style="color:var(--accent-dark)"></span></div>
+              <div class="ex-param"><span class="ex-param-label">FMV at Exercise</span><span class="ex-param-val" id="ex-d-fmv" style="color:var(--green)"></span></div>
               <div class="ex-param"><span class="ex-param-label">Tax Cost FMV</span><span class="ex-param-val" id="ex-d-taxfmv"></span></div>
               <div class="ex-param"><span class="ex-param-label">Spread / Share</span><span class="ex-param-val" id="ex-d-spread-per" style="color:var(--green)"></span></div>
-              <div class="ex-param"><span class="ex-param-label">Settlement</span><span class="ex-param-val" id="ex-d-method" style="font-size:11px"></span></div>
+              <div class="ex-param"><span class="ex-param-label">Settlement Method</span><span class="ex-param-val" id="ex-d-method" style="font-size:11px"></span></div>
+              <div class="ex-param"><span class="ex-param-label">Disposed Shares</span><span class="ex-param-val" id="ex-d-disposed" style="color:#be123c;font-weight:600"></span></div>
+              <div class="ex-param"><span class="ex-param-label">Net Held Shares</span><span class="ex-param-val" id="ex-d-netheld" style="color:var(--green);font-weight:600"></span></div>
+              <div id="ex-d-issuance-ref-row" class="ex-param" style="display:none"><span class="ex-param-label">Issuance Ref</span><span class="ex-param-val" id="ex-d-issuanceref" style="font-family:'SF Mono',monospace;font-size:11px;color:var(--accent)"></span></div>
             </div>
           </div><!-- /sidebar -->
 
@@ -3623,6 +3631,7 @@
             <div class="ex-calc-card" id="ex-d-calc"></div>
             <div class="ex-settle-card" id="ex-d-settle"></div>
             <div id="ex-d-iso"></div>
+            <div id="ex-d-notes-card"></div>
             <div class="ex-timeline-card">
               <div class="ex-calc-title" style="margin-bottom:20px">Approval Workflow</div>
               <div id="ex-d-timeline"></div>
@@ -6463,25 +6472,26 @@ function openExerciseModal(grantId) {
 // EXERCISE MANAGEMENT
 // ─────────────────────────────────────────────
 const exerciseData = [
-  { id:'EX-2026-0047', participant:'Sarah Chen',     dept:'Engineering', grantId:'GRT-2024-001', type:'ISO',  shares:2500,  strike:28.75, fmv:42.50, taxCostFmv:42.50, method:'Sell to Cover',          submitted:'2026-03-18', decided:null,         status:'submitted' },
-  { id:'EX-2026-0046', participant:'Marcus Johnson', dept:'Product',     grantId:'GRT-2024-002', type:'ISO',  shares:5000,  strike:28.75, fmv:42.50, taxCostFmv:42.50, method:'Sell All',                submitted:'2026-03-15', decided:null,         status:'pending'   },
-  { id:'EX-2026-0045', participant:'Emma Davis',     dept:'Sales',       grantId:'GRT-2023-008', type:'NSO',  shares:8000,  strike:22.00, fmv:42.50, taxCostFmv:42.50, method:'Withhold-to-Cover',       submitted:'2026-03-14', decided:null,         status:'pending'   },
-  { id:'EX-2026-0044', participant:'James Park',     dept:'Engineering', grantId:'GRT-2024-003', type:'ISO',  shares:1500,  strike:25.00, fmv:42.50, taxCostFmv:42.50, method:'Hold – Bank Transfer',    submitted:'2026-03-12', decided:null,         status:'submitted' },
-  { id:'EX-2026-0043', participant:'Amanda Foster',  dept:'Operations',  grantId:'GRT-2023-003', type:'NSO',  shares:4200,  strike:16.00, fmv:42.50, taxCostFmv:42.50, method:'Withhold-to-Cover',       submitted:'2026-03-10', decided:null,         status:'submitted' },
-  { id:'EX-2026-0042', participant:'Lisa Wong',      dept:'Engineering', grantId:'GRT-2023-005', type:'ISO',  shares:6000,  strike:18.50, fmv:42.50, taxCostFmv:42.50, method:'Sell All',                submitted:'2026-03-08', decided:'2026-03-11', status:'approved'  },
-  { id:'EX-2026-0041', participant:'Robert Chen',    dept:'Product',     grantId:'GRT-2023-004', type:'ISO',  shares:3500,  strike:17.25, fmv:42.50, taxCostFmv:42.50, method:'Sell to Cover',          submitted:'2026-03-05', decided:'2026-03-07', status:'approved'  },
-  { id:'EX-2026-0040', participant:'Priya Sharma',   dept:'Finance',     grantId:'GRT-2023-007', type:'NSO',  shares:2000,  strike:20.50, fmv:42.50, taxCostFmv:42.50, method:'Hold – Bank Transfer',    submitted:'2026-03-01', decided:'2026-03-03', status:'approved'  },
-  { id:'EX-2026-0039', participant:'David Miller',   dept:'Legal',       grantId:'GRT-2023-006', type:'NSO',  shares:1800,  strike:19.75, fmv:42.50, taxCostFmv:42.50, method:'Hold – Payroll',           submitted:'2026-02-28', decided:'2026-03-02', status:'approved'  },
-  { id:'EX-2026-0038', participant:'Wei Zhang',      dept:'Engineering', grantId:'GRT-2022-018', type:'NQSO', shares:10000, strike:14.20, fmv:42.50, taxCostFmv:42.50, method:'Sell All',                submitted:'2026-02-20', decided:'2026-02-22', status:'approved'  },
-  { id:'EX-2026-0037', participant:'Carlos Rivera',  dept:'Sales',       grantId:'GRT-2022-015', type:'NSO',  shares:3000,  strike:12.80, fmv:42.50, taxCostFmv:42.50, method:'Sell to Cover',          submitted:'2026-02-15', decided:'2026-02-18', status:'approved'  },
-  { id:'EX-2026-0036', participant:'Nina Hartley',   dept:'Legal',       grantId:'GRT-2021-009', type:'NSO',  shares:2500,  strike:11.50, fmv:42.50, taxCostFmv:42.50, method:'Hold – Bank Transfer',    submitted:'2026-02-10', decided:'2026-02-12', status:'rejected'  },
-  { id:'EX-2026-0035', participant:'Tom Bradley',    dept:'Marketing',   grantId:'GRT-2021-007', type:'SAR',  shares:4000,  strike:10.00, fmv:42.50, taxCostFmv:42.50, method:'Withhold-to-Cover',       submitted:'2026-02-05', decided:'2026-02-07', status:'rejected'  },
-  { id:'EX-2025-0081', participant:'Sophie Turner',  dept:'Sales',       grantId:'GRT-2020-012', type:'ISO',  shares:5500,  strike:9.50,  fmv:38.20, taxCostFmv:38.20, method:'Sell All',                submitted:'2025-12-01', decided:'2025-12-03', status:'approved'  },
-  { id:'EX-2025-0072', participant:'Alex Kim',       dept:'Engineering', grantId:'GRT-2020-008', type:'NQSO', shares:7500,  strike:8.75,  fmv:36.80, taxCostFmv:36.80, method:'Withhold-to-Cover',       submitted:'2025-11-10', decided:'2025-11-13', status:'approved'  },
-  { id:'EX-2025-0065', participant:'Rachel Green',   dept:'HR',          grantId:'GRT-2019-004', type:'ISO',  shares:3200,  strike:7.20,  fmv:35.50, taxCostFmv:35.50, method:'Hold – Bank Transfer',    submitted:'2025-09-15', decided:null,         status:'expired'   },
-  { id:'EX-2025-0058', participant:'Mark Torres',    dept:'Design',      grantId:'GRT-2019-002', type:'NSO',  shares:2800,  strike:6.80,  fmv:34.10, taxCostFmv:34.10, method:'Hold – Payroll',           submitted:'2025-08-20', decided:null,         status:'expired'   },
-  { id:'EX-2026-0050', participant:'Julia Ross',     dept:'Engineering', grantId:'GRT-2024-005', type:'ISO',  shares:1200,  strike:30.00, fmv:42.50, taxCostFmv:42.50, method:'Hold – Bank Transfer',    submitted:'2026-03-20', decided:null,         status:'submitted' },
-  { id:'EX-2026-0051', participant:'Kevin Park',     dept:'Product',     grantId:'GRT-2023-011', type:'NQSO', shares:3800,  strike:21.00, fmv:42.50, taxCostFmv:42.50, method:'Sell All',                submitted:'2026-03-21', decided:null,         status:'submitted' },
+  // settlementDate = T+2 from decided; externalPptId = participant system ID; netHeld = shares retained post-settlement; disposed = shares sold/withheld; notes = free text; issuanceRef = Long Share Txns issuance created on settlement
+  { id:'EX-2026-0047', participant:'Sarah Chen',     dept:'Engineering', grantId:'GRT-2024-001', type:'ISO',  shares:2500,  strike:28.75, fmv:42.50, taxCostFmv:42.50, method:'Sell to Cover',       submitted:'2026-03-18', decided:null,         settlementDate:null,         status:'submitted', externalPptId:'EXT-PPT-4281', netHeld:null,  disposed:null,  notes:'',                                          issuanceRef:null           },
+  { id:'EX-2026-0046', participant:'Marcus Johnson', dept:'Product',     grantId:'GRT-2024-002', type:'ISO',  shares:5000,  strike:28.75, fmv:42.50, taxCostFmv:42.50, method:'Sell All',            submitted:'2026-03-15', decided:null,         settlementDate:null,         status:'pending',   externalPptId:'EXT-PPT-4282', netHeld:null,  disposed:null,  notes:'Pending CFO approval sign-off',             issuanceRef:null           },
+  { id:'EX-2026-0045', participant:'Emma Davis',     dept:'Sales',       grantId:'GRT-2023-008', type:'NSO',  shares:8000,  strike:22.00, fmv:42.50, taxCostFmv:42.50, method:'Withhold-to-Cover',   submitted:'2026-03-14', decided:null,         settlementDate:null,         status:'pending',   externalPptId:'EXT-PPT-4283', netHeld:null,  disposed:null,  notes:'',                                          issuanceRef:null           },
+  { id:'EX-2026-0044', participant:'James Park',     dept:'Engineering', grantId:'GRT-2024-003', type:'ISO',  shares:1500,  strike:25.00, fmv:42.50, taxCostFmv:42.50, method:'Hold – Bank Transfer', submitted:'2026-03-12', decided:null,         settlementDate:null,         status:'submitted', externalPptId:'EXT-PPT-4284', netHeld:null,  disposed:null,  notes:'',                                          issuanceRef:null           },
+  { id:'EX-2026-0043', participant:'Amanda Foster',  dept:'Operations',  grantId:'GRT-2023-003', type:'NSO',  shares:4200,  strike:16.00, fmv:42.50, taxCostFmv:42.50, method:'Withhold-to-Cover',   submitted:'2026-03-10', decided:null,         settlementDate:null,         status:'submitted', externalPptId:'EXT-PPT-4285', netHeld:null,  disposed:null,  notes:'',                                          issuanceRef:null           },
+  { id:'EX-2026-0042', participant:'Lisa Wong',      dept:'Engineering', grantId:'GRT-2023-005', type:'ISO',  shares:6000,  strike:18.50, fmv:42.50, taxCostFmv:42.50, method:'Sell All',            submitted:'2026-03-08', decided:'2026-03-11', settlementDate:'2026-03-13', status:'approved',  externalPptId:'EXT-PPT-4286', netHeld:0,     disposed:6000,  notes:'',                                          issuanceRef:'ISS-2026-0012'},
+  { id:'EX-2026-0041', participant:'Robert Chen',    dept:'Product',     grantId:'GRT-2023-004', type:'ISO',  shares:3500,  strike:17.25, fmv:42.50, taxCostFmv:42.50, method:'Sell to Cover',       submitted:'2026-03-05', decided:'2026-03-07', settlementDate:'2026-03-11', status:'approved',  externalPptId:'EXT-PPT-4287', netHeld:2680,  disposed:820,   notes:'',                                          issuanceRef:'ISS-2026-0011'},
+  { id:'EX-2026-0040', participant:'Priya Sharma',   dept:'Finance',     grantId:'GRT-2023-007', type:'NSO',  shares:2000,  strike:20.50, fmv:42.50, taxCostFmv:42.50, method:'Hold – Bank Transfer', submitted:'2026-03-01', decided:'2026-03-03', settlementDate:'2026-03-05', status:'approved',  externalPptId:'EXT-PPT-4288', netHeld:2000,  disposed:0,     notes:'Participant confirmed bank transfer receipt',issuanceRef:'ISS-2026-0010'},
+  { id:'EX-2026-0039', participant:'David Miller',   dept:'Legal',       grantId:'GRT-2023-006', type:'NSO',  shares:1800,  strike:19.75, fmv:42.50, taxCostFmv:42.50, method:'Hold – Payroll',       submitted:'2026-02-28', decided:'2026-03-02', settlementDate:'2026-03-04', status:'approved',  externalPptId:'EXT-PPT-4289', netHeld:1800,  disposed:0,     notes:'',                                          issuanceRef:'ISS-2026-0009'},
+  { id:'EX-2026-0038', participant:'Wei Zhang',      dept:'Engineering', grantId:'GRT-2022-018', type:'NQSO', shares:10000, strike:14.20, fmv:42.50, taxCostFmv:42.50, method:'Sell All',            submitted:'2026-02-20', decided:'2026-02-22', settlementDate:'2026-02-24', status:'approved',  externalPptId:'EXT-PPT-4290', netHeld:0,     disposed:10000, notes:'',                                          issuanceRef:'ISS-2026-0008'},
+  { id:'EX-2026-0037', participant:'Carlos Rivera',  dept:'Sales',       grantId:'GRT-2022-015', type:'NSO',  shares:3000,  strike:12.80, fmv:42.50, taxCostFmv:42.50, method:'Sell to Cover',       submitted:'2026-02-15', decided:'2026-02-18', settlementDate:'2026-02-20', status:'approved',  externalPptId:'EXT-PPT-4291', netHeld:2088,  disposed:912,   notes:'',                                          issuanceRef:'ISS-2026-0007'},
+  { id:'EX-2026-0036', participant:'Nina Hartley',   dept:'Legal',       grantId:'GRT-2021-009', type:'NSO',  shares:2500,  strike:11.50, fmv:42.50, taxCostFmv:42.50, method:'Hold – Bank Transfer', submitted:'2026-02-10', decided:'2026-02-12', settlementDate:null,         status:'rejected',  externalPptId:'EXT-PPT-4292', netHeld:null,  disposed:null,  notes:'Rejected: trading window closed',           issuanceRef:null           },
+  { id:'EX-2026-0035', participant:'Tom Bradley',    dept:'Marketing',   grantId:'GRT-2021-007', type:'SAR',  shares:4000,  strike:10.00, fmv:42.50, taxCostFmv:42.50, method:'Withhold-to-Cover',   submitted:'2026-02-05', decided:'2026-02-07', settlementDate:null,         status:'rejected',  externalPptId:'EXT-PPT-4293', netHeld:null,  disposed:null,  notes:'Rejected: SAR terms mismatch',              issuanceRef:null           },
+  { id:'EX-2025-0081', participant:'Sophie Turner',  dept:'Sales',       grantId:'GRT-2020-012', type:'ISO',  shares:5500,  strike:9.50,  fmv:38.20, taxCostFmv:38.20, method:'Sell All',            submitted:'2025-12-01', decided:'2025-12-03', settlementDate:'2025-12-05', status:'approved',  externalPptId:'EXT-PPT-4294', netHeld:0,     disposed:5500,  notes:'',                                          issuanceRef:'ISS-2025-0091'},
+  { id:'EX-2025-0072', participant:'Alex Kim',       dept:'Engineering', grantId:'GRT-2020-008', type:'NQSO', shares:7500,  strike:8.75,  fmv:36.80, taxCostFmv:36.80, method:'Withhold-to-Cover',   submitted:'2025-11-10', decided:'2025-11-13', settlementDate:'2025-11-15', status:'approved',  externalPptId:'EXT-PPT-4295', netHeld:5820,  disposed:1680,  notes:'',                                          issuanceRef:'ISS-2025-0090'},
+  { id:'EX-2025-0065', participant:'Rachel Green',   dept:'HR',          grantId:'GRT-2019-004', type:'ISO',  shares:3200,  strike:7.20,  fmv:35.50, taxCostFmv:35.50, method:'Hold – Bank Transfer', submitted:'2025-09-15', decided:null,         settlementDate:null,         status:'expired',   externalPptId:'EXT-PPT-4296', netHeld:null,  disposed:null,  notes:'Exercise window lapsed',                    issuanceRef:null           },
+  { id:'EX-2025-0058', participant:'Mark Torres',    dept:'Design',      grantId:'GRT-2019-002', type:'NSO',  shares:2800,  strike:6.80,  fmv:34.10, taxCostFmv:34.10, method:'Hold – Payroll',       submitted:'2025-08-20', decided:null,         settlementDate:null,         status:'expired',   externalPptId:'EXT-PPT-4297', netHeld:null,  disposed:null,  notes:'',                                          issuanceRef:null           },
+  { id:'EX-2026-0050', participant:'Julia Ross',     dept:'Engineering', grantId:'GRT-2024-005', type:'ISO',  shares:1200,  strike:30.00, fmv:42.50, taxCostFmv:42.50, method:'Hold – Bank Transfer', submitted:'2026-03-20', decided:null,         settlementDate:null,         status:'submitted', externalPptId:'EXT-PPT-4298', netHeld:null,  disposed:null,  notes:'',                                          issuanceRef:null           },
+  { id:'EX-2026-0051', participant:'Kevin Park',     dept:'Product',     grantId:'GRT-2023-011', type:'NQSO', shares:3800,  strike:21.00, fmv:42.50, taxCostFmv:42.50, method:'Sell All',            submitted:'2026-03-21', decided:null,         settlementDate:null,         status:'submitted', externalPptId:'EXT-PPT-4299', netHeld:null,  disposed:null,  notes:'',                                          issuanceRef:null           },
 ];
 
 let exStatusFilter = 'all';
@@ -6720,22 +6730,33 @@ function renderExDetail(ex) {
   document.getElementById('ex-d-name').textContent = ex.participant;
   document.getElementById('ex-d-meta').textContent = ex.dept;
   document.getElementById('ex-d-dept').textContent = ex.dept;
+  document.getElementById('ex-d-extpptid').textContent = ex.externalPptId || '—';
   document.getElementById('ex-d-grantid').textContent = ex.grantId;
   document.getElementById('ex-d-type').innerHTML =
     `<span class="type-badge ${({ISO:'type-iso',NSO:'type-nqso',NQSO:'type-nqso',SAR:'type-sar'}[ex.type]||'')}">${ex.type}</span>`;
-  document.getElementById('ex-d-submitted').textContent = fmtD(ex.submitted);
-  document.getElementById('ex-d-decided').textContent   = fmtD(ex.decided);
+  document.getElementById('ex-d-submitted').textContent  = fmtD(ex.submitted);
+  document.getElementById('ex-d-decided').textContent    = fmtD(ex.decided);
+  document.getElementById('ex-d-settlement').textContent = fmtD(ex.settlementDate);
   document.getElementById('ex-d-status-chip').innerHTML =
     `<span style="width:9px;height:9px;border-radius:50%;background:${sc.color};flex-shrink:0"></span>` +
     `<span style="color:${sc.color}">${sc.label}</span>`;
   document.getElementById('ex-d-status-chip').style.cssText =
     `margin-top:14px;display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:8px;font-size:12px;font-weight:600;background:${sc.bg}`;
   document.getElementById('ex-d-shares').textContent      = fmtN(ex.shares) + ' shares';
-  document.getElementById('ex-d-strike').textContent      = fmtP(ex.strike);
+  document.getElementById('ex-d-strike').textContent      = fmtP(ex.strike) + ' / share';
   document.getElementById('ex-d-fmv').textContent         = fmtP(ex.fmv);
   document.getElementById('ex-d-taxfmv').textContent      = fmtP(ex.taxCostFmv);
   document.getElementById('ex-d-spread-per').textContent  = fmtP(spreadSh) + '/sh';
   document.getElementById('ex-d-method').textContent      = ex.method;
+  document.getElementById('ex-d-disposed').textContent    = ex.disposed !== null ? fmtN(ex.disposed) + ' shares' : '—';
+  document.getElementById('ex-d-netheld').textContent     = ex.netHeld  !== null ? fmtN(ex.netHeld)  + ' shares' : '—';
+  const issRow = document.getElementById('ex-d-issuance-ref-row');
+  if (ex.issuanceRef) {
+    issRow.style.display = '';
+    document.getElementById('ex-d-issuanceref').textContent = ex.issuanceRef;
+  } else {
+    issRow.style.display = 'none';
+  }
 
   // Settlement method calculations
   let sharesDelivered = ex.shares, sharesSold = 0, sharesSoldForTax = 0, cashOut = 0;
@@ -6760,25 +6781,53 @@ function renderExDetail(ex) {
     proceedsToParticipant = gross;
   }
 
+  // Holding period indicator for ISO net-held shares
+  let holdingPeriodBanner = '';
+  if (ex.netHeld && ex.netHeld > 0 && ex.settlementDate) {
+    const settleMs  = new Date(ex.settlementDate + 'T00:00:00').getTime();
+    const qualDate  = new Date(settleMs + 366 * 86400000); // ~1yr from exercise for ISO qualifying
+    const today     = new Date();
+    const daysHeld  = Math.floor((today - settleMs) / 86400000);
+    const daysLeft  = Math.max(0, Math.ceil((qualDate - today) / 86400000));
+    const pct       = Math.min(100, Math.round((daysHeld / 366) * 100));
+    const isQual    = daysLeft === 0;
+    holdingPeriodBanner = `<div style="background:${isQual ? '#f0fdf4' : '#fffbeb'};border:1px solid ${isQual ? '#bbf7d0' : '#fde68a'};border-radius:10px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:14px">
+      <div style="flex:1">
+        <div style="font-size:11.5px;font-weight:700;color:${isQual ? '#065f46' : '#92400e'};margin-bottom:6px">
+          ${ex.type === 'ISO' ? 'ISO Qualifying Disposition Holding Period' : 'Retention / Holding Period'} — ${fmtN(ex.netHeld)} shares held
+        </div>
+        <div style="background:#e2e8f0;border-radius:100px;height:6px;overflow:hidden;margin-bottom:5px">
+          <div style="width:${pct}%;background:${isQual ? 'var(--green)' : 'var(--amber)'};height:100%;border-radius:100px;transition:width .3s"></div>
+        </div>
+        <div style="font-size:10.5px;color:${isQual ? 'var(--green)' : '#92400e'}">
+          ${isQual ? '✓ Qualifying holding period met — long-term capital gains rate eligible' : `${daysHeld} days held · ${daysLeft} days until qualifying disposition`}
+        </div>
+      </div>
+    </div>`;
+  }
+
   // Hero
   document.getElementById('ex-d-hero').innerHTML =
     `<div class="ex-hero-label">${ex.id} — ${ex.participant}</div>` +
     `<div class="ex-hero-grid">` +
     `<div class="ex-hero-stat"><div class="ex-hero-stat-label">Gross Value</div><div class="ex-hero-stat-val" style="color:#74c0fc">${fmt(gross)}</div><div class="ex-hero-stat-sub">${fmtN(ex.shares)} sh × ${fmtP(ex.fmv)}</div></div>` +
-    `<div class="ex-hero-stat"><div class="ex-hero-stat-label">Total Gain</div><div class="ex-hero-stat-val" style="color:#69db7c">${fmt(gain)}</div><div class="ex-hero-stat-sub">+${gainPct}% over strike</div></div>` +
-    `<div class="ex-hero-stat"><div class="ex-hero-stat-label">Exercise Cost</div><div class="ex-hero-stat-val" style="color:#ffc078">${fmt(cost)}</div><div class="ex-hero-stat-sub">${fmtN(ex.shares)} sh × ${fmtP(ex.strike)}</div></div>` +
+    `<div class="ex-hero-stat"><div class="ex-hero-stat-label">Total Gain</div><div class="ex-hero-stat-val" style="color:#69db7c">${fmt(gain)}</div><div class="ex-hero-stat-sub">+${gainPct}% over cost basis</div></div>` +
+    `<div class="ex-hero-stat"><div class="ex-hero-stat-label">Exercise Cost</div><div class="ex-hero-stat-val" style="color:#ffc078">${fmt(cost)}</div><div class="ex-hero-stat-sub">${fmtN(ex.shares)} sh × ${fmtP(ex.strike)} cost basis</div></div>` +
     `<div class="ex-hero-stat"><div class="ex-hero-stat-label">${m === 'Sell All' || m === 'Sell to Cover' ? 'Net Proceeds' : 'Shares Delivered'}</div><div class="ex-hero-stat-val" style="color:#b197fc">${m === 'Hold – Bank Transfer' || m === 'Hold – Payroll' ? fmtN(sharesDelivered)+' sh' : fmt(proceedsToParticipant)}</div><div class="ex-hero-stat-sub">${m}</div></div>` +
-    `</div>`;
+    `</div>` +
+    holdingPeriodBanner;
 
   // Calculation breakdown
   let calcRows = `
     <div class="ex-calc-row"><span class="ex-calc-label">Shares exercised</span><span class="ex-calc-val">${fmtN(ex.shares)}</span></div>
-    <div class="ex-calc-row"><span class="ex-calc-label">Strike price (exercise price)</span><span class="ex-calc-val">${fmtP(ex.strike)}</span></div>
+    <div class="ex-calc-row"><span class="ex-calc-label">Cost basis (exercise / strike price)</span><span class="ex-calc-val" style="color:var(--accent-dark)">${fmtP(ex.strike)}/sh</span></div>
     <div class="ex-calc-row"><span class="ex-calc-label">FMV at exercise date</span><span class="ex-calc-val">${fmtP(ex.fmv)}</span></div>
-    <div class="ex-calc-row"><span class="ex-calc-label">Spread per share (FMV − Strike)</span><span class="ex-calc-val" style="color:var(--green)">${fmtP(spreadSh)}</span></div>
+    <div class="ex-calc-row"><span class="ex-calc-label">Spread per share (FMV − Cost Basis)</span><span class="ex-calc-val" style="color:var(--green)">${fmtP(spreadSh)}</span></div>
     <div class="ex-calc-divider"></div>
     <div class="ex-calc-row"><span class="ex-calc-label">Gross value (Shares × FMV)</span><span class="ex-calc-val">${fmt(gross)}</span></div>
-    <div class="ex-calc-row"><span class="ex-calc-label">Exercise cost (Shares × Strike)</span><span class="ex-calc-val" style="color:var(--text2)">(${fmt(cost)})</span></div>
+    <div class="ex-calc-row"><span class="ex-calc-label">Exercise cost (Shares × Cost Basis)</span><span class="ex-calc-val" style="color:var(--text2)">(${fmt(cost)})</span></div>
+    ${ex.disposed ? `<div class="ex-calc-row"><span class="ex-calc-label">Shares disposed (sold / withheld)</span><span class="ex-calc-val" style="color:#be123c">${fmtN(ex.disposed)} shares</span></div>` : ''}
+    ${ex.netHeld  ? `<div class="ex-calc-row"><span class="ex-calc-label">Net shares held by participant</span><span class="ex-calc-val" style="color:var(--green)">${fmtN(ex.netHeld)} shares</span></div>` : ''}
     <div class="ex-calc-divider"></div>
     <div class="ex-calc-total"><span class="ex-calc-total-label">Total gain (spread)</span><span style="color:var(--green);font-size:16px">${fmt(gain)}</span></div>`;
 
@@ -6910,11 +6959,11 @@ function renderExDetail(ex) {
     },
     {
       label: 'Settlement',
-      date: ex.status === 'approved' ? 'Processing' : '—',
+      date: ex.settlementDate ? fmtD(ex.settlementDate) : (ex.status === 'approved' ? 'Processing' : '—'),
       note: ex.status === 'approved'
-        ? (m === 'Sell All' || m === 'Sell to Cover' ? `Market order created. ${fmt(proceedsToParticipant)} net proceeds to participant.` : `${fmtN(sharesDelivered)} shares to be delivered upon payment receipt.`)
+        ? (m === 'Sell All' || m === 'Sell to Cover' ? `Market order created. ${fmt(proceedsToParticipant)} net proceeds to participant.${ex.settlementDate ? ' Settlement completed ' + fmtD(ex.settlementDate) + '.' : ''}` : `${fmtN(sharesDelivered)} shares delivered upon payment receipt.${ex.settlementDate ? ' Settlement date: ' + fmtD(ex.settlementDate) + '.' : ''}`)
         : 'Settlement pending approval.',
-      state: ex.status === 'approved' ? 'active' : 'pending'
+      state: ex.settlementDate ? 'done' : (ex.status === 'approved' ? 'active' : 'pending')
     }
   ];
 
@@ -6935,6 +6984,20 @@ function renderExDetail(ex) {
       </div>
     </div>`
   ).join('');
+
+  // Notes & Labels
+  const notesEl = document.getElementById('ex-d-notes-card');
+  if (ex.notes) {
+    notesEl.innerHTML = `<div class="ex-calc-card" style="border-left:3px solid var(--amber)">
+      <div class="ex-calc-title" style="margin-bottom:10px;display:flex;align-items:center;gap:8px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:var(--amber)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Notes
+      </div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.6;background:#fffbeb;border-radius:8px;padding:10px 14px">${ex.notes}</div>
+    </div>`;
+  } else {
+    notesEl.innerHTML = '';
+  }
 }
 
 function renderExerciseTable(forceStatus) {
@@ -7028,7 +7091,10 @@ function renderExerciseTable(forceStatus) {
             </button>
             <button class="kebab-menu-item danger" onclick="event.stopPropagation();closeAllKebabs();singleExAction('${e.id}','rejected')">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Reject
-            </button>` : ''}
+            </button>` : (e.status === 'approved' ? `
+            <button class="kebab-menu-item" style="opacity:0.45;cursor:not-allowed" title="Approved exercises are locked — contact your compliance officer to request amendments" disabled>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Locked — Edit Restricted
+            </button>` : '')}
             <div class="kebab-divider"></div>
             <div class="kebab-menu-label">Documents</div>
             <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();">
@@ -7040,23 +7106,43 @@ function renderExerciseTable(forceStatus) {
           </div>
         </div>
       </td>
-      <td style="font-family:'SF Mono',monospace;font-size:12px;font-weight:700;color:var(--accent-dark)">${e.id}</td>
-      <td><div class="participant-name">${e.participant}</div><div class="participant-dept">${e.dept}</div></td>
+      <td style="font-family:'SF Mono',monospace;font-size:12px;font-weight:700;color:var(--accent-dark)">
+        <div>${e.id}</div>
+        ${e.issuanceRef ? `<button onclick="event.stopPropagation()" style="background:none;border:none;cursor:pointer;padding:0;display:flex;align-items:center;gap:2px;margin-top:2px" title="View issuance record ${e.issuanceRef}"><span style="font-size:10px;color:var(--accent);font-weight:600;font-family:inherit">↗ ${e.issuanceRef}</span></button>` : ''}
+      </td>
+      <td>
+        <div class="participant-name">${e.participant}</div>
+        <div class="participant-dept">${e.dept}</div>
+        <div style="font-size:10.5px;color:var(--textm);margin-top:1px;font-family:'SF Mono',monospace">${e.externalPptId}</div>
+      </td>
       <td><button onclick="openLedgerDrawer('${e.grantId}')" style="background:none;border:none;cursor:pointer;padding:0;text-align:left">
         <span style="font-family:'SF Mono',monospace;font-size:11.5px;font-weight:700;color:var(--accent);border-bottom:1px dashed var(--accent)">${e.grantId}</span>
       </button></td>
       <td>${typeBadge(e.type)}</td>
       <td style="text-align:right;font-weight:600">${e.shares.toLocaleString()}</td>
-      <td style="text-align:right;font-weight:600;color:var(--accent-dark)">$${e.strike.toFixed(2)}</td>
+      <td style="text-align:right;font-weight:600;color:var(--accent-dark)">$${e.strike.toFixed(2)}<div style="font-size:10px;color:var(--textm);font-weight:400">cost basis</div></td>
       <td style="text-align:right;font-weight:600">$${e.fmv.toFixed(2)}</td>
       <td style="text-align:right;font-weight:600">${grossValue}</td>
+      <td style="text-align:right;font-weight:600;color:${e.disposed !== null && e.disposed > 0 ? '#be123c' : 'var(--textm)'}">
+        ${e.disposed !== null ? `${e.disposed.toLocaleString()}<div style="font-size:10px;color:var(--textm);font-weight:400">shares</div>` : '<span style="color:var(--textm)">—</span>'}
+      </td>
+      <td style="text-align:right;font-weight:600;color:${e.netHeld !== null && e.netHeld > 0 ? 'var(--green)' : 'var(--textm)'}">
+        ${e.netHeld !== null ? `${e.netHeld.toLocaleString()}<div style="font-size:10px;color:var(--textm);font-weight:400">shares</div>` : '<span style="color:var(--textm)">—</span>'}
+      </td>
       <td style="text-align:right;font-weight:700;color:var(--green)">${gain}<div style="font-size:10px;color:var(--textm);font-weight:400">+${gainPct}%</div></td>
-      <td>${methodBadge(e.method)}</td>
+      <td>
+        ${methodBadge(e.method)}
+        ${e.notes ? `<div style="font-size:10.5px;color:var(--textm);margin-top:3px;max-width:125px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${e.notes}">${e.notes}</div>` : ''}
+      </td>
       <td style="font-size:12px;color:var(--text2)">${e.submitted}</td>
       <td style="font-size:12px;color:var(--text2)">${e.decided||'<span style="color:var(--textm)">—</span>'}</td>
-      <td><span class="sdot ${sc.dot}" style="color:${sc.color};font-size:12px">${sc.label}</span></td>
+      <td style="font-size:12px;color:${e.settlementDate ? 'var(--green)' : 'var(--textm)'};font-weight:${e.settlementDate ? '600' : '400'}">${e.settlementDate||'<span style="color:var(--textm)">—</span>'}</td>
+      <td>
+        <span class="sdot ${sc.dot}" style="color:${sc.color};font-size:12px">${sc.label}</span>
+        ${e.status === 'approved' ? `<div style="font-size:10px;color:var(--textm);margin-top:2px;display:flex;align-items:center;gap:3px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:9px;height:9px"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>locked</div>` : ''}
+      </td>
     </tr>`;
-  }).join('') || `<tr><td colspan="15" style="text-align:center;padding:32px;color:var(--textm)">No exercises found</td></tr>`;
+  }).join('') || `<tr><td colspan="17" style="text-align:center;padding:32px;color:var(--textm)">No exercises found</td></tr>`;
 }
 
 function openEditModal(grantId) {
