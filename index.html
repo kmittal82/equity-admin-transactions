@@ -4077,26 +4077,26 @@
       </div>
 
       <!-- Summary stats -->
-      <div class="stats-row" style="margin-bottom:24px">
-        <div class="stat-card">
-          <div class="stat-label">Jurisdictions</div>
-          <div class="stat-val" id="tax-stat-jur">4</div>
-          <div class="stat-sub">Countries / states configured</div>
+      <div class="summary-row" style="margin-bottom:24px">
+        <div class="summary-card">
+          <div class="s-label">Jurisdictions</div>
+          <div class="s-value" id="tax-stat-jur">6</div>
+          <div class="s-sub">Countries / states configured</div>
         </div>
-        <div class="stat-card">
-          <div class="stat-label">Active Tax Codes</div>
-          <div class="stat-val" id="tax-stat-codes">12</div>
-          <div class="stat-sub">Withholding &amp; reporting codes</div>
+        <div class="summary-card">
+          <div class="s-label">Active Tax Codes</div>
+          <div class="s-value" id="tax-stat-codes">14</div>
+          <div class="s-sub">Withholding &amp; reporting codes</div>
         </div>
-        <div class="stat-card">
-          <div class="stat-label">Rate Sets</div>
-          <div class="stat-val" id="tax-stat-sets">7</div>
-          <div class="stat-sub">Federal + state/local</div>
+        <div class="summary-card">
+          <div class="s-label">Rate Sets</div>
+          <div class="s-value" id="tax-stat-sets">6</div>
+          <div class="s-sub">Federal + state/local</div>
         </div>
-        <div class="stat-card">
-          <div class="stat-label">Last Updated</div>
-          <div class="stat-val" style="font-size:18px">Apr 2026</div>
-          <div class="stat-sub">Rate schedule review</div>
+        <div class="summary-card">
+          <div class="s-label">Last Updated</div>
+          <div class="s-value" style="font-size:22px">Apr 2026</div>
+          <div class="s-sub">Rate schedule review</div>
         </div>
       </div>
 
@@ -8017,12 +8017,15 @@ function renderTaxBrackets() {
 }
 
 function updateTaxStats() {
-  const jur  = new Set(taxRatesData.map(r => r.jurisdiction)).size;
+  const jur   = new Set(taxRatesData.map(r => r.jurisdiction)).size;
   const codes = taxCodesData.filter(c => c.status === 'Active').length;
   const sets  = taxRatesData.length;
-  document.getElementById('tax-stat-jur')?.textContent && (document.getElementById('tax-stat-jur').textContent = jur);
-  document.getElementById('tax-stat-codes')?.textContent && (document.getElementById('tax-stat-codes').textContent = codes);
-  document.getElementById('tax-stat-sets')?.textContent && (document.getElementById('tax-stat-sets').textContent = sets);
+  const jurEl   = document.getElementById('tax-stat-jur');
+  const codesEl = document.getElementById('tax-stat-codes');
+  const setsEl  = document.getElementById('tax-stat-sets');
+  if (jurEl)   jurEl.textContent   = jur;
+  if (codesEl) codesEl.textContent = codes;
+  if (setsEl)  setsEl.textContent  = sets;
 }
 
 function openTaxRateModal(id) {
