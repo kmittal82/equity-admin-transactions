@@ -1901,6 +1901,53 @@
     .tm-tl-sub-clean  { font-size: 11px; color: var(--text2); margin-top: 2px; }
     .tm-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 14px; }
 
+    /* ════ TAX MANAGEMENT ════ */
+    .tax-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+    .tax-tab  { padding: 9px 18px; font-size: 13px; font-weight: 500; color: var(--text2); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all .15s; }
+    .tax-tab:hover  { color: var(--text); }
+    .tax-tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+
+    .tax-rate-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 0; overflow: hidden; margin-bottom: 16px;
+    }
+    .tax-rate-head {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 20px; border-bottom: 1px solid var(--border);
+      background: #f8fafc;
+    }
+    .tax-rate-flag {
+      width: 32px; height: 32px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .tax-rate-country  { font-size: 14px; font-weight: 700; color: var(--text); }
+    .tax-rate-subtitle { font-size: 12px; color: var(--text2); margin-top: 1px; }
+    .tax-rate-actions  { margin-left: auto; display: flex; gap: 6px; }
+
+    .tax-rate-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 0; border-top: 1px solid var(--border);
+    }
+    .tax-rate-cell {
+      padding: 14px 18px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    }
+    .tax-rate-cell:last-child { border-right: none; }
+    .tax-rate-cell-label { font-size: 10.5px; font-weight: 600; color: var(--textm); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 5px; }
+    .tax-rate-cell-val   { font-size: 18px; font-weight: 800; color: var(--text); }
+    .tax-rate-cell-sub   { font-size: 11px; color: var(--text2); margin-top: 2px; }
+
+    .tax-code-table { width: 100%; border-collapse: collapse; }
+    .tax-code-table th { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .4px; color: var(--textm); padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); background: #f8fafc; }
+    .tax-code-table td { padding: 11px 14px; border-bottom: 1px solid #f1f5f9; font-size: 13px; vertical-align: middle; }
+    .tax-code-table tr:last-child td { border-bottom: none; }
+    .tax-code-table tr:hover td { background: #f8fafc; }
+    .tax-code-badge { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+
+    /* add/edit modal grid */
+    .tax-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .tax-form-full  { grid-column: 1 / -1; }
+
   </style>
 </head>
 <body>
@@ -1959,6 +2006,10 @@
     <div class="nav-sub open" id="sub-txns">
       <div class="nav-sub-item" onclick="switchView('long-share-txns')">Long Share Transactions</div>
       <div class="nav-sub-item" onclick="switchView('approvals')">Approvals & Actions</div>
+    </div>
+    <div class="nav-item" id="nav-tax" onclick="setActive(this); switchView('tax-mgmt')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
+      Tax Management
     </div>
     <div class="nav-item" onclick="setActive(this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
@@ -4006,10 +4057,314 @@
       </div>
     </div>
 
+    <!-- ════ TAX MANAGEMENT ════ -->
+    <div class="view-section" id="view-tax-mgmt">
+      <div class="page-head">
+        <div>
+          <div class="page-title">Tax Management</div>
+          <div class="page-sub">Client-level tax rates and withholding codes for equity events</div>
+        </div>
+        <div class="head-actions">
+          <button class="btn btn-ghost" onclick="openTaxCodeModal(null)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Tax Code
+          </button>
+          <button class="btn btn-primary" onclick="openTaxRateModal(null)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Tax Rate
+          </button>
+        </div>
+      </div>
+
+      <!-- Summary stats -->
+      <div class="stats-row" style="margin-bottom:24px">
+        <div class="stat-card">
+          <div class="stat-label">Jurisdictions</div>
+          <div class="stat-val" id="tax-stat-jur">4</div>
+          <div class="stat-sub">Countries / states configured</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Active Tax Codes</div>
+          <div class="stat-val" id="tax-stat-codes">12</div>
+          <div class="stat-sub">Withholding &amp; reporting codes</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Rate Sets</div>
+          <div class="stat-val" id="tax-stat-sets">7</div>
+          <div class="stat-sub">Federal + state/local</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Last Updated</div>
+          <div class="stat-val" style="font-size:18px">Apr 2026</div>
+          <div class="stat-sub">Rate schedule review</div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tax-tabs">
+        <div class="tax-tab active" id="ttab-rates"   onclick="switchTaxTab('rates')">Tax Rates</div>
+        <div class="tax-tab"        id="ttab-codes"   onclick="switchTaxTab('codes')">Tax Codes</div>
+        <div class="tax-tab"        id="ttab-brackets" onclick="switchTaxTab('brackets')">Brackets &amp; Schedules</div>
+      </div>
+
+      <!-- TAX RATES panel -->
+      <div id="tax-panel-rates">
+        <div style="margin-bottom:14px;display:flex;align-items:center;gap:10px">
+          <div class="filter-search-wrap" style="max-width:320px">
+            <span class="filter-search-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+            <input class="filter-search-input" id="tax-rate-search" placeholder="Search jurisdiction…" oninput="renderTaxRates()">
+          </div>
+          <select class="filter-select-sm" id="tax-rate-type-filter" onchange="renderTaxRates()">
+            <option value="">All Types</option>
+            <option>Federal</option>
+            <option>State</option>
+            <option>Local</option>
+            <option>International</option>
+          </select>
+        </div>
+        <div id="tax-rates-container"></div>
+      </div>
+
+      <!-- TAX CODES panel -->
+      <div id="tax-panel-codes" style="display:none">
+        <div style="margin-bottom:14px;display:flex;align-items:center;gap:10px">
+          <div class="filter-search-wrap" style="max-width:320px">
+            <span class="filter-search-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+            <input class="filter-search-input" id="tax-code-search" placeholder="Search code or description…" oninput="renderTaxCodes()">
+          </div>
+          <select class="filter-select-sm" id="tax-code-category-filter" onchange="renderTaxCodes()">
+            <option value="">All Categories</option>
+            <option>Income</option>
+            <option>Withholding</option>
+            <option>Reporting</option>
+            <option>FICA</option>
+          </select>
+          <select class="filter-select-sm" id="tax-code-status-filter" onchange="renderTaxCodes()">
+            <option value="">All Statuses</option>
+            <option>Active</option>
+            <option>Inactive</option>
+          </select>
+        </div>
+        <div class="ag-table-wrap">
+          <table class="ag-table tax-code-table" id="tax-code-table">
+            <thead>
+              <tr>
+                <th style="width:44px">Actions</th>
+                <th style="width:120px">Code</th>
+                <th>Description</th>
+                <th style="width:110px">Category</th>
+                <th style="width:130px">Jurisdiction</th>
+                <th style="width:110px">Event Type</th>
+                <th style="text-align:right;width:90px">Rate</th>
+                <th style="width:90px">Effective</th>
+                <th style="width:90px">Status</th>
+              </tr>
+            </thead>
+            <tbody id="tax-code-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- BRACKETS panel -->
+      <div id="tax-panel-brackets" style="display:none">
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden">
+          <div style="padding:16px 20px;border-bottom:1px solid var(--border);background:#f8fafc;display:flex;align-items:center;gap:12px">
+            <div>
+              <div style="font-size:14px;font-weight:700;color:var(--text)">2026 US Federal Income Tax Brackets</div>
+              <div style="font-size:12px;color:var(--text2);margin-top:2px">For ordinary income (NSO / RSU spreads) — Single filer</div>
+            </div>
+            <div style="margin-left:auto;display:flex;gap:8px">
+              <select class="filter-select-sm">
+                <option>United States — Federal</option>
+                <option>California — State</option>
+                <option>New York — State</option>
+              </select>
+              <select class="filter-select-sm">
+                <option>2026</option><option>2025</option>
+              </select>
+            </div>
+          </div>
+          <table class="ag-table" style="width:100%">
+            <thead>
+              <tr>
+                <th>Bracket</th>
+                <th style="text-align:right">Income From</th>
+                <th style="text-align:right">Income To</th>
+                <th style="text-align:right">Rate</th>
+                <th>Applies To</th>
+              </tr>
+            </thead>
+            <tbody id="tax-bracket-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /view-tax-mgmt -->
+
   </div><!-- /content -->
 </div><!-- /main -->
 
 <!-- ════════════ MODALS ════════════ -->
+
+<!-- ════ TAX RATE MODAL ════ -->
+<div class="modal-overlay" id="modal-tax-rate">
+  <div class="modal-box" style="max-width:560px">
+    <div class="modal-head">
+      <div class="modal-title" id="tax-rate-modal-title">Add Tax Rate</div>
+      <button class="modal-close" onclick="closeModal('modal-tax-rate')">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="tax-rate-edit-id">
+      <div class="tax-form-grid">
+        <div>
+          <label class="form-label">Jurisdiction <span class="req">*</span></label>
+          <input class="form-input" id="tr-jurisdiction" placeholder="e.g. United States — Federal">
+        </div>
+        <div>
+          <label class="form-label">Type <span class="req">*</span></label>
+          <select class="form-select" id="tr-type">
+            <option value="">Select type</option>
+            <option>Federal</option>
+            <option>State</option>
+            <option>Local</option>
+            <option>International</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Federal Income Tax Rate (%)</label>
+          <input class="form-input" id="tr-federal" type="number" step="0.01" min="0" max="100" placeholder="e.g. 37">
+        </div>
+        <div>
+          <label class="form-label">Supplemental Withholding Rate (%)</label>
+          <input class="form-input" id="tr-supplemental" type="number" step="0.01" min="0" max="100" placeholder="e.g. 22">
+        </div>
+        <div>
+          <label class="form-label">State / Local Income Tax Rate (%)</label>
+          <input class="form-input" id="tr-state" type="number" step="0.01" min="0" max="100" placeholder="e.g. 13.3">
+        </div>
+        <div>
+          <label class="form-label">Social Security (OASDI) Rate (%)</label>
+          <input class="form-input" id="tr-ss" type="number" step="0.01" min="0" max="100" placeholder="e.g. 6.2">
+        </div>
+        <div>
+          <label class="form-label">Medicare Rate (%)</label>
+          <input class="form-input" id="tr-medicare" type="number" step="0.01" min="0" max="100" placeholder="e.g. 1.45">
+        </div>
+        <div>
+          <label class="form-label">Additional Medicare Rate (%)</label>
+          <input class="form-input" id="tr-addl-medicare" type="number" step="0.01" min="0" max="100" placeholder="e.g. 0.9">
+        </div>
+        <div>
+          <label class="form-label">Effective Date <span class="req">*</span></label>
+          <input class="form-input" id="tr-effective" type="date">
+        </div>
+        <div>
+          <label class="form-label">Expiry Date</label>
+          <input class="form-input" id="tr-expiry" type="date">
+        </div>
+        <div class="tax-form-full">
+          <label class="form-label">Currency</label>
+          <select class="form-select" id="tr-currency">
+            <option value="USD">USD — US Dollar</option>
+            <option value="CAD">CAD — Canadian Dollar</option>
+            <option value="GBP">GBP — British Pound</option>
+            <option value="EUR">EUR — Euro</option>
+            <option value="AUD">AUD — Australian Dollar</option>
+            <option value="SGD">SGD — Singapore Dollar</option>
+          </select>
+        </div>
+        <div class="tax-form-full">
+          <label class="form-label">Notes</label>
+          <textarea class="form-input" id="tr-notes" rows="2" placeholder="Additional context or sourcing notes…" style="resize:vertical"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('modal-tax-rate')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveTaxRate()">Save Rate</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ TAX CODE MODAL ════ -->
+<div class="modal-overlay" id="modal-tax-code">
+  <div class="modal-box" style="max-width:520px">
+    <div class="modal-head">
+      <div class="modal-title" id="tax-code-modal-title">Add Tax Code</div>
+      <button class="modal-close" onclick="closeModal('modal-tax-code')">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="tax-code-edit-id">
+      <div class="tax-form-grid">
+        <div>
+          <label class="form-label">Tax Code <span class="req">*</span></label>
+          <input class="form-input" id="tc-code" placeholder="e.g. FWT-US-001" style="font-family:'SF Mono',monospace">
+        </div>
+        <div>
+          <label class="form-label">Category <span class="req">*</span></label>
+          <select class="form-select" id="tc-category">
+            <option value="">Select category</option>
+            <option>Income</option>
+            <option>Withholding</option>
+            <option>Reporting</option>
+            <option>FICA</option>
+          </select>
+        </div>
+        <div class="tax-form-full">
+          <label class="form-label">Description <span class="req">*</span></label>
+          <input class="form-input" id="tc-description" placeholder="e.g. Federal Withholding Tax — Supplemental Rate">
+        </div>
+        <div>
+          <label class="form-label">Jurisdiction <span class="req">*</span></label>
+          <select class="form-select" id="tc-jurisdiction">
+            <option value="">Select jurisdiction</option>
+            <option>US — Federal</option>
+            <option>US — California</option>
+            <option>US — New York</option>
+            <option>US — Texas</option>
+            <option>UK — HMRC</option>
+            <option>Canada — Federal</option>
+            <option>Germany — Federal</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Event Type</label>
+          <select class="form-select" id="tc-event">
+            <option value="">All Events</option>
+            <option>Exercise</option>
+            <option>Release / Vest</option>
+            <option>Sale</option>
+            <option>Dividend</option>
+            <option>ESPP Purchase</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Rate (%) <span class="req">*</span></label>
+          <input class="form-input" id="tc-rate" type="number" step="0.001" min="0" max="100" placeholder="e.g. 22.000">
+        </div>
+        <div>
+          <label class="form-label">Effective Date <span class="req">*</span></label>
+          <input class="form-input" id="tc-effective" type="date">
+        </div>
+        <div>
+          <label class="form-label">Status</label>
+          <select class="form-select" id="tc-status">
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+        <div class="tax-form-full">
+          <label class="form-label">Notes</label>
+          <textarea class="form-input" id="tc-notes" rows="2" placeholder="Sourcing, applicability notes…" style="resize:vertical"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('modal-tax-code')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveTaxCode()">Save Code</button>
+    </div>
+  </div>
+</div>
 
 <!-- ADD GRANT MODAL -->
 <div class="modal-overlay" id="modal-add-grant">
@@ -5410,6 +5765,7 @@ function switchView(viewId) {
   else if (viewId === 'exercise-mgmt') renderExerciseTable();
   else if (viewId === 'release-mgmt') renderReleaseMgmt();
   else if (viewId === 'participants') renderParticipantsTable();
+  else if (viewId === 'tax-mgmt') { renderTaxRates(); updateTaxStats(); }
 }
 
 // ── Equity Plans ──
@@ -7433,6 +7789,360 @@ function closeRelSimulate(e) {
   document.getElementById('rel-sim-overlay').classList.remove('open');
   document.body.style.overflow = '';
   relSimReleaseId = null;
+}
+
+/* ══════════════════════════════════
+   TAX MANAGEMENT
+══════════════════════════════════ */
+
+const taxRatesData = [
+  {
+    id: 'TR-US-FED-001', jurisdiction: 'United States — Federal', type: 'Federal',
+    flag: '🇺🇸', currency: 'USD', effectiveDate: '2026-01-01', expiryDate: null,
+    federal: 37.0, supplemental: 22.0, state: null, socialSecurity: 6.2,
+    medicare: 1.45, addlMedicare: 0.9,
+    notes: 'Supplemental flat rate applies to equity income. Top marginal applies to high-income earners.',
+    status: 'Active'
+  },
+  {
+    id: 'TR-US-CA-001', jurisdiction: 'United States — California', type: 'State',
+    flag: '🇺🇸', currency: 'USD', effectiveDate: '2026-01-01', expiryDate: null,
+    federal: null, supplemental: null, state: 13.3, socialSecurity: null,
+    medicare: null, addlMedicare: null,
+    notes: 'CA SDI rate also applies at 1.1%. Used for participants with CA as state of residence.',
+    status: 'Active'
+  },
+  {
+    id: 'TR-US-NY-001', jurisdiction: 'United States — New York', type: 'State',
+    flag: '🇺🇸', currency: 'USD', effectiveDate: '2026-01-01', expiryDate: null,
+    federal: null, supplemental: null, state: 10.9, socialSecurity: null,
+    medicare: null, addlMedicare: null,
+    notes: 'NYC residents add up to 3.876% city tax on top of state rate.',
+    status: 'Active'
+  },
+  {
+    id: 'TR-GB-HMRC-001', jurisdiction: 'United Kingdom — HMRC', type: 'International',
+    flag: '🇬🇧', currency: 'GBP', effectiveDate: '2026-04-06', expiryDate: null,
+    federal: 45.0, supplemental: 40.0, state: null, socialSecurity: 2.0,
+    medicare: null, addlMedicare: null,
+    notes: 'Top rate 45% above £125,140. National Insurance Class 1 at 8% up to UEL, 2% above. Tax year runs Apr–Apr.',
+    status: 'Active'
+  },
+  {
+    id: 'TR-CA-FED-001', jurisdiction: 'Canada — Federal', type: 'Federal',
+    flag: '🇨🇦', currency: 'CAD', effectiveDate: '2026-01-01', expiryDate: null,
+    federal: 33.0, supplemental: 33.0, state: null, socialSecurity: 5.95,
+    medicare: null, addlMedicare: null,
+    notes: 'Provincial tax applies separately. Stock option benefit included in employment income.',
+    status: 'Active'
+  },
+  {
+    id: 'TR-DE-FED-001', jurisdiction: 'Germany — Federal', type: 'International',
+    flag: '🇩🇪', currency: 'EUR', effectiveDate: '2026-01-01', expiryDate: '2026-12-31',
+    federal: 45.0, supplemental: 25.0, state: null, socialSecurity: 9.3,
+    medicare: 1.7, addlMedicare: null,
+    notes: 'Solidarity surcharge (5.5% of tax) applies above exemption threshold. Abgeltungsteuer flat 25% on capital gains.',
+    status: 'Active'
+  },
+];
+
+const taxCodesData = [
+  { id:'TC-001', code:'FWT-US-001',  description:'Federal Income Tax Withholding — Supplemental Rate',     category:'Withholding', jurisdiction:'US — Federal',     event:'Exercise',         rate:22.000, effective:'2026-01-01', status:'Active',   notes:'' },
+  { id:'TC-002', code:'FWT-US-002',  description:'Federal Income Tax Withholding — Aggregate Method',      category:'Withholding', jurisdiction:'US — Federal',     event:'Exercise',         rate:37.000, effective:'2026-01-01', status:'Active',   notes:'Used when participant is in top marginal bracket' },
+  { id:'TC-003', code:'FICA-SS-001', description:'Social Security (OASDI) Withholding',                    category:'FICA',        jurisdiction:'US — Federal',     event:'All Events',       rate:6.200,  effective:'2026-01-01', status:'Active',   notes:'Wage base cap $176,100 for 2026' },
+  { id:'TC-004', code:'FICA-MC-001', description:'Medicare Withholding',                                   category:'FICA',        jurisdiction:'US — Federal',     event:'All Events',       rate:1.450,  effective:'2026-01-01', status:'Active',   notes:'' },
+  { id:'TC-005', code:'FICA-MC-002', description:'Additional Medicare Withholding',                        category:'FICA',        jurisdiction:'US — Federal',     event:'All Events',       rate:0.900,  effective:'2026-01-01', status:'Active',   notes:'Applies above $200K individual threshold' },
+  { id:'TC-006', code:'SWT-CA-001',  description:'California State Income Tax — Supplemental Rate',        category:'Withholding', jurisdiction:'US — California',  event:'Exercise',         rate:10.230, effective:'2026-01-01', status:'Active',   notes:'CA uses 10.23% supplemental for equity events' },
+  { id:'TC-007', code:'SWT-CA-002',  description:'California SDI Withholding',                             category:'Withholding', jurisdiction:'US — California',  event:'All Events',       rate:1.100,  effective:'2026-01-01', status:'Active',   notes:'' },
+  { id:'TC-008', code:'SWT-NY-001',  description:'New York State Income Tax — Supplemental Rate',          category:'Withholding', jurisdiction:'US — New York',    event:'Exercise',         rate:11.700, effective:'2026-01-01', status:'Active',   notes:'' },
+  { id:'TC-009', code:'RPT-W2-001',  description:'W-2 Box 12 Code V — ISO Disqualifying Disposition',     category:'Reporting',   jurisdiction:'US — Federal',     event:'Release / Vest',   rate:null,   effective:'2026-01-01', status:'Active',   notes:'Non-cash reporting code; no rate' },
+  { id:'TC-010', code:'RPT-3921',    description:'Form 3921 — ISO Exercise Reporting',                     category:'Reporting',   jurisdiction:'US — Federal',     event:'Exercise',         rate:null,   effective:'2026-01-01', status:'Active',   notes:'Annual IRS filing for all ISO exercises' },
+  { id:'TC-011', code:'WHT-GB-001',  description:'UK PAYE Income Tax Withholding — HMRC',                  category:'Withholding', jurisdiction:'UK — HMRC',        event:'Exercise',         rate:40.000, effective:'2026-04-06', status:'Active',   notes:'Basic / higher rate depends on employee tax code' },
+  { id:'TC-012', code:'WHT-GB-002',  description:'UK National Insurance (Class 1) Withholding',           category:'FICA',        jurisdiction:'UK — HMRC',        event:'Exercise',         rate:8.000,  effective:'2026-04-06', status:'Active',   notes:'Rate above UEL drops to 2%' },
+  { id:'TC-013', code:'WHT-CA-001',  description:'Canada Federal Payroll Tax Withholding — Stock Benefit', category:'Withholding', jurisdiction:'Canada — Federal', event:'Exercise',         rate:33.000, effective:'2026-01-01', status:'Active',   notes:'Option benefit treated as employment income' },
+  { id:'TC-014', code:'SWT-TX-001',  description:'Texas — No State Income Tax',                            category:'Income',      jurisdiction:'US — Texas',       event:'All Events',       rate:0.000,  effective:'2026-01-01', status:'Active',   notes:'Texas has no state income tax; confirm residency' },
+];
+
+const taxBracketsData = [
+  { bracket:'10%', from:0,       to:11925,   rate:'10%',  applies:'NSO, RSU, SAR ordinary income' },
+  { bracket:'12%', from:11926,   to:48475,   rate:'12%',  applies:'NSO, RSU, SAR ordinary income' },
+  { bracket:'22%', from:48476,   to:103350,  rate:'22%',  applies:'NSO, RSU, SAR ordinary income' },
+  { bracket:'24%', from:103351,  to:197300,  rate:'24%',  applies:'NSO, RSU, SAR ordinary income' },
+  { bracket:'32%', from:197301,  to:250525,  rate:'32%',  applies:'NSO, RSU, SAR ordinary income' },
+  { bracket:'35%', from:250526,  to:626350,  rate:'35%',  applies:'NSO, RSU, SAR ordinary income' },
+  { bracket:'37%', from:626351,  to:null,    rate:'37%',  applies:'NSO, RSU, SAR ordinary income' },
+];
+
+let taxTabActive = 'rates';
+
+function switchTaxTab(tab) {
+  taxTabActive = tab;
+  ['rates','codes','brackets'].forEach(t => {
+    document.getElementById('ttab-' + t)?.classList.toggle('active', t === tab);
+    document.getElementById('tax-panel-' + t).style.display = t === tab ? '' : 'none';
+  });
+  if (tab === 'rates')    renderTaxRates();
+  if (tab === 'codes')    renderTaxCodes();
+  if (tab === 'brackets') renderTaxBrackets();
+}
+
+function renderTaxRates() {
+  const search  = (document.getElementById('tax-rate-search')?.value || '').toLowerCase();
+  const typeVal = document.getElementById('tax-rate-type-filter')?.value || '';
+  const container = document.getElementById('tax-rates-container');
+  if (!container) return;
+
+  const filtered = taxRatesData.filter(r => {
+    if (typeVal && r.type !== typeVal) return false;
+    if (search && !r.jurisdiction.toLowerCase().includes(search)) return false;
+    return true;
+  });
+
+  const fmtRate = v => v !== null && v !== undefined ? `${v.toFixed(1)}%` : '—';
+
+  container.innerHTML = filtered.map(r => {
+    const cells = [
+      r.federal      !== null ? { label:'Federal Income', val: fmtRate(r.federal),      sub:'Marginal / top rate' } : null,
+      r.supplemental !== null ? { label:'Supplemental',   val: fmtRate(r.supplemental), sub:'Flat withholding rate' } : null,
+      r.state        !== null ? { label:'State / Local',  val: fmtRate(r.state),         sub:'State income tax' } : null,
+      r.socialSecurity !== null ? { label:'Social Security', val: fmtRate(r.socialSecurity), sub:'OASDI / NI' } : null,
+      r.medicare !== null ? { label:'Medicare / Health',   val: fmtRate(r.medicare),    sub:'Employer portion' } : null,
+      r.addlMedicare !== null ? { label:'Addl. Medicare',  val: fmtRate(r.addlMedicare), sub:'High-income surcharge' } : null,
+    ].filter(Boolean);
+
+    return `<div class="tax-rate-card">
+      <div class="tax-rate-head">
+        <div class="tax-rate-flag">${r.flag}</div>
+        <div>
+          <div class="tax-rate-country">${r.jurisdiction}</div>
+          <div class="tax-rate-subtitle">${r.type} · ${r.currency} · Effective ${r.effectiveDate}${r.expiryDate ? ' → ' + r.expiryDate : ''}</div>
+        </div>
+        <span class="sdot sdot-complete" style="margin-left:10px;font-size:11px">${r.status}</span>
+        <div class="tax-rate-actions">
+          <button class="btn btn-ghost" style="height:30px;padding:0 12px;font-size:12px" onclick="openTaxRateModal('${r.id}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>
+            Edit
+          </button>
+          <button class="btn btn-ghost danger" style="height:30px;padding:0 12px;font-size:12px;color:var(--red)" onclick="deleteTaxRate('${r.id}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+            Delete
+          </button>
+        </div>
+      </div>
+      ${r.notes ? `<div style="padding:10px 20px;font-size:12px;color:var(--text2);background:#fffbeb;border-bottom:1px solid var(--border)">${r.notes}</div>` : ''}
+      <div class="tax-rate-grid">
+        ${cells.map(c => `<div class="tax-rate-cell">
+          <div class="tax-rate-cell-label">${c.label}</div>
+          <div class="tax-rate-cell-val">${c.val}</div>
+          <div class="tax-rate-cell-sub">${c.sub}</div>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  }).join('') || `<div style="text-align:center;padding:40px;color:var(--textm)">No tax rates found</div>`;
+
+  updateTaxStats();
+}
+
+function renderTaxCodes() {
+  const search   = (document.getElementById('tax-code-search')?.value || '').toLowerCase();
+  const catVal   = document.getElementById('tax-code-category-filter')?.value || '';
+  const statVal  = document.getElementById('tax-code-status-filter')?.value || '';
+  const tbody    = document.getElementById('tax-code-body');
+  if (!tbody) return;
+
+  const filtered = taxCodesData.filter(c => {
+    if (catVal  && c.category !== catVal)  return false;
+    if (statVal && c.status   !== statVal) return false;
+    if (search  && !c.code.toLowerCase().includes(search) && !c.description.toLowerCase().includes(search)) return false;
+    return true;
+  });
+
+  const catColors = {
+    Income:      { bg:'#eff6ff', color:'#1d4ed8' },
+    Withholding: { bg:'#f0fdf4', color:'#166534' },
+    Reporting:   { bg:'#f5f3ff', color:'#6d28d9' },
+    FICA:        { bg:'#fef3c7', color:'#92400e' },
+  };
+
+  tbody.innerHTML = filtered.map(c => {
+    const cc = catColors[c.category] || { bg:'#f1f5f9', color:'#475569' };
+    return `<tr>
+      <td onclick="event.stopPropagation()">
+        <div class="kebab-wrap">
+          <button class="kebab-btn" onclick="event.stopPropagation();toggleKebab(this)" title="More actions">⋮</button>
+          <div class="kebab-menu">
+            <div class="kebab-menu-label">Tax Code</div>
+            <button class="kebab-menu-item" onclick="closeAllKebabs();openTaxCodeModal('${c.id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>Edit
+            </button>
+            <div class="kebab-divider"></div>
+            <button class="kebab-menu-item danger" onclick="closeAllKebabs();deleteTaxCode('${c.id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>Delete
+            </button>
+          </div>
+        </div>
+      </td>
+      <td style="font-family:'SF Mono',monospace;font-size:11.5px;font-weight:700;color:var(--accent-dark)">${c.code}</td>
+      <td>
+        <div style="font-size:13px;color:var(--text)">${c.description}</div>
+        ${c.notes ? `<div style="font-size:11px;color:var(--textm);margin-top:2px">${c.notes}</div>` : ''}
+      </td>
+      <td><span class="tax-code-badge" style="background:${cc.bg};color:${cc.color}">${c.category}</span></td>
+      <td style="font-size:12px;color:var(--text2)">${c.jurisdiction}</td>
+      <td style="font-size:12px;color:var(--text2)">${c.event}</td>
+      <td style="text-align:right;font-weight:700;color:var(--accent-dark)">${c.rate !== null ? c.rate.toFixed(3) + '%' : '<span style="color:var(--textm)">—</span>'}</td>
+      <td style="font-size:12px;color:var(--text2)">${c.effective}</td>
+      <td><span class="sdot ${c.status === 'Active' ? 'sdot-complete' : 'sdot-terminated'}" style="font-size:12px">${c.status}</span></td>
+    </tr>`;
+  }).join('') || `<tr><td colspan="9" style="text-align:center;padding:32px;color:var(--textm)">No tax codes found</td></tr>`;
+
+  updateTaxStats();
+}
+
+function renderTaxBrackets() {
+  const tbody = document.getElementById('tax-bracket-body');
+  if (!tbody) return;
+  const fmt = n => n !== null ? '$' + n.toLocaleString() : 'No limit';
+  tbody.innerHTML = taxBracketsData.map((b, i) => {
+    const colors = ['#f0fdf4','#ecfdf5','#fffbeb','#fff7ed','#fef3c7','#fee2e2','#fef2f2'];
+    const textC  = ['#065f46','#166534','#92400e','#c2410c','#b45309','#b91c1c','#991b1b'];
+    return `<tr>
+      <td><span style="background:${colors[i]};color:${textC[i]};font-weight:700;padding:3px 10px;border-radius:20px;font-size:12px">${b.bracket}</span></td>
+      <td style="text-align:right;font-size:13px">${fmt(b.from)}</td>
+      <td style="text-align:right;font-size:13px">${fmt(b.to)}</td>
+      <td style="text-align:right;font-weight:800;font-size:15px;color:${textC[i]}">${b.rate}</td>
+      <td style="font-size:12px;color:var(--text2)">${b.applies}</td>
+    </tr>`;
+  }).join('');
+}
+
+function updateTaxStats() {
+  const jur  = new Set(taxRatesData.map(r => r.jurisdiction)).size;
+  const codes = taxCodesData.filter(c => c.status === 'Active').length;
+  const sets  = taxRatesData.length;
+  document.getElementById('tax-stat-jur')?.textContent && (document.getElementById('tax-stat-jur').textContent = jur);
+  document.getElementById('tax-stat-codes')?.textContent && (document.getElementById('tax-stat-codes').textContent = codes);
+  document.getElementById('tax-stat-sets')?.textContent && (document.getElementById('tax-stat-sets').textContent = sets);
+}
+
+function openTaxRateModal(id) {
+  const r = id ? taxRatesData.find(x => x.id === id) : null;
+  document.getElementById('tax-rate-modal-title').textContent = r ? 'Edit Tax Rate' : 'Add Tax Rate';
+  document.getElementById('tax-rate-edit-id').value      = r ? r.id : '';
+  document.getElementById('tr-jurisdiction').value       = r ? r.jurisdiction : '';
+  document.getElementById('tr-type').value               = r ? r.type : '';
+  document.getElementById('tr-federal').value            = r?.federal ?? '';
+  document.getElementById('tr-supplemental').value       = r?.supplemental ?? '';
+  document.getElementById('tr-state').value              = r?.state ?? '';
+  document.getElementById('tr-ss').value                 = r?.socialSecurity ?? '';
+  document.getElementById('tr-medicare').value           = r?.medicare ?? '';
+  document.getElementById('tr-addl-medicare').value      = r?.addlMedicare ?? '';
+  document.getElementById('tr-effective').value          = r?.effectiveDate ?? '';
+  document.getElementById('tr-expiry').value             = r?.expiryDate ?? '';
+  document.getElementById('tr-currency').value           = r?.currency ?? 'USD';
+  document.getElementById('tr-notes').value              = r?.notes ?? '';
+  openModal('modal-tax-rate');
+}
+
+function saveTaxRate() {
+  const jur  = document.getElementById('tr-jurisdiction').value.trim();
+  const type = document.getElementById('tr-type').value;
+  const eff  = document.getElementById('tr-effective').value;
+  if (!jur || !type || !eff) { alert('Jurisdiction, type, and effective date are required.'); return; }
+
+  const editId = document.getElementById('tax-rate-edit-id').value;
+  const fv = id => { const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? null : v; };
+
+  const data = {
+    id:             editId || 'TR-' + Date.now(),
+    jurisdiction:   jur,
+    type:           type,
+    flag:           '🏳',
+    currency:       document.getElementById('tr-currency').value,
+    effectiveDate:  eff,
+    expiryDate:     document.getElementById('tr-expiry').value || null,
+    federal:        fv('tr-federal'),
+    supplemental:   fv('tr-supplemental'),
+    state:          fv('tr-state'),
+    socialSecurity: fv('tr-ss'),
+    medicare:       fv('tr-medicare'),
+    addlMedicare:   fv('tr-addl-medicare'),
+    notes:          document.getElementById('tr-notes').value.trim(),
+    status:         'Active'
+  };
+
+  if (editId) {
+    const idx = taxRatesData.findIndex(r => r.id === editId);
+    if (idx !== -1) taxRatesData[idx] = data;
+  } else {
+    taxRatesData.push(data);
+  }
+
+  closeModal('modal-tax-rate');
+  renderTaxRates();
+}
+
+function deleteTaxRate(id) {
+  if (!confirm('Delete this tax rate? This cannot be undone.')) return;
+  const idx = taxRatesData.findIndex(r => r.id === id);
+  if (idx !== -1) taxRatesData.splice(idx, 1);
+  renderTaxRates();
+}
+
+function openTaxCodeModal(id) {
+  const c = id ? taxCodesData.find(x => x.id === id) : null;
+  document.getElementById('tax-code-modal-title').textContent = c ? 'Edit Tax Code' : 'Add Tax Code';
+  document.getElementById('tax-code-edit-id').value   = c ? c.id : '';
+  document.getElementById('tc-code').value            = c?.code ?? '';
+  document.getElementById('tc-category').value        = c?.category ?? '';
+  document.getElementById('tc-description').value     = c?.description ?? '';
+  document.getElementById('tc-jurisdiction').value    = c?.jurisdiction ?? '';
+  document.getElementById('tc-event').value           = c?.event ?? '';
+  document.getElementById('tc-rate').value            = c?.rate ?? '';
+  document.getElementById('tc-effective').value       = c?.effective ?? '';
+  document.getElementById('tc-status').value          = c?.status ?? 'Active';
+  document.getElementById('tc-notes').value           = c?.notes ?? '';
+  openModal('modal-tax-code');
+}
+
+function saveTaxCode() {
+  const code = document.getElementById('tc-code').value.trim();
+  const desc = document.getElementById('tc-description').value.trim();
+  const cat  = document.getElementById('tc-category').value;
+  const jur  = document.getElementById('tc-jurisdiction').value;
+  const eff  = document.getElementById('tc-effective').value;
+  const rateRaw = document.getElementById('tc-rate').value;
+  if (!code || !desc || !cat || !jur || !eff) { alert('Code, description, category, jurisdiction, and effective date are required.'); return; }
+
+  const editId = document.getElementById('tax-code-edit-id').value;
+  const rate   = rateRaw !== '' ? parseFloat(rateRaw) : null;
+
+  const data = {
+    id:           editId || 'TC-' + Date.now(),
+    code, description: desc, category: cat,
+    jurisdiction: jur,
+    event:        document.getElementById('tc-event').value || 'All Events',
+    rate, effective: eff,
+    status:       document.getElementById('tc-status').value,
+    notes:        document.getElementById('tc-notes').value.trim()
+  };
+
+  if (editId) {
+    const idx = taxCodesData.findIndex(c => c.id === editId);
+    if (idx !== -1) taxCodesData[idx] = data;
+  } else {
+    taxCodesData.push(data);
+  }
+
+  closeModal('modal-tax-code');
+  renderTaxCodes();
+}
+
+function deleteTaxCode(id) {
+  if (!confirm('Delete this tax code? This cannot be undone.')) return;
+  const idx = taxCodesData.findIndex(c => c.id === id);
+  if (idx !== -1) taxCodesData.splice(idx, 1);
+  renderTaxCodes();
 }
 </script>
 </body>
