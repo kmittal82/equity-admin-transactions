@@ -4109,20 +4109,37 @@
 
       <!-- TAX RATES panel -->
       <div id="tax-panel-rates">
-        <div style="margin-bottom:14px;display:flex;align-items:center;gap:10px">
-          <div class="filter-search-wrap" style="max-width:320px">
-            <span class="filter-search-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
-            <input class="filter-search-input" id="tax-rate-search" placeholder="Search jurisdiction…" oninput="renderTaxRates()">
-          </div>
-          <select class="filter-select-sm" id="tax-rate-type-filter" onchange="renderTaxRates()">
+        <div class="filter-bar">
+          <input type="text" class="filter-input" id="tax-rate-search" placeholder="Search jurisdiction…" oninput="renderTaxRates()">
+          <select class="filter-select" id="tax-rate-type-filter" onchange="renderTaxRates()">
             <option value="">All Types</option>
             <option>Federal</option>
             <option>State</option>
             <option>Local</option>
             <option>International</option>
           </select>
+          <span class="filter-count" id="tax-rate-count"></span>
         </div>
-        <div id="tax-rates-container"></div>
+        <div class="ag-table-wrap" style="overflow-x:auto">
+          <table class="ag-table" id="tax-rates-table">
+            <thead>
+              <tr>
+                <th style="width:44px">Actions</th>
+                <th>Jurisdiction</th>
+                <th style="width:110px">Type</th>
+                <th style="width:55px">CCY</th>
+                <th style="text-align:right;width:110px">Federal / Top</th>
+                <th style="text-align:right;width:110px">Supplemental</th>
+                <th style="text-align:right;width:110px">State / Local</th>
+                <th style="text-align:right;width:110px">Soc. Security</th>
+                <th style="text-align:right;width:90px">Medicare</th>
+                <th style="width:100px">Effective</th>
+                <th style="width:85px">Status</th>
+              </tr>
+            </thead>
+            <tbody id="tax-rates-body"></tbody>
+          </table>
+        </div>
       </div>
 
       <!-- TAX CODES panel -->
@@ -7889,8 +7906,8 @@ function switchTaxTab(tab) {
 function renderTaxRates() {
   const search  = (document.getElementById('tax-rate-search')?.value || '').toLowerCase();
   const typeVal = document.getElementById('tax-rate-type-filter')?.value || '';
-  const container = document.getElementById('tax-rates-container');
-  if (!container) return;
+  const tbody   = document.getElementById('tax-rates-body');
+  if (!tbody) return;
 
   const filtered = taxRatesData.filter(r => {
     if (typeVal && r.type !== typeVal) return false;
@@ -7898,47 +7915,55 @@ function renderTaxRates() {
     return true;
   });
 
-  const fmtRate = v => v !== null && v !== undefined ? `${v.toFixed(1)}%` : '—';
+  const countEl = document.getElementById('tax-rate-count');
+  if (countEl) countEl.textContent = `${filtered.length} rate${filtered.length !== 1 ? 's' : ''}`;
 
-  container.innerHTML = filtered.map(r => {
-    const cells = [
-      r.federal      !== null ? { label:'Federal Income', val: fmtRate(r.federal),      sub:'Marginal / top rate' } : null,
-      r.supplemental !== null ? { label:'Supplemental',   val: fmtRate(r.supplemental), sub:'Flat withholding rate' } : null,
-      r.state        !== null ? { label:'State / Local',  val: fmtRate(r.state),         sub:'State income tax' } : null,
-      r.socialSecurity !== null ? { label:'Social Security', val: fmtRate(r.socialSecurity), sub:'OASDI / NI' } : null,
-      r.medicare !== null ? { label:'Medicare / Health',   val: fmtRate(r.medicare),    sub:'Employer portion' } : null,
-      r.addlMedicare !== null ? { label:'Addl. Medicare',  val: fmtRate(r.addlMedicare), sub:'High-income surcharge' } : null,
-    ].filter(Boolean);
+  const fmtR = v => v !== null && v !== undefined ? `<span style="font-weight:600">${v.toFixed(1)}%</span>` : `<span style="color:var(--textm)">—</span>`;
+  const typeCfg = {
+    Federal:       { bg:'#eff6ff', color:'#1d4ed8' },
+    State:         { bg:'#f0fdf4', color:'#166534' },
+    Local:         { bg:'#fef3c7', color:'#92400e' },
+    International: { bg:'#f5f3ff', color:'#6d28d9' },
+  };
 
-    return `<div class="tax-rate-card">
-      <div class="tax-rate-head">
-        <div class="tax-rate-flag">${r.flag}</div>
-        <div>
-          <div class="tax-rate-country">${r.jurisdiction}</div>
-          <div class="tax-rate-subtitle">${r.type} · ${r.currency} · Effective ${r.effectiveDate}${r.expiryDate ? ' → ' + r.expiryDate : ''}</div>
+  tbody.innerHTML = filtered.map(r => {
+    const tc = typeCfg[r.type] || { bg:'#f1f5f9', color:'#475569' };
+    return `<tr>
+      <td onclick="event.stopPropagation()">
+        <div class="kebab-wrap">
+          <button class="kebab-btn" onclick="event.stopPropagation();toggleKebab(this)" title="More actions">⋮</button>
+          <div class="kebab-menu">
+            <div class="kebab-menu-label">Tax Rate</div>
+            <button class="kebab-menu-item" onclick="closeAllKebabs();openTaxRateModal('${r.id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>Edit Rate
+            </button>
+            <div class="kebab-divider"></div>
+            <button class="kebab-menu-item danger" onclick="closeAllKebabs();deleteTaxRate('${r.id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>Delete
+            </button>
+          </div>
         </div>
-        <span class="sdot sdot-complete" style="margin-left:10px;font-size:11px">${r.status}</span>
-        <div class="tax-rate-actions">
-          <button class="btn btn-ghost" style="height:30px;padding:0 12px;font-size:12px" onclick="openTaxRateModal('${r.id}')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>
-            Edit
-          </button>
-          <button class="btn btn-ghost danger" style="height:30px;padding:0 12px;font-size:12px;color:var(--red)" onclick="deleteTaxRate('${r.id}')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
-            Delete
-          </button>
+      </td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:16px">${r.flag}</span>
+          <div>
+            <div style="font-weight:600;font-size:13px">${r.jurisdiction}</div>
+            ${r.notes ? `<div style="font-size:11px;color:var(--textm);margin-top:1px;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${r.notes}">${r.notes}</div>` : ''}
+          </div>
         </div>
-      </div>
-      ${r.notes ? `<div style="padding:10px 20px;font-size:12px;color:var(--text2);background:#fffbeb;border-bottom:1px solid var(--border)">${r.notes}</div>` : ''}
-      <div class="tax-rate-grid">
-        ${cells.map(c => `<div class="tax-rate-cell">
-          <div class="tax-rate-cell-label">${c.label}</div>
-          <div class="tax-rate-cell-val">${c.val}</div>
-          <div class="tax-rate-cell-sub">${c.sub}</div>
-        </div>`).join('')}
-      </div>
-    </div>`;
-  }).join('') || `<div style="text-align:center;padding:40px;color:var(--textm)">No tax rates found</div>`;
+      </td>
+      <td><span class="type-badge" style="background:${tc.bg};color:${tc.color}">${r.type}</span></td>
+      <td style="font-size:12px;font-weight:600;color:var(--text2)">${r.currency}</td>
+      <td style="text-align:right">${fmtR(r.federal)}</td>
+      <td style="text-align:right">${fmtR(r.supplemental)}</td>
+      <td style="text-align:right">${fmtR(r.state)}</td>
+      <td style="text-align:right">${fmtR(r.socialSecurity)}</td>
+      <td style="text-align:right">${fmtR(r.medicare)}</td>
+      <td style="font-size:12px;color:var(--text2)">${r.effectiveDate}${r.expiryDate ? `<div style="font-size:10.5px;color:var(--textm)">→ ${r.expiryDate}</div>` : ''}</td>
+      <td><span class="sdot sdot-complete" style="font-size:12px">${r.status}</span></td>
+    </tr>`;
+  }).join('') || `<tr><td colspan="11" style="text-align:center;padding:32px;color:var(--textm)">No tax rates found</td></tr>`;
 
   updateTaxStats();
 }
