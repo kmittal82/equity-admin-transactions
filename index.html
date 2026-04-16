@@ -9068,11 +9068,13 @@ function renderFXRates() {
       pinned: 'left',
       cellRenderer: (params) => `
         <div style="display:flex;gap:6px;align-items:center">
-          <button class="btn btn-ghost" style="padding:4px 6px;font-size:11px;height:28px;min-width:48px" onclick="openFXRateDrawer('${params.data.id}')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;margin-right:2px">Edit</svg>
+          <button class="btn btn-ghost" style="padding:4px 8px;font-size:11px;height:28px;display:flex;align-items:center;gap:4px" onclick="openFXRateDrawer('${params.data.id}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>
+            Edit
           </button>
-          <button class="btn btn-ghost" style="padding:4px 6px;font-size:11px;height:28px;min-width:48px" onclick="deleteFXRate('${params.data.id}')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;margin-right:2px">Delete</svg>
+          <button class="btn btn-ghost" style="padding:4px 8px;font-size:11px;height:28px;display:flex;align-items:center;gap:4px" onclick="deleteFXRate('${params.data.id}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+            Delete
           </button>
         </div>
       `,
