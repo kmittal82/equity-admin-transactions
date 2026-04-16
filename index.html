@@ -2196,9 +2196,13 @@
 
   <div class="nav-section">
     <div class="nav-label">Administration</div>
-    <div class="nav-item" onclick="setActive(this)">
+    <div class="nav-item" id="nav-settings" onclick="toggleSub(this,'sub-settings')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
       Company Settings
+      <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,18 15,12 9,6"/></svg>
+    </div>
+    <div class="nav-sub" id="sub-settings">
+      <div class="nav-sub-item" onclick="switchView('fx-rates')">FX Rates</div>
     </div>
     <div class="nav-item" onclick="setActive(this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
@@ -4395,6 +4399,78 @@
 
     </div><!-- /view-tax-mgmt -->
 
+    <!-- ════ FX RATES VIEW ════ -->
+    <div class="view-section" id="view-fx-rates">
+      <div class="page-head">
+        <div>
+          <div class="page-title">FX Rates</div>
+          <div class="page-sub">Global currency exchange rates management</div>
+        </div>
+        <div class="head-actions">
+          <button class="btn btn-ghost" onclick="downloadFXRatesData()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download
+          </button>
+          <button class="btn btn-ghost" onclick="triggerFXRatesUpload()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17,10 12,15 7,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Upload
+          </button>
+          <button class="btn btn-primary" onclick="openAddFXRateModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Rate
+          </button>
+        </div>
+      </div>
+
+      <div class="summary-row" style="margin-bottom:24px">
+        <div class="summary-card">
+          <div class="s-label">Currency Pairs</div>
+          <div class="s-value" id="fx-stat-pairs">24</div>
+          <div class="s-sub">Active exchange rates</div>
+        </div>
+        <div class="summary-card">
+          <div class="s-label">Last Updated</div>
+          <div class="s-value" id="fx-stat-updated">—</div>
+          <div class="s-sub">Most recent rate</div>
+        </div>
+        <div class="summary-card">
+          <div class="s-label">Currencies</div>
+          <div class="s-value" id="fx-stat-currencies">12</div>
+          <div class="s-sub">Unique currencies</div>
+        </div>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="filter-bar">
+        <input type="text" class="filter-input" id="fx-search" placeholder="Search currency pair…" oninput="renderFXRates()">
+        <span class="filter-count" id="fx-rate-count"></span>
+      </div>
+
+      <!-- AG Grid table -->
+      <div class="ag-table-wrap" style="overflow-x:auto">
+        <table class="ag-table" id="fx-rates-table">
+          <thead>
+            <tr>
+              <th style="width:44px">Actions</th>
+              <th style="width:100px">From</th>
+              <th style="width:100px">To</th>
+              <th style="width:110px">Effective Date</th>
+              <th style="width:110px">Exchange Date</th>
+              <th style="width:100px">Exchange Time</th>
+              <th style="text-align:right;width:100px">Ask</th>
+              <th style="text-align:right;width:100px">Bid</th>
+              <th style="text-align:right;width:100px">Average</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody id="fx-rates-body"></tbody>
+        </table>
+      </div>
+
+      <!-- Hidden upload input -->
+      <input type="file" id="fx-upload-input" style="display:none" accept=".csv" onchange="handleFXRatesUpload(event)">
+    </div><!-- /view-fx-rates -->
+
   </div><!-- /content -->
 </div><!-- /main -->
 
@@ -6108,6 +6184,7 @@ function switchView(viewId) {
   else if (viewId === 'release-mgmt') renderReleaseMgmt();
   else if (viewId === 'participants') renderParticipantsTable();
   else if (viewId === 'tax-mgmt') { renderTaxRates(); updateTaxStats(); }
+  else if (viewId === 'fx-rates') { document.getElementById('nav-settings')?.classList.add('active'); renderFXRates(); }
 }
 
 // ── Equity Plans ──
@@ -8873,6 +8950,186 @@ document.addEventListener('click', (e) => {
     }
   });
 });
+
+/* ════════════════════════════════════
+   FX RATES MANAGEMENT
+════════════════════════════════════ */
+
+const fxRatesData = [
+  { id: 'FX-001', currencyFrom: 'USD', currencyTo: 'EUR', effectiveDate: '2026-04-08', exchangeDate: '2026-04-08', exchangeTime: '16:30', ask: 0.9245, bid: 0.9235, average: 0.9240, notes: 'ECB reference rate' },
+  { id: 'FX-002', currencyFrom: 'USD', currencyTo: 'GBP', effectiveDate: '2026-04-08', exchangeDate: '2026-04-08', exchangeTime: '16:30', ask: 0.7895, bid: 0.7885, average: 0.7890, notes: 'Bank of England' },
+  { id: 'FX-003', currencyFrom: 'USD', currencyTo: 'JPY', effectiveDate: '2026-04-08', exchangeDate: '2026-04-08', exchangeTime: '16:30', ask: 149.85, bid: 149.75, average: 149.80, notes: 'BOJ fixing' },
+  { id: 'FX-004', currencyFrom: 'USD', currencyTo: 'CAD', effectiveDate: '2026-04-08', exchangeDate: '2026-04-08', exchangeTime: '16:30', ask: 1.3695, bid: 1.3685, average: 1.3690, notes: 'Bank of Canada' },
+  { id: 'FX-005', currencyFrom: 'USD', currencyTo: 'AUD', effectiveDate: '2026-04-08', exchangeDate: '2026-04-08', exchangeTime: '16:30', ask: 1.5245, bid: 1.5235, average: 1.5240, notes: 'Reserve Bank of Australia' },
+  { id: 'FX-006', currencyFrom: 'USD', currencyTo: 'CHF', effectiveDate: '2026-04-08', exchangeDate: '2026-04-08', exchangeTime: '16:30', ask: 0.8765, bid: 0.8755, average: 0.8760, notes: 'SNB' },
+  { id: 'FX-007', currencyFrom: 'EUR', currencyTo: 'GBP', effectiveDate: '2026-04-08', exchangeDate: '2026-04-08', exchangeTime: '16:30', ask: 0.8535, bid: 0.8525, average: 0.8530, notes: 'Cross rate' },
+  { id: 'FX-008', currencyFrom: 'EUR', currencyTo: 'JPY', effectiveDate: '2026-04-08', exchangeDate: '2026-04-08', exchangeTime: '16:30', ask: 162.15, bid: 162.05, average: 162.10, notes: 'Cross rate' },
+];
+
+function renderFXRates() {
+  const search = (document.getElementById('fx-search')?.value || '').toLowerCase();
+  const tbody = document.getElementById('fx-rates-body');
+  if (!tbody) return;
+
+  const filtered = fxRatesData.filter(r => {
+    const pair = `${r.currencyFrom}${r.currencyTo}`.toLowerCase();
+    return !search || pair.includes(search);
+  });
+
+  const countEl = document.getElementById('fx-rate-count');
+  if (countEl) countEl.textContent = `${filtered.length} rate${filtered.length !== 1 ? 's' : ''}`;
+
+  tbody.innerHTML = filtered.map(r => {
+    const fmtNum = (v) => typeof v === 'number' ? v.toFixed(4) : v;
+    return `<tr>
+      <td onclick="event.stopPropagation()">
+        <div class="kebab-wrap">
+          <button class="kebab-btn" onclick="event.stopPropagation();toggleKebab(this)" title="More actions">⋮</button>
+          <div class="kebab-menu">
+            <div class="kebab-menu-label">FX Rate</div>
+            <button class="kebab-menu-item" onclick="closeAllKebabs();editFXRate('${r.id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>Edit
+            </button>
+            <div class="kebab-divider"></div>
+            <button class="kebab-menu-item danger" onclick="closeAllKebabs();deleteFXRate('${r.id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>Delete
+            </button>
+          </div>
+        </div>
+      </td>
+      <td style="font-weight:600;color:var(--accent)">${r.currencyFrom}</td>
+      <td style="font-weight:600;color:var(--accent)">${r.currencyTo}</td>
+      <td style="font-size:12px;color:var(--text2)">${r.effectiveDate}</td>
+      <td style="font-size:12px;color:var(--text2)">${r.exchangeDate}</td>
+      <td style="font-size:12px;color:var(--text2)">${r.exchangeTime}</td>
+      <td style="text-align:right;font-family:'SF Mono',monospace;font-weight:600">${fmtNum(r.ask)}</td>
+      <td style="text-align:right;font-family:'SF Mono',monospace;font-weight:600">${fmtNum(r.bid)}</td>
+      <td style="text-align:right;font-family:'SF Mono',monospace;font-weight:600;color:var(--green)">${fmtNum(r.average)}</td>
+      <td style="font-size:11px;color:var(--textm);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${r.notes}">${r.notes || '—'}</td>
+    </tr>`;
+  }).join('') || `<tr><td colspan="10" style="text-align:center;padding:32px;color:var(--textm)">No FX rates found</td></tr>`;
+
+  updateFXRatesStats();
+}
+
+function updateFXRatesStats() {
+  const pairs = fxRatesData.length;
+  const currencies = new Set();
+  fxRatesData.forEach(r => {
+    currencies.add(r.currencyFrom);
+    currencies.add(r.currencyTo);
+  });
+  const latestDate = fxRatesData.length > 0 ? fxRatesData[0].effectiveDate : '—';
+
+  const pairsEl = document.getElementById('fx-stat-pairs');
+  const updatedEl = document.getElementById('fx-stat-updated');
+  const currenciesEl = document.getElementById('fx-stat-currencies');
+
+  if (pairsEl) pairsEl.textContent = pairs;
+  if (updatedEl) updatedEl.textContent = latestDate;
+  if (currenciesEl) currenciesEl.textContent = currencies.size;
+}
+
+function downloadFXRatesData() {
+  const headers = ['Currency From', 'Currency To', 'Effective Date', 'Exchange Date', 'Exchange Time', 'Ask', 'Bid', 'Average', 'Notes'];
+  const rows = fxRatesData.map(r => [
+    r.currencyFrom,
+    r.currencyTo,
+    r.effectiveDate,
+    r.exchangeDate,
+    r.exchangeTime,
+    r.ask,
+    r.bid,
+    r.average,
+    r.notes
+  ]);
+
+  const csv = [headers, ...rows].map(row =>
+    row.map(cell => {
+      if (typeof cell === 'string' && (cell.includes(',') || cell.includes('"'))) {
+        return '"' + cell.replace(/"/g, '""') + '"';
+      }
+      return cell;
+    }).join(',')
+  ).join('\n');
+
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `fx-rates-${new Date().toISOString().split('T')[0]}.csv`;
+  a.click();
+  window.URL.revokeObjectURL(url);
+}
+
+function triggerFXRatesUpload() {
+  document.getElementById('fx-upload-input').click();
+}
+
+function handleFXRatesUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const csv = e.target.result;
+      const lines = csv.split('\n').filter(line => line.trim());
+      const headers = lines[0].split(',').map(h => h.trim());
+
+      const newRates = [];
+      for (let i = 1; i < lines.length; i++) {
+        const values = lines[i].split(',').map(v => v.trim().replace(/^"|"$/g, ''));
+        if (values.length >= 5 && values[0]) {
+          const rate = {
+            id: 'FX-' + Date.now() + '-' + i,
+            currencyFrom: values[0],
+            currencyTo: values[1],
+            effectiveDate: values[2],
+            exchangeDate: values[3],
+            exchangeTime: values[4],
+            ask: parseFloat(values[5]) || 0,
+            bid: parseFloat(values[6]) || 0,
+            average: parseFloat(values[7]) || 0,
+            notes: values[8] || ''
+          };
+          newRates.push(rate);
+        }
+      }
+
+      if (newRates.length === 0) {
+        alert('No valid rates found in the CSV file.');
+        return;
+      }
+
+      fxRatesData.push(...newRates);
+      renderFXRates();
+      alert(`Successfully imported ${newRates.length} FX rate(s).`);
+    } catch (err) {
+      alert('Error parsing CSV file: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+function openAddFXRateModal() {
+  alert('Add FX Rate modal would open here. For now, use the upload feature to add rates in bulk.');
+}
+
+function editFXRate(id) {
+  const rate = fxRatesData.find(r => r.id === id);
+  if (rate) {
+    alert('Edit modal for ' + rate.currencyFrom + '/' + rate.currencyTo + ' would open here.');
+  }
+}
+
+function deleteFXRate(id) {
+  if (!confirm('Delete this FX rate? This cannot be undone.')) return;
+  const idx = fxRatesData.findIndex(r => r.id === id);
+  if (idx !== -1) fxRatesData.splice(idx, 1);
+  renderFXRates();
+}
 </script>
 </body>
 </html>
