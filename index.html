@@ -1681,6 +1681,46 @@
       flex-shrink: 0; display: flex; gap: 10px; justify-content: flex-end;
     }
 
+    /* FX Rate drawer */
+    .fx-rate-drawer-overlay {
+      position: fixed; inset: 0; background: rgba(15,23,42,0.3);
+      z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    }
+    .fx-rate-drawer-overlay.open { opacity: 1; pointer-events: all; }
+    .fx-rate-drawer {
+      position: fixed; top: 0; right: 0; bottom: 0;
+      width: 480px; max-width: 94vw; background: var(--card);
+      border-left: 1px solid var(--border);
+      box-shadow: -8px 0 40px rgba(15,23,42,0.15);
+      z-index: 201; transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+      display: flex; flex-direction: column;
+    }
+    .fx-rate-drawer-overlay.open .fx-rate-drawer { transform: translateX(0); }
+    .fx-rate-drawer-head {
+      padding: 20px 24px; background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      flex-shrink: 0; color: #fff;
+    }
+    .fx-rate-drawer-title { font-size: 18px; font-weight: 700; }
+    .fx-rate-drawer-meta { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+    .fx-rate-drawer-close {
+      width: 32px; height: 32px; border: none; background: rgba(255,255,255,0.1);
+      border-radius: 8px; cursor: pointer; display: flex; align-items: center;
+      justify-content: center; color: rgba(255,255,255,0.7); transition: all 0.14s; flex-shrink: 0;
+    }
+    .fx-rate-drawer-close:hover { background: rgba(255,255,255,0.2); color: #fff; }
+    .fx-rate-drawer-close svg { width: 18px; height: 18px; }
+    .fx-rate-drawer-body { flex: 1; overflow-y: auto; padding: 24px; }
+    .fx-rate-drawer-body::-webkit-scrollbar { width: 4px; }
+    .fx-rate-drawer-body::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 2px; }
+    .fx-rate-drawer-foot {
+      padding: 20px 24px; border-top: 1px solid var(--border);
+      flex-shrink: 0; display: flex; gap: 10px; justify-content: flex-end;
+    }
+    .fx-form-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+    }
+
     /* Searchable multi-select */
     .grant-types-selector {
       position: relative;
@@ -4454,6 +4494,73 @@
 
   </div><!-- /content -->
 </div><!-- /main -->
+
+<!-- ════ FX RATE DRAWER ════ -->
+<div class="fx-rate-drawer-overlay" id="fx-rate-drawer-overlay" onclick="closeFXRateDrawer(event)">
+  <div class="fx-rate-drawer" id="fx-rate-drawer" onclick="event.stopPropagation()">
+    <div class="fx-rate-drawer-head">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+        <div>
+          <div class="fx-rate-drawer-title" id="drawer-fx-title">USD / EUR</div>
+          <div class="fx-rate-drawer-meta" id="drawer-fx-meta">Exchange rate</div>
+        </div>
+        <button class="fx-rate-drawer-close" onclick="closeFXRateDrawer()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="fx-rate-drawer-body">
+      <input type="hidden" id="drawer-fx-rate-id">
+
+      <div class="fx-form-grid">
+        <div>
+          <label class="form-label">Currency From <span class="req">*</span></label>
+          <input class="form-input" id="drawer-fx-from" placeholder="USD" maxlength="3">
+        </div>
+        <div>
+          <label class="form-label">Currency To <span class="req">*</span></label>
+          <input class="form-input" id="drawer-fx-to" placeholder="EUR" maxlength="3">
+        </div>
+        <div>
+          <label class="form-label">Effective Date <span class="req">*</span></label>
+          <input class="form-input" id="drawer-fx-effective" type="date">
+        </div>
+        <div>
+          <label class="form-label">Exchange Date <span class="req">*</span></label>
+          <input class="form-input" id="drawer-fx-exchange-date" type="date">
+        </div>
+        <div>
+          <label class="form-label">Exchange Time <span class="req">*</span></label>
+          <input class="form-input" id="drawer-fx-exchange-time" type="time">
+        </div>
+        <div style="display:none"></div>
+        <div>
+          <label class="form-label">Ask <span class="req">*</span></label>
+          <input class="form-input" id="drawer-fx-ask" type="number" step="0.0001" placeholder="0.9245">
+        </div>
+        <div>
+          <label class="form-label">Bid <span class="req">*</span></label>
+          <input class="form-input" id="drawer-fx-bid" type="number" step="0.0001" placeholder="0.9235">
+        </div>
+        <div>
+          <label class="form-label">Average <span class="req">*</span></label>
+          <input class="form-input" id="drawer-fx-average" type="number" step="0.0001" placeholder="0.9240">
+        </div>
+        <div style="display:none"></div>
+        <div class="tax-form-full">
+          <label class="form-label">Notes</label>
+          <textarea class="form-input" id="drawer-fx-notes" rows="3" placeholder="Additional notes…" style="resize:vertical"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="fx-rate-drawer-foot">
+      <button class="btn btn-ghost" onclick="closeFXRateDrawer()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveFXRateFromDrawer()">Save Rate</button>
+    </div>
+  </div>
+</div>
 
 <!-- ════════════ MODALS ════════════ -->
 
@@ -8956,6 +9063,23 @@ function renderFXRates() {
 
   const columnDefs = [
     {
+      headerName: 'Actions',
+      width: 140,
+      pinned: 'left',
+      cellRenderer: (params) => `
+        <div style="display:flex;gap:6px;align-items:center">
+          <button class="btn btn-ghost" style="padding:4px 6px;font-size:11px;height:28px;min-width:48px" onclick="openFXRateDrawer('${params.data.id}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;margin-right:2px">Edit</svg>
+          </button>
+          <button class="btn btn-ghost" style="padding:4px 6px;font-size:11px;height:28px;min-width:48px" onclick="deleteFXRate('${params.data.id}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;margin-right:2px">Delete</svg>
+          </button>
+        </div>
+      `,
+      sortable: false,
+      filter: false
+    },
+    {
       field: 'id',
       headerName: 'ID',
       width: 100,
@@ -8965,7 +9089,7 @@ function renderFXRates() {
       field: 'currencyFrom',
       headerName: 'From',
       width: 100,
-      editable: true,
+      editable: false,
       filter: 'agTextColumnFilter',
       filterParams: { buttons: ['reset'] }
     },
@@ -8973,7 +9097,7 @@ function renderFXRates() {
       field: 'currencyTo',
       headerName: 'To',
       width: 100,
-      editable: true,
+      editable: false,
       filter: 'agTextColumnFilter',
       filterParams: { buttons: ['reset'] }
     },
@@ -8981,7 +9105,7 @@ function renderFXRates() {
       field: 'effectiveDate',
       headerName: 'Effective Date',
       width: 130,
-      editable: true,
+      editable: false,
       filter: 'agDateColumnFilter',
       filterParams: { buttons: ['reset'] }
     },
@@ -8989,19 +9113,19 @@ function renderFXRates() {
       field: 'exchangeDate',
       headerName: 'Exchange Date',
       width: 130,
-      editable: true
+      editable: false
     },
     {
       field: 'exchangeTime',
       headerName: 'Exchange Time',
       width: 120,
-      editable: true
+      editable: false
     },
     {
       field: 'ask',
       headerName: 'Ask',
       width: 110,
-      editable: true,
+      editable: false,
       valueFormatter: (params) => typeof params.value === 'number' ? params.value.toFixed(4) : params.value,
       filter: 'agNumberColumnFilter'
     },
@@ -9009,7 +9133,7 @@ function renderFXRates() {
       field: 'bid',
       headerName: 'Bid',
       width: 110,
-      editable: true,
+      editable: false,
       valueFormatter: (params) => typeof params.value === 'number' ? params.value.toFixed(4) : params.value,
       filter: 'agNumberColumnFilter'
     },
@@ -9017,7 +9141,7 @@ function renderFXRates() {
       field: 'average',
       headerName: 'Average',
       width: 110,
-      editable: true,
+      editable: false,
       valueFormatter: (params) => typeof params.value === 'number' ? params.value.toFixed(4) : params.value,
       filter: 'agNumberColumnFilter'
     },
@@ -9025,20 +9149,8 @@ function renderFXRates() {
       field: 'notes',
       headerName: 'Notes',
       flex: 1,
-      editable: true,
+      editable: false,
       minWidth: 200
-    },
-    {
-      headerName: 'Actions',
-      width: 80,
-      cellRenderer: (params) => `
-        <button class="btn btn-ghost" style="padding:4px 8px;font-size:11px;height:28px" onclick="deleteFXRate('${params.data.id}')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
-          Delete
-        </button>
-      `,
-      sortable: false,
-      filter: false
     }
   ];
 
@@ -9178,6 +9290,72 @@ function deleteFXRate(id) {
   if (!confirm('Delete this FX rate? This cannot be undone.')) return;
   const idx = fxRatesData.findIndex(r => r.id === id);
   if (idx !== -1) fxRatesData.splice(idx, 1);
+  renderFXRates();
+}
+
+function openFXRateDrawer(id) {
+  const rate = id ? fxRatesData.find(r => r.id === id) : null;
+
+  if (!rate) return;
+
+  document.getElementById('drawer-fx-title').textContent = `${rate.currencyFrom} / ${rate.currencyTo}`;
+  document.getElementById('drawer-fx-meta').textContent = `Effective ${rate.effectiveDate}`;
+
+  document.getElementById('drawer-fx-rate-id').value = rate.id;
+  document.getElementById('drawer-fx-from').value = rate.currencyFrom;
+  document.getElementById('drawer-fx-to').value = rate.currencyTo;
+  document.getElementById('drawer-fx-effective').value = rate.effectiveDate;
+  document.getElementById('drawer-fx-exchange-date').value = rate.exchangeDate;
+  document.getElementById('drawer-fx-exchange-time').value = rate.exchangeTime;
+  document.getElementById('drawer-fx-ask').value = rate.ask;
+  document.getElementById('drawer-fx-bid').value = rate.bid;
+  document.getElementById('drawer-fx-average').value = rate.average;
+  document.getElementById('drawer-fx-notes').value = rate.notes || '';
+
+  document.getElementById('fx-rate-drawer-overlay').classList.add('open');
+}
+
+function closeFXRateDrawer(event) {
+  if (event && event.target !== document.getElementById('fx-rate-drawer-overlay')) return;
+  document.getElementById('fx-rate-drawer-overlay').classList.remove('open');
+}
+
+function saveFXRateFromDrawer() {
+  const from = document.getElementById('drawer-fx-from').value.trim().toUpperCase();
+  const to = document.getElementById('drawer-fx-to').value.trim().toUpperCase();
+  const effective = document.getElementById('drawer-fx-effective').value;
+  const exchangeDate = document.getElementById('drawer-fx-exchange-date').value;
+  const exchangeTime = document.getElementById('drawer-fx-exchange-time').value;
+  const ask = parseFloat(document.getElementById('drawer-fx-ask').value);
+  const bid = parseFloat(document.getElementById('drawer-fx-bid').value);
+  const average = parseFloat(document.getElementById('drawer-fx-average').value);
+  const notes = document.getElementById('drawer-fx-notes').value.trim();
+  const rateId = document.getElementById('drawer-fx-rate-id').value;
+
+  if (!from || !to || !effective || !exchangeDate || !exchangeTime) {
+    alert('Please fill in all required fields');
+    return;
+  }
+
+  if (isNaN(ask) || isNaN(bid) || isNaN(average)) {
+    alert('Ask, Bid, and Average must be valid numbers');
+    return;
+  }
+
+  const rate = fxRatesData.find(r => r.id === rateId);
+  if (rate) {
+    rate.currencyFrom = from;
+    rate.currencyTo = to;
+    rate.effectiveDate = effective;
+    rate.exchangeDate = exchangeDate;
+    rate.exchangeTime = exchangeTime;
+    rate.ask = ask;
+    rate.bid = bid;
+    rate.average = average;
+    rate.notes = notes;
+  }
+
+  closeFXRateDrawer();
   renderFXRates();
 }
 </script>
