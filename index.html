@@ -8693,9 +8693,9 @@ function getSelectedGrantTypes(context) {
 document.addEventListener('click', (e) => {
   ['modal', 'drawer'].forEach(ctx => {
     const dropdown = document.getElementById(`${ctx}-grant-dropdown`);
-    const wrapper = document.querySelector(`#${ctx}-grant-dropdown`)?.parentElement;
-    if (dropdown && !wrapper?.contains(e.target)) {
-      dropdown.classList.remove('show');
+    const selector = document.getElementById(`${ctx}-grant-pills`)?.closest('.grant-types-selector');
+    if (dropdown && selector && !selector.contains(e.target)) {
+      closeGrantTypesDropdown(ctx);
     }
   });
 });
