@@ -4131,6 +4131,7 @@
                 <th style="width:44px">Actions</th>
                 <th>Jurisdiction</th>
                 <th style="width:110px">Type</th>
+                <th style="width:120px">Grant Types</th>
                 <th style="width:55px">CCY</th>
                 <th style="text-align:right;width:110px">Federal / Top</th>
                 <th style="text-align:right;width:110px">Supplemental</th>
@@ -4236,6 +4237,7 @@
     </div>
     <div class="modal-body">
       <input type="hidden" id="tax-rate-edit-id">
+      <input type="hidden" id="tax-rate-grant-types">
       <div class="tax-form-grid">
         <div>
           <label class="form-label">Jurisdiction <span class="req">*</span></label>
@@ -4282,6 +4284,24 @@
         <div>
           <label class="form-label">Expiry Date</label>
           <input class="form-input" id="tr-expiry" type="date">
+        </div>
+        <div class="tax-form-full">
+          <label class="form-label">Grant Types</label>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;padding:8px 0">
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+              <input type="checkbox" class="grant-type-check" value="RSU" id="grant-rsu"> RSU
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+              <input type="checkbox" class="grant-type-check" value="RSA" id="grant-rsa"> RSA
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+              <input type="checkbox" class="grant-type-check" value="ISO" id="grant-iso"> ISO
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+              <input type="checkbox" class="grant-type-check" value="NQO" id="grant-nqo"> NQO
+            </label>
+          </div>
+          <div style="font-size:12px;color:#666">Select which grant types this tax rate applies to</div>
         </div>
         <div class="tax-form-full">
           <label class="form-label">Currency</label>
