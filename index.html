@@ -9285,7 +9285,21 @@ function handleFXRatesUpload(event) {
 }
 
 function openAddFXRateModal() {
-  alert('Click on any cell in the table to inline edit, or use the Upload feature to add rates in bulk.');
+  document.getElementById('drawer-fx-title').textContent = 'New FX Rate';
+  document.getElementById('drawer-fx-meta').textContent = 'Add a new exchange rate';
+
+  document.getElementById('drawer-fx-rate-id').value = '';
+  document.getElementById('drawer-fx-from').value = '';
+  document.getElementById('drawer-fx-to').value = '';
+  document.getElementById('drawer-fx-effective').value = '';
+  document.getElementById('drawer-fx-exchange-date').value = '';
+  document.getElementById('drawer-fx-exchange-time').value = '';
+  document.getElementById('drawer-fx-ask').value = '';
+  document.getElementById('drawer-fx-bid').value = '';
+  document.getElementById('drawer-fx-average').value = '';
+  document.getElementById('drawer-fx-notes').value = '';
+
+  document.getElementById('fx-rate-drawer-overlay').classList.add('open');
 }
 
 function deleteFXRate(id) {
@@ -9344,17 +9358,35 @@ function saveFXRateFromDrawer() {
     return;
   }
 
-  const rate = fxRatesData.find(r => r.id === rateId);
-  if (rate) {
-    rate.currencyFrom = from;
-    rate.currencyTo = to;
-    rate.effectiveDate = effective;
-    rate.exchangeDate = exchangeDate;
-    rate.exchangeTime = exchangeTime;
-    rate.ask = ask;
-    rate.bid = bid;
-    rate.average = average;
-    rate.notes = notes;
+  if (rateId) {
+    // Update existing rate
+    const rate = fxRatesData.find(r => r.id === rateId);
+    if (rate) {
+      rate.currencyFrom = from;
+      rate.currencyTo = to;
+      rate.effectiveDate = effective;
+      rate.exchangeDate = exchangeDate;
+      rate.exchangeTime = exchangeTime;
+      rate.ask = ask;
+      rate.bid = bid;
+      rate.average = average;
+      rate.notes = notes;
+    }
+  } else {
+    // Add new rate
+    const newRate = {
+      id: 'FX-' + Date.now(),
+      currencyFrom: from,
+      currencyTo: to,
+      effectiveDate: effective,
+      exchangeDate: exchangeDate,
+      exchangeTime: exchangeTime,
+      ask: ask,
+      bid: bid,
+      average: average,
+      notes: notes
+    };
+    fxRatesData.push(newRate);
   }
 
   closeFXRateDrawer();
