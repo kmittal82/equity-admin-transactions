@@ -1681,6 +1681,140 @@
       flex-shrink: 0; display: flex; gap: 10px; justify-content: flex-end;
     }
 
+    /* Searchable multi-select */
+    .grant-types-selector {
+      position: relative;
+    }
+    .grant-types-input-wrapper {
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      padding: 8px 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      background: #fff;
+      cursor: text;
+      min-height: 40px;
+      transition: all 0.14s;
+    }
+    .grant-types-input-wrapper:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+    }
+    .grant-type-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+      color: #0c4a6e;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .grant-type-pill-remove {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.1);
+      color: #0c4a6e;
+      transition: all 0.14s;
+    }
+    .grant-type-pill-remove:hover {
+      background: rgba(0,0,0,0.2);
+    }
+    .grant-types-search {
+      flex: 1;
+      min-width: 120px;
+      border: none;
+      outline: none;
+      font-family: inherit;
+      font-size: 13px;
+      color: var(--text);
+    }
+    .grant-types-search::placeholder {
+      color: var(--textm);
+    }
+    .grant-types-dropdown {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      box-shadow: 0 4px 16px rgba(15,23,42,0.1);
+      max-height: 300px;
+      overflow-y: auto;
+      z-index: 1000;
+      display: none;
+    }
+    .grant-types-dropdown.show {
+      display: block;
+      animation: slideDown 0.2s cubic-bezier(0.4,0,0.2,1);
+    }
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .grant-types-dropdown::-webkit-scrollbar {
+      width: 6px;
+    }
+    .grant-types-dropdown::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+    .grant-type-option {
+      padding: 10px 14px;
+      cursor: pointer;
+      border-bottom: 1px solid #f1f5f9;
+      transition: background 0.14s;
+      font-size: 13px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .grant-type-option:last-child {
+      border-bottom: none;
+    }
+    .grant-type-option:hover {
+      background: #f8fafc;
+    }
+    .grant-type-option.selected {
+      background: #eff6ff;
+      color: #0c4a6e;
+      font-weight: 500;
+    }
+    .grant-type-option-check {
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--border);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.14s;
+    }
+    .grant-type-option.selected .grant-type-option-check {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
     .iss-ledger-section { padding: 18px 24px; border-bottom: 1px solid var(--border); }
     .iss-ledger-section-title {
       font-size: 10.5px; font-weight: 700; color: var(--text2); text-transform: uppercase;
@@ -4324,21 +4458,17 @@
         </div>
         <div class="tax-form-full">
           <label class="form-label">Grant Types</label>
-          <div style="display:flex;gap:12px;flex-wrap:wrap;padding:8px 0">
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
-              <input type="checkbox" class="grant-type-check" value="RSU" id="grant-rsu"> RSU
-            </label>
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
-              <input type="checkbox" class="grant-type-check" value="RSA" id="grant-rsa"> RSA
-            </label>
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
-              <input type="checkbox" class="grant-type-check" value="ISO" id="grant-iso"> ISO
-            </label>
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
-              <input type="checkbox" class="grant-type-check" value="NQO" id="grant-nqo"> NQO
-            </label>
+          <div class="grant-types-selector">
+            <div class="grant-types-input-wrapper" onclick="openGrantTypesDropdown('modal')">
+              <div id="modal-grant-pills" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"></div>
+              <input type="text" class="grant-types-search" id="modal-grant-search" placeholder="Search or add grant types…"
+                     onfocus="openGrantTypesDropdown('modal')"
+                     oninput="filterGrantTypesDropdown('modal')"
+                     onkeydown="handleGrantTypeKeydown(event, 'modal')">
+            </div>
+            <div class="grant-types-dropdown" id="modal-grant-dropdown"></div>
           </div>
-          <div style="font-size:12px;color:#666">Select which grant types this tax rate applies to</div>
+          <div style="font-size:12px;color:#666;margin-top:8px">Select one or more grant types that this tax rate applies to</div>
         </div>
         <div class="tax-form-full">
           <label class="form-label">Currency</label>
@@ -4431,20 +4561,17 @@
         </div>
         <div class="tax-form-full">
           <label class="form-label">Grant Types</label>
-          <div style="display:flex;gap:12px;flex-wrap:wrap;padding:8px 0">
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
-              <input type="checkbox" class="drawer-grant-type" value="RSU" id="drawer-grant-rsu"> RSU
-            </label>
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
-              <input type="checkbox" class="drawer-grant-type" value="RSA" id="drawer-grant-rsa"> RSA
-            </label>
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
-              <input type="checkbox" class="drawer-grant-type" value="ISO" id="drawer-grant-iso"> ISO
-            </label>
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
-              <input type="checkbox" class="drawer-grant-type" value="NQO" id="drawer-grant-nqo"> NQO
-            </label>
+          <div class="grant-types-selector">
+            <div class="grant-types-input-wrapper" onclick="openGrantTypesDropdown('drawer')">
+              <div id="drawer-grant-pills" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"></div>
+              <input type="text" class="grant-types-search" id="drawer-grant-search" placeholder="Search or add grant types…"
+                     onfocus="openGrantTypesDropdown('drawer')"
+                     oninput="filterGrantTypesDropdown('drawer')"
+                     onkeydown="handleGrantTypeKeydown(event, 'drawer')">
+            </div>
+            <div class="grant-types-dropdown" id="drawer-grant-dropdown"></div>
           </div>
+          <div style="font-size:12px;color:#666;margin-top:8px">Select one or more grant types that this tax rate applies to</div>
         </div>
         <div class="tax-form-full">
           <label class="form-label">Currency</label>
@@ -7981,6 +8108,14 @@ function closeRelSimulate(e) {
    TAX MANAGEMENT
 ══════════════════════════════════ */
 
+const grantTypesList = [
+  'RSU', 'RSA', 'ISO', 'NQO', 'SAR', 'ESPP', 'PSU', 'PSA',
+  'COU', 'Bonus', 'Deferred', 'Performance Share', 'Phantom Stock',
+  'Stock Appreciation', 'Tandem SAR', 'Replacement Grant', 'Service Award',
+  'Restricted Stock Unit', 'Restricted Stock Award', 'Performance Stock',
+  'Equity Award', 'Other'
+];
+
 const taxRatesData = [
   {
     id: 'TR-US-FED-001', jurisdiction: 'United States — Federal', type: 'Federal',
@@ -8243,15 +8378,10 @@ function openTaxRateModal(id) {
   document.getElementById('tr-expiry').value             = r?.expiryDate ?? '';
   document.getElementById('tr-currency').value           = r?.currency ?? 'USD';
   document.getElementById('tr-notes').value              = r?.notes ?? '';
+  document.getElementById('modal-grant-search').value    = '';
 
-  // Set grant types
-  document.querySelectorAll('.grant-type-check').forEach(cb => cb.checked = false);
-  if (r?.grantTypes) {
-    r.grantTypes.forEach(gt => {
-      const cb = document.getElementById(`grant-${gt.toLowerCase()}`);
-      if (cb) cb.checked = true;
-    });
-  }
+  // Initialize grant types selector
+  initGrantTypesSelector('modal', r?.grantTypes || []);
 
   openModal('modal-tax-rate');
 }
@@ -8265,8 +8395,8 @@ function saveTaxRate() {
   const editId = document.getElementById('tax-rate-edit-id').value;
   const fv = id => { const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? null : v; };
 
-  // Collect grant types
-  const grantTypes = Array.from(document.querySelectorAll('.grant-type-check:checked')).map(cb => cb.value);
+  // Collect grant types from selector
+  const grantTypes = getSelectedGrantTypes('modal');
 
   const data = {
     id:             editId || 'TR-' + Date.now(),
@@ -8325,15 +8455,10 @@ function openTaxRateDrawer(id) {
   document.getElementById('drawer-expiry').value         = r?.expiryDate ?? '';
   document.getElementById('drawer-currency').value       = r?.currency ?? 'USD';
   document.getElementById('drawer-notes').value          = r?.notes ?? '';
+  document.getElementById('drawer-grant-search').value   = '';
 
-  // Set grant types
-  document.querySelectorAll('.drawer-grant-type').forEach(cb => cb.checked = false);
-  if (r?.grantTypes) {
-    r.grantTypes.forEach(gt => {
-      const cb = document.getElementById(`drawer-grant-${gt.toLowerCase()}`);
-      if (cb) cb.checked = true;
-    });
-  }
+  // Initialize grant types selector
+  initGrantTypesSelector('drawer', r?.grantTypes || []);
 
   // Show/hide delete button
   const deleteBtn = document.getElementById('drawer-delete-btn');
@@ -8362,8 +8487,8 @@ function saveTaxRateFromDrawer() {
   const editId = document.getElementById('drawer-tax-rate-id').value;
   const fv = id => { const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? null : v; };
 
-  // Collect grant types
-  const grantTypes = Array.from(document.querySelectorAll('.drawer-grant-type:checked')).map(cb => cb.value);
+  // Collect grant types from selector
+  const grantTypes = getSelectedGrantTypes('drawer');
 
   const data = {
     id:             editId || 'TR-' + Date.now(),
@@ -8450,6 +8575,130 @@ function deleteTaxCode(id) {
   if (idx !== -1) taxCodesData.splice(idx, 1);
   renderTaxCodes();
 }
+
+/* ════ GRANT TYPES SELECTOR ════ */
+let grantTypesState = {
+  modal: { selected: [], filtered: grantTypesList },
+  drawer: { selected: [], filtered: grantTypesList }
+};
+
+function openGrantTypesDropdown(context) {
+  const dropdown = document.getElementById(`${context}-grant-dropdown`);
+  const input = document.getElementById(`${context}-grant-search`);
+  dropdown.classList.add('show');
+  input.focus();
+  renderGrantTypesDropdown(context);
+}
+
+function closeGrantTypesDropdown(context) {
+  const dropdown = document.getElementById(`${context}-grant-dropdown`);
+  dropdown.classList.remove('show');
+}
+
+function filterGrantTypesDropdown(context) {
+  const input = document.getElementById(`${context}-grant-search`);
+  const searchVal = input.value.toLowerCase().trim();
+  const allTypes = grantTypesList;
+  const selected = grantTypesState[context].selected;
+
+  grantTypesState[context].filtered = searchVal
+    ? allTypes.filter(gt => gt.toLowerCase().includes(searchVal) && !selected.includes(gt))
+    : allTypes.filter(gt => !selected.includes(gt));
+
+  renderGrantTypesDropdown(context);
+}
+
+function renderGrantTypesDropdown(context) {
+  const dropdown = document.getElementById(`${context}-grant-dropdown`);
+  const filtered = grantTypesState[context].filtered;
+  const selected = grantTypesState[context].selected;
+
+  if (filtered.length === 0) {
+    dropdown.innerHTML = `<div style="padding:16px;text-align:center;color:var(--textm);font-size:13px">No grant types found</div>`;
+    return;
+  }
+
+  dropdown.innerHTML = filtered.map(gt => `
+    <div class="grant-type-option ${selected.includes(gt) ? 'selected' : ''}" onclick="toggleGrantType('${context}', '${gt}', event)">
+      <div class="grant-type-option-check">
+        ${selected.includes(gt) ? '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>' : ''}
+      </div>
+      <span>${gt}</span>
+    </div>
+  `).join('');
+}
+
+function toggleGrantType(context, grantType, event) {
+  event.stopPropagation();
+  const selected = grantTypesState[context].selected;
+  const idx = selected.indexOf(grantType);
+  if (idx !== -1) {
+    selected.splice(idx, 1);
+  } else {
+    selected.push(grantType);
+  }
+  renderGrantTypesPills(context);
+  filterGrantTypesDropdown(context);
+}
+
+function renderGrantTypesPills(context) {
+  const pills = document.getElementById(`${context}-grant-pills`);
+  const selected = grantTypesState[context].selected;
+  pills.innerHTML = selected.map(gt => `
+    <div class="grant-type-pill">
+      ${gt}
+      <div class="grant-type-pill-remove" onclick="removeGrantType('${context}', '${gt}', event)">×</div>
+    </div>
+  `).join('');
+}
+
+function removeGrantType(context, grantType, event) {
+  event.stopPropagation();
+  const selected = grantTypesState[context].selected;
+  const idx = selected.indexOf(grantType);
+  if (idx !== -1) selected.splice(idx, 1);
+  renderGrantTypesPills(context);
+  filterGrantTypesDropdown(context);
+}
+
+function handleGrantTypeKeydown(event, context) {
+  if (event.key === 'Escape') {
+    closeGrantTypesDropdown(context);
+    event.preventDefault();
+  } else if (event.key === 'Backspace') {
+    const input = event.target;
+    if (input.value === '') {
+      const selected = grantTypesState[context].selected;
+      if (selected.length > 0) {
+        selected.pop();
+        renderGrantTypesPills(context);
+        filterGrantTypesDropdown(context);
+      }
+      event.preventDefault();
+    }
+  }
+}
+
+function initGrantTypesSelector(context, grantTypes) {
+  grantTypesState[context].selected = grantTypes || [];
+  renderGrantTypesPills(context);
+  grantTypesState[context].filtered = grantTypesList.filter(gt => !grantTypesState[context].selected.includes(gt));
+}
+
+function getSelectedGrantTypes(context) {
+  return grantTypesState[context].selected;
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', (e) => {
+  ['modal', 'drawer'].forEach(ctx => {
+    const dropdown = document.getElementById(`${ctx}-grant-dropdown`);
+    const wrapper = document.querySelector(`#${ctx}-grant-dropdown`)?.parentElement;
+    if (dropdown && !wrapper?.contains(e.target)) {
+      dropdown.classList.remove('show');
+    }
+  });
+});
 </script>
 </body>
 </html>
