@@ -2120,6 +2120,10 @@
     .tax-form-full  { grid-column: 1 / -1; }
 
   </style>
+  <!-- AG Grid -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community@latest/dist/styles/ag-grid.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community@latest/dist/styles/ag-theme-quartz.css">
+  <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@latest/dist/ag-grid-community.min.js"></script>
 </head>
 <body>
 
@@ -4440,38 +4444,9 @@
         </div>
       </div>
 
-      <!-- Filter bar -->
-      <div class="filter-bar" style="flex-wrap:wrap;gap:10px">
-        <select class="filter-select" id="fx-from-filter" onchange="renderFXRates()" style="max-width:120px">
-          <option value="">All From</option>
-        </select>
-        <select class="filter-select" id="fx-to-filter" onchange="renderFXRates()" style="max-width:120px">
-          <option value="">All To</option>
-        </select>
-        <input type="date" class="filter-input" id="fx-date-filter" onchange="renderFXRates()" style="max-width:150px;padding:8px 12px">
-        <span class="filter-count" id="fx-rate-count" style="margin-left:auto"></span>
-      </div>
 
-      <!-- AG Grid table -->
-      <div class="ag-table-wrap" style="overflow-x:auto">
-        <table class="ag-table" id="fx-rates-table">
-          <thead>
-            <tr>
-              <th style="width:44px">Actions</th>
-              <th style="width:100px">From</th>
-              <th style="width:100px">To</th>
-              <th style="width:110px">Effective Date</th>
-              <th style="width:110px">Exchange Date</th>
-              <th style="width:100px">Exchange Time</th>
-              <th style="text-align:right;width:100px">Ask</th>
-              <th style="text-align:right;width:100px">Bid</th>
-              <th style="text-align:right;width:100px">Average</th>
-              <th>Notes</th>
-            </tr>
-          </thead>
-          <tbody id="fx-rates-body"></tbody>
-        </table>
-      </div>
+      <!-- AG Grid -->
+      <div id="fx-rates-grid" style="width:100%;height:600px;margin-bottom:20px" class="ag-theme-quartz"></div>
 
       <!-- Hidden upload input -->
       <input type="file" id="fx-upload-input" style="display:none" accept=".csv" onchange="handleFXRatesUpload(event)">
@@ -8972,159 +8947,126 @@ const fxRatesData = [
   { id: 'FX-008', currencyFrom: 'EUR', currencyTo: 'JPY', effectiveDate: '2026-04-08', exchangeDate: '2026-04-08', exchangeTime: '16:30', ask: 162.15, bid: 162.05, average: 162.10, notes: 'Cross rate' },
 ];
 
-function populateFXFilters() {
-  const fromSet = new Set();
-  const toSet = new Set();
-
-  fxRatesData.forEach(r => {
-    fromSet.add(r.currencyFrom);
-    toSet.add(r.currencyTo);
-  });
-
-  const fromSelect = document.getElementById('fx-from-filter');
-  const toSelect = document.getElementById('fx-to-filter');
-
-  if (fromSelect) {
-    const fromVal = fromSelect.value;
-    fromSelect.innerHTML = '<option value="">All From</option>' +
-      Array.from(fromSet).sort().map(c => `<option value="${c}">${c}</option>`).join('');
-    fromSelect.value = fromVal;
-  }
-
-  if (toSelect) {
-    const toVal = toSelect.value;
-    toSelect.innerHTML = '<option value="">All To</option>' +
-      Array.from(toSet).sort().map(c => `<option value="${c}">${c}</option>`).join('');
-    toSelect.value = toVal;
-  }
-}
+let fxGridApi = null;
+let fxColumnApi = null;
 
 function renderFXRates() {
-  const fromFilter = document.getElementById('fx-from-filter')?.value || '';
-  const toFilter = document.getElementById('fx-to-filter')?.value || '';
-  const dateFilter = document.getElementById('fx-date-filter')?.value || '';
-  const tbody = document.getElementById('fx-rates-body');
-  if (!tbody) return;
+  const gridDiv = document.getElementById('fx-rates-grid');
+  if (!gridDiv) return;
 
-  const filtered = fxRatesData.filter(r => {
-    if (fromFilter && r.currencyFrom !== fromFilter) return false;
-    if (toFilter && r.currencyTo !== toFilter) return false;
-    if (dateFilter && r.effectiveDate !== dateFilter) return false;
-    return true;
-  });
+  const columnDefs = [
+    {
+      field: 'id',
+      headerName: 'ID',
+      width: 100,
+      hide: true
+    },
+    {
+      field: 'currencyFrom',
+      headerName: 'From',
+      width: 100,
+      editable: true,
+      filter: 'agTextColumnFilter',
+      filterParams: { buttons: ['reset'] }
+    },
+    {
+      field: 'currencyTo',
+      headerName: 'To',
+      width: 100,
+      editable: true,
+      filter: 'agTextColumnFilter',
+      filterParams: { buttons: ['reset'] }
+    },
+    {
+      field: 'effectiveDate',
+      headerName: 'Effective Date',
+      width: 130,
+      editable: true,
+      filter: 'agDateColumnFilter',
+      filterParams: { buttons: ['reset'] }
+    },
+    {
+      field: 'exchangeDate',
+      headerName: 'Exchange Date',
+      width: 130,
+      editable: true
+    },
+    {
+      field: 'exchangeTime',
+      headerName: 'Exchange Time',
+      width: 120,
+      editable: true
+    },
+    {
+      field: 'ask',
+      headerName: 'Ask',
+      width: 110,
+      editable: true,
+      valueFormatter: (params) => typeof params.value === 'number' ? params.value.toFixed(4) : params.value,
+      filter: 'agNumberColumnFilter'
+    },
+    {
+      field: 'bid',
+      headerName: 'Bid',
+      width: 110,
+      editable: true,
+      valueFormatter: (params) => typeof params.value === 'number' ? params.value.toFixed(4) : params.value,
+      filter: 'agNumberColumnFilter'
+    },
+    {
+      field: 'average',
+      headerName: 'Average',
+      width: 110,
+      editable: true,
+      valueFormatter: (params) => typeof params.value === 'number' ? params.value.toFixed(4) : params.value,
+      filter: 'agNumberColumnFilter'
+    },
+    {
+      field: 'notes',
+      headerName: 'Notes',
+      flex: 1,
+      editable: true,
+      minWidth: 200
+    },
+    {
+      headerName: 'Actions',
+      width: 80,
+      cellRenderer: (params) => `
+        <button class="btn btn-ghost" style="padding:4px 8px;font-size:11px;height:28px" onclick="deleteFXRate('${params.data.id}')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+          Delete
+        </button>
+      `,
+      sortable: false,
+      filter: false
+    }
+  ];
 
-  const countEl = document.getElementById('fx-rate-count');
-  if (countEl) countEl.textContent = `${filtered.length} rate${filtered.length !== 1 ? 's' : ''}`;
+  const gridOptions = {
+    columnDefs: columnDefs,
+    rowData: fxRatesData,
+    defaultColDef: {
+      resizable: true,
+      sortable: true,
+      filter: true
+    },
+    domLayout: 'normal',
+    paginationPageSize: 20,
+    pagination: true,
+    onCellValueChanged: (params) => {
+      updateFXRatesStats();
+    }
+  };
 
-  populateFXFilters();
+  if (fxGridApi) {
+    fxGridApi.destroy();
+  }
 
-  tbody.innerHTML = filtered.map(r => {
-    const fmtNum = (v) => typeof v === 'number' ? v.toFixed(4) : v;
-    return `<tr id="fx-row-${r.id}">
-      <td onclick="event.stopPropagation()">
-        <div class="kebab-wrap">
-          <button class="kebab-btn" onclick="event.stopPropagation();toggleKebab(this)" title="More actions">⋮</button>
-          <div class="kebab-menu">
-            <div class="kebab-menu-label">FX Rate</div>
-            <button class="kebab-menu-item danger" onclick="closeAllKebabs();deleteFXRate('${r.id}')">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>Delete
-            </button>
-          </div>
-        </div>
-      </td>
-      <td style="font-weight:600;color:var(--accent);cursor:pointer" onclick="editFXCell('${r.id}', 'currencyFrom')">${r.currencyFrom}</td>
-      <td style="font-weight:600;color:var(--accent);cursor:pointer" onclick="editFXCell('${r.id}', 'currencyTo')">${r.currencyTo}</td>
-      <td style="font-size:12px;color:var(--text2);cursor:pointer" onclick="editFXCell('${r.id}', 'effectiveDate')">${r.effectiveDate}</td>
-      <td style="font-size:12px;color:var(--text2);cursor:pointer" onclick="editFXCell('${r.id}', 'exchangeDate')">${r.exchangeDate}</td>
-      <td style="font-size:12px;color:var(--text2);cursor:pointer" onclick="editFXCell('${r.id}', 'exchangeTime')">${r.exchangeTime}</td>
-      <td style="text-align:right;font-family:'SF Mono',monospace;font-weight:600;cursor:pointer" onclick="editFXCell('${r.id}', 'ask')">${fmtNum(r.ask)}</td>
-      <td style="text-align:right;font-family:'SF Mono',monospace;font-weight:600;cursor:pointer" onclick="editFXCell('${r.id}', 'bid')">${fmtNum(r.bid)}</td>
-      <td style="text-align:right;font-family:'SF Mono',monospace;font-weight:600;color:var(--green);cursor:pointer" onclick="editFXCell('${r.id}', 'average')">${fmtNum(r.average)}</td>
-      <td style="font-size:11px;color:var(--textm);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer" title="${r.notes}" onclick="editFXCell('${r.id}', 'notes')">${r.notes || '—'}</td>
-    </tr>`;
-  }).join('') || `<tr><td colspan="10" style="text-align:center;padding:32px;color:var(--textm)">No FX rates found</td></tr>`;
+  const newGridOptions = agGrid.createGrid(gridDiv, gridOptions);
+  fxGridApi = newGridOptions.api;
+  fxColumnApi = newGridOptions.columnApi;
 
   updateFXRatesStats();
-}
-
-let fxEditingCell = null;
-
-function editFXCell(rateId, field) {
-  if (fxEditingCell) cancelFXEdit();
-
-  const rate = fxRatesData.find(r => r.id === rateId);
-  if (!rate) return;
-
-  const row = document.getElementById(`fx-row-${rateId}`);
-  if (!row) return;
-
-  const cells = row.querySelectorAll('td');
-  const fieldIndex = { currencyFrom: 1, currencyTo: 2, effectiveDate: 3, exchangeDate: 4, exchangeTime: 5, ask: 6, bid: 7, average: 8, notes: 9 };
-  const cellIndex = fieldIndex[field];
-  const cell = cells[cellIndex];
-
-  const currentValue = rate[field];
-  const isDate = field.includes('Date');
-  const isTime = field === 'exchangeTime';
-  const isNumber = ['ask', 'bid', 'average'].includes(field);
-
-  let inputHTML = '';
-  if (isDate) {
-    inputHTML = `<input type="date" id="fx-edit-input" value="${currentValue}" style="padding:4px 8px;border:1px solid var(--accent);border-radius:4px;font-size:12px;width:100%" autofocus>`;
-  } else if (isTime) {
-    inputHTML = `<input type="time" id="fx-edit-input" value="${currentValue}" style="padding:4px 8px;border:1px solid var(--accent);border-radius:4px;font-size:12px;width:100%" autofocus>`;
-  } else if (isNumber) {
-    inputHTML = `<input type="number" id="fx-edit-input" value="${currentValue}" step="0.0001" style="padding:4px 8px;border:1px solid var(--accent);border-radius:4px;font-size:12px;width:100%;text-align:right;font-family:'SF Mono',monospace" autofocus>`;
-  } else {
-    inputHTML = `<input type="text" id="fx-edit-input" value="${currentValue}" style="padding:4px 8px;border:1px solid var(--accent);border-radius:4px;font-size:12px;width:100%" autofocus>`;
-  }
-
-  cell.innerHTML = `<div style="display:flex;gap:6px">${inputHTML}<button class="btn" style="padding:4px 8px;font-size:11px;height:28px;min-width:50px" onclick="saveFXEdit('${rateId}', '${field}')">Save</button><button class="btn btn-ghost" style="padding:4px 8px;font-size:11px;height:28px;min-width:50px" onclick="cancelFXEdit()">Cancel</button></div>`;
-
-  fxEditingCell = { rateId, field, cell };
-  document.getElementById('fx-edit-input').focus();
-
-  const input = document.getElementById('fx-edit-input');
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') saveFXEdit(rateId, field);
-    if (e.key === 'Escape') cancelFXEdit();
-  });
-}
-
-function saveFXEdit(rateId, field) {
-  const input = document.getElementById('fx-edit-input');
-  if (!input) return;
-
-  const newValue = input.value.trim();
-  if (!newValue) {
-    alert('Value cannot be empty');
-    return;
-  }
-
-  const rate = fxRatesData.find(r => r.id === rateId);
-  if (!rate) return;
-
-  const isNumber = ['ask', 'bid', 'average'].includes(field);
-  if (isNumber) {
-    const numVal = parseFloat(newValue);
-    if (isNaN(numVal)) {
-      alert('Please enter a valid number');
-      return;
-    }
-    rate[field] = numVal;
-  } else {
-    rate[field] = newValue;
-  }
-
-  fxEditingCell = null;
-  renderFXRates();
-}
-
-function cancelFXEdit() {
-  if (fxEditingCell) {
-    renderFXRates();
-    fxEditingCell = null;
-  }
 }
 
 function updateFXRatesStats() {
