@@ -1644,6 +1644,43 @@
     .iss-ledger-body::-webkit-scrollbar { width: 4px; }
     .iss-ledger-body::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 2px; }
 
+    /* Tax rate drawer */
+    .tax-rate-drawer-overlay {
+      position: fixed; inset: 0; background: rgba(15,23,42,0.3);
+      z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    }
+    .tax-rate-drawer-overlay.open { opacity: 1; pointer-events: all; }
+    .tax-rate-drawer {
+      position: fixed; top: 0; right: 0; bottom: 0;
+      width: 520px; max-width: 94vw; background: var(--card);
+      border-left: 1px solid var(--border);
+      box-shadow: -8px 0 40px rgba(15,23,42,0.15);
+      z-index: 201; transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+      display: flex; flex-direction: column;
+    }
+    .tax-rate-drawer-overlay.open .tax-rate-drawer { transform: translateX(0); }
+    .tax-rate-drawer-head {
+      padding: 20px 24px; background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      flex-shrink: 0; color: #fff;
+    }
+    .tax-rate-drawer-title { font-size: 18px; font-weight: 700; }
+    .tax-rate-drawer-meta { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+    .tax-rate-drawer-close {
+      width: 32px; height: 32px; border: none; background: rgba(255,255,255,0.1);
+      border-radius: 8px; cursor: pointer; display: flex; align-items: center;
+      justify-content: center; color: rgba(255,255,255,0.7); transition: all 0.14s; flex-shrink: 0;
+    }
+    .tax-rate-drawer-close:hover { background: rgba(255,255,255,0.2); color: #fff; }
+    .tax-rate-drawer-close svg { width: 18px; height: 18px; }
+    .tax-rate-drawer-body { flex: 1; overflow-y: auto; padding: 24px; }
+    .tax-rate-drawer-body::-webkit-scrollbar { width: 4px; }
+    .tax-rate-drawer-body::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 2px; }
+    .tax-rate-drawer-foot {
+      padding: 20px 24px; border-top: 1px solid var(--border);
+      flex-shrink: 0; display: flex; gap: 10px; justify-content: flex-end;
+    }
+
     .iss-ledger-section { padding: 18px 24px; border-bottom: 1px solid var(--border); }
     .iss-ledger-section-title {
       font-size: 10.5px; font-weight: 700; color: var(--text2); text-transform: uppercase;
@@ -4323,6 +4360,114 @@
     <div class="modal-foot">
       <button class="btn btn-ghost" onclick="closeModal('modal-tax-rate')">Cancel</button>
       <button class="btn btn-primary" onclick="saveTaxRate()">Save Rate</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ TAX RATE DRAWER (SLIDE-OUT) ════ -->
+<div class="tax-rate-drawer-overlay" id="tax-rate-drawer-overlay" onclick="closeTaxRateDrawer(event)">
+  <div class="tax-rate-drawer" id="tax-rate-drawer" onclick="event.stopPropagation()">
+    <div class="tax-rate-drawer-head">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+        <div>
+          <div class="tax-rate-drawer-title" id="drawer-tax-title">US — Federal</div>
+          <div class="tax-rate-drawer-meta" id="drawer-tax-meta">Federal income tax rates</div>
+        </div>
+        <button class="tax-rate-drawer-close" onclick="closeTaxRateDrawer()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="tax-rate-drawer-body">
+      <input type="hidden" id="drawer-tax-rate-id">
+
+      <div class="tax-form-grid" style="gap:16px">
+        <div>
+          <label class="form-label">Jurisdiction <span class="req">*</span></label>
+          <input class="form-input" id="drawer-jurisdiction" placeholder="e.g. United States — Federal">
+        </div>
+        <div>
+          <label class="form-label">Type <span class="req">*</span></label>
+          <select class="form-select" id="drawer-type">
+            <option value="">Select type</option>
+            <option>Federal</option>
+            <option>State</option>
+            <option>Local</option>
+            <option>International</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Federal Income Tax Rate (%)</label>
+          <input class="form-input" id="drawer-federal" type="number" step="0.01" min="0" max="100" placeholder="e.g. 37">
+        </div>
+        <div>
+          <label class="form-label">Supplemental Withholding Rate (%)</label>
+          <input class="form-input" id="drawer-supplemental" type="number" step="0.01" min="0" max="100" placeholder="e.g. 22">
+        </div>
+        <div>
+          <label class="form-label">State / Local Income Tax Rate (%)</label>
+          <input class="form-input" id="drawer-state" type="number" step="0.01" min="0" max="100" placeholder="e.g. 13.3">
+        </div>
+        <div>
+          <label class="form-label">Social Security (OASDI) Rate (%)</label>
+          <input class="form-input" id="drawer-ss" type="number" step="0.01" min="0" max="100" placeholder="e.g. 6.2">
+        </div>
+        <div>
+          <label class="form-label">Medicare Rate (%)</label>
+          <input class="form-input" id="drawer-medicare" type="number" step="0.01" min="0" max="100" placeholder="e.g. 1.45">
+        </div>
+        <div>
+          <label class="form-label">Additional Medicare Rate (%)</label>
+          <input class="form-input" id="drawer-addl-medicare" type="number" step="0.01" min="0" max="100" placeholder="e.g. 0.9">
+        </div>
+        <div>
+          <label class="form-label">Effective Date <span class="req">*</span></label>
+          <input class="form-input" id="drawer-effective" type="date">
+        </div>
+        <div>
+          <label class="form-label">Expiry Date</label>
+          <input class="form-input" id="drawer-expiry" type="date">
+        </div>
+        <div class="tax-form-full">
+          <label class="form-label">Grant Types</label>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;padding:8px 0">
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+              <input type="checkbox" class="drawer-grant-type" value="RSU" id="drawer-grant-rsu"> RSU
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+              <input type="checkbox" class="drawer-grant-type" value="RSA" id="drawer-grant-rsa"> RSA
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+              <input type="checkbox" class="drawer-grant-type" value="ISO" id="drawer-grant-iso"> ISO
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+              <input type="checkbox" class="drawer-grant-type" value="NQO" id="drawer-grant-nqo"> NQO
+            </label>
+          </div>
+        </div>
+        <div class="tax-form-full">
+          <label class="form-label">Currency</label>
+          <select class="form-select" id="drawer-currency">
+            <option value="USD">USD — US Dollar</option>
+            <option value="CAD">CAD — Canadian Dollar</option>
+            <option value="GBP">GBP — British Pound</option>
+            <option value="EUR">EUR — Euro</option>
+            <option value="AUD">AUD — Australian Dollar</option>
+            <option value="SGD">SGD — Singapore Dollar</option>
+          </select>
+        </div>
+        <div class="tax-form-full">
+          <label class="form-label">Notes</label>
+          <textarea class="form-input" id="drawer-notes" rows="3" placeholder="Additional context or sourcing notes…" style="resize:vertical"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="tax-rate-drawer-foot">
+      <button class="btn btn-ghost" onclick="closeTaxRateDrawer()">Cancel</button>
+      <button class="btn btn-danger" onclick="deleteTaxRate()" style="display:none" id="drawer-delete-btn">Delete</button>
+      <button class="btn btn-primary" onclick="saveTaxRateFromDrawer()">Save Rate</button>
     </div>
   </div>
 </div>
@@ -7958,7 +8103,7 @@ function renderTaxRates() {
           <button class="kebab-btn" onclick="event.stopPropagation();toggleKebab(this)" title="More actions">⋮</button>
           <div class="kebab-menu">
             <div class="kebab-menu-label">Tax Rate</div>
-            <button class="kebab-menu-item" onclick="closeAllKebabs();openTaxRateModal('${r.id}')">
+            <button class="kebab-menu-item" onclick="closeAllKebabs();openTaxRateDrawer('${r.id}')">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>Edit Rate
             </button>
             <div class="kebab-divider"></div>
@@ -7978,6 +8123,11 @@ function renderTaxRates() {
         </div>
       </td>
       <td><span class="type-badge" style="background:${tc.bg};color:${tc.color}">${r.type}</span></td>
+      <td style="font-size:12px">
+        ${r.grantTypes && r.grantTypes.length > 0
+          ? r.grantTypes.map(gt => `<span style="display:inline-block;background:#f0f4f8;color:#334155;padding:3px 8px;border-radius:4px;margin-right:4px;font-weight:500">${gt}</span>`).join('')
+          : `<span style="color:var(--textm)">All types</span>`}
+      </td>
       <td style="font-size:12px;font-weight:600;color:var(--text2)">${r.currency}</td>
       <td style="text-align:right">${fmtR(r.federal)}</td>
       <td style="text-align:right">${fmtR(r.supplemental)}</td>
@@ -7987,7 +8137,7 @@ function renderTaxRates() {
       <td style="font-size:12px;color:var(--text2)">${r.effectiveDate}${r.expiryDate ? `<div style="font-size:10.5px;color:var(--textm)">→ ${r.expiryDate}</div>` : ''}</td>
       <td><span class="sdot sdot-complete" style="font-size:12px">${r.status}</span></td>
     </tr>`;
-  }).join('') || `<tr><td colspan="11" style="text-align:center;padding:32px;color:var(--textm)">No tax rates found</td></tr>`;
+  }).join('') || `<tr><td colspan="12" style="text-align:center;padding:32px;color:var(--textm)">No tax rates found</td></tr>`;
 
   updateTaxStats();
 }
@@ -8093,6 +8243,16 @@ function openTaxRateModal(id) {
   document.getElementById('tr-expiry').value             = r?.expiryDate ?? '';
   document.getElementById('tr-currency').value           = r?.currency ?? 'USD';
   document.getElementById('tr-notes').value              = r?.notes ?? '';
+
+  // Set grant types
+  document.querySelectorAll('.grant-type-check').forEach(cb => cb.checked = false);
+  if (r?.grantTypes) {
+    r.grantTypes.forEach(gt => {
+      const cb = document.getElementById(`grant-${gt.toLowerCase()}`);
+      if (cb) cb.checked = true;
+    });
+  }
+
   openModal('modal-tax-rate');
 }
 
@@ -8104,6 +8264,9 @@ function saveTaxRate() {
 
   const editId = document.getElementById('tax-rate-edit-id').value;
   const fv = id => { const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? null : v; };
+
+  // Collect grant types
+  const grantTypes = Array.from(document.querySelectorAll('.grant-type-check:checked')).map(cb => cb.value);
 
   const data = {
     id:             editId || 'TR-' + Date.now(),
@@ -8119,6 +8282,7 @@ function saveTaxRate() {
     socialSecurity: fv('tr-ss'),
     medicare:       fv('tr-medicare'),
     addlMedicare:   fv('tr-addl-medicare'),
+    grantTypes:     grantTypes.length > 0 ? grantTypes : null,
     notes:          document.getElementById('tr-notes').value.trim(),
     status:         'Active'
   };
@@ -8138,6 +8302,96 @@ function deleteTaxRate(id) {
   if (!confirm('Delete this tax rate? This cannot be undone.')) return;
   const idx = taxRatesData.findIndex(r => r.id === id);
   if (idx !== -1) taxRatesData.splice(idx, 1);
+  renderTaxRates();
+}
+
+function openTaxRateDrawer(id) {
+  const r = id ? taxRatesData.find(x => x.id === id) : null;
+  const isEdit = !!r;
+
+  document.getElementById('drawer-tax-title').textContent = r ? r.jurisdiction : 'New Tax Rate';
+  document.getElementById('drawer-tax-meta').textContent = r ? `${r.type} · Effective ${r.effectiveDate}` : 'Create a new tax rate';
+
+  document.getElementById('drawer-tax-rate-id').value    = r ? r.id : '';
+  document.getElementById('drawer-jurisdiction').value   = r?.jurisdiction ?? '';
+  document.getElementById('drawer-type').value           = r?.type ?? '';
+  document.getElementById('drawer-federal').value        = r?.federal ?? '';
+  document.getElementById('drawer-supplemental').value   = r?.supplemental ?? '';
+  document.getElementById('drawer-state').value          = r?.state ?? '';
+  document.getElementById('drawer-ss').value             = r?.socialSecurity ?? '';
+  document.getElementById('drawer-medicare').value       = r?.medicare ?? '';
+  document.getElementById('drawer-addl-medicare').value  = r?.addlMedicare ?? '';
+  document.getElementById('drawer-effective').value      = r?.effectiveDate ?? '';
+  document.getElementById('drawer-expiry').value         = r?.expiryDate ?? '';
+  document.getElementById('drawer-currency').value       = r?.currency ?? 'USD';
+  document.getElementById('drawer-notes').value          = r?.notes ?? '';
+
+  // Set grant types
+  document.querySelectorAll('.drawer-grant-type').forEach(cb => cb.checked = false);
+  if (r?.grantTypes) {
+    r.grantTypes.forEach(gt => {
+      const cb = document.getElementById(`drawer-grant-${gt.toLowerCase()}`);
+      if (cb) cb.checked = true;
+    });
+  }
+
+  // Show/hide delete button
+  const deleteBtn = document.getElementById('drawer-delete-btn');
+  deleteBtn.style.display = isEdit ? 'block' : 'none';
+  if (isEdit) deleteBtn.onclick = () => {
+    if (confirm('Delete this tax rate? This cannot be undone.')) {
+      closeTaxRateDrawer();
+      deleteTaxRate(r.id);
+    }
+  };
+
+  document.getElementById('tax-rate-drawer-overlay').classList.add('open');
+}
+
+function closeTaxRateDrawer(event) {
+  if (event && event.target !== document.getElementById('tax-rate-drawer-overlay')) return;
+  document.getElementById('tax-rate-drawer-overlay').classList.remove('open');
+}
+
+function saveTaxRateFromDrawer() {
+  const jur  = document.getElementById('drawer-jurisdiction').value.trim();
+  const type = document.getElementById('drawer-type').value;
+  const eff  = document.getElementById('drawer-effective').value;
+  if (!jur || !type || !eff) { alert('Jurisdiction, type, and effective date are required.'); return; }
+
+  const editId = document.getElementById('drawer-tax-rate-id').value;
+  const fv = id => { const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? null : v; };
+
+  // Collect grant types
+  const grantTypes = Array.from(document.querySelectorAll('.drawer-grant-type:checked')).map(cb => cb.value);
+
+  const data = {
+    id:             editId || 'TR-' + Date.now(),
+    jurisdiction:   jur,
+    type:           type,
+    flag:           '🏳',
+    currency:       document.getElementById('drawer-currency').value,
+    effectiveDate:  eff,
+    expiryDate:     document.getElementById('drawer-expiry').value || null,
+    federal:        fv('drawer-federal'),
+    supplemental:   fv('drawer-supplemental'),
+    state:          fv('drawer-state'),
+    socialSecurity: fv('drawer-ss'),
+    medicare:       fv('drawer-medicare'),
+    addlMedicare:   fv('drawer-addl-medicare'),
+    grantTypes:     grantTypes.length > 0 ? grantTypes : null,
+    notes:          document.getElementById('drawer-notes').value.trim(),
+    status:         'Active'
+  };
+
+  if (editId) {
+    const idx = taxRatesData.findIndex(r => r.id === editId);
+    if (idx !== -1) taxRatesData[idx] = data;
+  } else {
+    taxRatesData.push(data);
+  }
+
+  closeTaxRateDrawer();
   renderTaxRates();
 }
 
