@@ -4302,7 +4302,8 @@
                 <th style="width:44px">Actions</th>
                 <th>Jurisdiction</th>
                 <th style="width:110px">Type</th>
-                <th style="width:120px">Grant Types</th>
+                <th style="width:140px">Grant Types</th>
+                <th style="width:160px">Transaction Types</th>
                 <th style="width:55px">CCY</th>
                 <th style="text-align:right;width:110px">Federal / Top</th>
                 <th style="text-align:right;width:110px">Supplemental</th>
@@ -4471,6 +4472,20 @@
           <div style="font-size:12px;color:#666;margin-top:8px">Select one or more grant types that this tax rate applies to</div>
         </div>
         <div class="tax-form-full">
+          <label class="form-label">Transaction Types</label>
+          <div class="grant-types-selector">
+            <div class="grant-types-input-wrapper" onclick="openTransactionTypesDropdown('modal')">
+              <div id="modal-txn-pills" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"></div>
+              <input type="text" class="grant-types-search" id="modal-txn-search" placeholder="Search or add transaction types…"
+                     onfocus="openTransactionTypesDropdown('modal')"
+                     oninput="filterTransactionTypesDropdown('modal')"
+                     onkeydown="handleTransactionTypeKeydown(event, 'modal')">
+            </div>
+            <div class="grant-types-dropdown" id="modal-txn-dropdown"></div>
+          </div>
+          <div style="font-size:12px;color:#666;margin-top:8px">Select one or more transaction types that this tax rate applies to</div>
+        </div>
+        <div class="tax-form-full">
           <label class="form-label">Currency</label>
           <select class="form-select" id="tr-currency">
             <option value="USD">USD — US Dollar</option>
@@ -4572,6 +4587,20 @@
             <div class="grant-types-dropdown" id="drawer-grant-dropdown"></div>
           </div>
           <div style="font-size:12px;color:#666;margin-top:8px">Select one or more grant types that this tax rate applies to</div>
+        </div>
+        <div class="tax-form-full">
+          <label class="form-label">Transaction Types</label>
+          <div class="grant-types-selector">
+            <div class="grant-types-input-wrapper" onclick="openTransactionTypesDropdown('drawer')">
+              <div id="drawer-txn-pills" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"></div>
+              <input type="text" class="grant-types-search" id="drawer-txn-search" placeholder="Search or add transaction types…"
+                     onfocus="openTransactionTypesDropdown('drawer')"
+                     oninput="filterTransactionTypesDropdown('drawer')"
+                     onkeydown="handleTransactionTypeKeydown(event, 'drawer')">
+            </div>
+            <div class="grant-types-dropdown" id="drawer-txn-dropdown"></div>
+          </div>
+          <div style="font-size:12px;color:#666;margin-top:8px">Select one or more transaction types that this tax rate applies to</div>
         </div>
         <div class="tax-form-full">
           <label class="form-label">Currency</label>
@@ -8116,6 +8145,17 @@ const grantTypesList = [
   'Equity Award', 'Other'
 ];
 
+const transactionTypesList = [
+  'Exercise and Monetary Payment',
+  'Exercise and Withhold to Cover',
+  'Release and Monetary Payment',
+  'Release and Withhold to Cover',
+  'Release and Sell All',
+  'Sale',
+  'Dividend',
+  'Vesting'
+];
+
 const taxRatesData = [
   {
     id: 'TR-US-FED-001', jurisdiction: 'United States — Federal', type: 'Federal',
@@ -8263,6 +8303,11 @@ function renderTaxRates() {
           ? r.grantTypes.map(gt => `<span style="display:inline-block;background:#f0f4f8;color:#334155;padding:3px 8px;border-radius:4px;margin-right:4px;font-weight:500">${gt}</span>`).join('')
           : `<span style="color:var(--textm)">All types</span>`}
       </td>
+      <td style="font-size:12px">
+        ${r.transactionTypes && r.transactionTypes.length > 0
+          ? r.transactionTypes.map(tt => `<span style="display:inline-block;background:#fef3c7;color:#92400e;padding:3px 8px;border-radius:4px;margin-right:4px;font-weight:500">${tt}</span>`).join('')
+          : `<span style="color:var(--textm)">All types</span>`}
+      </td>
       <td style="font-size:12px;font-weight:600;color:var(--text2)">${r.currency}</td>
       <td style="text-align:right">${fmtR(r.federal)}</td>
       <td style="text-align:right">${fmtR(r.supplemental)}</td>
@@ -8272,7 +8317,7 @@ function renderTaxRates() {
       <td style="font-size:12px;color:var(--text2)">${r.effectiveDate}${r.expiryDate ? `<div style="font-size:10.5px;color:var(--textm)">→ ${r.expiryDate}</div>` : ''}</td>
       <td><span class="sdot sdot-complete" style="font-size:12px">${r.status}</span></td>
     </tr>`;
-  }).join('') || `<tr><td colspan="12" style="text-align:center;padding:32px;color:var(--textm)">No tax rates found</td></tr>`;
+  }).join('') || `<tr><td colspan="13" style="text-align:center;padding:32px;color:var(--textm)">No tax rates found</td></tr>`;
 
   updateTaxStats();
 }
@@ -8379,9 +8424,11 @@ function openTaxRateModal(id) {
   document.getElementById('tr-currency').value           = r?.currency ?? 'USD';
   document.getElementById('tr-notes').value              = r?.notes ?? '';
   document.getElementById('modal-grant-search').value    = '';
+  document.getElementById('modal-txn-search').value       = '';
 
-  // Initialize grant types selector
+  // Initialize selectors
   initGrantTypesSelector('modal', r?.grantTypes || []);
+  initTransactionTypesSelector('modal', r?.transactionTypes || []);
 
   openModal('modal-tax-rate');
 }
@@ -8395,26 +8442,28 @@ function saveTaxRate() {
   const editId = document.getElementById('tax-rate-edit-id').value;
   const fv = id => { const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? null : v; };
 
-  // Collect grant types from selector
+  // Collect grant and transaction types from selectors
   const grantTypes = getSelectedGrantTypes('modal');
+  const transactionTypes = getSelectedTransactionTypes('modal');
 
   const data = {
-    id:             editId || 'TR-' + Date.now(),
-    jurisdiction:   jur,
-    type:           type,
-    flag:           '🏳',
-    currency:       document.getElementById('tr-currency').value,
-    effectiveDate:  eff,
-    expiryDate:     document.getElementById('tr-expiry').value || null,
-    federal:        fv('tr-federal'),
-    supplemental:   fv('tr-supplemental'),
-    state:          fv('tr-state'),
-    socialSecurity: fv('tr-ss'),
-    medicare:       fv('tr-medicare'),
-    addlMedicare:   fv('tr-addl-medicare'),
-    grantTypes:     grantTypes.length > 0 ? grantTypes : null,
-    notes:          document.getElementById('tr-notes').value.trim(),
-    status:         'Active'
+    id:                 editId || 'TR-' + Date.now(),
+    jurisdiction:       jur,
+    type:               type,
+    flag:               '🏳',
+    currency:           document.getElementById('tr-currency').value,
+    effectiveDate:      eff,
+    expiryDate:         document.getElementById('tr-expiry').value || null,
+    federal:            fv('tr-federal'),
+    supplemental:       fv('tr-supplemental'),
+    state:              fv('tr-state'),
+    socialSecurity:     fv('tr-ss'),
+    medicare:           fv('tr-medicare'),
+    addlMedicare:       fv('tr-addl-medicare'),
+    grantTypes:         grantTypes.length > 0 ? grantTypes : null,
+    transactionTypes:   transactionTypes.length > 0 ? transactionTypes : null,
+    notes:              document.getElementById('tr-notes').value.trim(),
+    status:             'Active'
   };
 
   if (editId) {
@@ -8456,9 +8505,11 @@ function openTaxRateDrawer(id) {
   document.getElementById('drawer-currency').value       = r?.currency ?? 'USD';
   document.getElementById('drawer-notes').value          = r?.notes ?? '';
   document.getElementById('drawer-grant-search').value   = '';
+  document.getElementById('drawer-txn-search').value      = '';
 
-  // Initialize grant types selector
+  // Initialize selectors
   initGrantTypesSelector('drawer', r?.grantTypes || []);
+  initTransactionTypesSelector('drawer', r?.transactionTypes || []);
 
   // Show/hide delete button
   const deleteBtn = document.getElementById('drawer-delete-btn');
@@ -8487,26 +8538,28 @@ function saveTaxRateFromDrawer() {
   const editId = document.getElementById('drawer-tax-rate-id').value;
   const fv = id => { const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? null : v; };
 
-  // Collect grant types from selector
+  // Collect grant and transaction types from selectors
   const grantTypes = getSelectedGrantTypes('drawer');
+  const transactionTypes = getSelectedTransactionTypes('drawer');
 
   const data = {
-    id:             editId || 'TR-' + Date.now(),
-    jurisdiction:   jur,
-    type:           type,
-    flag:           '🏳',
-    currency:       document.getElementById('drawer-currency').value,
-    effectiveDate:  eff,
-    expiryDate:     document.getElementById('drawer-expiry').value || null,
-    federal:        fv('drawer-federal'),
-    supplemental:   fv('drawer-supplemental'),
-    state:          fv('drawer-state'),
-    socialSecurity: fv('drawer-ss'),
-    medicare:       fv('drawer-medicare'),
-    addlMedicare:   fv('drawer-addl-medicare'),
-    grantTypes:     grantTypes.length > 0 ? grantTypes : null,
-    notes:          document.getElementById('drawer-notes').value.trim(),
-    status:         'Active'
+    id:                 editId || 'TR-' + Date.now(),
+    jurisdiction:       jur,
+    type:               type,
+    flag:               '🏳',
+    currency:           document.getElementById('drawer-currency').value,
+    effectiveDate:      eff,
+    expiryDate:         document.getElementById('drawer-expiry').value || null,
+    federal:            fv('drawer-federal'),
+    supplemental:       fv('drawer-supplemental'),
+    state:              fv('drawer-state'),
+    socialSecurity:     fv('drawer-ss'),
+    medicare:           fv('drawer-medicare'),
+    addlMedicare:       fv('drawer-addl-medicare'),
+    grantTypes:         grantTypes.length > 0 ? grantTypes : null,
+    transactionTypes:   transactionTypes.length > 0 ? transactionTypes : null,
+    notes:              document.getElementById('drawer-notes').value.trim(),
+    status:             'Active'
   };
 
   if (editId) {
@@ -8576,10 +8629,15 @@ function deleteTaxCode(id) {
   renderTaxCodes();
 }
 
-/* ════ GRANT TYPES SELECTOR ════ */
+/* ════ GRANT & TRANSACTION TYPES SELECTORS ════ */
 let grantTypesState = {
   modal: { selected: [], filtered: grantTypesList },
   drawer: { selected: [], filtered: grantTypesList }
+};
+
+let transactionTypesState = {
+  modal: { selected: [], filtered: transactionTypesList },
+  drawer: { selected: [], filtered: transactionTypesList }
 };
 
 function openGrantTypesDropdown(context) {
@@ -8689,13 +8747,129 @@ function getSelectedGrantTypes(context) {
   return grantTypesState[context].selected;
 }
 
-// Close dropdown when clicking outside
+/* ════ TRANSACTION TYPES SELECTOR ════ */
+function openTransactionTypesDropdown(context) {
+  const dropdown = document.getElementById(`${context}-txn-dropdown`);
+  const input = document.getElementById(`${context}-txn-search`);
+  dropdown.classList.add('show');
+  input.focus();
+  renderTransactionTypesDropdown(context);
+}
+
+function closeTransactionTypesDropdown(context) {
+  const dropdown = document.getElementById(`${context}-txn-dropdown`);
+  dropdown.classList.remove('show');
+}
+
+function filterTransactionTypesDropdown(context) {
+  const input = document.getElementById(`${context}-txn-search`);
+  const searchVal = input.value.toLowerCase().trim();
+  const allTypes = transactionTypesList;
+  const selected = transactionTypesState[context].selected;
+
+  transactionTypesState[context].filtered = searchVal
+    ? allTypes.filter(tt => tt.toLowerCase().includes(searchVal) && !selected.includes(tt))
+    : allTypes.filter(tt => !selected.includes(tt));
+
+  renderTransactionTypesDropdown(context);
+}
+
+function renderTransactionTypesDropdown(context) {
+  const dropdown = document.getElementById(`${context}-txn-dropdown`);
+  const filtered = transactionTypesState[context].filtered;
+  const selected = transactionTypesState[context].selected;
+
+  if (filtered.length === 0) {
+    dropdown.innerHTML = `<div style="padding:16px;text-align:center;color:var(--textm);font-size:13px">No transaction types found</div>`;
+    return;
+  }
+
+  dropdown.innerHTML = filtered.map(tt => `
+    <div class="grant-type-option ${selected.includes(tt) ? 'selected' : ''}" onclick="toggleTransactionType('${context}', '${tt}', event)">
+      <div class="grant-type-option-check">
+        ${selected.includes(tt) ? '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>' : ''}
+      </div>
+      <span>${tt}</span>
+    </div>
+  `).join('');
+}
+
+function toggleTransactionType(context, transactionType, event) {
+  event.stopPropagation();
+  const selected = transactionTypesState[context].selected;
+  const idx = selected.indexOf(transactionType);
+  if (idx !== -1) {
+    selected.splice(idx, 1);
+  } else {
+    selected.push(transactionType);
+  }
+  renderTransactionTypePills(context);
+  filterTransactionTypesDropdown(context);
+}
+
+function renderTransactionTypePills(context) {
+  const pills = document.getElementById(`${context}-txn-pills`);
+  const selected = transactionTypesState[context].selected;
+  pills.innerHTML = selected.map(tt => `
+    <div class="grant-type-pill">
+      ${tt}
+      <div class="grant-type-pill-remove" onclick="removeTransactionType('${context}', '${tt}', event)">×</div>
+    </div>
+  `).join('');
+}
+
+function removeTransactionType(context, transactionType, event) {
+  event.stopPropagation();
+  const selected = transactionTypesState[context].selected;
+  const idx = selected.indexOf(transactionType);
+  if (idx !== -1) selected.splice(idx, 1);
+  renderTransactionTypePills(context);
+  filterTransactionTypesDropdown(context);
+}
+
+function handleTransactionTypeKeydown(event, context) {
+  if (event.key === 'Escape') {
+    closeTransactionTypesDropdown(context);
+    event.preventDefault();
+  } else if (event.key === 'Backspace') {
+    const input = event.target;
+    if (input.value === '') {
+      const selected = transactionTypesState[context].selected;
+      if (selected.length > 0) {
+        selected.pop();
+        renderTransactionTypePills(context);
+        filterTransactionTypesDropdown(context);
+      }
+      event.preventDefault();
+    }
+  }
+}
+
+function initTransactionTypesSelector(context, transactionTypes) {
+  transactionTypesState[context].selected = transactionTypes || [];
+  renderTransactionTypePills(context);
+  transactionTypesState[context].filtered = transactionTypesList.filter(tt => !transactionTypesState[context].selected.includes(tt));
+}
+
+function getSelectedTransactionTypes(context) {
+  return transactionTypesState[context].selected;
+}
+
+// Close dropdowns when clicking outside
 document.addEventListener('click', (e) => {
   ['modal', 'drawer'].forEach(ctx => {
-    const dropdown = document.getElementById(`${ctx}-grant-dropdown`);
-    const selector = document.getElementById(`${ctx}-grant-pills`)?.closest('.grant-types-selector');
-    if (dropdown && selector && !selector.contains(e.target)) {
+    // Grant types
+    const grantDropdown = document.getElementById(`${ctx}-grant-dropdown`);
+    const grantSelector = document.getElementById(`${ctx}-grant-pills`)?.closest('.grant-types-selector');
+    if (grantDropdown && grantSelector && !grantSelector.contains(e.target)) {
       closeGrantTypesDropdown(ctx);
+    }
+
+    // Transaction types
+    const txnDropdown = document.getElementById(`${ctx}-txn-dropdown`);
+    const txnSelector = document.getElementById(`${ctx}-txn-pills`)?.closest('.grant-types-selector');
+    if (txnDropdown && txnSelector && !txnSelector.contains(e.target)) {
+      closeTransactionTypesDropdown(ctx);
     }
   });
 });
