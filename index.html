@@ -4652,21 +4652,15 @@
 <div class="modal-overlay" id="modal-tax-rate">
   <div class="modal-box" style="max-width:560px">
     <div class="modal-head">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
         <div class="modal-title" id="tax-rate-modal-title">Add Tax Rate</div>
         <button class="modal-close" onclick="closeModal('modal-tax-rate')">×</button>
-      </div>
-      <div class="tax-modal-tabs">
-        <button class="tax-modal-tab active" onclick="switchTaxModalTab('details')">Details</button>
-        <button class="tax-modal-tab" onclick="switchTaxModalTab('rules')">Rules</button>
       </div>
     </div>
     <div class="modal-body">
       <input type="hidden" id="tax-rate-edit-id">
       <input type="hidden" id="tax-rate-grant-types">
 
-      <!-- Details Tab -->
-      <div class="tax-modal-tab-content active" id="tax-tab-details">
       <div class="tax-form-grid">
         <div>
           <label class="form-label">Jurisdiction <span class="req">*</span></label>
@@ -4730,23 +4724,110 @@
           <textarea class="form-input" id="tr-notes" rows="2" placeholder="Additional context or sourcing notes…" style="resize:vertical"></textarea>
         </div>
       </div>
-      </div><!-- /tax-tab-details -->
-
-      <!-- Rules Tab -->
-      <div class="tax-modal-tab-content" id="tax-tab-rules">
-        <div style="padding:0">
-          <div style="font-size:12px;color:#64748b;margin-bottom:16px;margin-top:4px">Define rules for this tax rate. All conditions are combined with AND logic.</div>
-          <div id="tax-rules-container" style="display:flex;flex-direction:column;gap:12px"></div>
-          <button class="btn btn-ghost" style="margin-top:12px;width:100%" onclick="addTaxRuleRow()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Add Rule
-          </button>
-        </div>
-      </div><!-- /tax-tab-rules -->
     </div><!-- /modal-body -->
     <div class="modal-foot">
       <button class="btn btn-ghost" onclick="closeModal('modal-tax-rate')">Cancel</button>
       <button class="btn btn-primary" onclick="saveTaxRate()">Save Rate</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ NEW TAX RULE MODAL ════ -->
+<div class="modal-overlay" id="modal-new-tax-rule">
+  <div class="modal-box" style="max-width:600px">
+    <div class="modal-head">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div class="modal-title">Create Tax Rate Rule</div>
+        <button class="modal-close" onclick="closeModal('modal-new-tax-rule')">×</button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div style="font-size:13px;color:var(--text2);margin-bottom:16px">Define conditions for applying a tax rate. All conditions are combined with AND logic.</div>
+
+      <div class="tax-form-grid">
+        <div class="tax-form-full">
+          <label class="form-label">Tax Rate <span class="req">*</span></label>
+          <select class="form-select" id="new-rule-rate">
+            <option value="">Select a tax rate</option>
+          </select>
+          <div style="font-size:11px;color:var(--text2);margin-top:4px">Which tax rate does this rule apply to?</div>
+        </div>
+      </div>
+
+      <div style="margin:20px 0;padding:16px;background:#f8fafc;border-radius:8px">
+        <div style="font-weight:600;font-size:13px;color:var(--text);margin-bottom:12px">Conditions (all must be true)</div>
+
+        <div class="tax-form-grid">
+          <div style="display:flex;gap:8px;align-items:flex-end">
+            <div style="flex:1">
+              <label class="form-label" style="font-size:12px">Tax Rate</label>
+              <select class="form-select" id="new-rule-rate-cond" style="font-size:12px">
+                <option value="IN">IN</option>
+                <option value="EQUALS">EQUALS</option>
+                <option value="NOT_IN">NOT IN</option>
+              </select>
+            </div>
+            <div style="flex:1">
+              <label class="form-label" style="font-size:12px">Value</label>
+              <input class="form-input" id="new-rule-rate-value" placeholder="Enter rate name" style="font-size:12px">
+            </div>
+          </div>
+
+          <div style="grid-column:1/-1;text-align:center;color:var(--textm);font-size:11px;font-weight:600;text-transform:uppercase">AND</div>
+
+          <div style="display:flex;gap:8px;align-items:flex-end">
+            <div style="flex:1">
+              <label class="form-label" style="font-size:12px">Grant Type</label>
+              <select class="form-select" id="new-rule-gt-cond" style="font-size:12px">
+                <option value="IN">IN</option>
+                <option value="EQUALS">EQUALS</option>
+                <option value="NOT_IN">NOT IN</option>
+              </select>
+            </div>
+            <div style="flex:1">
+              <label class="form-label" style="font-size:12px">Value</label>
+              <select class="form-select" id="new-rule-gt-value" style="font-size:12px">
+                <option value="">Select...</option>
+                <option>RSU</option>
+                <option>RSA</option>
+                <option>ISO</option>
+                <option>NQO</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="grid-column:1/-1;text-align:center;color:var(--textm);font-size:11px;font-weight:600;text-transform:uppercase">AND</div>
+
+          <div style="display:flex;gap:8px;align-items:flex-end">
+            <div style="flex:1">
+              <label class="form-label" style="font-size:12px">Transaction Type</label>
+              <select class="form-select" id="new-rule-tt-cond" style="font-size:12px">
+                <option value="IN">IN</option>
+                <option value="EQUALS">EQUALS</option>
+                <option value="NOT_IN">NOT IN</option>
+              </select>
+            </div>
+            <div style="flex:1">
+              <label class="form-label" style="font-size:12px">Value</label>
+              <select class="form-select" id="new-rule-tt-value" style="font-size:12px">
+                <option value="">Select...</option>
+                <option>Exercise and Monetary Payment</option>
+                <option>Exercise and Withhold to Cover</option>
+                <option>Release and Monetary Payment</option>
+                <option>Release and Withhold to Cover</option>
+                <option>Release and Sell All</option>
+                <option>Sale</option>
+                <option>Dividend</option>
+                <option>Vesting</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('modal-new-tax-rule')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveNewTaxRule()">Create Rule</button>
     </div>
   </div>
 </div>
@@ -8551,7 +8632,58 @@ function renderTaxRules() {
 }
 
 function openTaxRuleBuilder() {
-  alert('Click on a tax rate to edit or add rules');
+  // Populate the tax rate dropdown
+  const rateSelect = document.getElementById('new-rule-rate');
+  rateSelect.innerHTML = '<option value="">Select a tax rate</option>';
+  taxRatesData.forEach(rate => {
+    const option = document.createElement('option');
+    option.value = rate.id;
+    option.textContent = `${rate.jurisdiction} — ${rate.type}`;
+    rateSelect.appendChild(option);
+  });
+
+  // Clear form fields
+  document.getElementById('new-rule-rate-cond').value = 'IN';
+  document.getElementById('new-rule-rate-value').value = '';
+  document.getElementById('new-rule-gt-cond').value = 'IN';
+  document.getElementById('new-rule-gt-value').value = '';
+  document.getElementById('new-rule-tt-cond').value = 'IN';
+  document.getElementById('new-rule-tt-value').value = '';
+
+  openModal('modal-new-tax-rule');
+}
+
+function saveNewTaxRule() {
+  const rateId = document.getElementById('new-rule-rate').value;
+  const rateValue = document.getElementById('new-rule-rate-value').value;
+  const rateCond = document.getElementById('new-rule-rate-cond').value;
+  const gtValue = document.getElementById('new-rule-gt-value').value;
+  const gtCond = document.getElementById('new-rule-gt-cond').value;
+  const ttValue = document.getElementById('new-rule-tt-value').value;
+  const ttCond = document.getElementById('new-rule-tt-cond').value;
+
+  if (!rateId || (!rateValue && !gtValue && !ttValue)) {
+    alert('Please select a tax rate and at least one condition');
+    return;
+  }
+
+  const rate = taxRatesData.find(r => r.id === rateId);
+  if (!rate) return;
+
+  if (!rate.rules) rate.rules = [];
+
+  const newRule = {
+    rate: rateValue,
+    rateCondition: rateCond,
+    grantType: gtValue,
+    gtCondition: gtCond,
+    txnType: ttValue,
+    ttCondition: ttCond
+  };
+
+  rate.rules.push(newRule);
+  closeModal('modal-new-tax-rule');
+  renderTaxRules();
 }
 
 function editTaxRule(rateId, ruleIdx) {
@@ -8897,19 +9029,6 @@ function openTaxRateModal(id) {
   document.getElementById('tr-expiry').value             = r?.expiryDate ?? '';
   document.getElementById('tr-currency').value           = r?.currency ?? 'USD';
   document.getElementById('tr-notes').value              = r?.notes ?? '';
-
-  // Reset to Details tab
-  document.querySelectorAll('.tax-modal-tab-content').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tax-modal-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('tax-tab-details').classList.add('active');
-  document.querySelectorAll('.tax-modal-tab')[0].classList.add('active');
-
-  // Load rules
-  if (id) {
-    loadTaxRules(id);
-  } else {
-    document.getElementById('tax-rules-container').innerHTML = '';
-  }
 
   openModal('modal-tax-rate');
 }
