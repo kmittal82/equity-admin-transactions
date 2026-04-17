@@ -1710,7 +1710,23 @@
     }
     .fx-rate-drawer-close:hover { background: rgba(255,255,255,0.2); color: #fff; }
     .fx-rate-drawer-close svg { width: 18px; height: 18px; }
-    .fx-rate-drawer-body { flex: 1; overflow-y: auto; padding: 24px; }
+    .fx-drawer-tabs {
+      display: flex; gap: 0; border-bottom: 1px solid rgba(0,0,0,0.06);
+      margin-top: 12px; padding: 0 24px;
+    }
+    .fx-drawer-tab {
+      flex: 1; padding: 10px 0; border: none; background: none;
+      color: rgba(255,255,255,0.6); cursor: pointer; font-size: 13px;
+      font-weight: 500; transition: all 0.14s; border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+    }
+    .fx-drawer-tab:hover { color: rgba(255,255,255,0.8); }
+    .fx-drawer-tab.active { color: #fff; border-bottom-color: #fff; }
+    .fx-rate-drawer-body { flex: 1; overflow-y: auto; padding: 0; }
+    .fx-drawer-tab-content {
+      padding: 24px; display: none;
+    }
+    .fx-drawer-tab-content.active { display: block; }
     .fx-rate-drawer-body::-webkit-scrollbar { width: 4px; }
     .fx-rate-drawer-body::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 2px; }
     .fx-rate-drawer-foot {
@@ -1719,6 +1735,24 @@
     }
     .fx-form-grid {
       display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+    }
+    .fx-rule-row {
+      display: flex; gap: 8px; align-items: flex-start; padding: 12px;
+      background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;
+    }
+    .fx-rule-row > div { flex: 1; }
+    .fx-rule-row select { width: 100%; }
+    .fx-rule-remove {
+      flex-shrink: 0; width: 28px; height: 28px; padding: 4px;
+      border: 1px solid #e2e8f0; background: #fff; border-radius: 4px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: #64748b; transition: all 0.14s;
+    }
+    .fx-rule-remove:hover { background: #fee2e2; color: #ef4444; border-color: #fecaca; }
+    .fx-rule-remove svg { width: 14px; height: 14px; }
+    .fx-rule-and {
+      font-size: 11px; font-weight: 600; color: #64748b; text-align: center;
+      padding: 4px 0; text-transform: uppercase; letter-spacing: 0.4px;
     }
 
     /* Searchable multi-select */
@@ -4508,49 +4542,68 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
+      <div class="fx-drawer-tabs">
+        <button class="fx-drawer-tab active" onclick="switchFXDrawerTab('details')">Details</button>
+        <button class="fx-drawer-tab" onclick="switchFXDrawerTab('rules')">Rules</button>
+      </div>
     </div>
 
     <div class="fx-rate-drawer-body">
       <input type="hidden" id="drawer-fx-rate-id">
 
-      <div class="fx-form-grid">
-        <div>
-          <label class="form-label">Currency From <span class="req">*</span></label>
-          <input class="form-input" id="drawer-fx-from" placeholder="USD" maxlength="3">
+      <!-- Details Tab -->
+      <div class="fx-drawer-tab-content active" id="fx-tab-details">
+        <div class="fx-form-grid">
+          <div>
+            <label class="form-label">Currency From <span class="req">*</span></label>
+            <input class="form-input" id="drawer-fx-from" placeholder="USD" maxlength="3">
+          </div>
+          <div>
+            <label class="form-label">Currency To <span class="req">*</span></label>
+            <input class="form-input" id="drawer-fx-to" placeholder="EUR" maxlength="3">
+          </div>
+          <div>
+            <label class="form-label">Effective Date <span class="req">*</span></label>
+            <input class="form-input" id="drawer-fx-effective" type="date">
+          </div>
+          <div>
+            <label class="form-label">Exchange Date <span class="req">*</span></label>
+            <input class="form-input" id="drawer-fx-exchange-date" type="date">
+          </div>
+          <div>
+            <label class="form-label">Exchange Time <span class="req">*</span></label>
+            <input class="form-input" id="drawer-fx-exchange-time" type="time">
+          </div>
+          <div style="display:none"></div>
+          <div>
+            <label class="form-label">Ask <span class="req">*</span></label>
+            <input class="form-input" id="drawer-fx-ask" type="number" step="0.0001" placeholder="0.9245">
+          </div>
+          <div>
+            <label class="form-label">Bid <span class="req">*</span></label>
+            <input class="form-input" id="drawer-fx-bid" type="number" step="0.0001" placeholder="0.9235">
+          </div>
+          <div>
+            <label class="form-label">Average <span class="req">*</span></label>
+            <input class="form-input" id="drawer-fx-average" type="number" step="0.0001" placeholder="0.9240">
+          </div>
+          <div style="display:none"></div>
+          <div class="tax-form-full">
+            <label class="form-label">Notes</label>
+            <textarea class="form-input" id="drawer-fx-notes" rows="3" placeholder="Additional notes…" style="resize:vertical"></textarea>
+          </div>
         </div>
-        <div>
-          <label class="form-label">Currency To <span class="req">*</span></label>
-          <input class="form-input" id="drawer-fx-to" placeholder="EUR" maxlength="3">
-        </div>
-        <div>
-          <label class="form-label">Effective Date <span class="req">*</span></label>
-          <input class="form-input" id="drawer-fx-effective" type="date">
-        </div>
-        <div>
-          <label class="form-label">Exchange Date <span class="req">*</span></label>
-          <input class="form-input" id="drawer-fx-exchange-date" type="date">
-        </div>
-        <div>
-          <label class="form-label">Exchange Time <span class="req">*</span></label>
-          <input class="form-input" id="drawer-fx-exchange-time" type="time">
-        </div>
-        <div style="display:none"></div>
-        <div>
-          <label class="form-label">Ask <span class="req">*</span></label>
-          <input class="form-input" id="drawer-fx-ask" type="number" step="0.0001" placeholder="0.9245">
-        </div>
-        <div>
-          <label class="form-label">Bid <span class="req">*</span></label>
-          <input class="form-input" id="drawer-fx-bid" type="number" step="0.0001" placeholder="0.9235">
-        </div>
-        <div>
-          <label class="form-label">Average <span class="req">*</span></label>
-          <input class="form-input" id="drawer-fx-average" type="number" step="0.0001" placeholder="0.9240">
-        </div>
-        <div style="display:none"></div>
-        <div class="tax-form-full">
-          <label class="form-label">Notes</label>
-          <textarea class="form-input" id="drawer-fx-notes" rows="3" placeholder="Additional notes…" style="resize:vertical"></textarea>
+      </div>
+
+      <!-- Rules Tab -->
+      <div class="fx-drawer-tab-content" id="fx-tab-rules">
+        <div style="padding:16px 0">
+          <div style="font-size:12px;color:#64748b;margin-bottom:16px">Define rules for this FX rate. All conditions are combined with AND logic.</div>
+          <div id="fx-rules-container" style="display:flex;flex-direction:column;gap:12px"></div>
+          <button class="btn btn-ghost" style="margin-top:12px;width:100%" onclick="addFXRuleRow()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Rule
+          </button>
         </div>
       </div>
     </div>
@@ -9299,6 +9352,15 @@ function openAddFXRateModal() {
   document.getElementById('drawer-fx-average').value = '';
   document.getElementById('drawer-fx-notes').value = '';
 
+  // Clear rules container
+  document.getElementById('fx-rules-container').innerHTML = '';
+
+  // Reset to details tab
+  document.querySelectorAll('.fx-drawer-tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.fx-drawer-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('fx-tab-details').classList.add('active');
+  document.querySelectorAll('.fx-drawer-tab')[0].classList.add('active');
+
   document.getElementById('fx-rate-drawer-overlay').classList.add('open');
 }
 
@@ -9307,6 +9369,140 @@ function deleteFXRate(id) {
   const idx = fxRatesData.findIndex(r => r.id === id);
   if (idx !== -1) fxRatesData.splice(idx, 1);
   renderFXRates();
+}
+
+/* ════ FX Rate Drawer Tabs ════ */
+function switchFXDrawerTab(tabName) {
+  // Hide all tabs
+  document.querySelectorAll('.fx-drawer-tab-content').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  document.querySelectorAll('.fx-drawer-tab').forEach(btn => {
+    btn.classList.remove('active');
+  });
+
+  // Show selected tab
+  document.getElementById('fx-tab-' + tabName).classList.add('active');
+  event.target.classList.add('active');
+
+  // Load rules when switching to rules tab
+  if (tabName === 'rules') {
+    const rateId = document.getElementById('drawer-fx-rate-id').value;
+    if (rateId) {
+      loadFXRules(rateId);
+    }
+  }
+}
+
+function loadFXRules(rateId) {
+  const rate = fxRatesData.find(r => r.id === rateId);
+  const container = document.getElementById('fx-rules-container');
+  container.innerHTML = '';
+
+  if (rate && rate.rules && rate.rules.length > 0) {
+    rate.rules.forEach((rule, idx) => {
+      renderFXRuleRow(idx, rule);
+      if (idx < rate.rules.length - 1) {
+        const andDiv = document.createElement('div');
+        andDiv.className = 'fx-rule-and';
+        andDiv.textContent = 'AND';
+        container.appendChild(andDiv);
+      }
+    });
+  }
+}
+
+function renderFXRuleRow(index, rule = {}) {
+  const container = document.getElementById('fx-rules-container');
+  const rowDiv = document.createElement('div');
+  rowDiv.className = 'fx-rule-row';
+  rowDiv.id = 'fx-rule-row-' + index;
+
+  const rateNames = [...new Set(fxRatesData.map(r => r.currencyFrom + '/' + r.currencyTo))];
+
+  rowDiv.innerHTML = `
+    <div>
+      <label class="form-label" style="font-size:11px">Rate</label>
+      <select class="form-input" data-rule-field="rate" style="font-size:12px">
+        <option value="">Select rate</option>
+        ${rateNames.map(r => `<option value="${r}" ${rule.rate === r ? 'selected' : ''}>${r}</option>`).join('')}
+      </select>
+    </div>
+    <div>
+      <label class="form-label" style="font-size:11px">Condition</label>
+      <select class="form-input" data-rule-field="rateCondition" style="font-size:12px">
+        <option value="">Select</option>
+        <option value="IN" ${rule.rateCondition === 'IN' ? 'selected' : ''}>IN</option>
+        <option value="EQUALS" ${rule.rateCondition === 'EQUALS' ? 'selected' : ''}>EQUALS</option>
+        <option value="NOT_IN" ${rule.rateCondition === 'NOT_IN' ? 'selected' : ''}>NOT IN</option>
+      </select>
+    </div>
+    <div style="flex:0.8">
+      <label class="form-label" style="font-size:11px">Grant Type</label>
+      <select class="form-input" data-rule-field="grantType" style="font-size:12px">
+        <option value="">Select</option>
+        ${grantTypesList.map(g => `<option value="${g}" ${rule.grantType === g ? 'selected' : ''}>${g}</option>`).join('')}
+      </select>
+    </div>
+    <div>
+      <label class="form-label" style="font-size:11px">Condition</label>
+      <select class="form-input" data-rule-field="gtCondition" style="font-size:12px">
+        <option value="">Select</option>
+        <option value="IN" ${rule.gtCondition === 'IN' ? 'selected' : ''}>IN</option>
+        <option value="EQUALS" ${rule.gtCondition === 'EQUALS' ? 'selected' : ''}>EQUALS</option>
+        <option value="NOT_IN" ${rule.gtCondition === 'NOT_IN' ? 'selected' : ''}>NOT IN</option>
+      </select>
+    </div>
+    <div style="flex:0.8">
+      <label class="form-label" style="font-size:11px">Transaction Type</label>
+      <select class="form-input" data-rule-field="txnType" style="font-size:12px">
+        <option value="">Select</option>
+        ${transactionTypesList.map(t => `<option value="${t}" ${rule.txnType === t ? 'selected' : ''}>${t}</option>`).join('')}
+      </select>
+    </div>
+    <div>
+      <label class="form-label" style="font-size:11px">Condition</label>
+      <select class="form-input" data-rule-field="ttCondition" style="font-size:12px">
+        <option value="">Select</option>
+        <option value="IN" ${rule.ttCondition === 'IN' ? 'selected' : ''}>IN</option>
+        <option value="EQUALS" ${rule.ttCondition === 'EQUALS' ? 'selected' : ''}>EQUALS</option>
+        <option value="NOT_IN" ${rule.ttCondition === 'NOT_IN' ? 'selected' : ''}>NOT IN</option>
+      </select>
+    </div>
+    <button class="fx-rule-remove" onclick="removeFXRuleRow(${index})">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+    </button>
+  `;
+
+  if (container.children.length > 0) {
+    const andDiv = document.createElement('div');
+    andDiv.className = 'fx-rule-and';
+    andDiv.textContent = 'AND';
+    container.appendChild(andDiv);
+  }
+  container.appendChild(rowDiv);
+}
+
+function addFXRuleRow() {
+  const container = document.getElementById('fx-rules-container');
+  const rowCount = container.querySelectorAll('.fx-rule-row').length;
+  renderFXRuleRow(rowCount);
+}
+
+function removeFXRuleRow(index) {
+  const row = document.getElementById('fx-rule-row-' + index);
+  if (!row) return;
+
+  // Remove the row and any adjacent AND text
+  const nextNode = row.nextElementSibling;
+  if (nextNode && nextNode.classList && nextNode.classList.contains('fx-rule-and')) {
+    nextNode.remove();
+  }
+  const prevNode = row.previousElementSibling;
+  if (prevNode && prevNode.classList && prevNode.classList.contains('fx-rule-and')) {
+    prevNode.remove();
+  }
+  row.remove();
 }
 
 function openFXRateDrawer(id) {
@@ -9328,12 +9524,49 @@ function openFXRateDrawer(id) {
   document.getElementById('drawer-fx-average').value = rate.average;
   document.getElementById('drawer-fx-notes').value = rate.notes || '';
 
+  // Reset to details tab
+  document.querySelectorAll('.fx-drawer-tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.fx-drawer-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('fx-tab-details').classList.add('active');
+  document.querySelectorAll('.fx-drawer-tab')[0].classList.add('active');
+
+  // Load rules
+  loadFXRules(rate.id);
+
   document.getElementById('fx-rate-drawer-overlay').classList.add('open');
 }
 
 function closeFXRateDrawer(event) {
   if (event && event.target !== document.getElementById('fx-rate-drawer-overlay')) return;
   document.getElementById('fx-rate-drawer-overlay').classList.remove('open');
+}
+
+function collectFXRules() {
+  const rules = [];
+  const ruleRows = document.querySelectorAll('.fx-rule-row');
+
+  ruleRows.forEach((row, idx) => {
+    const rate = row.querySelector('[data-rule-field="rate"]').value;
+    const rateCondition = row.querySelector('[data-rule-field="rateCondition"]').value;
+    const grantType = row.querySelector('[data-rule-field="grantType"]').value;
+    const gtCondition = row.querySelector('[data-rule-field="gtCondition"]').value;
+    const txnType = row.querySelector('[data-rule-field="txnType"]').value;
+    const ttCondition = row.querySelector('[data-rule-field="ttCondition"]').value;
+
+    // Only add rule if at least one field is filled
+    if (rate || grantType || txnType) {
+      rules.push({
+        rate,
+        rateCondition,
+        grantType,
+        gtCondition,
+        txnType,
+        ttCondition
+      });
+    }
+  });
+
+  return rules;
 }
 
 function saveFXRateFromDrawer() {
@@ -9358,6 +9591,9 @@ function saveFXRateFromDrawer() {
     return;
   }
 
+  // Collect rules
+  const rules = collectFXRules();
+
   if (rateId) {
     // Update existing rate
     const rate = fxRatesData.find(r => r.id === rateId);
@@ -9371,6 +9607,7 @@ function saveFXRateFromDrawer() {
       rate.bid = bid;
       rate.average = average;
       rate.notes = notes;
+      rate.rules = rules;
     }
   } else {
     // Add new rate
@@ -9384,7 +9621,8 @@ function saveFXRateFromDrawer() {
       ask: ask,
       bid: bid,
       average: average,
-      notes: notes
+      notes: notes,
+      rules: rules
     };
     fxRatesData.push(newRate);
   }
