@@ -2191,6 +2191,42 @@
     .tax-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     .tax-form-full  { grid-column: 1 / -1; }
 
+    /* Tax Rules Cards */
+    .tax-rule-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 16px; display: flex; flex-direction: column; gap: 12px;
+    }
+    .tax-rule-card-header {
+      display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+      padding-bottom: 12px; border-bottom: 1px solid var(--border);
+    }
+    .tax-rule-card-title {
+      font-size: 14px; font-weight: 600; color: var(--text);
+    }
+    .tax-rule-card-actions {
+      display: flex; gap: 6px;
+    }
+    .tax-rule-card-actions button {
+      width: 28px; height: 28px; padding: 4px; border: 1px solid var(--border);
+      background: #fff; border-radius: 6px; cursor: pointer; display: flex;
+      align-items: center; justify-content: center; color: var(--text2);
+      transition: all 0.14s;
+    }
+    .tax-rule-card-actions button:hover { background: var(--bg); color: var(--text); }
+    .tax-rule-card-content {
+      display: flex; flex-direction: column; gap: 8px; font-size: 12px;
+    }
+    .tax-rule-condition {
+      display: flex; gap: 8px; align-items: center; color: var(--text2);
+    }
+    .tax-rule-condition-label {
+      font-weight: 500; color: var(--text); min-width: 80px;
+    }
+    .tax-rule-and {
+      text-align: center; color: var(--textm); font-size: 11px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.4px; padding: 6px 0;
+    }
+
   </style>
   <!-- AG Grid -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community@latest/dist/styles/ag-grid.css">
@@ -4360,6 +4396,7 @@
         <div class="tax-tab active" id="ttab-rates"   onclick="switchTaxTab('rates')">Tax Rates</div>
         <div class="tax-tab"        id="ttab-codes"   onclick="switchTaxTab('codes')">Tax Codes</div>
         <div class="tax-tab"        id="ttab-brackets" onclick="switchTaxTab('brackets')">Brackets &amp; Schedules</div>
+        <div class="tax-tab"        id="ttab-rules" onclick="switchTaxTab('rules')">Rules</div>
       </div>
 
       <!-- TAX RATES panel -->
@@ -4471,6 +4508,21 @@
             <tbody id="tax-bracket-body"></tbody>
           </table>
         </div>
+      </div>
+
+      <!-- RULES panel -->
+      <div id="tax-panel-rules" style="display:none">
+        <div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <h3 style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:4px">Tax Rate Rules</h3>
+            <p style="font-size:13px;color:var(--text2)">Define conditions for applying tax rates based on transaction type and grant type</p>
+          </div>
+          <button class="btn btn-primary" onclick="openTaxRuleBuilder()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Rule
+          </button>
+        </div>
+        <div id="tax-rules-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(500px,1fr));gap:16px"></div>
       </div>
 
     </div><!-- /view-tax-mgmt -->
@@ -8429,13 +8481,96 @@ let taxTabActive = 'rates';
 
 function switchTaxTab(tab) {
   taxTabActive = tab;
-  ['rates','codes','brackets'].forEach(t => {
+  ['rates','codes','brackets','rules'].forEach(t => {
     document.getElementById('ttab-' + t)?.classList.toggle('active', t === tab);
     document.getElementById('tax-panel-' + t).style.display = t === tab ? '' : 'none';
   });
   if (tab === 'rates')    renderTaxRates();
   if (tab === 'codes')    renderTaxCodes();
   if (tab === 'brackets') renderTaxBrackets();
+  if (tab === 'rules')    renderTaxRules();
+}
+
+function renderTaxRules() {
+  const container = document.getElementById('tax-rules-list');
+  if (!container) return;
+  container.innerHTML = '';
+
+  // Collect all rules from tax rates
+  let allRules = [];
+  taxRatesData.forEach(rate => {
+    if (rate.rules && rate.rules.length > 0) {
+      rate.rules.forEach((rule, idx) => {
+        allRules.push({ ...rule, rateId: rate.id, rateName: `${rate.jurisdiction} — ${rate.type}`, ruleIdx: idx });
+      });
+    }
+  });
+
+  if (allRules.length === 0) {
+    container.innerHTML = '<div style="grid-column:1/-1;padding:24px;text-align:center;color:var(--textm)">No rules defined yet. Create a rule to get started.</div>';
+    return;
+  }
+
+  allRules.forEach((rule, idx) => {
+    const card = document.createElement('div');
+    card.className = 'tax-rule-card';
+    card.innerHTML = `
+      <div class="tax-rule-card-header">
+        <div class="tax-rule-card-title">${rule.rateName}</div>
+        <div class="tax-rule-card-actions">
+          <button onclick="editTaxRule('${rule.rateId}', ${rule.ruleIdx})" title="Edit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>
+          </button>
+          <button onclick="deleteTaxRule('${rule.rateId}', ${rule.ruleIdx})" title="Delete">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="tax-rule-card-content">
+        <div class="tax-rule-condition">
+          <span class="tax-rule-condition-label">Tax Rate:</span>
+          <span>${rule.rate || '—'}</span>
+          <span style="color:#999">${rule.rateCondition || ''}</span>
+        </div>
+        <div class="tax-rule-and">AND</div>
+        <div class="tax-rule-condition">
+          <span class="tax-rule-condition-label">Grant Type:</span>
+          <span>${rule.grantType || '—'}</span>
+          <span style="color:#999">${rule.gtCondition || ''}</span>
+        </div>
+        <div class="tax-rule-and">AND</div>
+        <div class="tax-rule-condition">
+          <span class="tax-rule-condition-label">Txn Type:</span>
+          <span>${rule.txnType || '—'}</span>
+          <span style="color:#999">${rule.ttCondition || ''}</span>
+        </div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function openTaxRuleBuilder() {
+  alert('Click on a tax rate to edit or add rules');
+}
+
+function editTaxRule(rateId, ruleIdx) {
+  const rate = taxRatesData.find(r => r.id === rateId);
+  if (!rate) return;
+  openTaxRateModal(rateId);
+  setTimeout(() => {
+    const rulesTab = document.querySelector('.tax-modal-tab:nth-child(2)');
+    if (rulesTab) rulesTab.click();
+  }, 100);
+}
+
+function deleteTaxRule(rateId, ruleIdx) {
+  if (!confirm('Delete this rule?')) return;
+  const rate = taxRatesData.find(r => r.id === rateId);
+  if (rate && rate.rules) {
+    rate.rules.splice(ruleIdx, 1);
+    renderTaxRules();
+  }
 }
 
 function renderTaxRates() {
