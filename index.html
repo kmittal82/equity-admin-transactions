@@ -4512,9 +4512,20 @@
 
       <!-- RULES panel -->
       <div id="tax-panel-rules" style="display:none">
-        <div style="margin-bottom:24px;padding:20px;background:var(--card);border:1px solid var(--border);border-radius:12px">
-          <h3 style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:12px">Create New Rule</h3>
-          <p style="font-size:12px;color:var(--text2);margin-bottom:16px">Select a tax rate and define conditions for when to apply it.</p>
+        <div style="margin-bottom:24px;display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <h3 style="font-size:16px;font-weight:600;color:var(--text)">Tax Rate Rules</h3>
+            <p style="font-size:13px;color:var(--text2);margin-top:4px">Manage conditions for applying tax rates</p>
+          </div>
+          <button class="btn btn-primary" onclick="startCreateRule()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Rule
+          </button>
+        </div>
+
+        <!-- Rule Form (Hidden by default) -->
+        <div id="rule-form-container" style="display:none;margin-bottom:24px;padding:20px;background:var(--card);border:1px solid var(--border);border-radius:12px">
+          <h3 style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:16px" id="rule-form-title">Create New Rule</h3>
 
           <div class="tax-form-grid">
             <div class="tax-form-full">
@@ -4525,12 +4536,12 @@
             </div>
 
             <div class="tax-form-full" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">
-              <div style="font-weight:600;font-size:13px;color:var(--text);margin-bottom:12px">Conditions (all must be true)</div>
+              <div style="font-weight:600;font-size:13px;color:var(--text);margin-bottom:12px">Conditions</div>
 
               <div style="display:grid;grid-template-columns:auto 1fr;gap:16px;margin-bottom:16px">
-                <div style="font-weight:500;color:var(--text);font-size:13px;padding-top:6px">Grant Type:</div>
+                <div style="font-weight:500;color:var(--text);font-size:13px;padding-top:6px">Grant Types:</div>
                 <div>
-                  <select class="form-select" id="page-rule-gt-values" multiple style="min-height:100px">
+                  <select class="form-select" id="page-rule-gt-values" multiple style="min-height:80px">
                     <option value="RSU">RSU</option>
                     <option value="RSA">RSA</option>
                     <option value="ISO">ISO</option>
@@ -4541,9 +4552,9 @@
               </div>
 
               <div style="display:grid;grid-template-columns:auto 1fr;gap:16px">
-                <div style="font-weight:500;color:var(--text);font-size:13px;padding-top:6px">Transaction Type:</div>
+                <div style="font-weight:500;color:var(--text);font-size:13px;padding-top:6px">Transaction Types:</div>
                 <div>
-                  <select class="form-select" id="page-rule-tt-values" multiple style="min-height:100px">
+                  <select class="form-select" id="page-rule-tt-values" multiple style="min-height:80px">
                     <option value="Exercise and Monetary Payment">Exercise and Monetary Payment</option>
                     <option value="Exercise and Withhold to Cover">Exercise and Withhold to Cover</option>
                     <option value="Release and Monetary Payment">Release and Monetary Payment</option>
@@ -4559,16 +4570,28 @@
             </div>
 
             <div class="tax-form-full" style="margin-top:16px;display:flex;gap:8px">
-              <button class="btn btn-ghost" onclick="clearRuleForm()" style="flex:1">Clear</button>
-              <button class="btn btn-primary" onclick="createPageLevelRule()" style="flex:1">Create Rule</button>
+              <button class="btn btn-ghost" onclick="cancelRuleForm()" style="flex:1">Cancel</button>
+              <button class="btn btn-primary" onclick="saveRule()" style="flex:1" id="rule-save-btn">Create Rule</button>
             </div>
           </div>
         </div>
 
-        <div style="margin-bottom:16px">
-          <h3 style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:12px">Existing Rules</h3>
+        <!-- Rules Table -->
+        <div style="overflow-x:auto">
+          <table class="ag-table" style="width:100%">
+            <thead>
+              <tr>
+                <th style="width:200px">Tax Rate</th>
+                <th>Grant Types</th>
+                <th>Transaction Types</th>
+                <th style="width:120px;text-align:center">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tax-rules-tbody">
+              <tr><td colspan="4" style="text-align:center;padding:24px;color:var(--textm)">No rules defined yet</td></tr>
+            </tbody>
+          </table>
         </div>
-        <div id="tax-rules-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(500px,1fr));gap:16px"></div>
       </div>
 
     </div><!-- /view-tax-mgmt -->
@@ -8518,6 +8541,8 @@ function switchTaxTab(tab) {
   if (tab === 'rules')    renderTaxRules();
 }
 
+let currentEditingRule = null;
+
 function renderTaxRules() {
   // Populate tax rate dropdown in form
   const rateSelect = document.getElementById('page-rule-rate');
@@ -8533,9 +8558,8 @@ function renderTaxRules() {
     rateSelect.value = currentVal;
   }
 
-  const container = document.getElementById('tax-rules-list');
-  if (!container) return;
-  container.innerHTML = '';
+  const tbody = document.getElementById('tax-rules-tbody');
+  if (!tbody) return;
 
   // Collect all rules from tax rates
   let allRules = [];
@@ -8548,48 +8572,46 @@ function renderTaxRules() {
   });
 
   if (allRules.length === 0) {
-    container.innerHTML = '<div style="grid-column:1/-1;padding:24px;text-align:center;color:var(--textm)">No rules defined yet. Create a rule above.</div>';
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:24px;color:var(--textm)">No rules defined yet</td></tr>';
     return;
   }
 
-  allRules.forEach((rule, idx) => {
-    const card = document.createElement('div');
-    card.className = 'tax-rule-card';
+  tbody.innerHTML = allRules.map((rule, idx) => {
     const grantTypesList = rule.grantTypes ? rule.grantTypes.join(', ') : '—';
     const txnTypesList = rule.txnTypes ? rule.txnTypes.join(', ') : '—';
 
-    card.innerHTML = `
-      <div class="tax-rule-card-header">
-        <div class="tax-rule-card-title">${rule.rateName}</div>
-        <div class="tax-rule-card-actions">
-          <button onclick="deleteTaxRule('${rule.rateId}', ${rule.ruleIdx})" title="Delete">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
-          </button>
-        </div>
-      </div>
-      <div class="tax-rule-card-content">
-        <div class="tax-rule-condition">
-          <span class="tax-rule-condition-label">Grant Types:</span>
-          <span style="font-size:12px">${grantTypesList}</span>
-        </div>
-        ${rule.grantTypes && rule.txnTypes ? '<div class="tax-rule-and">AND</div>' : ''}
-        <div class="tax-rule-condition">
-          <span class="tax-rule-condition-label">Txn Types:</span>
-          <span style="font-size:12px">${txnTypesList}</span>
-        </div>
-      </div>
-    `;
-    container.appendChild(card);
-  });
+    return `<tr>
+      <td>${rule.rateName}</td>
+      <td>${grantTypesList}</td>
+      <td>${txnTypesList}</td>
+      <td style="text-align:center">
+        <button class="btn btn-sm" onclick="editTaxRule('${rule.rateId}', ${rule.ruleIdx})" title="Edit" style="margin-right:4px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <button class="btn btn-sm" onclick="deleteTaxRule('${rule.rateId}', ${rule.ruleIdx})" title="Delete">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+        </button>
+      </td>
+    </tr>`;
+  }).join('');
 }
 
-function clearRuleForm() {
-  document.getElementById('page-rule-rate').value = '';
-  document.getElementById('page-rule-gt-values').selectedIndex = -1;
-  document.getElementById('page-rule-tt-values').selectedIndex = -1;
+function startCreateRule() {
+  currentEditingRule = null;
+  document.getElementById('rule-form-container').style.display = 'block';
+  document.getElementById('rule-form-title').textContent = 'Create New Rule';
+  document.getElementById('rule-save-btn').textContent = 'Create Rule';
+  clearRuleForm();
+  document.getElementById('page-rule-rate').focus();
 }
 
-function createPageLevelRule() {
+function cancelRuleForm() {
+  currentEditingRule = null;
+  document.getElementById('rule-form-container').style.display = 'none';
+  clearRuleForm();
+}
+
+function saveRule() {
   const rateId = document.getElementById('page-rule-rate').value;
   const gtSelect = document.getElementById('page-rule-gt-values');
   const ttSelect = document.getElementById('page-rule-tt-values');
@@ -8612,20 +8634,61 @@ function createPageLevelRule() {
     txnTypes: txnTypes.length > 0 ? txnTypes : null
   };
 
-  rate.rules.push(newRule);
+  if (currentEditingRule) {
+    // Update existing rule
+    rate.rules[currentEditingRule.ruleIdx] = newRule;
+  } else {
+    // Create new rule
+    rate.rules.push(newRule);
+  }
+
   clearRuleForm();
+  cancelRuleForm();
   renderTaxRules();
-  alert('Rule created successfully!');
 }
+
+function clearRuleForm() {
+  document.getElementById('page-rule-rate').value = '';
+  document.getElementById('page-rule-gt-values').selectedIndex = -1;
+  document.getElementById('page-rule-tt-values').selectedIndex = -1;
+}
+
 
 function editTaxRule(rateId, ruleIdx) {
   const rate = taxRatesData.find(r => r.id === rateId);
-  if (!rate) return;
-  openTaxRateModal(rateId);
-  setTimeout(() => {
-    const rulesTab = document.querySelector('.tax-modal-tab:nth-child(2)');
-    if (rulesTab) rulesTab.click();
-  }, 100);
+  if (!rate || !rate.rules || !rate.rules[ruleIdx]) return;
+
+  const rule = rate.rules[ruleIdx];
+  currentEditingRule = { rateId, ruleIdx };
+
+  // Populate form with existing rule data
+  document.getElementById('page-rule-rate').value = rateId;
+
+  // Clear and select grant types
+  const gtSelect = document.getElementById('page-rule-gt-values');
+  Array.from(gtSelect.options).forEach(opt => opt.selected = false);
+  if (rule.grantTypes) {
+    rule.grantTypes.forEach(gt => {
+      const opt = Array.from(gtSelect.options).find(o => o.value === gt);
+      if (opt) opt.selected = true;
+    });
+  }
+
+  // Clear and select transaction types
+  const ttSelect = document.getElementById('page-rule-tt-values');
+  Array.from(ttSelect.options).forEach(opt => opt.selected = false);
+  if (rule.txnTypes) {
+    rule.txnTypes.forEach(tt => {
+      const opt = Array.from(ttSelect.options).find(o => o.value === tt);
+      if (opt) opt.selected = true;
+    });
+  }
+
+  // Show form and update title/button
+  document.getElementById('rule-form-container').style.display = 'block';
+  document.getElementById('rule-form-title').textContent = 'Edit Rule';
+  document.getElementById('rule-save-btn').textContent = 'Update Rule';
+  document.getElementById('page-rule-rate').focus();
 }
 
 function deleteTaxRule(rateId, ruleIdx) {
