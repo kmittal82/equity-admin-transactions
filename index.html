@@ -1211,6 +1211,20 @@
       display: flex; justify-content: flex-end; gap: 8px;
     }
     .modal-foot-split { justify-content: space-between; }
+    .tax-modal-tabs {
+      display: flex; gap: 0; border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+    }
+    .tax-modal-tab {
+      flex: 1; padding: 10px 0; border: none; background: none;
+      color: var(--textm); cursor: pointer; font-size: 13px;
+      font-weight: 500; transition: all 0.14s; border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+    }
+    .tax-modal-tab:hover { color: var(--text); }
+    .tax-modal-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .tax-modal-tab-content { display: none; }
+    .tax-modal-tab-content.active { display: block; }
 
     /* Steps */
     .steps { display: flex; gap: 8px; margin-bottom: 24px; }
@@ -1710,23 +1724,7 @@
     }
     .fx-rate-drawer-close:hover { background: rgba(255,255,255,0.2); color: #fff; }
     .fx-rate-drawer-close svg { width: 18px; height: 18px; }
-    .fx-drawer-tabs {
-      display: flex; gap: 0; border-bottom: 1px solid rgba(0,0,0,0.06);
-      margin-top: 12px; padding: 0 24px;
-    }
-    .fx-drawer-tab {
-      flex: 1; padding: 10px 0; border: none; background: none;
-      color: rgba(255,255,255,0.6); cursor: pointer; font-size: 13px;
-      font-weight: 500; transition: all 0.14s; border-bottom: 2px solid transparent;
-      margin-bottom: -1px;
-    }
-    .fx-drawer-tab:hover { color: rgba(255,255,255,0.8); }
-    .fx-drawer-tab.active { color: #fff; border-bottom-color: #fff; }
-    .fx-rate-drawer-body { flex: 1; overflow-y: auto; padding: 0; }
-    .fx-drawer-tab-content {
-      padding: 24px; display: none;
-    }
-    .fx-drawer-tab-content.active { display: block; }
+    .fx-rate-drawer-body { flex: 1; overflow-y: auto; padding: 24px; }
     .fx-rate-drawer-body::-webkit-scrollbar { width: 4px; }
     .fx-rate-drawer-body::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 2px; }
     .fx-rate-drawer-foot {
@@ -4542,68 +4540,49 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
-      <div class="fx-drawer-tabs">
-        <button class="fx-drawer-tab active" onclick="switchFXDrawerTab('details')">Details</button>
-        <button class="fx-drawer-tab" onclick="switchFXDrawerTab('rules')">Rules</button>
-      </div>
     </div>
 
     <div class="fx-rate-drawer-body">
       <input type="hidden" id="drawer-fx-rate-id">
 
-      <!-- Details Tab -->
-      <div class="fx-drawer-tab-content active" id="fx-tab-details">
-        <div class="fx-form-grid">
-          <div>
-            <label class="form-label">Currency From <span class="req">*</span></label>
-            <input class="form-input" id="drawer-fx-from" placeholder="USD" maxlength="3">
-          </div>
-          <div>
-            <label class="form-label">Currency To <span class="req">*</span></label>
-            <input class="form-input" id="drawer-fx-to" placeholder="EUR" maxlength="3">
-          </div>
-          <div>
-            <label class="form-label">Effective Date <span class="req">*</span></label>
-            <input class="form-input" id="drawer-fx-effective" type="date">
-          </div>
-          <div>
-            <label class="form-label">Exchange Date <span class="req">*</span></label>
-            <input class="form-input" id="drawer-fx-exchange-date" type="date">
-          </div>
-          <div>
-            <label class="form-label">Exchange Time <span class="req">*</span></label>
-            <input class="form-input" id="drawer-fx-exchange-time" type="time">
-          </div>
-          <div style="display:none"></div>
-          <div>
-            <label class="form-label">Ask <span class="req">*</span></label>
-            <input class="form-input" id="drawer-fx-ask" type="number" step="0.0001" placeholder="0.9245">
-          </div>
-          <div>
-            <label class="form-label">Bid <span class="req">*</span></label>
-            <input class="form-input" id="drawer-fx-bid" type="number" step="0.0001" placeholder="0.9235">
-          </div>
-          <div>
-            <label class="form-label">Average <span class="req">*</span></label>
-            <input class="form-input" id="drawer-fx-average" type="number" step="0.0001" placeholder="0.9240">
-          </div>
-          <div style="display:none"></div>
-          <div class="tax-form-full">
-            <label class="form-label">Notes</label>
-            <textarea class="form-input" id="drawer-fx-notes" rows="3" placeholder="Additional notes…" style="resize:vertical"></textarea>
-          </div>
+      <div class="fx-form-grid">
+        <div>
+          <label class="form-label">Currency From <span class="req">*</span></label>
+          <input class="form-input" id="drawer-fx-from" placeholder="USD" maxlength="3">
         </div>
-      </div>
-
-      <!-- Rules Tab -->
-      <div class="fx-drawer-tab-content" id="fx-tab-rules">
-        <div style="padding:16px 0">
-          <div style="font-size:12px;color:#64748b;margin-bottom:16px">Define rules for this FX rate. All conditions are combined with AND logic.</div>
-          <div id="fx-rules-container" style="display:flex;flex-direction:column;gap:12px"></div>
-          <button class="btn btn-ghost" style="margin-top:12px;width:100%" onclick="addFXRuleRow()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Add Rule
-          </button>
+        <div>
+          <label class="form-label">Currency To <span class="req">*</span></label>
+          <input class="form-input" id="drawer-fx-to" placeholder="EUR" maxlength="3">
+        </div>
+        <div>
+          <label class="form-label">Effective Date <span class="req">*</span></label>
+          <input class="form-input" id="drawer-fx-effective" type="date">
+        </div>
+        <div>
+          <label class="form-label">Exchange Date <span class="req">*</span></label>
+          <input class="form-input" id="drawer-fx-exchange-date" type="date">
+        </div>
+        <div>
+          <label class="form-label">Exchange Time <span class="req">*</span></label>
+          <input class="form-input" id="drawer-fx-exchange-time" type="time">
+        </div>
+        <div style="display:none"></div>
+        <div>
+          <label class="form-label">Ask <span class="req">*</span></label>
+          <input class="form-input" id="drawer-fx-ask" type="number" step="0.0001" placeholder="0.9245">
+        </div>
+        <div>
+          <label class="form-label">Bid <span class="req">*</span></label>
+          <input class="form-input" id="drawer-fx-bid" type="number" step="0.0001" placeholder="0.9235">
+        </div>
+        <div>
+          <label class="form-label">Average <span class="req">*</span></label>
+          <input class="form-input" id="drawer-fx-average" type="number" step="0.0001" placeholder="0.9240">
+        </div>
+        <div style="display:none"></div>
+        <div class="tax-form-full">
+          <label class="form-label">Notes</label>
+          <textarea class="form-input" id="drawer-fx-notes" rows="3" placeholder="Additional notes…" style="resize:vertical"></textarea>
         </div>
       </div>
     </div>
@@ -4621,12 +4600,21 @@
 <div class="modal-overlay" id="modal-tax-rate">
   <div class="modal-box" style="max-width:560px">
     <div class="modal-head">
-      <div class="modal-title" id="tax-rate-modal-title">Add Tax Rate</div>
-      <button class="modal-close" onclick="closeModal('modal-tax-rate')">×</button>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div class="modal-title" id="tax-rate-modal-title">Add Tax Rate</div>
+        <button class="modal-close" onclick="closeModal('modal-tax-rate')">×</button>
+      </div>
+      <div class="tax-modal-tabs">
+        <button class="tax-modal-tab active" onclick="switchTaxModalTab('details')">Details</button>
+        <button class="tax-modal-tab" onclick="switchTaxModalTab('rules')">Rules</button>
+      </div>
     </div>
     <div class="modal-body">
       <input type="hidden" id="tax-rate-edit-id">
       <input type="hidden" id="tax-rate-grant-types">
+
+      <!-- Details Tab -->
+      <div class="tax-modal-tab-content active" id="tax-tab-details">
       <div class="tax-form-grid">
         <div>
           <label class="form-label">Jurisdiction <span class="req">*</span></label>
@@ -4675,34 +4663,6 @@
           <input class="form-input" id="tr-expiry" type="date">
         </div>
         <div class="tax-form-full">
-          <label class="form-label">Grant Types</label>
-          <div class="grant-types-selector">
-            <div class="grant-types-input-wrapper" onclick="openGrantTypesDropdown('modal')">
-              <div id="modal-grant-pills" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"></div>
-              <input type="text" class="grant-types-search" id="modal-grant-search" placeholder="Search or add grant types…"
-                     onfocus="openGrantTypesDropdown('modal')"
-                     oninput="filterGrantTypesDropdown('modal')"
-                     onkeydown="handleGrantTypeKeydown(event, 'modal')">
-            </div>
-            <div class="grant-types-dropdown" id="modal-grant-dropdown"></div>
-          </div>
-          <div style="font-size:12px;color:#666;margin-top:8px">Select one or more grant types that this tax rate applies to</div>
-        </div>
-        <div class="tax-form-full">
-          <label class="form-label">Transaction Types</label>
-          <div class="grant-types-selector">
-            <div class="grant-types-input-wrapper" onclick="openTransactionTypesDropdown('modal')">
-              <div id="modal-txn-pills" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"></div>
-              <input type="text" class="grant-types-search" id="modal-txn-search" placeholder="Search or add transaction types…"
-                     onfocus="openTransactionTypesDropdown('modal')"
-                     oninput="filterTransactionTypesDropdown('modal')"
-                     onkeydown="handleTransactionTypeKeydown(event, 'modal')">
-            </div>
-            <div class="grant-types-dropdown" id="modal-txn-dropdown"></div>
-          </div>
-          <div style="font-size:12px;color:#666;margin-top:8px">Select one or more transaction types that this tax rate applies to</div>
-        </div>
-        <div class="tax-form-full">
           <label class="form-label">Currency</label>
           <select class="form-select" id="tr-currency">
             <option value="USD">USD — US Dollar</option>
@@ -4718,7 +4678,20 @@
           <textarea class="form-input" id="tr-notes" rows="2" placeholder="Additional context or sourcing notes…" style="resize:vertical"></textarea>
         </div>
       </div>
-    </div>
+      </div><!-- /tax-tab-details -->
+
+      <!-- Rules Tab -->
+      <div class="tax-modal-tab-content" id="tax-tab-rules">
+        <div style="padding:0">
+          <div style="font-size:12px;color:#64748b;margin-bottom:16px;margin-top:4px">Define rules for this tax rate. All conditions are combined with AND logic.</div>
+          <div id="tax-rules-container" style="display:flex;flex-direction:column;gap:12px"></div>
+          <button class="btn btn-ghost" style="margin-top:12px;width:100%" onclick="addTaxRuleRow()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Rule
+          </button>
+        </div>
+      </div><!-- /tax-tab-rules -->
+    </div><!-- /modal-body -->
     <div class="modal-foot">
       <button class="btn btn-ghost" onclick="closeModal('modal-tax-rate')">Cancel</button>
       <button class="btn btn-primary" onclick="saveTaxRate()">Save Rate</button>
@@ -8625,6 +8598,154 @@ function updateTaxStats() {
   if (setsEl)  setsEl.textContent  = sets;
 }
 
+/* ════ Tax Modal Tabs ════ */
+function switchTaxModalTab(tabName) {
+  document.querySelectorAll('.tax-modal-tab-content').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  document.querySelectorAll('.tax-modal-tab').forEach(btn => {
+    btn.classList.remove('active');
+  });
+
+  document.getElementById('tax-tab-' + tabName).classList.add('active');
+  event.target.classList.add('active');
+
+  if (tabName === 'rules') {
+    const rateId = document.getElementById('tax-rate-edit-id').value;
+    loadTaxRules(rateId);
+  }
+}
+
+function loadTaxRules(rateId) {
+  const rate = rateId ? taxRatesData.find(r => r.id === rateId) : null;
+  const container = document.getElementById('tax-rules-container');
+  container.innerHTML = '';
+
+  if (rate && rate.rules && rate.rules.length > 0) {
+    rate.rules.forEach((rule, idx) => {
+      renderTaxRuleRow(idx, rule);
+      if (idx < rate.rules.length - 1) {
+        const andDiv = document.createElement('div');
+        andDiv.className = 'fx-rule-and';
+        andDiv.textContent = 'AND';
+        container.appendChild(andDiv);
+      }
+    });
+  }
+}
+
+function renderTaxRuleRow(index, rule = {}) {
+  const container = document.getElementById('tax-rules-container');
+  const rowDiv = document.createElement('div');
+  rowDiv.className = 'fx-rule-row';
+  rowDiv.id = 'tax-rule-row-' + index;
+
+  const taxRateNames = [...new Set(taxRatesData.map(r => r.jurisdiction + ' — ' + r.type))];
+
+  rowDiv.innerHTML = `
+    <div style="flex:1.2">
+      <label class="form-label" style="font-size:11px">Tax Rate</label>
+      <select class="form-input" data-rule-field="rate" style="font-size:12px">
+        <option value="">Select</option>
+        ${taxRateNames.map(r => `<option value="${r}" ${rule.rate === r ? 'selected' : ''}>${r}</option>`).join('')}
+      </select>
+    </div>
+    <div>
+      <label class="form-label" style="font-size:11px">Condition</label>
+      <select class="form-input" data-rule-field="rateCondition" style="font-size:12px">
+        <option value="">Select</option>
+        <option value="IN" ${rule.rateCondition === 'IN' ? 'selected' : ''}>IN</option>
+        <option value="EQUALS" ${rule.rateCondition === 'EQUALS' ? 'selected' : ''}>EQUALS</option>
+        <option value="NOT_IN" ${rule.rateCondition === 'NOT_IN' ? 'selected' : ''}>NOT IN</option>
+      </select>
+    </div>
+    <div>
+      <label class="form-label" style="font-size:11px">Grant Type</label>
+      <select class="form-input" data-rule-field="grantType" style="font-size:12px">
+        <option value="">Select</option>
+        ${grantTypesList.map(g => `<option value="${g}" ${rule.grantType === g ? 'selected' : ''}>${g}</option>`).join('')}
+      </select>
+    </div>
+    <div>
+      <label class="form-label" style="font-size:11px">Condition</label>
+      <select class="form-input" data-rule-field="gtCondition" style="font-size:12px">
+        <option value="">Select</option>
+        <option value="IN" ${rule.gtCondition === 'IN' ? 'selected' : ''}>IN</option>
+        <option value="EQUALS" ${rule.gtCondition === 'EQUALS' ? 'selected' : ''}>EQUALS</option>
+        <option value="NOT_IN" ${rule.gtCondition === 'NOT_IN' ? 'selected' : ''}>NOT IN</option>
+      </select>
+    </div>
+    <div>
+      <label class="form-label" style="font-size:11px">Transaction Type</label>
+      <select class="form-input" data-rule-field="txnType" style="font-size:12px">
+        <option value="">Select</option>
+        ${transactionTypesList.map(t => `<option value="${t}" ${rule.txnType === t ? 'selected' : ''}>${t}</option>`).join('')}
+      </select>
+    </div>
+    <div>
+      <label class="form-label" style="font-size:11px">Condition</label>
+      <select class="form-input" data-rule-field="ttCondition" style="font-size:12px">
+        <option value="">Select</option>
+        <option value="IN" ${rule.ttCondition === 'IN' ? 'selected' : ''}>IN</option>
+        <option value="EQUALS" ${rule.ttCondition === 'EQUALS' ? 'selected' : ''}>EQUALS</option>
+        <option value="NOT_IN" ${rule.ttCondition === 'NOT_IN' ? 'selected' : ''}>NOT IN</option>
+      </select>
+    </div>
+    <button class="fx-rule-remove" onclick="removeTaxRuleRow(${index})">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+    </button>
+  `;
+
+  if (container.children.length > 0) {
+    const andDiv = document.createElement('div');
+    andDiv.className = 'fx-rule-and';
+    andDiv.textContent = 'AND';
+    container.appendChild(andDiv);
+  }
+  container.appendChild(rowDiv);
+}
+
+function addTaxRuleRow() {
+  const container = document.getElementById('tax-rules-container');
+  const rowCount = container.querySelectorAll('.fx-rule-row').length;
+  renderTaxRuleRow(rowCount);
+}
+
+function removeTaxRuleRow(index) {
+  const row = document.getElementById('tax-rule-row-' + index);
+  if (!row) return;
+
+  const nextNode = row.nextElementSibling;
+  if (nextNode && nextNode.classList && nextNode.classList.contains('fx-rule-and')) {
+    nextNode.remove();
+  }
+  const prevNode = row.previousElementSibling;
+  if (prevNode && prevNode.classList && prevNode.classList.contains('fx-rule-and')) {
+    prevNode.remove();
+  }
+  row.remove();
+}
+
+function collectTaxRules() {
+  const rules = [];
+  const ruleRows = document.querySelectorAll('#tax-rules-container .fx-rule-row');
+
+  ruleRows.forEach((row) => {
+    const rate = row.querySelector('[data-rule-field="rate"]').value;
+    const rateCondition = row.querySelector('[data-rule-field="rateCondition"]').value;
+    const grantType = row.querySelector('[data-rule-field="grantType"]').value;
+    const gtCondition = row.querySelector('[data-rule-field="gtCondition"]').value;
+    const txnType = row.querySelector('[data-rule-field="txnType"]').value;
+    const ttCondition = row.querySelector('[data-rule-field="ttCondition"]').value;
+
+    if (rate || grantType || txnType) {
+      rules.push({ rate, rateCondition, grantType, gtCondition, txnType, ttCondition });
+    }
+  });
+
+  return rules;
+}
+
 function openTaxRateModal(id) {
   const r = id ? taxRatesData.find(x => x.id === id) : null;
   document.getElementById('tax-rate-modal-title').textContent = r ? 'Edit Tax Rate' : 'Add Tax Rate';
@@ -8641,12 +8762,19 @@ function openTaxRateModal(id) {
   document.getElementById('tr-expiry').value             = r?.expiryDate ?? '';
   document.getElementById('tr-currency').value           = r?.currency ?? 'USD';
   document.getElementById('tr-notes').value              = r?.notes ?? '';
-  document.getElementById('modal-grant-search').value    = '';
-  document.getElementById('modal-txn-search').value       = '';
 
-  // Initialize selectors
-  initGrantTypesSelector('modal', r?.grantTypes || []);
-  initTransactionTypesSelector('modal', r?.transactionTypes || []);
+  // Reset to Details tab
+  document.querySelectorAll('.tax-modal-tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tax-modal-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tax-tab-details').classList.add('active');
+  document.querySelectorAll('.tax-modal-tab')[0].classList.add('active');
+
+  // Load rules
+  if (id) {
+    loadTaxRules(id);
+  } else {
+    document.getElementById('tax-rules-container').innerHTML = '';
+  }
 
   openModal('modal-tax-rate');
 }
@@ -8660,9 +8788,8 @@ function saveTaxRate() {
   const editId = document.getElementById('tax-rate-edit-id').value;
   const fv = id => { const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? null : v; };
 
-  // Collect grant and transaction types from selectors
-  const grantTypes = getSelectedGrantTypes('modal');
-  const transactionTypes = getSelectedTransactionTypes('modal');
+  // Collect rules
+  const rules = collectTaxRules();
 
   const data = {
     id:                 editId || 'TR-' + Date.now(),
@@ -8678,8 +8805,7 @@ function saveTaxRate() {
     socialSecurity:     fv('tr-ss'),
     medicare:           fv('tr-medicare'),
     addlMedicare:       fv('tr-addl-medicare'),
-    grantTypes:         grantTypes.length > 0 ? grantTypes : null,
-    transactionTypes:   transactionTypes.length > 0 ? transactionTypes : null,
+    rules:              rules.length > 0 ? rules : null,
     notes:              document.getElementById('tr-notes').value.trim(),
     status:             'Active'
   };
@@ -9352,15 +9478,6 @@ function openAddFXRateModal() {
   document.getElementById('drawer-fx-average').value = '';
   document.getElementById('drawer-fx-notes').value = '';
 
-  // Clear rules container
-  document.getElementById('fx-rules-container').innerHTML = '';
-
-  // Reset to details tab
-  document.querySelectorAll('.fx-drawer-tab-content').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.fx-drawer-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('fx-tab-details').classList.add('active');
-  document.querySelectorAll('.fx-drawer-tab')[0].classList.add('active');
-
   document.getElementById('fx-rate-drawer-overlay').classList.add('open');
 }
 
@@ -9369,140 +9486,6 @@ function deleteFXRate(id) {
   const idx = fxRatesData.findIndex(r => r.id === id);
   if (idx !== -1) fxRatesData.splice(idx, 1);
   renderFXRates();
-}
-
-/* ════ FX Rate Drawer Tabs ════ */
-function switchFXDrawerTab(tabName) {
-  // Hide all tabs
-  document.querySelectorAll('.fx-drawer-tab-content').forEach(tab => {
-    tab.classList.remove('active');
-  });
-  document.querySelectorAll('.fx-drawer-tab').forEach(btn => {
-    btn.classList.remove('active');
-  });
-
-  // Show selected tab
-  document.getElementById('fx-tab-' + tabName).classList.add('active');
-  event.target.classList.add('active');
-
-  // Load rules when switching to rules tab
-  if (tabName === 'rules') {
-    const rateId = document.getElementById('drawer-fx-rate-id').value;
-    if (rateId) {
-      loadFXRules(rateId);
-    }
-  }
-}
-
-function loadFXRules(rateId) {
-  const rate = fxRatesData.find(r => r.id === rateId);
-  const container = document.getElementById('fx-rules-container');
-  container.innerHTML = '';
-
-  if (rate && rate.rules && rate.rules.length > 0) {
-    rate.rules.forEach((rule, idx) => {
-      renderFXRuleRow(idx, rule);
-      if (idx < rate.rules.length - 1) {
-        const andDiv = document.createElement('div');
-        andDiv.className = 'fx-rule-and';
-        andDiv.textContent = 'AND';
-        container.appendChild(andDiv);
-      }
-    });
-  }
-}
-
-function renderFXRuleRow(index, rule = {}) {
-  const container = document.getElementById('fx-rules-container');
-  const rowDiv = document.createElement('div');
-  rowDiv.className = 'fx-rule-row';
-  rowDiv.id = 'fx-rule-row-' + index;
-
-  const rateNames = [...new Set(fxRatesData.map(r => r.currencyFrom + '/' + r.currencyTo))];
-
-  rowDiv.innerHTML = `
-    <div>
-      <label class="form-label" style="font-size:11px">Rate</label>
-      <select class="form-input" data-rule-field="rate" style="font-size:12px">
-        <option value="">Select rate</option>
-        ${rateNames.map(r => `<option value="${r}" ${rule.rate === r ? 'selected' : ''}>${r}</option>`).join('')}
-      </select>
-    </div>
-    <div>
-      <label class="form-label" style="font-size:11px">Condition</label>
-      <select class="form-input" data-rule-field="rateCondition" style="font-size:12px">
-        <option value="">Select</option>
-        <option value="IN" ${rule.rateCondition === 'IN' ? 'selected' : ''}>IN</option>
-        <option value="EQUALS" ${rule.rateCondition === 'EQUALS' ? 'selected' : ''}>EQUALS</option>
-        <option value="NOT_IN" ${rule.rateCondition === 'NOT_IN' ? 'selected' : ''}>NOT IN</option>
-      </select>
-    </div>
-    <div style="flex:0.8">
-      <label class="form-label" style="font-size:11px">Grant Type</label>
-      <select class="form-input" data-rule-field="grantType" style="font-size:12px">
-        <option value="">Select</option>
-        ${grantTypesList.map(g => `<option value="${g}" ${rule.grantType === g ? 'selected' : ''}>${g}</option>`).join('')}
-      </select>
-    </div>
-    <div>
-      <label class="form-label" style="font-size:11px">Condition</label>
-      <select class="form-input" data-rule-field="gtCondition" style="font-size:12px">
-        <option value="">Select</option>
-        <option value="IN" ${rule.gtCondition === 'IN' ? 'selected' : ''}>IN</option>
-        <option value="EQUALS" ${rule.gtCondition === 'EQUALS' ? 'selected' : ''}>EQUALS</option>
-        <option value="NOT_IN" ${rule.gtCondition === 'NOT_IN' ? 'selected' : ''}>NOT IN</option>
-      </select>
-    </div>
-    <div style="flex:0.8">
-      <label class="form-label" style="font-size:11px">Transaction Type</label>
-      <select class="form-input" data-rule-field="txnType" style="font-size:12px">
-        <option value="">Select</option>
-        ${transactionTypesList.map(t => `<option value="${t}" ${rule.txnType === t ? 'selected' : ''}>${t}</option>`).join('')}
-      </select>
-    </div>
-    <div>
-      <label class="form-label" style="font-size:11px">Condition</label>
-      <select class="form-input" data-rule-field="ttCondition" style="font-size:12px">
-        <option value="">Select</option>
-        <option value="IN" ${rule.ttCondition === 'IN' ? 'selected' : ''}>IN</option>
-        <option value="EQUALS" ${rule.ttCondition === 'EQUALS' ? 'selected' : ''}>EQUALS</option>
-        <option value="NOT_IN" ${rule.ttCondition === 'NOT_IN' ? 'selected' : ''}>NOT IN</option>
-      </select>
-    </div>
-    <button class="fx-rule-remove" onclick="removeFXRuleRow(${index})">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
-    </button>
-  `;
-
-  if (container.children.length > 0) {
-    const andDiv = document.createElement('div');
-    andDiv.className = 'fx-rule-and';
-    andDiv.textContent = 'AND';
-    container.appendChild(andDiv);
-  }
-  container.appendChild(rowDiv);
-}
-
-function addFXRuleRow() {
-  const container = document.getElementById('fx-rules-container');
-  const rowCount = container.querySelectorAll('.fx-rule-row').length;
-  renderFXRuleRow(rowCount);
-}
-
-function removeFXRuleRow(index) {
-  const row = document.getElementById('fx-rule-row-' + index);
-  if (!row) return;
-
-  // Remove the row and any adjacent AND text
-  const nextNode = row.nextElementSibling;
-  if (nextNode && nextNode.classList && nextNode.classList.contains('fx-rule-and')) {
-    nextNode.remove();
-  }
-  const prevNode = row.previousElementSibling;
-  if (prevNode && prevNode.classList && prevNode.classList.contains('fx-rule-and')) {
-    prevNode.remove();
-  }
-  row.remove();
 }
 
 function openFXRateDrawer(id) {
@@ -9524,49 +9507,12 @@ function openFXRateDrawer(id) {
   document.getElementById('drawer-fx-average').value = rate.average;
   document.getElementById('drawer-fx-notes').value = rate.notes || '';
 
-  // Reset to details tab
-  document.querySelectorAll('.fx-drawer-tab-content').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.fx-drawer-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('fx-tab-details').classList.add('active');
-  document.querySelectorAll('.fx-drawer-tab')[0].classList.add('active');
-
-  // Load rules
-  loadFXRules(rate.id);
-
   document.getElementById('fx-rate-drawer-overlay').classList.add('open');
 }
 
 function closeFXRateDrawer(event) {
   if (event && event.target !== document.getElementById('fx-rate-drawer-overlay')) return;
   document.getElementById('fx-rate-drawer-overlay').classList.remove('open');
-}
-
-function collectFXRules() {
-  const rules = [];
-  const ruleRows = document.querySelectorAll('.fx-rule-row');
-
-  ruleRows.forEach((row, idx) => {
-    const rate = row.querySelector('[data-rule-field="rate"]').value;
-    const rateCondition = row.querySelector('[data-rule-field="rateCondition"]').value;
-    const grantType = row.querySelector('[data-rule-field="grantType"]').value;
-    const gtCondition = row.querySelector('[data-rule-field="gtCondition"]').value;
-    const txnType = row.querySelector('[data-rule-field="txnType"]').value;
-    const ttCondition = row.querySelector('[data-rule-field="ttCondition"]').value;
-
-    // Only add rule if at least one field is filled
-    if (rate || grantType || txnType) {
-      rules.push({
-        rate,
-        rateCondition,
-        grantType,
-        gtCondition,
-        txnType,
-        ttCondition
-      });
-    }
-  });
-
-  return rules;
 }
 
 function saveFXRateFromDrawer() {
@@ -9591,9 +9537,6 @@ function saveFXRateFromDrawer() {
     return;
   }
 
-  // Collect rules
-  const rules = collectFXRules();
-
   if (rateId) {
     // Update existing rate
     const rate = fxRatesData.find(r => r.id === rateId);
@@ -9607,7 +9550,6 @@ function saveFXRateFromDrawer() {
       rate.bid = bid;
       rate.average = average;
       rate.notes = notes;
-      rate.rules = rules;
     }
   } else {
     // Add new rate
@@ -9621,8 +9563,7 @@ function saveFXRateFromDrawer() {
       ask: ask,
       bid: bid,
       average: average,
-      notes: notes,
-      rules: rules
+      notes: notes
     };
     fxRatesData.push(newRate);
   }
