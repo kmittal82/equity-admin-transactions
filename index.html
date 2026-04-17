@@ -4512,15 +4512,61 @@
 
       <!-- RULES panel -->
       <div id="tax-panel-rules" style="display:none">
-        <div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center">
-          <div>
-            <h3 style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:4px">Tax Rate Rules</h3>
-            <p style="font-size:13px;color:var(--text2)">Define conditions for applying tax rates based on transaction type and grant type</p>
+        <div style="margin-bottom:24px;padding:20px;background:var(--card);border:1px solid var(--border);border-radius:12px">
+          <h3 style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:12px">Create New Rule</h3>
+          <p style="font-size:12px;color:var(--text2);margin-bottom:16px">Select a tax rate and define conditions for when to apply it.</p>
+
+          <div class="tax-form-grid">
+            <div class="tax-form-full">
+              <label class="form-label">Tax Rate <span class="req">*</span></label>
+              <select class="form-select" id="page-rule-rate">
+                <option value="">Select a tax rate</option>
+              </select>
+            </div>
+
+            <div class="tax-form-full" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">
+              <div style="font-weight:600;font-size:13px;color:var(--text);margin-bottom:12px">Conditions (all must be true)</div>
+
+              <div style="display:grid;grid-template-columns:auto 1fr;gap:16px;margin-bottom:16px">
+                <div style="font-weight:500;color:var(--text);font-size:13px;padding-top:6px">Grant Type:</div>
+                <div>
+                  <select class="form-select" id="page-rule-gt-values" multiple style="min-height:100px">
+                    <option value="RSU">RSU</option>
+                    <option value="RSA">RSA</option>
+                    <option value="ISO">ISO</option>
+                    <option value="NQO">NQO</option>
+                  </select>
+                  <div style="font-size:11px;color:var(--text2);margin-top:4px">Hold Ctrl/Cmd to select multiple</div>
+                </div>
+              </div>
+
+              <div style="display:grid;grid-template-columns:auto 1fr;gap:16px">
+                <div style="font-weight:500;color:var(--text);font-size:13px;padding-top:6px">Transaction Type:</div>
+                <div>
+                  <select class="form-select" id="page-rule-tt-values" multiple style="min-height:100px">
+                    <option value="Exercise and Monetary Payment">Exercise and Monetary Payment</option>
+                    <option value="Exercise and Withhold to Cover">Exercise and Withhold to Cover</option>
+                    <option value="Release and Monetary Payment">Release and Monetary Payment</option>
+                    <option value="Release and Withhold to Cover">Release and Withhold to Cover</option>
+                    <option value="Release and Sell All">Release and Sell All</option>
+                    <option value="Sale">Sale</option>
+                    <option value="Dividend">Dividend</option>
+                    <option value="Vesting">Vesting</option>
+                  </select>
+                  <div style="font-size:11px;color:var(--text2);margin-top:4px">Hold Ctrl/Cmd to select multiple</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tax-form-full" style="margin-top:16px;display:flex;gap:8px">
+              <button class="btn btn-ghost" onclick="clearRuleForm()" style="flex:1">Clear</button>
+              <button class="btn btn-primary" onclick="createPageLevelRule()" style="flex:1">Create Rule</button>
+            </div>
           </div>
-          <button class="btn btn-primary" onclick="openTaxRuleBuilder()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            New Rule
-          </button>
+        </div>
+
+        <div style="margin-bottom:16px">
+          <h3 style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:12px">Existing Rules</h3>
         </div>
         <div id="tax-rules-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(500px,1fr));gap:16px"></div>
       </div>
@@ -4728,106 +4774,6 @@
     <div class="modal-foot">
       <button class="btn btn-ghost" onclick="closeModal('modal-tax-rate')">Cancel</button>
       <button class="btn btn-primary" onclick="saveTaxRate()">Save Rate</button>
-    </div>
-  </div>
-</div>
-
-<!-- ════ NEW TAX RULE MODAL ════ -->
-<div class="modal-overlay" id="modal-new-tax-rule">
-  <div class="modal-box" style="max-width:600px">
-    <div class="modal-head">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <div class="modal-title">Create Tax Rate Rule</div>
-        <button class="modal-close" onclick="closeModal('modal-new-tax-rule')">×</button>
-      </div>
-    </div>
-    <div class="modal-body">
-      <div style="font-size:13px;color:var(--text2);margin-bottom:16px">Define conditions for applying a tax rate. All conditions are combined with AND logic.</div>
-
-      <div class="tax-form-grid">
-        <div class="tax-form-full">
-          <label class="form-label">Tax Rate <span class="req">*</span></label>
-          <select class="form-select" id="new-rule-rate">
-            <option value="">Select a tax rate</option>
-          </select>
-          <div style="font-size:11px;color:var(--text2);margin-top:4px">Which tax rate does this rule apply to?</div>
-        </div>
-      </div>
-
-      <div style="margin:20px 0;padding:16px;background:#f8fafc;border-radius:8px">
-        <div style="font-weight:600;font-size:13px;color:var(--text);margin-bottom:12px">Conditions (all must be true)</div>
-
-        <div class="tax-form-grid">
-          <div style="display:flex;gap:8px;align-items:flex-end">
-            <div style="flex:1">
-              <label class="form-label" style="font-size:12px">Tax Rate</label>
-              <select class="form-select" id="new-rule-rate-cond" style="font-size:12px">
-                <option value="IN">IN</option>
-                <option value="EQUALS">EQUALS</option>
-                <option value="NOT_IN">NOT IN</option>
-              </select>
-            </div>
-            <div style="flex:1">
-              <label class="form-label" style="font-size:12px">Value</label>
-              <input class="form-input" id="new-rule-rate-value" placeholder="Enter rate name" style="font-size:12px">
-            </div>
-          </div>
-
-          <div style="grid-column:1/-1;text-align:center;color:var(--textm);font-size:11px;font-weight:600;text-transform:uppercase">AND</div>
-
-          <div style="display:flex;gap:8px;align-items:flex-end">
-            <div style="flex:1">
-              <label class="form-label" style="font-size:12px">Grant Type</label>
-              <select class="form-select" id="new-rule-gt-cond" style="font-size:12px">
-                <option value="IN">IN</option>
-                <option value="EQUALS">EQUALS</option>
-                <option value="NOT_IN">NOT IN</option>
-              </select>
-            </div>
-            <div style="flex:1">
-              <label class="form-label" style="font-size:12px">Value</label>
-              <select class="form-select" id="new-rule-gt-value" style="font-size:12px">
-                <option value="">Select...</option>
-                <option>RSU</option>
-                <option>RSA</option>
-                <option>ISO</option>
-                <option>NQO</option>
-              </select>
-            </div>
-          </div>
-
-          <div style="grid-column:1/-1;text-align:center;color:var(--textm);font-size:11px;font-weight:600;text-transform:uppercase">AND</div>
-
-          <div style="display:flex;gap:8px;align-items:flex-end">
-            <div style="flex:1">
-              <label class="form-label" style="font-size:12px">Transaction Type</label>
-              <select class="form-select" id="new-rule-tt-cond" style="font-size:12px">
-                <option value="IN">IN</option>
-                <option value="EQUALS">EQUALS</option>
-                <option value="NOT_IN">NOT IN</option>
-              </select>
-            </div>
-            <div style="flex:1">
-              <label class="form-label" style="font-size:12px">Value</label>
-              <select class="form-select" id="new-rule-tt-value" style="font-size:12px">
-                <option value="">Select...</option>
-                <option>Exercise and Monetary Payment</option>
-                <option>Exercise and Withhold to Cover</option>
-                <option>Release and Monetary Payment</option>
-                <option>Release and Withhold to Cover</option>
-                <option>Release and Sell All</option>
-                <option>Sale</option>
-                <option>Dividend</option>
-                <option>Vesting</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal-foot">
-      <button class="btn btn-ghost" onclick="closeModal('modal-new-tax-rule')">Cancel</button>
-      <button class="btn btn-primary" onclick="saveNewTaxRule()">Create Rule</button>
     </div>
   </div>
 </div>
@@ -8573,6 +8519,20 @@ function switchTaxTab(tab) {
 }
 
 function renderTaxRules() {
+  // Populate tax rate dropdown in form
+  const rateSelect = document.getElementById('page-rule-rate');
+  if (rateSelect) {
+    const currentVal = rateSelect.value;
+    rateSelect.innerHTML = '<option value="">Select a tax rate</option>';
+    taxRatesData.forEach(rate => {
+      const option = document.createElement('option');
+      option.value = rate.id;
+      option.textContent = `${rate.jurisdiction} — ${rate.type}`;
+      rateSelect.appendChild(option);
+    });
+    rateSelect.value = currentVal;
+  }
+
   const container = document.getElementById('tax-rules-list');
   if (!container) return;
   container.innerHTML = '';
@@ -8588,20 +8548,20 @@ function renderTaxRules() {
   });
 
   if (allRules.length === 0) {
-    container.innerHTML = '<div style="grid-column:1/-1;padding:24px;text-align:center;color:var(--textm)">No rules defined yet. Create a rule to get started.</div>';
+    container.innerHTML = '<div style="grid-column:1/-1;padding:24px;text-align:center;color:var(--textm)">No rules defined yet. Create a rule above.</div>';
     return;
   }
 
   allRules.forEach((rule, idx) => {
     const card = document.createElement('div');
     card.className = 'tax-rule-card';
+    const grantTypesList = rule.grantTypes ? rule.grantTypes.join(', ') : '—';
+    const txnTypesList = rule.txnTypes ? rule.txnTypes.join(', ') : '—';
+
     card.innerHTML = `
       <div class="tax-rule-card-header">
         <div class="tax-rule-card-title">${rule.rateName}</div>
         <div class="tax-rule-card-actions">
-          <button onclick="editTaxRule('${rule.rateId}', ${rule.ruleIdx})" title="Edit">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>
-          </button>
           <button onclick="deleteTaxRule('${rule.rateId}', ${rule.ruleIdx})" title="Delete">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
           </button>
@@ -8609,21 +8569,13 @@ function renderTaxRules() {
       </div>
       <div class="tax-rule-card-content">
         <div class="tax-rule-condition">
-          <span class="tax-rule-condition-label">Tax Rate:</span>
-          <span>${rule.rate || '—'}</span>
-          <span style="color:#999">${rule.rateCondition || ''}</span>
+          <span class="tax-rule-condition-label">Grant Types:</span>
+          <span style="font-size:12px">${grantTypesList}</span>
         </div>
-        <div class="tax-rule-and">AND</div>
+        ${rule.grantTypes && rule.txnTypes ? '<div class="tax-rule-and">AND</div>' : ''}
         <div class="tax-rule-condition">
-          <span class="tax-rule-condition-label">Grant Type:</span>
-          <span>${rule.grantType || '—'}</span>
-          <span style="color:#999">${rule.gtCondition || ''}</span>
-        </div>
-        <div class="tax-rule-and">AND</div>
-        <div class="tax-rule-condition">
-          <span class="tax-rule-condition-label">Txn Type:</span>
-          <span>${rule.txnType || '—'}</span>
-          <span style="color:#999">${rule.ttCondition || ''}</span>
+          <span class="tax-rule-condition-label">Txn Types:</span>
+          <span style="font-size:12px">${txnTypesList}</span>
         </div>
       </div>
     `;
@@ -8631,39 +8583,22 @@ function renderTaxRules() {
   });
 }
 
-function openTaxRuleBuilder() {
-  // Populate the tax rate dropdown
-  const rateSelect = document.getElementById('new-rule-rate');
-  rateSelect.innerHTML = '<option value="">Select a tax rate</option>';
-  taxRatesData.forEach(rate => {
-    const option = document.createElement('option');
-    option.value = rate.id;
-    option.textContent = `${rate.jurisdiction} — ${rate.type}`;
-    rateSelect.appendChild(option);
-  });
-
-  // Clear form fields
-  document.getElementById('new-rule-rate-cond').value = 'IN';
-  document.getElementById('new-rule-rate-value').value = '';
-  document.getElementById('new-rule-gt-cond').value = 'IN';
-  document.getElementById('new-rule-gt-value').value = '';
-  document.getElementById('new-rule-tt-cond').value = 'IN';
-  document.getElementById('new-rule-tt-value').value = '';
-
-  openModal('modal-new-tax-rule');
+function clearRuleForm() {
+  document.getElementById('page-rule-rate').value = '';
+  document.getElementById('page-rule-gt-values').selectedIndex = -1;
+  document.getElementById('page-rule-tt-values').selectedIndex = -1;
 }
 
-function saveNewTaxRule() {
-  const rateId = document.getElementById('new-rule-rate').value;
-  const rateValue = document.getElementById('new-rule-rate-value').value;
-  const rateCond = document.getElementById('new-rule-rate-cond').value;
-  const gtValue = document.getElementById('new-rule-gt-value').value;
-  const gtCond = document.getElementById('new-rule-gt-cond').value;
-  const ttValue = document.getElementById('new-rule-tt-value').value;
-  const ttCond = document.getElementById('new-rule-tt-cond').value;
+function createPageLevelRule() {
+  const rateId = document.getElementById('page-rule-rate').value;
+  const gtSelect = document.getElementById('page-rule-gt-values');
+  const ttSelect = document.getElementById('page-rule-tt-values');
 
-  if (!rateId || (!rateValue && !gtValue && !ttValue)) {
-    alert('Please select a tax rate and at least one condition');
+  const grantTypes = Array.from(gtSelect.selectedOptions).map(o => o.value);
+  const txnTypes = Array.from(ttSelect.selectedOptions).map(o => o.value);
+
+  if (!rateId || (grantTypes.length === 0 && txnTypes.length === 0)) {
+    alert('Please select a tax rate and at least one grant type or transaction type');
     return;
   }
 
@@ -8673,17 +8608,14 @@ function saveNewTaxRule() {
   if (!rate.rules) rate.rules = [];
 
   const newRule = {
-    rate: rateValue,
-    rateCondition: rateCond,
-    grantType: gtValue,
-    gtCondition: gtCond,
-    txnType: ttValue,
-    ttCondition: ttCond
+    grantTypes: grantTypes.length > 0 ? grantTypes : null,
+    txnTypes: txnTypes.length > 0 ? txnTypes : null
   };
 
   rate.rules.push(newRule);
-  closeModal('modal-new-tax-rule');
+  clearRuleForm();
   renderTaxRules();
+  alert('Rule created successfully!');
 }
 
 function editTaxRule(rateId, ruleIdx) {
