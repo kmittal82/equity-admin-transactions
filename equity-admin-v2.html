@@ -1394,45 +1394,292 @@
     .kebab-menu-label { padding: 6px 14px; font-size: 10px; font-weight: 700; color: var(--textm); text-transform: uppercase; letter-spacing: 0.6px; }
 
     /* ════════════ TAX MANAGEMENT UI ════════════ */
+
+    /* — Summary metric cards — */
+    .tax-metrics-row {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+      margin-bottom: 20px;
+    }
+    .tax-metric-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 16px 18px; position: relative; overflow: hidden;
+      transition: all 0.2s; cursor: default;
+    }
+    .tax-metric-card:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(15,23,42,0.06); border-color: #cbd5e1; }
+    .tax-metric-card::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+      background: var(--accent);
+    }
+    .tax-metric-card.tm-green::before { background: var(--green); }
+    .tax-metric-card.tm-amber::before { background: var(--amber); }
+    .tax-metric-card.tm-purple::before { background: var(--purple); }
+    .tax-metric-card.tm-cyan::before  { background: var(--cyan); }
+    .tm-label { font-size: 10.5px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+    .tm-label svg { width: 13px; height: 13px; }
+    .tm-value { font-size: 24px; font-weight: 700; color: var(--text); font-family: 'SF Mono', monospace; line-height: 1.1; }
+    .tm-sub { font-size: 11px; color: var(--text2); margin-top: 4px; }
+    .tm-sub strong { color: var(--green); }
+
+    /* — Page header with subtle gradient accent — */
+    .tax-page-head {
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      border: 1px solid var(--border); border-radius: 14px;
+      padding: 22px 24px; margin-bottom: 18px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: relative; overflow: hidden;
+    }
+    .tax-page-head::before {
+      content: ''; position: absolute; top: 0; right: 0;
+      width: 280px; height: 100%;
+      background: radial-gradient(circle at 100% 50%, rgba(59,130,246,0.08), transparent 70%);
+      pointer-events: none;
+    }
+    .tax-page-head .page-title-row { display: flex; align-items: center; gap: 14px; }
+    .tax-page-icon {
+      width: 44px; height: 44px; border-radius: 11px;
+      background: linear-gradient(135deg, var(--accent) 0%, #2563eb 100%);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 14px rgba(59,130,246,0.3);
+    }
+    .tax-page-icon svg { width: 22px; height: 22px; }
+
+    /* — Type badges (colored by tax type) — */
+    .type-badge.t-income { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+    .type-badge.t-fica { background: #f5f3ff; color: #6d28d9; border: 1px solid #ddd6fe; }
+    .type-badge.t-amt { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+    .type-badge.t-capital-gains { background: #ecfeff; color: #0e7490; border: 1px solid #a5f3fc; }
+    .type-badge.t-supplemental { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+    .type-badge.t-other { background: #f1f5f9; color: var(--text2); border: 1px solid var(--border); }
+    .type-badge {
+      display: inline-flex; align-items: center; padding: 3px 10px;
+      border-radius: 6px; font-size: 11px; font-weight: 600;
+      letter-spacing: 0.2px;
+    }
+
+    /* — Jurisdiction badge — */
+    .juris-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 9px; border-radius: 6px; font-size: 11px; font-weight: 600;
+      background: #f8fafc; color: var(--text); border: 1px solid var(--border);
+    }
+    .juris-badge::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent);
+    }
+    .juris-badge.j-federal::before { background: #1e40af; }
+    .juris-badge.j-ca::before { background: #f59e0b; }
+    .juris-badge.j-ny::before { background: #6366f1; }
+    .juris-badge.j-other::before { background: var(--text2); }
+
+    /* — Tax bracket visualization (horizontal stacked bar) — */
+    .bracket-viz {
+      display: flex; height: 6px; border-radius: 3px; overflow: hidden;
+      background: #f1f5f9; margin-top: 6px; min-width: 100px;
+    }
+    .bracket-segment {
+      flex: 1; transition: all 0.2s;
+      position: relative;
+    }
+    .bracket-segment + .bracket-segment { border-left: 1px solid #fff; }
+    .bracket-range-text { font-size: 11px; color: var(--text2); font-family: 'SF Mono', monospace; margin-top: 4px; }
+
+    /* — Detailed bracket viz (in drawer) — */
+    .bracket-viz-large { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+    .bracket-row {
+      display: grid; grid-template-columns: 130px 1fr 80px;
+      align-items: center; gap: 14px;
+      padding: 10px 14px; background: #fff;
+      border: 1px solid var(--border); border-radius: 10px;
+      transition: all 0.15s;
+    }
+    .bracket-row:hover { border-color: #cbd5e1; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+    .bracket-range { font-size: 12px; font-family: 'SF Mono', monospace; color: var(--text); font-weight: 600; }
+    .bracket-bar-wrap { background: #f1f5f9; height: 8px; border-radius: 4px; overflow: hidden; }
+    .bracket-bar-fill {
+      height: 100%; background: linear-gradient(90deg, #60a5fa, var(--accent));
+      border-radius: 4px; transition: width 0.4s ease;
+    }
+    .bracket-rate { font-size: 14px; font-weight: 700; font-family: 'SF Mono', monospace; color: var(--accent); text-align: right; }
+
+    /* — Rules pill (active/inactive) — */
+    .rules-pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 9px; border-radius: 12px; font-size: 11px; font-weight: 600;
+    }
+    .rules-pill.has-rules { background: var(--green-l); color: #065f46; }
+    .rules-pill.no-rules  { background: #f1f5f9; color: var(--text2); }
+    .rules-pill svg { width: 11px; height: 11px; }
+
+    /* — Bracket count pill — */
+    .bracket-pill {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 9px; border-radius: 12px; font-size: 11px; font-weight: 600;
+      background: #eff6ff; color: #1e40af;
+    }
+
+    /* — Chip toggle (rules drawer) — */
     .chip-grid { display: flex; flex-wrap: wrap; gap: 8px; }
     .chip-toggle {
-      display: inline-flex; align-items: center; padding: 6px 12px;
-      border-radius: 20px; border: 1.5px solid var(--border); font-size: 12px;
-      font-weight: 500; cursor: pointer; user-select: none; transition: all 0.15s;
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 7px 14px; border-radius: 22px;
+      border: 1.5px solid var(--border); background: #fff; font-size: 12.5px;
+      font-weight: 500; color: var(--text); cursor: pointer; user-select: none;
+      transition: all 0.15s; font-family: inherit;
     }
-    .chip-toggle:hover { border-color: var(--accent); color: var(--accent); }
-    .chip-toggle.selected { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .chip-toggle:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+    .chip-toggle.selected {
+      background: linear-gradient(135deg, var(--accent), #2563eb); color: #fff;
+      border-color: var(--accent); box-shadow: 0 2px 8px rgba(59,130,246,0.3);
+    }
+    .chip-toggle.selected::before {
+      content: '✓'; font-weight: 700; font-size: 11px;
+    }
 
+    /* — Bands table (in modal) — */
     .bands-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
     .bands-table th {
-      padding: 8px 10px; text-align: left; font-size: 10px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.5px; color: var(--text2);
-      border-bottom: 2px solid var(--border);
+      padding: 10px 12px; text-align: left; font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.6px; color: var(--text2);
+      border-bottom: 2px solid var(--border); background: #f8fafc;
     }
-    .bands-table td { padding: 8px 10px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+    .bands-table td { padding: 8px 12px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
     .bands-table tr:last-child td { border-bottom: none; }
+    .bands-table tr:hover { background: #f8fafc; }
     .bands-table .band-rate { font-family: 'SF Mono', monospace; font-weight: 700; color: var(--accent); }
     .bands-table input {
-      width: 100%; padding: 5px 8px; border: 1.5px solid var(--border);
-      border-radius: 6px; font-size: 12px; font-family: 'SF Mono', monospace;
+      width: 100%; padding: 7px 10px; border: 1.5px solid var(--border);
+      border-radius: 7px; font-size: 12.5px; font-family: 'SF Mono', monospace;
     }
     .bands-table input:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
-    .bands-table button { padding: 4px 8px; border-radius: 5px; border: 1px solid var(--border); background: #fff; cursor: pointer; font-size: 11px; }
-    .bands-table button:hover { background: #f8fafc; }
+    .bands-table .remove-btn {
+      padding: 5px 10px; border-radius: 6px; border: 1px solid #fecaca;
+      background: #fff; color: var(--red); cursor: pointer; font-size: 11px; font-weight: 600;
+    }
+    .bands-table .remove-btn:hover { background: var(--red-l); }
 
-    .rate-range-bar { height: 6px; background: #f1f5f9; border-radius: 3px; margin-top: 4px; overflow: hidden; }
-    .rate-range-fill { height: 100%; background: linear-gradient(90deg, var(--green), var(--accent)); border-radius: 3px; }
+    /* — Tax Code rate composition viz — */
+    .tc-composition {
+      display: flex; height: 8px; border-radius: 4px; overflow: hidden;
+      background: #f1f5f9; min-width: 100px;
+    }
+    .tc-comp-seg { flex: 1; height: 100%; }
+    .tc-comp-seg.cs-income { background: #3b82f6; }
+    .tc-comp-seg.cs-fica   { background: #8b5cf6; }
+    .tc-comp-seg.cs-amt    { background: #f59e0b; }
+    .tc-comp-seg.cs-capital-gains { background: #06b6d4; }
+    .tc-comp-seg.cs-supplemental  { background: #10b981; }
+    .tc-comp-seg.cs-other  { background: #94a3b8; }
+    .tc-comp-seg + .tc-comp-seg { border-left: 1px solid #fff; }
 
-    .tc-rate-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
-    .tc-rate-row:last-child { border-bottom: none; }
+    /* — Tax Code rate row (in detail drawer) — */
+    .tc-rate-row {
+      display: flex; align-items: center; gap: 14px; padding: 14px 16px;
+      background: #fff; border: 1px solid var(--border); border-radius: 10px;
+      margin-bottom: 8px; transition: all 0.15s;
+    }
+    .tc-rate-row:hover { border-color: #cbd5e1; box-shadow: 0 2px 8px rgba(15,23,42,0.05); }
+    .tc-rate-icon {
+      width: 36px; height: 36px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; flex-shrink: 0;
+    }
+    .tc-rate-icon.t-income { background: #eff6ff; color: #1e40af; }
+    .tc-rate-icon.t-fica { background: #f5f3ff; color: #6d28d9; }
+    .tc-rate-icon.t-amt { background: #fffbeb; color: #b45309; }
+    .tc-rate-icon.t-capital-gains { background: #ecfeff; color: #0e7490; }
+    .tc-rate-icon.t-supplemental { background: #ecfdf5; color: #065f46; }
+    .tc-rate-icon.t-other { background: #f1f5f9; color: var(--text2); }
+    .tc-rate-remove {
+      padding: 6px 12px; border-radius: 7px; border: 1px solid #fecaca;
+      background: #fff; color: var(--red); cursor: pointer; font-size: 11.5px; font-weight: 600;
+      transition: all 0.15s;
+    }
+    .tc-rate-remove:hover { background: var(--red-l); border-color: var(--red); }
 
-    .ledger-stats-bar { display: flex; gap: 20px; padding: 16px 24px; border-bottom: 1px solid var(--border); background: #f8fafc; flex-wrap: wrap; }
-    .stat-item { display: flex; align-items: center; gap: 12px; }
-    .stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text2); letter-spacing: 0.5px; }
-    .stat-value { font-size: 14px; font-weight: 700; color: var(--text); font-family: 'SF Mono', monospace; }
+    /* — Drawer enhancements — */
+    .ledger-drawer-head { padding: 22px 24px !important; }
+    #tc-detail-drawer-overlay .ledger-drawer-head { background: linear-gradient(135deg, #4c1d95 0%, #6d28d9 100%) !important; }
+    #tr-rules-drawer-overlay .ledger-drawer-head { background: linear-gradient(135deg, #064e3b 0%, #047857 100%) !important; }
+    #tc-rates-drawer-overlay .ledger-drawer-head { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%) !important; }
+    .ledger-stats-bar {
+      display: flex; gap: 28px; padding: 18px 24px;
+      border-bottom: 1px solid var(--border); background: #f8fafc; flex-wrap: wrap;
+    }
+    .stat-item { display: flex; flex-direction: column; gap: 2px; }
+    .stat-label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text2); letter-spacing: 0.6px; }
+    .stat-value { font-size: 16px; font-weight: 700; color: var(--text); font-family: 'SF Mono', monospace; }
 
+    /* — Section title in drawer — */
+    .drawer-sec-title {
+      font-size: 11.5px; font-weight: 700; text-transform: uppercase;
+      color: var(--text2); letter-spacing: 0.6px; margin-bottom: 12px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .drawer-sec-title::before {
+      content: ''; width: 3px; height: 12px; background: var(--accent); border-radius: 2px;
+    }
+
+    /* — Empty state — */
+    .tax-empty {
+      text-align: center; padding: 32px 20px;
+      background: #f8fafc; border-radius: 10px;
+      border: 1.5px dashed var(--border);
+    }
+    .tax-empty-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      background: #fff; display: inline-flex; align-items: center; justify-content: center;
+      margin-bottom: 10px; color: var(--textm);
+    }
+    .tax-empty-text { font-size: 12.5px; color: var(--text2); }
+
+    /* — Pill (generic) — */
     .pill { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; background: #f1f5f9; color: var(--text2); }
-    .tag-code { display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 5px; font-size: 10px; font-weight: 700; font-family: 'SF Mono', monospace; background: #f0f4fb; color: var(--accent); }
+    .tag-code { display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 5px; font-size: 10.5px; font-weight: 700; font-family: 'SF Mono', monospace; background: #f0f4fb; color: var(--accent); letter-spacing: 0.3px; }
+
+    /* — Modal enhancements — */
+    .req { color: var(--red); margin-left: 2px; }
+    .modal-step-1, .modal-step-2 { animation: stepFadeIn 0.25s ease; }
+    @keyframes stepFadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* — Bracket preview chart in modal — */
+    .preview-chart-card {
+      background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+      border: 1px solid #a7f3d0; border-radius: 12px; padding: 14px 16px;
+      margin-top: 16px;
+    }
+    .preview-chart-label {
+      font-size: 10.5px; font-weight: 700; color: #065f46;
+      text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .preview-chart-bar {
+      display: flex; height: 12px; border-radius: 6px; overflow: hidden;
+      background: #fff; box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+    }
+    .preview-chart-seg { flex: 1; transition: all 0.3s; }
+    .preview-chart-seg + .preview-chart-seg { border-left: 1px solid #fff; }
+    .preview-chart-info { display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; }
+    .preview-chart-info strong { color: #065f46; font-family: 'SF Mono', monospace; }
+
+    /* — Search/filter bar refinement for tax pages — */
+    .tax-filter-bar {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 18px; background: var(--card);
+      border: 1px solid var(--border); border-radius: 12px;
+      margin-bottom: 14px;
+    }
+    .tax-filter-bar .filter-search-input { flex: 1; max-width: 360px; }
+
+    /* — Add Rates drawer rate item — */
+    .rate-pick-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px; border: 1px solid var(--border);
+      border-radius: 10px; margin-bottom: 8px; cursor: pointer;
+      transition: all 0.15s;
+    }
+    .rate-pick-row:hover { border-color: var(--accent); background: #f8fafc; }
+    .rate-pick-row.checked { border-color: var(--accent); background: #eff6ff; box-shadow: 0 0 0 1px var(--accent) inset; }
+    .rate-pick-row input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; accent-color: var(--accent); }
 
 @media (max-width: 900px) { .summary-row { grid-template-columns: repeat(2, 1fr); } .form-grid { grid-template-columns: 1fr; } }
 
@@ -3645,93 +3892,127 @@
 
     <!-- TAX RATES VIEW -->
     <div class="view-section" id="view-tax-rates">
-      <div class="page-head">
-        <div>
-          <div class="page-title">Tax Rates</div>
-          <div class="page-sub">Define tax brackets and assign rules to grant &amp; transaction types</div>
+      <!-- Page Header with Icon -->
+      <div class="tax-page-head">
+        <div class="page-title-row">
+          <div class="tax-page-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div>
+            <div class="page-title" style="margin:0">Tax Rates</div>
+            <div class="page-sub" style="margin-top:4px">Define tax brackets and configure rules for grants &amp; transactions</div>
+          </div>
         </div>
         <div class="head-actions">
-          <button class="btn btn-primary" onclick="openTaxRateModal(null)">+ Create Tax Rate</button>
+          <button class="btn btn-ghost">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export
+          </button>
+          <button class="btn btn-primary" onclick="openTaxRateModal(null)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Create Tax Rate
+          </button>
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-hd">
-          <input class="filter-search-input" id="tr-search" placeholder="Search Tax Rates…" oninput="renderTaxRatesTable()">
-          <select class="filter-select-sm" id="tr-status-filter" onchange="renderTaxRatesTable()">
-            <option value="">All Statuses</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-          </select>
-          <select class="filter-select-sm" id="tr-type-filter" onchange="renderTaxRatesTable()">
-            <option value="">All Types</option>
-            <option value="Income">Income</option>
-            <option value="FICA">FICA</option>
-            <option value="AMT">AMT</option>
-            <option value="Capital Gains">Capital Gains</option>
-            <option value="Supplemental">Supplemental</option>
-            <option value="Other">Other</option>
-          </select>
-          <div id="tr-result-count" style="font-size:12px;color:var(--textm)"></div>
-        </div>
-        <div class="ag-table-wrap">
-          <table class="ag-table" id="tr-table">
-            <thead>
-              <tr>
-                <th class="col-actions">Actions</th>
-                <th style="width:120px">Rate ID</th>
-                <th>Name</th>
-                <th style="width:90px">Type</th>
-                <th style="width:100px">Bands</th>
-                <th style="width:90px">Rules</th>
-                <th style="width:100px">Effective</th>
-                <th style="width:80px">Status</th>
-              </tr>
-            </thead>
-            <tbody id="tr-body"></tbody>
-          </table>
-        </div>
+      <!-- Summary Metrics -->
+      <div class="tax-metrics-row" id="tr-metrics"></div>
+
+      <!-- Filter Bar -->
+      <div class="tax-filter-bar">
+        <input class="filter-search-input" id="tr-search" placeholder="🔍 Search by name, ID or jurisdiction…" oninput="renderTaxRatesTable()">
+        <select class="filter-select-sm" id="tr-status-filter" onchange="renderTaxRatesTable()">
+          <option value="">All Statuses</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+        <select class="filter-select-sm" id="tr-type-filter" onchange="renderTaxRatesTable()">
+          <option value="">All Types</option>
+          <option value="Income">Income</option>
+          <option value="FICA">FICA</option>
+          <option value="AMT">AMT</option>
+          <option value="Capital Gains">Capital Gains</option>
+          <option value="Supplemental">Supplemental</option>
+          <option value="Other">Other</option>
+        </select>
+        <div style="flex:1"></div>
+        <div id="tr-result-count" style="font-size:12px;color:var(--text2);font-weight:500"></div>
+      </div>
+
+      <div class="ag-table-wrap">
+        <table class="ag-table" id="tr-table">
+          <thead>
+            <tr>
+              <th class="col-actions">Actions</th>
+              <th style="width:110px">Rate ID</th>
+              <th>Name &amp; Jurisdiction</th>
+              <th style="width:120px">Type</th>
+              <th style="width:200px">Brackets</th>
+              <th style="width:120px">Rules</th>
+              <th style="width:110px">Effective</th>
+              <th style="width:90px">Status</th>
+            </tr>
+          </thead>
+          <tbody id="tr-body"></tbody>
+        </table>
       </div>
     </div><!-- /view-tax-rates -->
 
     <!-- TAX CODES VIEW -->
     <div class="view-section" id="view-tax-codes">
-      <div class="page-head">
-        <div>
-          <div class="page-title">Tax Codes</div>
-          <div class="page-sub">Package multiple tax rates into reusable withholding codes</div>
+      <!-- Page Header with Icon -->
+      <div class="tax-page-head">
+        <div class="page-title-row">
+          <div class="tax-page-icon" style="background:linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);box-shadow:0 4px 14px rgba(139,92,246,0.3)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27,6.96 12,12.01 20.73,6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          </div>
+          <div>
+            <div class="page-title" style="margin:0">Tax Codes</div>
+            <div class="page-sub" style="margin-top:4px">Package multiple tax rates into reusable withholding codes</div>
+          </div>
         </div>
         <div class="head-actions">
-          <button class="btn btn-primary" onclick="openTaxCodeModal(null)">+ Create Tax Code</button>
+          <button class="btn btn-ghost">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export
+          </button>
+          <button class="btn btn-primary" onclick="openTaxCodeModal(null)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Create Tax Code
+          </button>
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-hd">
-          <input class="filter-search-input" id="tc-search" placeholder="Search Tax Codes…" oninput="renderTaxCodesTable()">
-          <select class="filter-select-sm" id="tc-status-filter" onchange="renderTaxCodesTable()">
-            <option value="">All Statuses</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-          </select>
-          <div id="tc-result-count" style="font-size:12px;color:var(--textm)"></div>
-        </div>
-        <div class="ag-table-wrap">
-          <table class="ag-table" id="tc-table">
-            <thead>
-              <tr>
-                <th class="col-actions">Actions</th>
-                <th style="width:120px">Code ID</th>
-                <th>Name</th>
-                <th style="width:120px">Jurisdiction</th>
-                <th style="width:80px">Rates</th>
-                <th style="width:100px">Eff. Rate</th>
-                <th style="width:80px">Status</th>
-              </tr>
-            </thead>
-            <tbody id="tc-body"></tbody>
-          </table>
-        </div>
+      <!-- Summary Metrics -->
+      <div class="tax-metrics-row" id="tc-metrics"></div>
+
+      <!-- Filter Bar -->
+      <div class="tax-filter-bar">
+        <input class="filter-search-input" id="tc-search" placeholder="🔍 Search tax codes…" oninput="renderTaxCodesTable()">
+        <select class="filter-select-sm" id="tc-status-filter" onchange="renderTaxCodesTable()">
+          <option value="">All Statuses</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+        <div style="flex:1"></div>
+        <div id="tc-result-count" style="font-size:12px;color:var(--text2);font-weight:500"></div>
+      </div>
+
+      <div class="ag-table-wrap">
+        <table class="ag-table" id="tc-table">
+          <thead>
+            <tr>
+              <th class="col-actions">Actions</th>
+              <th style="width:110px">Code ID</th>
+              <th>Name</th>
+              <th style="width:130px">Jurisdiction</th>
+              <th style="width:200px">Composition</th>
+              <th style="width:90px">Rates</th>
+              <th style="width:90px">Status</th>
+            </tr>
+          </thead>
+          <tbody id="tc-body"></tbody>
+        </table>
       </div>
     </div><!-- /view-tax-codes -->
 
@@ -4443,22 +4724,37 @@
 
       <!-- Step 2: Brackets -->
       <div id="tr-modal-step-2" style="display:none">
-        <div style="font-size:12px;color:var(--text2);margin-bottom:16px">Add tax brackets for this rate. Specify income ranges and corresponding tax rates.</div>
+        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;margin-bottom:16px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#1e40af" stroke-width="2" style="width:18px;height:18px;flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <div style="font-size:12px;color:#1e40af">Configure tax brackets with income ranges and corresponding rates. Leave "To" blank for the highest bracket (no upper limit).</div>
+        </div>
         <table class="bands-table">
           <thead>
             <tr>
-              <th>From ($)</th>
-              <th>To ($)</th>
+              <th>Income From ($)</th>
+              <th>Income To ($)</th>
               <th>Rate (%)</th>
-              <th style="width:60px"></th>
+              <th style="width:80px"></th>
             </tr>
           </thead>
           <tbody id="tr-bands-tbody"></tbody>
         </table>
-        <button class="btn btn-ghost" onclick="addBandRow()" style="margin-top:12px">+ Add Bracket</button>
-        <div style="margin-top:16px;padding:12px;background:var(--green-l);border-radius:8px;border:1px solid #a7f3d0">
-          <div style="font-size:11px;font-weight:700;color:#065f46;text-transform:uppercase">Effective Range</div>
-          <div style="font-size:14px;font-weight:700;color:#15803d;font-family:'SF Mono',monospace" id="tr-band-preview">—</div>
+        <button class="btn btn-ghost" onclick="addBandRow()" style="margin-top:12px;width:100%;justify-content:center;border-style:dashed">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Bracket
+        </button>
+
+        <!-- Live preview chart -->
+        <div class="preview-chart-card">
+          <div class="preview-chart-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            Live Bracket Preview
+          </div>
+          <div class="preview-chart-bar" id="tr-preview-chart"></div>
+          <div class="preview-chart-info">
+            <span style="color:var(--text2)"><span id="tr-preview-count">0</span> bracket(s)</span>
+            <span>Effective Range: <strong id="tr-band-preview">—</strong></span>
+          </div>
         </div>
       </div>
     </div>
@@ -6718,7 +7014,59 @@ let currentTRId = null;
 let currentTCId = null;
 let tcRatesSelectedIds = [];
 
+function typeClass(t) { return 't-' + (t || '').toLowerCase().replace(/\s+/g, '-'); }
+function jurisClass(j) {
+  const lower = (j || '').toLowerCase();
+  if (lower.includes('federal')) return 'j-federal';
+  if (lower === 'ca') return 'j-ca';
+  if (lower === 'ny') return 'j-ny';
+  return 'j-other';
+}
+
+function renderBracketViz(bands) {
+  if (!bands || bands.length === 0) return '<div class="bracket-viz"></div>';
+  const maxRate = Math.max(...bands.map(b => b.rate));
+  return `<div class="bracket-viz">${bands.map(b => {
+    const intensity = maxRate > 0 ? b.rate / maxRate : 0;
+    const opacity = 0.35 + intensity * 0.65;
+    return `<div class="bracket-segment" style="background:rgba(59,130,246,${opacity})" title="${b.rate}%"></div>`;
+  }).join('')}</div>`;
+}
+
+function renderTaxRatesMetrics() {
+  const total = taxRatesData.length;
+  const active = taxRatesData.filter(r => r.status === 'active').length;
+  const allRates = taxRatesData.flatMap(r => r.bands.map(b => b.rate));
+  const avgRate = allRates.length > 0 ? (allRates.reduce((a,b) => a+b, 0) / allRates.length).toFixed(1) : 0;
+  const jurisdictions = new Set(taxRatesData.map(r => r.jurisdiction)).size;
+  const withRules = taxRatesData.filter(r => r.rules.grantTypes.length > 0 || r.rules.txnTypes.length > 0).length;
+
+  document.getElementById('tr-metrics').innerHTML = `
+    <div class="tax-metric-card">
+      <div class="tm-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>Total Rates</div>
+      <div class="tm-value">${total}</div>
+      <div class="tm-sub"><strong>${active}</strong> active · ${total - active} inactive</div>
+    </div>
+    <div class="tax-metric-card tm-green">
+      <div class="tm-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Average Rate</div>
+      <div class="tm-value">${avgRate}<span style="font-size:16px;color:var(--text2)">%</span></div>
+      <div class="tm-sub">Across all brackets</div>
+    </div>
+    <div class="tax-metric-card tm-purple">
+      <div class="tm-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Jurisdictions</div>
+      <div class="tm-value">${jurisdictions}</div>
+      <div class="tm-sub">Federal &amp; state</div>
+    </div>
+    <div class="tax-metric-card tm-amber">
+      <div class="tm-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-4"/><polyline points="9 11 12 14 15 11"/><line x1="12" y1="2" x2="12" y2="14"/></svg>Configured Rules</div>
+      <div class="tm-value">${withRules}<span style="font-size:14px;color:var(--text2)">/${total}</span></div>
+      <div class="tm-sub">Rates with active rules</div>
+    </div>
+  `;
+}
+
 function renderTaxRatesTable() {
+  renderTaxRatesMetrics();
   const tbody = document.getElementById('tr-body');
   if (!tbody) return;
   const search = (document.getElementById('tr-search')?.value || '').toLowerCase();
@@ -6732,44 +7080,122 @@ function renderTaxRatesTable() {
     return true;
   });
 
-  document.getElementById('tr-result-count').innerHTML = `Showing <strong>${filtered.length}</strong> rate${filtered.length !== 1 ? 's' : ''}`;
+  document.getElementById('tr-result-count').innerHTML = `Showing <strong style="color:var(--text)">${filtered.length}</strong> of ${taxRatesData.length} rate${taxRatesData.length !== 1 ? 's' : ''}`;
 
   tbody.innerHTML = filtered.map(r => {
-    const ruleCount = (r.rules.grantTypes.length > 0 || r.rules.txnTypes.length > 0) ? 1 : 0;
-    return `<tr>
+    const hasRules = r.rules.grantTypes.length > 0 || r.rules.txnTypes.length > 0;
+    const ruleCount = r.rules.grantTypes.length + r.rules.txnTypes.length;
+    const minRate = Math.min(...r.bands.map(b => b.rate));
+    const maxRate = Math.max(...r.bands.map(b => b.rate));
+    return `<tr style="cursor:pointer" onclick="openTaxRateDrawer('${r.id}')">
       <td class="col-actions" onclick="event.stopPropagation()">
         <div class="action-cell">
-          <button class="action-icon-btn" title="View" onclick="openTaxRateDrawer('${r.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-          <button class="action-icon-btn" title="Edit" onclick="openTaxRateModal('${r.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19H4v-3L16.5 3.5z"/></svg></button>
-          <div class="kebab-wrap"><button class="kebab-btn" onclick="event.stopPropagation(); toggleKebab(this)">⋮</button><div class="kebab-menu"><div class="kebab-menu-label">Actions</div><button class="kebab-menu-item" onclick="openTaxRulesDrawer('${r.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg>Manage Rules</button><div class="kebab-divider"></div><button class="kebab-menu-item danger" onclick="deleteTaxRate('${r.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Delete</button></div></div>
+          <button class="action-icon-btn" title="View Detail" onclick="openTaxRateDrawer('${r.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          <button class="action-icon-btn" title="Edit Rate" onclick="openTaxRateModal('${r.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19H4v-3L16.5 3.5z"/></svg></button>
+          <div class="kebab-wrap"><button class="kebab-btn" onclick="event.stopPropagation(); toggleKebab(this)">⋮</button><div class="kebab-menu"><div class="kebab-menu-label">Actions</div><button class="kebab-menu-item" onclick="openTaxRulesDrawer('${r.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-4"/><polyline points="9 11 12 14 15 11"/><line x1="12" y1="2" x2="12" y2="14"/></svg>Manage Rules</button><button class="kebab-menu-item" onclick="duplicateTaxRate('${r.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Duplicate</button><div class="kebab-divider"></div><button class="kebab-menu-item danger" onclick="deleteTaxRate('${r.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Delete</button></div></div>
         </div>
       </td>
       <td><span class="tag-code">${r.id}</span></td>
-      <td><div style="font-weight:600">${r.name}</div><div style="font-size:11px;color:var(--text2)">${r.jurisdiction}</div></td>
-      <td><span class="type-badge">${r.type}</span></td>
-      <td><span class="pill">${r.bands.length} bracket${r.bands.length !== 1 ? 's' : ''}</span></td>
-      <td><span class="pill" style="background:${ruleCount > 0 ? 'var(--green-l)' : '#f1f5f9'};color:${ruleCount > 0 ? '#065f46' : 'var(--text2)'}">${ruleCount} rule${ruleCount !== 1 ? 's' : ''}</span></td>
-      <td>${r.effectiveDate}</td>
-      <td><span class="sdot sdot-${r.status}">${r.status}</span></td>
+      <td>
+        <div style="font-weight:600;font-size:13px;color:var(--text)">${r.name}</div>
+        <div style="margin-top:4px"><span class="juris-badge ${jurisClass(r.jurisdiction)}">${r.jurisdiction}</span></div>
+      </td>
+      <td><span class="type-badge ${typeClass(r.type)}">${r.type}</span></td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="bracket-pill">${r.bands.length}</span>
+          <div style="flex:1">
+            ${renderBracketViz(r.bands)}
+            <div class="bracket-range-text">${minRate}% – ${maxRate}%</div>
+          </div>
+        </div>
+      </td>
+      <td>
+        ${hasRules
+          ? `<span class="rules-pill has-rules"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>${ruleCount} rule${ruleCount !== 1 ? 's' : ''}</span>`
+          : `<span class="rules-pill no-rules">No rules</span>`
+        }
+      </td>
+      <td><span style="font-size:12px;color:var(--text2);font-family:'SF Mono',monospace">${r.effectiveDate}</span></td>
+      <td><span class="sdot sdot-${r.status === 'active' ? 'active' : 'terminated'}">${r.status === 'active' ? 'Active' : 'Inactive'}</span></td>
     </tr>`;
   }).join('');
+}
+
+function duplicateTaxRate(id) {
+  const r = taxRatesData.find(x => x.id === id);
+  if (!r) return;
+  const newId = 'TXR-' + String(Math.max(0, ...taxRatesData.map(x => parseInt(x.id.split('-')[1]) || 0)) + 1).padStart(3, '0');
+  taxRatesData.push({ ...JSON.parse(JSON.stringify(r)), id: newId, name: r.name + ' (Copy)' });
+  renderTaxRatesTable();
 }
 
 function openTaxRateDrawer(id) {
   const rate = taxRatesData.find(r => r.id === id);
   if (!rate) return;
   currentTRId = id;
-  document.getElementById('tr-drawer-title').textContent = rate.name;
-  document.getElementById('tr-drawer-meta').textContent = `${rate.id} · ${rate.jurisdiction}`;
-  document.getElementById('tr-drawer-stats').innerHTML = `<div class="stat-item"><span class="stat-label">${rate.bands.length} Brackets</span><span class="stat-value">${Math.min(...rate.bands.map(b => b.rate))}%–${Math.max(...rate.bands.map(b => b.rate))}%</span></div><div class="stat-item"><span class="stat-label">Type</span><span class="stat-value">${rate.type}</span></div><div class="stat-item"><span class="stat-label">Status</span><span class="stat-value">${rate.status}</span></div>`;
-  let html = `<div style="padding:20px"><div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--text2);margin-bottom:12px">Tax Brackets</div><table class="bands-table" style="margin:0"><thead><tr><th>Income From</th><th>Income To</th><th>Rate</th></tr></thead><tbody>`;
-  rate.bands.forEach(b => { html += `<tr><td>$${b.from.toLocaleString()}</td><td>${b.to ? '$' + b.to.toLocaleString() : '—'}</td><td class="band-rate">${b.rate}%</td></tr>`; });
-  html += `</tbody></table>`;
+  const minRate = Math.min(...rate.bands.map(b => b.rate));
+  const maxRate = Math.max(...rate.bands.map(b => b.rate));
+
+  document.getElementById('tr-drawer-title').innerHTML = `${rate.name} <span class="type-badge ${typeClass(rate.type)}" style="margin-left:8px;vertical-align:middle">${rate.type}</span>`;
+  document.getElementById('tr-drawer-meta').innerHTML = `<span class="tag-code" style="background:rgba(255,255,255,0.15);color:#fff">${rate.id}</span> &nbsp; <span style="color:rgba(255,255,255,0.7)">${rate.jurisdiction}</span> · <span style="color:${rate.status === 'active' ? '#a7f3d0' : '#fca5a5'}">●</span> <span style="color:rgba(255,255,255,0.85)">${rate.status === 'active' ? 'Active' : 'Inactive'}</span>`;
+
+  document.getElementById('tr-drawer-stats').innerHTML = `
+    <div class="stat-item"><span class="stat-label">Brackets</span><span class="stat-value">${rate.bands.length}</span></div>
+    <div class="stat-item"><span class="stat-label">Rate Range</span><span class="stat-value" style="color:var(--accent)">${minRate}% – ${maxRate}%</span></div>
+    <div class="stat-item"><span class="stat-label">Effective</span><span class="stat-value" style="font-size:13px">${rate.effectiveDate}</span></div>
+    <div class="stat-item"><span class="stat-label">Rules</span><span class="stat-value" style="color:${(rate.rules.grantTypes.length + rate.rules.txnTypes.length) > 0 ? 'var(--green)' : 'var(--textm)'}">${rate.rules.grantTypes.length + rate.rules.txnTypes.length}</span></div>
+  `;
+
+  const maxRateForViz = Math.max(...rate.bands.map(b => b.rate));
+  let html = `<div style="padding:20px">`;
+
+  if (rate.description) {
+    html += `<div style="background:#f8fafc;border-radius:10px;padding:12px 14px;margin-bottom:20px;font-size:12.5px;color:var(--text2);border-left:3px solid var(--accent)">${rate.description}</div>`;
+  }
+
+  html += `<div class="drawer-sec-title">Tax Brackets</div>
+    <div class="bracket-viz-large">`;
+  rate.bands.forEach(b => {
+    const widthPct = maxRateForViz > 0 ? (b.rate / maxRateForViz * 100) : 0;
+    html += `<div class="bracket-row">
+      <div class="bracket-range">$${b.from.toLocaleString()}${b.to ? ' – $' + b.to.toLocaleString() : '+'}</div>
+      <div class="bracket-bar-wrap"><div class="bracket-bar-fill" style="width:${widthPct}%"></div></div>
+      <div class="bracket-rate">${b.rate}%</div>
+    </div>`;
+  });
+  html += `</div>`;
+
+  html += `<div style="display:flex;justify-content:space-between;align-items:center;margin-top:24px;margin-bottom:12px">
+    <div class="drawer-sec-title" style="margin-bottom:0">Applicable Rules</div>
+    <button class="btn btn-ghost" style="padding:6px 12px;font-size:12px" onclick="openTaxRulesDrawer('${rate.id}')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19H4v-3L16.5 3.5z"/></svg>
+      Edit Rules
+    </button>
+  </div>`;
+
   if (rate.rules.grantTypes.length > 0 || rate.rules.txnTypes.length > 0) {
-    html += `<div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--text2);margin:20px 0 12px 0">Rules</div>`;
-    if (rate.rules.grantTypes.length > 0) html += `<div style="margin-bottom:8px"><span style="font-size:11px;color:var(--text2)">Grant Types:</span> ${rate.rules.grantTypes.map(g => `<span class="chip-toggle selected" style="margin:2px 4px 2px 0">${g}</span>`).join('')}</div>`;
-    if (rate.rules.txnTypes.length > 0) html += `<div><span style="font-size:11px;color:var(--text2)">Transaction Types:</span> ${rate.rules.txnTypes.map(t => `<span class="chip-toggle selected" style="margin:2px 4px 2px 0">${t}</span>`).join('')}</div>`;
-  } else { html += `<div style="font-size:11px;color:var(--text2);margin-top:20px">No rules assigned. Click "Manage Rules" to add them.</div>`; }
+    if (rate.rules.grantTypes.length > 0) {
+      html += `<div style="margin-bottom:14px">
+        <div style="font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Grant Types</div>
+        <div class="chip-grid">${rate.rules.grantTypes.map(g => `<span class="chip-toggle selected" style="cursor:default">${g}</span>`).join('')}</div>
+      </div>`;
+    }
+    if (rate.rules.txnTypes.length > 0) {
+      html += `<div>
+        <div style="font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Transaction Types</div>
+        <div class="chip-grid">${rate.rules.txnTypes.map(t => `<span class="chip-toggle selected" style="cursor:default">${t}</span>`).join('')}</div>
+      </div>`;
+    }
+  } else {
+    html += `<div class="tax-empty">
+      <div class="tax-empty-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:22px;height:22px"><path d="M9 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-4"/><polyline points="9 11 12 14 15 11"/></svg>
+      </div>
+      <div class="tax-empty-text">No rules configured for this tax rate.<br><a onclick="openTaxRulesDrawer('${rate.id}')" style="color:var(--accent);cursor:pointer;font-weight:600">Click here to add rules</a></div>
+    </div>`;
+  }
+
   html += `</div>`;
   document.getElementById('tr-drawer-body').innerHTML = html;
   document.getElementById('tr-detail-drawer-overlay').classList.add('open');
@@ -6820,8 +7246,35 @@ function setTRModalStep(step) {
 function renderBandsTable() {
   const tbody = document.getElementById('tr-bands-tbody');
   if (!tbody) return;
-  tbody.innerHTML = trBandsTemp.sort((a,b) => a.from - b.from).map((b, i) => `<tr><td><input type="number" value="${b.from}" onchange="trBandsTemp[${i}].from = parseInt(this.value); renderBandsTable()" min="0"></td><td><input type="number" value="${b.to || ''}" onchange="trBandsTemp[${i}].to = this.value ? parseInt(this.value) : null; renderBandsTable()" min="0"></td><td><input type="number" value="${b.rate}" onchange="trBandsTemp[${i}].rate = parseFloat(this.value); renderBandsTable()" min="0" max="100" step="0.01"></td><td><button onclick="removeBandRow(${i})">Remove</button></td></tr>`).join('');
-  if (trBandsTemp.length > 0) { const minRate = Math.min(...trBandsTemp.map(b => b.rate)), maxRate = Math.max(...trBandsTemp.map(b => b.rate)); document.getElementById('tr-band-preview').textContent = `${minRate.toFixed(2)}% – ${maxRate.toFixed(2)}%`; }
+  tbody.innerHTML = trBandsTemp.sort((a,b) => a.from - b.from).map((b, i) => `<tr>
+    <td><input type="number" value="${b.from}" onchange="trBandsTemp[${i}].from = parseInt(this.value) || 0; renderBandsTable()" min="0" placeholder="0"></td>
+    <td><input type="number" value="${b.to || ''}" onchange="trBandsTemp[${i}].to = this.value ? parseInt(this.value) : null; renderBandsTable()" min="0" placeholder="No limit"></td>
+    <td><input type="number" value="${b.rate}" onchange="trBandsTemp[${i}].rate = parseFloat(this.value) || 0; renderBandsTable()" min="0" max="100" step="0.01" placeholder="0.00"></td>
+    <td><button class="remove-btn" onclick="removeBandRow(${i})">Remove</button></td>
+  </tr>`).join('');
+
+  // Update preview chart
+  const previewChart = document.getElementById('tr-preview-chart');
+  const previewCount = document.getElementById('tr-preview-count');
+  const previewRange = document.getElementById('tr-band-preview');
+
+  if (previewCount) previewCount.textContent = trBandsTemp.length;
+
+  if (trBandsTemp.length > 0) {
+    const minRate = Math.min(...trBandsTemp.map(b => b.rate));
+    const maxRate = Math.max(...trBandsTemp.map(b => b.rate));
+    if (previewRange) previewRange.textContent = `${minRate.toFixed(2)}% – ${maxRate.toFixed(2)}%`;
+    if (previewChart) {
+      previewChart.innerHTML = trBandsTemp.map(b => {
+        const intensity = maxRate > 0 ? b.rate / maxRate : 0;
+        const opacity = 0.4 + intensity * 0.6;
+        return `<div class="preview-chart-seg" style="background:rgba(16,185,129,${opacity})" title="${b.rate}%"></div>`;
+      }).join('');
+    }
+  } else {
+    if (previewRange) previewRange.textContent = '—';
+    if (previewChart) previewChart.innerHTML = '<div style="flex:1;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--textm)">Add brackets to see preview</div>';
+  }
 }
 
 function addBandRow() { const maxFrom = trBandsTemp.length > 0 ? Math.max(...trBandsTemp.map(b => b.from + (b.to || 0))) : 0; trBandsTemp.push({ from: maxFrom > 0 ? maxFrom + 1 : 0, to: null, rate: 0 }); renderBandsTable(); }
@@ -6831,12 +7284,14 @@ function removeBandRow(idx) { trBandsTemp.splice(idx, 1); renderBandsTable(); }
 function openTaxRulesDrawer(id) {
   const rate = taxRatesData.find(r => r.id === id);
   if (!rate) return;
+  // Close detail drawer if open, but preserve currentTRId
+  document.getElementById('tr-detail-drawer-overlay').classList.remove('open');
   currentTRId = id;
-  document.getElementById('tr-rules-meta').textContent = rate.name;
+  document.getElementById('tr-rules-meta').innerHTML = `<span class="tag-code" style="background:rgba(255,255,255,0.15);color:#fff">${rate.id}</span> &nbsp; ${rate.name}`;
   const grantGrid = document.getElementById('tr-rules-grant-grid');
-  grantGrid.innerHTML = grantTypeOptions.map(g => `<button class="chip-toggle ${rate.rules.grantTypes.includes(g) ? 'selected' : ''}" onclick="this.classList.toggle('selected')" data-type="grant" data-value="${g}">${g}</button>`).join('');
+  grantGrid.innerHTML = grantTypeOptions.map(g => `<button class="chip-toggle ${rate.rules.grantTypes.includes(g) ? 'selected' : ''}" onclick="this.classList.toggle('selected'); updateRulesSummary()" data-type="grant" data-value="${g}">${g}</button>`).join('');
   const txnGrid = document.getElementById('tr-rules-txn-grid');
-  txnGrid.innerHTML = txnTypeOptions.map(t => `<button class="chip-toggle ${rate.rules.txnTypes.includes(t) ? 'selected' : ''}" onclick="this.classList.toggle('selected')" data-type="txn" data-value="${t}">${t}</button>`).join('');
+  txnGrid.innerHTML = txnTypeOptions.map(t => `<button class="chip-toggle ${rate.rules.txnTypes.includes(t) ? 'selected' : ''}" onclick="this.classList.toggle('selected'); updateRulesSummary()" data-type="txn" data-value="${t}">${t}</button>`).join('');
   updateRulesSummary();
   document.getElementById('tr-rules-drawer-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -6847,8 +7302,17 @@ function closeTaxRulesDrawer() { document.getElementById('tr-rules-drawer-overla
 function updateRulesSummary() {
   const grantCount = document.querySelectorAll('#tr-rules-grant-grid .chip-toggle.selected').length;
   const txnCount = document.querySelectorAll('#tr-rules-txn-grid .chip-toggle.selected').length;
-  const summary = grantCount > 0 && txnCount > 0 ? `Applies to ${grantCount} grant type${grantCount !== 1 ? 's' : ''} and ${txnCount} transaction type${txnCount !== 1 ? 's' : ''}` : grantCount > 0 ? `Applies to ${grantCount} grant type${grantCount !== 1 ? 's' : ''}` : txnCount > 0 ? `Applies to ${txnCount} transaction type${txnCount !== 1 ? 's' : ''}` : 'No rules configured';
-  document.getElementById('tr-rules-summary').textContent = summary;
+  const total = grantCount + txnCount;
+  const summary = total === 0
+    ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:var(--textm)"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> <span>No rules configured. Select grant and transaction types above.</span>`
+    : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:var(--green)"><polyline points="20 6 9 17 4 12"/></svg> <span>Applies to <strong>${grantCount}</strong> grant type${grantCount !== 1 ? 's' : ''} × <strong>${txnCount}</strong> transaction type${txnCount !== 1 ? 's' : ''} = <strong style="color:var(--accent)">${grantCount * txnCount}</strong> rule combinations</span>`;
+  const el = document.getElementById('tr-rules-summary');
+  el.innerHTML = summary;
+  el.style.display = 'flex';
+  el.style.alignItems = 'center';
+  el.style.gap = '8px';
+  el.style.background = total === 0 ? '#f8fafc' : 'linear-gradient(135deg, #ecfdf5, #d1fae5)';
+  el.style.border = total === 0 ? '1px solid var(--border)' : '1px solid #a7f3d0';
 }
 
 function saveTaxRules(id) { const rate = taxRatesData.find(r => r.id === id); if (!rate) return; rate.rules.grantTypes = Array.from(document.querySelectorAll('#tr-rules-grant-grid .chip-toggle.selected')).map(el => el.dataset.value); rate.rules.txnTypes = Array.from(document.querySelectorAll('#tr-rules-txn-grid .chip-toggle.selected')).map(el => el.dataset.value); closeTaxRulesDrawer(); renderTaxRatesTable(); }
@@ -6868,32 +7332,158 @@ function saveTaxRate() {
 
 function deleteTaxRate(id) { if (!confirm('Delete this tax rate?')) return; const idx = taxRatesData.findIndex(r => r.id === id); if (idx >= 0) taxRatesData.splice(idx, 1); renderTaxRatesTable(); }
 
+function renderCompositionViz(rates) {
+  if (rates.length === 0) return '<div class="tc-composition"></div>';
+  return `<div class="tc-composition">${rates.map(r => `<div class="tc-comp-seg cs-${typeClass(r.type).replace('t-','')}" title="${r.name} (${r.type})"></div>`).join('')}</div>`;
+}
+
+function renderTaxCodesMetrics() {
+  const total = taxCodesData.length;
+  const active = taxCodesData.filter(c => c.status === 'active').length;
+  const totalRateLinks = taxCodesData.reduce((s, c) => s + c.rateIds.length, 0);
+  const avgRatesPerCode = total > 0 ? (totalRateLinks / total).toFixed(1) : 0;
+  const jurisdictions = new Set(taxCodesData.map(c => c.jurisdiction)).size;
+
+  document.getElementById('tc-metrics').innerHTML = `
+    <div class="tax-metric-card tm-purple">
+      <div class="tm-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Total Codes</div>
+      <div class="tm-value">${total}</div>
+      <div class="tm-sub"><strong>${active}</strong> active · ${total - active} inactive</div>
+    </div>
+    <div class="tax-metric-card tm-green">
+      <div class="tm-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Avg Rates / Code</div>
+      <div class="tm-value">${avgRatesPerCode}</div>
+      <div class="tm-sub">${totalRateLinks} total rate assignments</div>
+    </div>
+    <div class="tax-metric-card tm-cyan">
+      <div class="tm-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg>Jurisdictions</div>
+      <div class="tm-value">${jurisdictions}</div>
+      <div class="tm-sub">Geographic coverage</div>
+    </div>
+    <div class="tax-metric-card tm-amber">
+      <div class="tm-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>Linked Rates</div>
+      <div class="tm-value">${taxRatesData.length}</div>
+      <div class="tm-sub">Available for packaging</div>
+    </div>
+  `;
+}
+
 function renderTaxCodesTable() {
+  renderTaxCodesMetrics();
   const tbody = document.getElementById('tc-body');
   if (!tbody) return;
   const search = (document.getElementById('tc-search')?.value || '').toLowerCase();
   const status = document.getElementById('tc-status-filter')?.value || '';
-  const filtered = taxCodesData.filter(c => { if (status && c.status !== status) return false; if (search && !c.id.toLowerCase().includes(search) && !c.name.toLowerCase().includes(search)) return false; return true; });
-  document.getElementById('tc-result-count').innerHTML = `Showing <strong>${filtered.length}</strong> code${filtered.length !== 1 ? 's' : ''}`;
+  const filtered = taxCodesData.filter(c => {
+    if (status && c.status !== status) return false;
+    if (search && !c.id.toLowerCase().includes(search) && !c.name.toLowerCase().includes(search) && !c.jurisdiction.toLowerCase().includes(search)) return false;
+    return true;
+  });
+  document.getElementById('tc-result-count').innerHTML = `Showing <strong style="color:var(--text)">${filtered.length}</strong> of ${taxCodesData.length} code${taxCodesData.length !== 1 ? 's' : ''}`;
+
   tbody.innerHTML = filtered.map(c => {
     const rates = taxRatesData.filter(r => c.rateIds.includes(r.id));
-    const effRate = rates.length > 0 ? Math.min(...rates.map(r => Math.min(...r.bands.map(b => b.rate)))) + ' – ' + Math.max(...rates.map(r => Math.max(...r.bands.map(b => b.rate)))) + '%' : '—';
-    return `<tr><td class="col-actions" onclick="event.stopPropagation()"><div class="action-cell"><button class="action-icon-btn" title="View" onclick="openTaxCodeDrawer('${c.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="action-icon-btn" title="Edit" onclick="openTaxCodeModal('${c.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19H4v-3L16.5 3.5z"/></svg></button><div class="kebab-wrap"><button class="kebab-btn" onclick="event.stopPropagation(); toggleKebab(this)">⋮</button><div class="kebab-menu"><div class="kebab-menu-label">Actions</div><button class="kebab-menu-item" onclick="openTCRatesDrawer('${c.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg>Add Rates</button><div class="kebab-divider"></div><button class="kebab-menu-item danger" onclick="deleteTaxCode('${c.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Delete</button></div></div></div></td><td><span class="tag-code">${c.id}</span></td><td><div style="font-weight:600">${c.name}</div></td><td>${c.jurisdiction}</td><td><span class="pill">${c.rateIds.length}</span></td><td>${effRate}</td><td><span class="sdot sdot-${c.status}">${c.status}</span></td></tr>`;
+    return `<tr style="cursor:pointer" onclick="openTaxCodeDrawer('${c.id}')">
+      <td class="col-actions" onclick="event.stopPropagation()">
+        <div class="action-cell">
+          <button class="action-icon-btn" title="View Detail" onclick="openTaxCodeDrawer('${c.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          <button class="action-icon-btn" title="Edit Code" onclick="openTaxCodeModal('${c.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19H4v-3L16.5 3.5z"/></svg></button>
+          <div class="kebab-wrap"><button class="kebab-btn" onclick="event.stopPropagation(); toggleKebab(this)">⋮</button><div class="kebab-menu"><div class="kebab-menu-label">Actions</div><button class="kebab-menu-item" onclick="openTCRatesDrawer('${c.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Rates</button><button class="kebab-menu-item" onclick="duplicateTaxCode('${c.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Duplicate</button><div class="kebab-divider"></div><button class="kebab-menu-item danger" onclick="deleteTaxCode('${c.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Delete</button></div></div>
+        </div>
+      </td>
+      <td><span class="tag-code">${c.id}</span></td>
+      <td>
+        <div style="font-weight:600;font-size:13px;color:var(--text)">${c.name}</div>
+        <div style="font-size:11px;color:var(--text2);margin-top:3px">${c.description || ''}</div>
+      </td>
+      <td><span class="juris-badge ${jurisClass(c.jurisdiction)}">${c.jurisdiction}</span></td>
+      <td>
+        ${rates.length > 0
+          ? `<div>${renderCompositionViz(rates)}<div style="font-size:10.5px;color:var(--text2);margin-top:5px">${rates.map(r => r.type).join(' · ')}</div></div>`
+          : `<span style="font-size:11px;color:var(--textm);font-style:italic">No rates assigned</span>`
+        }
+      </td>
+      <td><span class="bracket-pill" style="background:#f5f3ff;color:#6d28d9">${c.rateIds.length} rate${c.rateIds.length !== 1 ? 's' : ''}</span></td>
+      <td><span class="sdot sdot-${c.status === 'active' ? 'active' : 'terminated'}">${c.status === 'active' ? 'Active' : 'Inactive'}</span></td>
+    </tr>`;
   }).join('');
+}
+
+function duplicateTaxCode(id) {
+  const c = taxCodesData.find(x => x.id === id);
+  if (!c) return;
+  const newId = 'TXC-' + String(Math.max(0, ...taxCodesData.map(x => parseInt(x.id.split('-')[1]) || 0)) + 1).padStart(3, '0');
+  taxCodesData.push({ ...JSON.parse(JSON.stringify(c)), id: newId, name: c.name + ' (Copy)' });
+  renderTaxCodesTable();
 }
 
 function openTaxCodeDrawer(id) {
   const code = taxCodesData.find(c => c.id === id);
   if (!code) return;
   currentTCId = id;
-  document.getElementById('tc-drawer-title').textContent = code.name;
-  document.getElementById('tc-drawer-meta').textContent = `${code.id} · ${code.jurisdiction}`;
   const rates = taxRatesData.filter(r => code.rateIds.includes(r.id));
-  const minRate = rates.length > 0 ? Math.min(...rates.map(r => Math.min(...r.bands.map(b => b.rate)))) : 0;
-  const maxRate = rates.length > 0 ? Math.max(...rates.map(r => Math.max(...r.bands.map(b => b.rate)))) : 0;
-  document.getElementById('tc-drawer-stats').innerHTML = `<div class="stat-item"><span class="stat-label">${rates.length} Rates</span><span class="stat-value">${minRate.toFixed(1)}%–${maxRate.toFixed(1)}%</span></div><div class="stat-item"><span class="stat-label">Jurisdiction</span><span class="stat-value">${code.jurisdiction}</span></div><div class="stat-item"><span class="stat-label">Status</span><span class="stat-value">${code.status}</span></div>`;
-  let html = `<div style="padding:20px"><div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--text2);margin-bottom:12px">Assigned Tax Rates</div>`;
-  if (rates.length > 0) { html += `<div>`; rates.forEach(r => { html += `<div class="tc-rate-row"><div style="flex:1"><div style="font-weight:600">${r.name}</div><div style="font-size:11px;color:var(--text2)">${r.bands.length} bracket${r.bands.length !== 1 ? 's' : ''}</div></div><button style="padding:4px 8px;border-radius:5px;border:1px solid var(--red);background:#fff;color:var(--red);cursor:pointer;font-size:11px" onclick="removeRateFromCode('${id}','${r.id}')">Remove</button></div>`; }); html += `</div>`; } else { html += `<div style="font-size:11px;color:var(--text2)">No tax rates assigned yet.</div>`; }
+  const minRate = rates.length > 0 ? Math.min(...rates.flatMap(r => r.bands.map(b => b.rate))) : 0;
+  const maxRate = rates.length > 0 ? Math.max(...rates.flatMap(r => r.bands.map(b => b.rate))) : 0;
+
+  document.getElementById('tc-drawer-title').textContent = code.name;
+  document.getElementById('tc-drawer-meta').innerHTML = `<span class="tag-code" style="background:rgba(255,255,255,0.15);color:#fff">${code.id}</span> &nbsp; <span style="color:rgba(255,255,255,0.7)">${code.jurisdiction}</span> · <span style="color:${code.status === 'active' ? '#a7f3d0' : '#fca5a5'}">●</span> <span style="color:rgba(255,255,255,0.85)">${code.status === 'active' ? 'Active' : 'Inactive'}</span>`;
+
+  document.getElementById('tc-drawer-stats').innerHTML = `
+    <div class="stat-item"><span class="stat-label">Tax Rates</span><span class="stat-value">${rates.length}</span></div>
+    <div class="stat-item"><span class="stat-label">Rate Range</span><span class="stat-value" style="color:var(--accent)">${rates.length > 0 ? minRate.toFixed(1) + '% – ' + maxRate.toFixed(1) + '%' : '—'}</span></div>
+    <div class="stat-item"><span class="stat-label">Total Brackets</span><span class="stat-value">${rates.reduce((s, r) => s + r.bands.length, 0)}</span></div>
+    <div class="stat-item"><span class="stat-label">Jurisdiction</span><span class="stat-value" style="font-size:13px">${code.jurisdiction}</span></div>
+  `;
+
+  let html = `<div style="padding:20px">`;
+
+  if (code.description) {
+    html += `<div style="background:#f8fafc;border-radius:10px;padding:12px 14px;margin-bottom:20px;font-size:12.5px;color:var(--text2);border-left:3px solid var(--purple)">${code.description}</div>`;
+  }
+
+  if (rates.length > 0) {
+    html += `<div style="background:linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);border-radius:12px;padding:16px;margin-bottom:20px;border:1px solid #ddd6fe">
+      <div style="font-size:10.5px;font-weight:700;color:#6d28d9;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px">Rate Composition</div>
+      ${renderCompositionViz(rates)}
+      <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px">
+        ${rates.map(r => `<span style="font-size:11px;color:var(--text);display:inline-flex;align-items:center;gap:5px"><span style="width:8px;height:8px;border-radius:2px;display:inline-block" class="cs-${typeClass(r.type).replace('t-','')}" style="background:${{'t-income':'#3b82f6','t-fica':'#8b5cf6','t-amt':'#f59e0b','t-capital-gains':'#06b6d4','t-supplemental':'#10b981','t-other':'#94a3b8'}[typeClass(r.type)]}"></span>${r.type}</span>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  html += `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <div class="drawer-sec-title" style="margin-bottom:0">Assigned Tax Rates (${rates.length})</div>
+    <button class="btn btn-primary" style="padding:6px 12px;font-size:12px" onclick="openTCRatesDrawer('${id}')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add Rates
+    </button>
+  </div>`;
+
+  if (rates.length > 0) {
+    rates.forEach(r => {
+      const minR = Math.min(...r.bands.map(b => b.rate));
+      const maxR = Math.max(...r.bands.map(b => b.rate));
+      html += `<div class="tc-rate-row">
+        <div class="tc-rate-icon ${typeClass(r.type)}">${r.type.substring(0, 2).toUpperCase()}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:600;font-size:13px;color:var(--text)">${r.name}</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:3px">
+            <span class="type-badge ${typeClass(r.type)}" style="font-size:10px;padding:2px 7px">${r.type}</span>
+            <span style="font-size:11px;color:var(--text2)">${r.bands.length} bracket${r.bands.length !== 1 ? 's' : ''} · ${minR}%–${maxR}%</span>
+          </div>
+        </div>
+        <button class="tc-rate-remove" onclick="removeRateFromCode('${id}','${r.id}')">Remove</button>
+      </div>`;
+    });
+  } else {
+    html += `<div class="tax-empty">
+      <div class="tax-empty-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:22px;height:22px"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      </div>
+      <div class="tax-empty-text">No tax rates assigned to this code yet.<br><a onclick="openTCRatesDrawer('${id}')" style="color:var(--accent);cursor:pointer;font-weight:600">Click here to add rates</a></div>
+    </div>`;
+  }
+
   html += `</div>`;
   document.getElementById('tc-drawer-body').innerHTML = html;
   document.getElementById('tc-detail-drawer-overlay').classList.add('open');
@@ -6937,11 +7527,48 @@ function renderTCRatesDrawer() {
   const code = taxCodesData.find(c => c.id === currentTCId);
   if (!code) return;
   const search = (document.getElementById('tcr-search')?.value || '').toLowerCase();
-  const unassigned = taxRatesData.filter(r => !code.rateIds.includes(r.id) && (search === '' || r.name.toLowerCase().includes(search) || r.id.toLowerCase().includes(search)));
+  const unassigned = taxRatesData.filter(r => !code.rateIds.includes(r.id) && (search === '' || r.name.toLowerCase().includes(search) || r.id.toLowerCase().includes(search) || r.jurisdiction.toLowerCase().includes(search)));
   document.getElementById('tcr-meta').textContent = code.name;
-  document.getElementById('tcr-add-btn').textContent = `Add Selected (${tcRatesSelectedIds.length})`;
+  document.getElementById('tcr-add-btn').textContent = tcRatesSelectedIds.length > 0 ? `Add ${tcRatesSelectedIds.length} Rate${tcRatesSelectedIds.length !== 1 ? 's' : ''}` : 'Add Selected';
+  document.getElementById('tcr-add-btn').disabled = tcRatesSelectedIds.length === 0;
+  document.getElementById('tcr-add-btn').style.opacity = tcRatesSelectedIds.length === 0 ? '0.5' : '1';
+
   const list = document.getElementById('tcr-rates-list');
-  list.innerHTML = unassigned.map(r => `<label style="display:flex;align-items:center;padding:10px;border-bottom:1px solid var(--border);cursor:pointer"><input type="checkbox" data-rate-id="${r.id}" onchange="tcRatesSelectedIds = Array.from(document.querySelectorAll('#tcr-rates-list input:checked')).map(e => e.dataset.rateId); renderTCRatesDrawer()" ${tcRatesSelectedIds.includes(r.id) ? 'checked' : ''} style="margin-right:10px;cursor:pointer"><div style="flex:1"><div style="font-weight:600">${r.name}</div><div style="font-size:11px;color:var(--text2)">${r.jurisdiction} · ${r.type} · ${r.bands.length} bracket${r.bands.length !== 1 ? 's' : ''}</div></div></label>`).join('');
+  if (unassigned.length === 0) {
+    list.innerHTML = `<div class="tax-empty"><div class="tax-empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:22px;height:22px"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><div class="tax-empty-text">${search ? 'No rates match your search.' : 'All available rates are already assigned.'}</div></div>`;
+    return;
+  }
+  list.innerHTML = unassigned.map(r => {
+    const minR = Math.min(...r.bands.map(b => b.rate));
+    const maxR = Math.max(...r.bands.map(b => b.rate));
+    const checked = tcRatesSelectedIds.includes(r.id);
+    return `<label class="rate-pick-row ${checked ? 'checked' : ''}">
+      <input type="checkbox" data-rate-id="${r.id}" onchange="toggleRatePick(this, '${r.id}')" ${checked ? 'checked' : ''}>
+      <div class="tc-rate-icon ${typeClass(r.type)}" style="width:32px;height:32px;font-size:10px">${r.type.substring(0, 2).toUpperCase()}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:600;font-size:13px;color:var(--text)">${r.name}</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:3px;flex-wrap:wrap">
+          <span class="juris-badge ${jurisClass(r.jurisdiction)}" style="font-size:10px;padding:2px 7px">${r.jurisdiction}</span>
+          <span class="type-badge ${typeClass(r.type)}" style="font-size:10px;padding:2px 7px">${r.type}</span>
+          <span style="font-size:11px;color:var(--text2)">${r.bands.length} brackets · ${minR}%–${maxR}%</span>
+        </div>
+      </div>
+    </label>`;
+  }).join('');
+}
+
+function toggleRatePick(checkbox, rateId) {
+  const row = checkbox.closest('.rate-pick-row');
+  if (checkbox.checked) {
+    if (!tcRatesSelectedIds.includes(rateId)) tcRatesSelectedIds.push(rateId);
+    row.classList.add('checked');
+  } else {
+    tcRatesSelectedIds = tcRatesSelectedIds.filter(id => id !== rateId);
+    row.classList.remove('checked');
+  }
+  document.getElementById('tcr-add-btn').textContent = tcRatesSelectedIds.length > 0 ? `Add ${tcRatesSelectedIds.length} Rate${tcRatesSelectedIds.length !== 1 ? 's' : ''}` : 'Add Selected';
+  document.getElementById('tcr-add-btn').disabled = tcRatesSelectedIds.length === 0;
+  document.getElementById('tcr-add-btn').style.opacity = tcRatesSelectedIds.length === 0 ? '0.5' : '1';
 }
 
 function addRatesToCode() { const code = taxCodesData.find(c => c.id === currentTCId); if (!code) return; code.rateIds.push(...tcRatesSelectedIds); closeTCRatesDrawer(); openTaxCodeDrawer(currentTCId); renderTaxCodesTable(); }
