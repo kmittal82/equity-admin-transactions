@@ -1670,6 +1670,168 @@
     }
     .tax-filter-bar .filter-search-input { flex: 1; max-width: 360px; }
 
+    /* ════════════ DASHBOARD OPERATIONS CENTER ════════════ */
+    .ops-section-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin: 32px 0 16px 0; padding: 0 4px;
+    }
+    .ops-section-title-wrap { display: flex; align-items: center; gap: 12px; }
+    .ops-section-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 12px rgba(59,130,246,0.25);
+    }
+    .ops-section-icon svg { width: 19px; height: 19px; }
+    .ops-section-title { font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.2px; }
+    .ops-section-sub { font-size: 12.5px; color: var(--text2); margin-top: 2px; }
+    .ops-section-pill {
+      padding: 6px 12px; background: #eff6ff; color: #1e40af;
+      border-radius: 20px; font-size: 11.5px; font-weight: 600;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .ops-section-pill::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: currentColor;
+    }
+
+    .ops-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    .ops-grid-3 { grid-template-columns: repeat(3, 1fr); }
+    @media (max-width: 1280px) { .ops-grid-3 { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 900px) { .ops-grid, .ops-grid-3 { grid-template-columns: 1fr; } }
+
+    .ops-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 18px 18px 14px 18px; position: relative; overflow: hidden;
+      transition: all 0.2s; display: flex; flex-direction: column;
+    }
+    .ops-card:hover { border-color: #cbd5e1; box-shadow: 0 8px 28px rgba(15,23,42,0.06); }
+    .ops-card::before {
+      content: ''; position: absolute; top: 0; left: 0; height: 4px; width: 100%;
+      background: var(--accent);
+    }
+    .ops-card-blue::before { background: linear-gradient(90deg, #3b82f6, #1d4ed8); }
+    .ops-card-red::before { background: linear-gradient(90deg, #ef4444, #b91c1c); }
+    .ops-card-green::before { background: linear-gradient(90deg, #10b981, #047857); }
+    .ops-card-purple::before { background: linear-gradient(90deg, #8b5cf6, #6d28d9); }
+    .ops-card-amber::before { background: linear-gradient(90deg, #f59e0b, #b45309); }
+    .ops-card-cyan::before { background: linear-gradient(90deg, #06b6d4, #0e7490); }
+    .ops-card-indigo::before { background: linear-gradient(90deg, #6366f1, #4338ca); }
+
+    .ops-card-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .ops-card-title {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13.5px; font-weight: 700; color: var(--text);
+    }
+    .ops-card-ico {
+      width: 32px; height: 32px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .ops-card-ico svg { width: 16px; height: 16px; }
+    .ops-card-count {
+      font-size: 26px; font-weight: 700; color: var(--accent);
+      font-family: 'SF Mono', monospace; letter-spacing: -1px; line-height: 1;
+    }
+
+    .ops-card-meta {
+      display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px;
+    }
+    .ops-meta-pill {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 9px; border-radius: 12px;
+      background: #f1f5f9; color: var(--text2);
+      font-size: 10.5px; font-weight: 600;
+    }
+    .ops-meta-blue { background: #eff6ff !important; color: #1e40af !important; }
+
+    .ops-list { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+    .ops-item {
+      display: flex; align-items: center; gap: 11px;
+      padding: 10px 12px; background: #fff;
+      border: 1px solid var(--border); border-radius: 10px;
+      transition: all 0.15s;
+    }
+    .ops-item:hover { border-color: #cbd5e1; background: #f8fafc; }
+
+    .ops-item-date {
+      width: 42px; flex-shrink: 0; text-align: center;
+      padding: 4px 0; border-radius: 7px;
+      background: #eff6ff; color: #1e40af;
+    }
+    .ops-item-month { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1; }
+    .ops-item-day { font-size: 16px; font-weight: 700; line-height: 1.1; margin-top: 1px; }
+
+    .ops-item-body { flex: 1; min-width: 0; }
+    .ops-item-title { font-size: 12.5px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ops-item-sub { font-size: 11px; color: var(--text2); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .ops-item-tag {
+      flex-shrink: 0; padding: 3px 9px; border-radius: 11px;
+      font-size: 10.5px; font-weight: 700; letter-spacing: 0.2px;
+    }
+    .tag-soon { background: #fef3c7; color: #92400e; }
+    .tag-upcoming { background: #eff6ff; color: #1e40af; }
+    .tag-future { background: #f1f5f9; color: var(--text2); }
+    .tag-critical { background: var(--red-l); color: #991b1b; }
+    .tag-warning { background: #fef3c7; color: #92400e; }
+
+    .ops-card-foot {
+      margin-top: 14px; padding-top: 12px; border-top: 1px solid #f1f5f9;
+    }
+    .ops-foot-btn {
+      background: none; border: none; padding: 0;
+      color: var(--accent); font-size: 12.5px; font-weight: 600;
+      cursor: pointer; font-family: inherit;
+      transition: all 0.15s;
+    }
+    .ops-foot-btn:hover { transform: translateX(3px); }
+
+    /* Approval stat rows */
+    .approval-stats { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+    .approval-stat-row {
+      display: flex; align-items: center; gap: 11px;
+      padding: 10px 12px; background: #fff;
+      border: 1px solid var(--border); border-radius: 10px;
+      transition: all 0.15s; cursor: pointer;
+    }
+    .approval-stat-row:hover { border-color: #cbd5e1; background: #f8fafc; transform: translateX(2px); }
+    .approval-stat-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .approval-stat-icon svg { width: 15px; height: 15px; }
+    .approval-stat-body { flex: 1; min-width: 0; }
+    .approval-stat-label { font-size: 12.5px; font-weight: 600; color: var(--text); }
+    .approval-stat-sub { font-size: 11px; color: var(--text2); margin-top: 1px; }
+    .approval-stat-count {
+      font-size: 18px; font-weight: 700; font-family: 'SF Mono', monospace;
+    }
+
+    /* Import status indicators */
+    .ops-item-import { gap: 12px; }
+    .import-status {
+      width: 32px; height: 32px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .import-status svg { width: 16px; height: 16px; }
+    .import-progress { background: #ecfeff; color: #0e7490; animation: spin 2s linear infinite; }
+    .import-failed { background: var(--red-l); color: var(--red); }
+    .import-success { background: var(--green-l); color: #065f46; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    /* Report icons */
+    .report-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .report-icon svg { width: 15px; height: 15px; }
+
     /* — Add Rates drawer rate item — */
     .rate-pick-row {
       display: flex; align-items: center; gap: 12px;
@@ -2435,6 +2597,467 @@
 
 
       </div><!-- /grid -->
+
+      <!-- ════════════ OPERATIONS CENTER ════════════ -->
+      <div class="ops-section-head">
+        <div class="ops-section-title-wrap">
+          <div class="ops-section-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div>
+            <div class="ops-section-title">Upcoming Activities</div>
+            <div class="ops-section-sub">Events, deadlines and time-sensitive items in the next 30 days</div>
+          </div>
+        </div>
+        <div class="ops-section-pill">Next 30 days</div>
+      </div>
+
+      <div class="ops-grid">
+        <!-- Upcoming Releases -->
+        <div class="ops-card ops-card-blue">
+          <div class="ops-card-head">
+            <div class="ops-card-title">
+              <div class="ops-card-ico" style="background:#eff6ff;color:#1e40af">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 4 12 14.01 9 11.01"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              </div>
+              <span>Upcoming Releases</span>
+            </div>
+            <div class="ops-card-count">12</div>
+          </div>
+          <div class="ops-card-meta">
+            <span class="ops-meta-pill ops-meta-blue">8,420 units</span>
+            <span class="ops-meta-pill" style="background:#fef3c7;color:#92400e">$358K value</span>
+          </div>
+          <div class="ops-list">
+            <div class="ops-item">
+              <div class="ops-item-date">
+                <div class="ops-item-month">MAR</div>
+                <div class="ops-item-day">05</div>
+              </div>
+              <div class="ops-item-body">
+                <div class="ops-item-title">Sarah Chen — RSU Quarterly Vest</div>
+                <div class="ops-item-sub">GRT-2024-001 · 1,250 units · ~$53K</div>
+              </div>
+              <div class="ops-item-tag tag-soon">5 days</div>
+            </div>
+            <div class="ops-item">
+              <div class="ops-item-date">
+                <div class="ops-item-month">MAR</div>
+                <div class="ops-item-day">12</div>
+              </div>
+              <div class="ops-item-body">
+                <div class="ops-item-title">Marcus Johnson — Cliff Release</div>
+                <div class="ops-item-sub">GRT-2024-002 · 2,500 units · ~$106K</div>
+              </div>
+              <div class="ops-item-tag tag-soon">12 days</div>
+            </div>
+            <div class="ops-item">
+              <div class="ops-item-date">
+                <div class="ops-item-month">MAR</div>
+                <div class="ops-item-day">15</div>
+              </div>
+              <div class="ops-item-body">
+                <div class="ops-item-title">Emma Davis — RSU Monthly</div>
+                <div class="ops-item-sub">GRT-2023-008 · 850 units · ~$36K</div>
+              </div>
+              <div class="ops-item-tag tag-upcoming">15 days</div>
+            </div>
+            <div class="ops-item">
+              <div class="ops-item-date">
+                <div class="ops-item-month">MAR</div>
+                <div class="ops-item-day">22</div>
+              </div>
+              <div class="ops-item-body">
+                <div class="ops-item-title">James Park — RSU Quarterly</div>
+                <div class="ops-item-sub">GRT-2024-003 · 1,500 units · ~$64K</div>
+              </div>
+              <div class="ops-item-tag tag-upcoming">22 days</div>
+            </div>
+          </div>
+          <div class="ops-card-foot">
+            <button class="ops-foot-btn" onclick="switchView('release-mgmt')">View all releases →</button>
+          </div>
+        </div>
+
+        <!-- Upcoming Exercise Expirations -->
+        <div class="ops-card ops-card-red">
+          <div class="ops-card-head">
+            <div class="ops-card-title">
+              <div class="ops-card-ico" style="background:var(--red-l);color:#991b1b">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              </div>
+              <span>Exercise Expirations</span>
+            </div>
+            <div class="ops-card-count" style="color:var(--red)">7</div>
+          </div>
+          <div class="ops-card-meta">
+            <span class="ops-meta-pill" style="background:var(--red-l);color:#991b1b">⚠ 2 critical</span>
+            <span class="ops-meta-pill">15,200 options</span>
+          </div>
+          <div class="ops-list">
+            <div class="ops-item">
+              <div class="ops-item-date" style="background:var(--red-l);color:#991b1b">
+                <div class="ops-item-month">MAR</div>
+                <div class="ops-item-day">08</div>
+              </div>
+              <div class="ops-item-body">
+                <div class="ops-item-title">Tom Bradley — ISO Expiry</div>
+                <div class="ops-item-sub">GRT-2016-012 · 4,000 options · $14.20 strike</div>
+              </div>
+              <div class="ops-item-tag tag-critical">8 days</div>
+            </div>
+            <div class="ops-item">
+              <div class="ops-item-date" style="background:var(--red-l);color:#991b1b">
+                <div class="ops-item-month">MAR</div>
+                <div class="ops-item-day">14</div>
+              </div>
+              <div class="ops-item-body">
+                <div class="ops-item-title">Lisa Wong — NSO Expiry</div>
+                <div class="ops-item-sub">GRT-2016-015 · 3,200 options · $11.80 strike</div>
+              </div>
+              <div class="ops-item-tag tag-critical">14 days</div>
+            </div>
+            <div class="ops-item">
+              <div class="ops-item-date" style="background:#fef3c7;color:#92400e">
+                <div class="ops-item-month">MAR</div>
+                <div class="ops-item-day">22</div>
+              </div>
+              <div class="ops-item-body">
+                <div class="ops-item-title">Robert Chen — Post-Term Window</div>
+                <div class="ops-item-sub">GRT-2018-007 · 2,500 options · 90-day window</div>
+              </div>
+              <div class="ops-item-tag tag-warning">22 days</div>
+            </div>
+            <div class="ops-item">
+              <div class="ops-item-date" style="background:#fef3c7;color:#92400e">
+                <div class="ops-item-month">MAR</div>
+                <div class="ops-item-day">28</div>
+              </div>
+              <div class="ops-item-body">
+                <div class="ops-item-title">David Miller — NQSO Expiry</div>
+                <div class="ops-item-sub">GRT-2017-003 · 5,500 options · $12.50 strike</div>
+              </div>
+              <div class="ops-item-tag tag-warning">28 days</div>
+            </div>
+          </div>
+          <div class="ops-card-foot">
+            <button class="ops-foot-btn" style="color:var(--red)" onclick="switchView('exercise-mgmt')">Notify expiring holders →</button>
+          </div>
+        </div>
+
+        <!-- Trading Windows -->
+        <div class="ops-card ops-card-green">
+          <div class="ops-card-head">
+            <div class="ops-card-title">
+              <div class="ops-card-ico" style="background:var(--green-l);color:#065f46">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              </div>
+              <span>Trading Windows</span>
+            </div>
+            <div class="ops-card-count" style="color:var(--green)">OPEN</div>
+          </div>
+          <div class="ops-card-meta">
+            <span class="ops-meta-pill" style="background:var(--green-l);color:#065f46">● Currently open</span>
+            <span class="ops-meta-pill">Closes Mar 18</span>
+          </div>
+          <div style="padding:14px 16px;background:linear-gradient(135deg,#ecfdf5,#d1fae5);border-radius:10px;margin:10px 0">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+              <span style="font-size:11px;font-weight:700;color:#065f46;text-transform:uppercase;letter-spacing:0.5px">Q1 2026 Window</span>
+              <span style="font-size:11px;color:#065f46;font-weight:600">19 days remaining</span>
+            </div>
+            <div style="height:8px;background:rgba(16,185,129,0.2);border-radius:4px;overflow:hidden">
+              <div style="height:100%;width:32%;background:linear-gradient(90deg,#10b981,#059669);border-radius:4px"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:10.5px;color:#065f46">
+              <span>Feb 28 (open)</span>
+              <span>Mar 18 (close)</span>
+            </div>
+          </div>
+          <div class="ops-list">
+            <div class="ops-item">
+              <div class="ops-item-date" style="background:var(--green-l);color:#065f46">
+                <div class="ops-item-month">APR</div>
+                <div class="ops-item-day">15</div>
+              </div>
+              <div class="ops-item-body">
+                <div class="ops-item-title">Q2 2026 Window Opens</div>
+                <div class="ops-item-sub">Section 16 officers cleared · 30-day window</div>
+              </div>
+              <div class="ops-item-tag tag-upcoming">46 days</div>
+            </div>
+            <div class="ops-item">
+              <div class="ops-item-date">
+                <div class="ops-item-month">JUN</div>
+                <div class="ops-item-day">01</div>
+              </div>
+              <div class="ops-item-body">
+                <div class="ops-item-title">Earnings Blackout Begins</div>
+                <div class="ops-item-sub">Q2 earnings · 14-day blackout</div>
+              </div>
+              <div class="ops-item-tag tag-future">90+ days</div>
+            </div>
+          </div>
+          <div class="ops-card-foot">
+            <button class="ops-foot-btn">View calendar →</button>
+          </div>
+        </div>
+
+        <!-- ESPP Purchase & Enrollment -->
+        <div class="ops-card ops-card-purple">
+          <div class="ops-card-head">
+            <div class="ops-card-title">
+              <div class="ops-card-ico" style="background:#f5f3ff;color:#6d28d9">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 11l-3-3m0 0l-3 3m3-3v12"/></svg>
+              </div>
+              <span>ESPP Purchase &amp; Enrollment</span>
+            </div>
+            <div class="ops-card-count" style="color:var(--purple)">2</div>
+          </div>
+          <div class="ops-card-meta">
+            <span class="ops-meta-pill" style="background:#f5f3ff;color:#6d28d9">1,204 enrolled</span>
+            <span class="ops-meta-pill" style="background:#fef3c7;color:#92400e">2026-A enrollment</span>
+          </div>
+          <div class="ops-list">
+            <div class="ops-item">
+              <div class="ops-item-date" style="background:#f5f3ff;color:#6d28d9">
+                <div class="ops-item-month">JUN</div>
+                <div class="ops-item-day">30</div>
+              </div>
+              <div class="ops-item-body">
+                <div class="ops-item-title">2025-B Purchase Date</div>
+                <div class="ops-item-sub">1,204 employees · ~$2.4M expected</div>
+              </div>
+              <div class="ops-item-tag tag-future">123 days</div>
+            </div>
+            <div class="ops-item">
+              <div class="ops-item-date" style="background:#fef3c7;color:#92400e">
+                <div class="ops-item-month">MAR</div>
+                <div class="ops-item-day">15</div>
+              </div>
+              <div class="ops-item-body">
+                <div class="ops-item-title">2026-A Enrollment Window</div>
+                <div class="ops-item-sub">Open enrollment closes · 412 employees enrolled so far</div>
+              </div>
+              <div class="ops-item-tag tag-soon">15 days</div>
+            </div>
+            <div style="padding:10px 12px;background:#fef3c7;border-radius:8px;border-left:3px solid var(--amber);font-size:11.5px;color:#92400e;margin-top:6px">
+              <strong>Action needed:</strong> 287 eligible employees haven't enrolled yet. Send reminder?
+            </div>
+          </div>
+          <div class="ops-card-foot">
+            <button class="ops-foot-btn" style="color:var(--purple)">View ESPP details →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════ WORKFLOW & APPROVALS ════════════ -->
+      <div class="ops-section-head" style="margin-top:32px">
+        <div class="ops-section-title-wrap">
+          <div class="ops-section-icon" style="background:linear-gradient(135deg,#f59e0b,#d97706)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+          <div>
+            <div class="ops-section-title">Workflow &amp; Operations</div>
+            <div class="ops-section-sub">Pending approvals, data imports, and recent reports</div>
+          </div>
+        </div>
+        <div class="ops-section-pill" style="background:var(--amber-l);color:#92400e">23 require attention</div>
+      </div>
+
+      <div class="ops-grid ops-grid-3">
+        <!-- Pending Approvals -->
+        <div class="ops-card ops-card-amber">
+          <div class="ops-card-head">
+            <div class="ops-card-title">
+              <div class="ops-card-ico" style="background:var(--amber-l);color:#92400e">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <span>Pending Approvals</span>
+            </div>
+            <div class="ops-card-count" style="color:var(--amber)">14</div>
+          </div>
+          <div class="ops-card-meta">
+            <span class="ops-meta-pill" style="background:var(--red-l);color:#991b1b">3 overdue</span>
+            <span class="ops-meta-pill">Pre-clearance required</span>
+          </div>
+          <div class="approval-stats">
+            <div class="approval-stat-row">
+              <div class="approval-stat-icon" style="background:#eff6ff;color:#1e40af">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+              <div class="approval-stat-body">
+                <div class="approval-stat-label">Pre-clearance — Sale</div>
+                <div class="approval-stat-sub">Section 16 / 10b5-1 reviews</div>
+              </div>
+              <div class="approval-stat-count" style="color:#1e40af">5</div>
+            </div>
+            <div class="approval-stat-row">
+              <div class="approval-stat-icon" style="background:#ecfdf5;color:#065f46">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              </div>
+              <div class="approval-stat-body">
+                <div class="approval-stat-label">Pre-clearance — Exercise</div>
+                <div class="approval-stat-sub">ISO/NSO exercise requests</div>
+              </div>
+              <div class="approval-stat-count" style="color:#065f46">4</div>
+            </div>
+            <div class="approval-stat-row">
+              <div class="approval-stat-icon" style="background:#f5f3ff;color:#6d28d9">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              </div>
+              <div class="approval-stat-body">
+                <div class="approval-stat-label">Grant Amendments</div>
+                <div class="approval-stat-sub">Vesting / repricing changes</div>
+              </div>
+              <div class="approval-stat-count" style="color:#6d28d9">3</div>
+            </div>
+            <div class="approval-stat-row">
+              <div class="approval-stat-icon" style="background:var(--red-l);color:#991b1b">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
+              </div>
+              <div class="approval-stat-body">
+                <div class="approval-stat-label">Terminations</div>
+                <div class="approval-stat-sub">Forfeiture &amp; vesting acceleration</div>
+              </div>
+              <div class="approval-stat-count" style="color:#991b1b">2</div>
+            </div>
+          </div>
+          <div class="ops-card-foot">
+            <button class="ops-foot-btn" onclick="switchView('approvals')">Review approvals →</button>
+          </div>
+        </div>
+
+        <!-- Imports -->
+        <div class="ops-card ops-card-cyan">
+          <div class="ops-card-head">
+            <div class="ops-card-title">
+              <div class="ops-card-ico" style="background:#ecfeff;color:#0e7490">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              </div>
+              <span>Imports</span>
+            </div>
+            <div class="ops-card-count" style="color:var(--cyan)">8</div>
+          </div>
+          <div class="ops-card-meta">
+            <span class="ops-meta-pill" style="background:#ecfeff;color:#0e7490">3 in progress</span>
+            <span class="ops-meta-pill" style="background:var(--red-l);color:#991b1b">2 failed</span>
+          </div>
+          <div class="ops-list">
+            <div class="ops-item ops-item-import">
+              <div class="import-status import-progress">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <div class="ops-item-body">
+                <div class="ops-item-title">Q1 2026 Vesting Schedule Update</div>
+                <div class="ops-item-sub">847 of 1,250 records · ETA 4 min</div>
+                <div style="height:4px;background:#e0f2fe;border-radius:2px;margin-top:6px">
+                  <div style="width:68%;height:100%;background:linear-gradient(90deg,#06b6d4,#0891b2);border-radius:2px"></div>
+                </div>
+              </div>
+              <div class="ops-item-tag" style="background:#ecfeff;color:#0e7490">68%</div>
+            </div>
+            <div class="ops-item ops-item-import">
+              <div class="import-status import-progress">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <div class="ops-item-body">
+                <div class="ops-item-title">New Hire Equity Awards (HRIS)</div>
+                <div class="ops-item-sub">38 of 38 records · Validating...</div>
+                <div style="height:4px;background:#e0f2fe;border-radius:2px;margin-top:6px">
+                  <div style="width:92%;height:100%;background:linear-gradient(90deg,#06b6d4,#0891b2);border-radius:2px"></div>
+                </div>
+              </div>
+              <div class="ops-item-tag" style="background:#ecfeff;color:#0e7490">92%</div>
+            </div>
+            <div class="ops-item ops-item-import">
+              <div class="import-status import-failed">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+              </div>
+              <div class="ops-item-body">
+                <div class="ops-item-title">Termination Records (Workday)</div>
+                <div class="ops-item-sub" style="color:var(--red)">4 errors · invalid grant references</div>
+              </div>
+              <div class="ops-item-tag tag-critical">FAILED</div>
+            </div>
+            <div class="ops-item ops-item-import">
+              <div class="import-status import-success">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="ops-item-body">
+                <div class="ops-item-title">FMV Price Update — End of Day</div>
+                <div class="ops-item-sub">Completed at 5:32 PM · 1 record</div>
+              </div>
+              <div class="ops-item-tag" style="background:var(--green-l);color:#065f46">DONE</div>
+            </div>
+          </div>
+          <div class="ops-card-foot">
+            <button class="ops-foot-btn" style="color:var(--cyan)">View import history →</button>
+          </div>
+        </div>
+
+        <!-- Reports -->
+        <div class="ops-card ops-card-indigo">
+          <div class="ops-card-head">
+            <div class="ops-card-title">
+              <div class="ops-card-ico" style="background:#eef2ff;color:#4338ca">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              </div>
+              <span>Recent Reports</span>
+            </div>
+            <div class="ops-card-count" style="color:#4338ca">24</div>
+          </div>
+          <div class="ops-card-meta">
+            <span class="ops-meta-pill" style="background:#eef2ff;color:#4338ca">Last 7 days</span>
+            <span class="ops-meta-pill" style="background:var(--green-l);color:#065f46">All on-time</span>
+          </div>
+          <div class="ops-list">
+            <div class="ops-item">
+              <div class="report-icon" style="background:#eef2ff;color:#4338ca">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              </div>
+              <div class="ops-item-body">
+                <div class="ops-item-title">ASC 718 Stock Comp Expense — Q1 2026</div>
+                <div class="ops-item-sub">PDF · 14 pages · Run by Jamie Wilson</div>
+              </div>
+              <div class="ops-item-tag" style="background:#eef2ff;color:#4338ca">2h ago</div>
+            </div>
+            <div class="ops-item">
+              <div class="report-icon" style="background:#fef3c7;color:#92400e">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              </div>
+              <div class="ops-item-body">
+                <div class="ops-item-title">Section 16 Filing Summary</div>
+                <div class="ops-item-sub">Excel · 8 transactions · Run by Compliance Bot</div>
+              </div>
+              <div class="ops-item-tag" style="background:#eef2ff;color:#4338ca">5h ago</div>
+            </div>
+            <div class="ops-item">
+              <div class="report-icon" style="background:#ecfdf5;color:#065f46">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              </div>
+              <div class="ops-item-body">
+                <div class="ops-item-title">Vesting Forecast — Next 90 Days</div>
+                <div class="ops-item-sub">CSV · 1,840 events · Auto-scheduled</div>
+              </div>
+              <div class="ops-item-tag" style="background:#eef2ff;color:#4338ca">Yesterday</div>
+            </div>
+            <div class="ops-item">
+              <div class="report-icon" style="background:#f5f3ff;color:#6d28d9">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              </div>
+              <div class="ops-item-body">
+                <div class="ops-item-title">Participant Termination Activity</div>
+                <div class="ops-item-sub">PDF · 23 records · Q1 cycle</div>
+              </div>
+              <div class="ops-item-tag" style="background:#eef2ff;color:#4338ca">2d ago</div>
+            </div>
+          </div>
+          <div class="ops-card-foot">
+            <button class="ops-foot-btn" style="color:#4338ca">View all reports →</button>
+          </div>
+        </div>
+      </div>
+
     </div><!-- /view-dashboard -->
 
     <!-- GRANT TRANSACTIONS VIEW -->
