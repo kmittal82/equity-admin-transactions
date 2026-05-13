@@ -1670,6 +1670,264 @@
     }
     .tax-filter-bar .filter-search-input { flex: 1; max-width: 360px; }
 
+    /* ════════════ TAX RULES BUILDER ════════════ */
+
+    /* Rules manager header */
+    .rules-mgr-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 20px; border-bottom: 1px solid var(--border);
+      background: #fff; position: sticky; top: 0; z-index: 2;
+    }
+    .rules-mgr-title { font-size: 13px; font-weight: 700; color: var(--text); }
+    .rules-mgr-count {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 2px 9px; border-radius: 10px; background: #eff6ff; color: #1e40af;
+      font-size: 11px; font-weight: 700; margin-left: 8px;
+    }
+
+    .rules-list { padding: 16px 20px; display: flex; flex-direction: column; gap: 12px; }
+
+    /* Rule card */
+    .rule-card {
+      background: #fff; border: 1px solid var(--border); border-radius: 12px;
+      overflow: hidden; transition: all 0.15s;
+    }
+    .rule-card.inactive { opacity: 0.65; }
+    .rule-card:hover { border-color: #cbd5e1; box-shadow: 0 2px 10px rgba(15,23,42,0.05); }
+    .rule-card.editing { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+
+    .rule-card-head {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 14px; background: linear-gradient(135deg, #f8fafc, #ffffff);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .rule-priority-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 26px; height: 26px; border-radius: 7px;
+      background: #1e293b; color: #fff;
+      font-size: 11px; font-weight: 700; font-family: 'SF Mono', monospace;
+      flex-shrink: 0;
+    }
+    .rule-card-name {
+      flex: 1; font-size: 13px; font-weight: 700; color: var(--text);
+      min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .rule-status-toggle {
+      width: 36px; height: 20px; border-radius: 10px; background: #e2e8f0;
+      position: relative; cursor: pointer; flex-shrink: 0;
+      transition: background 0.2s;
+    }
+    .rule-status-toggle.active { background: var(--green); }
+    .rule-status-toggle::after {
+      content: ''; position: absolute; top: 2px; left: 2px;
+      width: 16px; height: 16px; border-radius: 50%; background: #fff;
+      transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .rule-status-toggle.active::after { transform: translateX(16px); }
+    .rule-actions-btn {
+      width: 26px; height: 26px; border: 1px solid var(--border); background: #fff;
+      border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: var(--text2); transition: all 0.15s;
+    }
+    .rule-actions-btn:hover { background: #f8fafc; border-color: #cbd5e1; }
+    .rule-actions-btn svg { width: 13px; height: 13px; }
+
+    /* IF/THEN visual */
+    .rule-card-body { padding: 14px 16px; }
+    .rule-clause {
+      display: flex; gap: 10px; align-items: flex-start;
+      margin-bottom: 10px;
+    }
+    .rule-clause:last-child { margin-bottom: 0; }
+    .rule-clause-label {
+      flex-shrink: 0; width: 50px; padding: 4px 0;
+      font-size: 10px; font-weight: 800; color: #fff;
+      text-align: center; border-radius: 6px; letter-spacing: 1px;
+    }
+    .rule-clause-label.lbl-if { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+    .rule-clause-label.lbl-then { background: linear-gradient(135deg, #10b981, #059669); }
+
+    .rule-conditions-list { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+    .rule-condition-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 10px; background: #f8fafc; border: 1px solid var(--border);
+      border-radius: 8px; font-size: 12px; color: var(--text);
+    }
+    .rc-icon { font-size: 13px; }
+    .rc-field { font-weight: 600; }
+    .rc-op { color: var(--text2); font-style: italic; }
+    .rc-value {
+      padding: 1px 7px; background: #eff6ff; color: #1e40af;
+      border-radius: 5px; font-weight: 600; font-size: 11.5px;
+    }
+
+    .rule-logic-divider {
+      display: flex; align-items: center; gap: 8px;
+      padding: 2px 0; margin: 2px 0;
+    }
+    .rule-logic-divider::before, .rule-logic-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+    .rule-logic-pill {
+      padding: 2px 10px; border-radius: 10px; font-size: 10px; font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .rule-logic-pill.and { background: #f5f3ff; color: #6d28d9; }
+    .rule-logic-pill.or  { background: #fef3c7; color: #92400e; }
+
+    .rule-action-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 14px; border-radius: 10px;
+      font-size: 12.5px; font-weight: 600;
+    }
+    .rule-action-icon {
+      width: 22px; height: 22px; border-radius: 6px;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 13px;
+    }
+    .rule-action-pill.action-apply     { background: var(--green-l); color: #065f46; }
+    .rule-action-pill.action-apply     .rule-action-icon { background: var(--green); color: #fff; }
+    .rule-action-pill.action-multiply  { background: #eff6ff; color: #1e40af; }
+    .rule-action-pill.action-multiply  .rule-action-icon { background: var(--accent); color: #fff; }
+    .rule-action-pill.action-override  { background: var(--amber-l); color: #92400e; }
+    .rule-action-pill.action-override  .rule-action-icon { background: var(--amber); color: #fff; }
+    .rule-action-pill.action-surcharge { background: #f5f3ff; color: #6d28d9; }
+    .rule-action-pill.action-surcharge .rule-action-icon { background: var(--purple); color: #fff; }
+    .rule-action-pill.action-skip      { background: var(--red-l); color: #991b1b; }
+    .rule-action-pill.action-skip      .rule-action-icon { background: var(--red); color: #fff; }
+
+    /* Match preview footer */
+    .rule-card-foot {
+      padding: 8px 14px; background: #fafbfc; border-top: 1px solid #f1f5f9;
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 11px; color: var(--text2);
+    }
+    .rule-card-foot strong { color: var(--accent); font-weight: 700; }
+
+    /* Rule editor (inline expanding) */
+    .rule-editor {
+      padding: 14px 16px 16px; background: #fafbfc;
+      border-top: 2px dashed var(--border);
+      animation: editorFade 0.2s ease;
+    }
+    @keyframes editorFade { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+    .rule-editor-section { margin-bottom: 14px; }
+    .rule-editor-section:last-child { margin-bottom: 0; }
+    .rule-editor-label {
+      font-size: 10.5px; font-weight: 700; color: var(--text2);
+      text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px;
+    }
+
+    .cond-builder { display: flex; flex-direction: column; gap: 8px; }
+    .cond-row {
+      display: grid; grid-template-columns: 28px 160px 130px 1fr 28px;
+      gap: 8px; align-items: center;
+    }
+    .cond-row-num {
+      width: 24px; height: 24px; border-radius: 6px;
+      background: #1e293b; color: #fff;
+      font-size: 10px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'SF Mono', monospace;
+    }
+    .cond-row select, .cond-row input {
+      width: 100%; padding: 7px 10px; border: 1.5px solid var(--border);
+      border-radius: 7px; font-size: 12px; background: #fff;
+      font-family: inherit; color: var(--text);
+    }
+    .cond-row select:focus, .cond-row input:focus { border-color: var(--accent); outline: none; }
+    .cond-row .cond-multi {
+      display: flex; flex-wrap: wrap; gap: 4px; padding: 4px 6px;
+      border: 1.5px solid var(--border); border-radius: 7px;
+      background: #fff; min-height: 32px; align-items: center; cursor: pointer;
+    }
+    .cond-row .cond-multi:hover { border-color: var(--accent); }
+    .cond-multi-tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 7px; background: #eff6ff; color: #1e40af;
+      border-radius: 5px; font-size: 11px; font-weight: 600;
+    }
+    .cond-multi-tag .x-btn {
+      cursor: pointer; opacity: 0.6; font-size: 13px; line-height: 1;
+    }
+    .cond-multi-tag .x-btn:hover { opacity: 1; }
+    .cond-multi-placeholder { font-size: 11px; color: var(--textm); padding: 2px 4px; }
+
+    .cond-row-remove {
+      width: 24px; height: 24px; border-radius: 6px;
+      border: 1px solid #fecaca; background: #fff; color: var(--red);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 14px; line-height: 1;
+    }
+    .cond-row-remove:hover { background: var(--red-l); }
+
+    /* Multi-select picker (dropdown) */
+    .multi-picker-pop {
+      position: absolute; z-index: 100; min-width: 200px;
+      background: #fff; border: 1px solid var(--border); border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(15,23,42,0.15);
+      max-height: 240px; overflow-y: auto;
+      animation: popIn 0.15s ease;
+    }
+    @keyframes popIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    .multi-picker-pop label {
+      display: flex; align-items: center; gap: 8px; padding: 8px 12px;
+      cursor: pointer; font-size: 12.5px; transition: background 0.1s;
+    }
+    .multi-picker-pop label:hover { background: #f8fafc; }
+    .multi-picker-pop input[type="checkbox"] { accent-color: var(--accent); }
+
+    .logic-toggle-group { display: inline-flex; background: #f1f5f9; border-radius: 8px; padding: 2px; gap: 2px; }
+    .logic-toggle-btn {
+      padding: 5px 14px; border-radius: 6px; border: none; background: transparent;
+      font-size: 11.5px; font-weight: 700; cursor: pointer; letter-spacing: 0.5px;
+      color: var(--text2); font-family: inherit;
+    }
+    .logic-toggle-btn.active { background: #fff; color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+
+    .action-picker { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .action-pick-card {
+      padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 9px;
+      cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 10px;
+      background: #fff;
+    }
+    .action-pick-card:hover { border-color: var(--accent); background: #f8fafc; }
+    .action-pick-card.selected { border-color: var(--accent); background: #eff6ff; box-shadow: 0 0 0 1px var(--accent) inset; }
+    .action-pick-icon {
+      width: 24px; height: 24px; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 800; flex-shrink: 0;
+    }
+    .action-pick-label { font-size: 12px; font-weight: 600; color: var(--text); }
+
+    .rule-editor-foot {
+      display: flex; gap: 8px; justify-content: flex-end;
+      padding-top: 12px; border-top: 1px solid #f1f5f9;
+    }
+
+    .add-rule-btn {
+      width: 100%; padding: 12px; border: 1.5px dashed var(--border);
+      background: transparent; border-radius: 10px; cursor: pointer;
+      font-size: 13px; font-weight: 600; color: var(--text2);
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      transition: all 0.15s; font-family: inherit;
+    }
+    .add-rule-btn:hover { border-color: var(--accent); color: var(--accent); background: #f8fafc; }
+
+    /* Empty rules state */
+    .rules-empty {
+      text-align: center; padding: 40px 20px;
+      background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+      border-radius: 12px; border: 1.5px dashed var(--border);
+    }
+    .rules-empty-icon {
+      width: 56px; height: 56px; border-radius: 14px;
+      background: #fff; display: inline-flex; align-items: center; justify-content: center;
+      margin-bottom: 12px; color: var(--accent);
+    }
+    .rules-empty-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .rules-empty-sub { font-size: 12px; color: var(--text2); margin-bottom: 14px; }
+
     /* ════════════ DASHBOARD OPERATIONS CENTER ════════════ */
     .ops-section-head {
       display: flex; align-items: center; justify-content: space-between;
@@ -3361,13 +3619,13 @@
       </div>
     </div>
 
-    <!-- TAX RULES DRAWER -->
+    <!-- TAX RULES DRAWER (rule builder) -->
     <div class="ledger-drawer-overlay" id="tr-rules-drawer-overlay" onclick="closeTaxRulesDrawer()">
-      <div class="ledger-drawer" onclick="event.stopPropagation()" style="width:480px">
+      <div class="ledger-drawer" onclick="event.stopPropagation()" style="width:680px">
         <div class="ledger-drawer-head">
           <div class="ledger-drawer-title-row">
             <div>
-              <div class="ledger-drawer-title">Tax Rules</div>
+              <div class="ledger-drawer-title">Rule Builder</div>
               <div class="ledger-drawer-meta" id="tr-rules-meta"></div>
             </div>
             <button class="ledger-drawer-close" onclick="closeTaxRulesDrawer()">
@@ -3375,23 +3633,29 @@
             </button>
           </div>
         </div>
-        <div class="ledger-drawer-body">
-          <div style="padding:20px">
-            <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px">Grant Types</div>
-            <div class="chip-grid" id="tr-rules-grant-grid"></div>
-
-            <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin:24px 0 12px 0">Transaction Types</div>
-            <div class="chip-grid" id="tr-rules-txn-grid"></div>
-
-            <div style="font-size:11px;color:var(--text2);margin-top:24px;padding:12px;background:#f8fafc;border-radius:8px" id="tr-rules-summary"></div>
+        <div class="rules-mgr-bar">
+          <div>
+            <span class="rules-mgr-title">Rules</span>
+            <span class="rules-mgr-count" id="tr-rules-count">0</span>
+            <span style="font-size:11px;color:var(--text2);margin-left:10px">Evaluated in priority order</span>
           </div>
+          <button class="btn btn-primary" style="padding:7px 13px;font-size:12.5px" onclick="addNewRule()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:13px;height:13px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Rule
+          </button>
         </div>
-        <div style="padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end">
-          <button class="btn btn-ghost" onclick="closeTaxRulesDrawer()">Cancel</button>
-          <button class="btn btn-primary" onclick="saveTaxRules(currentTRId)">Save Rules</button>
+        <div class="ledger-drawer-body">
+          <div class="rules-list" id="tr-rules-list"></div>
+        </div>
+        <div style="padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;background:#fafbfc">
+          <button class="btn btn-ghost" onclick="closeTaxRulesDrawer()">Close</button>
+          <button class="btn btn-primary" onclick="saveAllRules()">Save Changes</button>
         </div>
       </div>
     </div>
+
+    <!-- Multi-select picker popover (for rule builder) -->
+    <div class="multi-picker-pop" id="multi-picker-pop" style="display:none"></div>
 
     <!-- TAX CODE DETAIL DRAWER -->
     <div class="ledger-drawer-overlay" id="tc-detail-drawer-overlay" onclick="closeTaxCodeDrawer()">
@@ -5927,13 +6191,178 @@ const txnTypeOptions     = ['Exercise','Release','Sale','Transfer','Dividend','C
 const jurisdictionOptions = ['Federal','CA','NY','TX','FL','WA','MA','IL','Other'];
 const rateTypeOptions    = ['Income','FICA','AMT','Capital Gains','Supplemental','Other'];
 
-const taxRatesData = [
-  { id: 'TXR-001', name: 'Federal Income – Standard', jurisdiction: 'Federal', type: 'Income', status: 'active', effectiveDate: '2024-01-01', description: 'Standard federal income tax brackets (2024)', bands: [{ from: 0, to: 11000, rate: 10 },{ from: 11001, to: 44725, rate: 12 },{ from: 44726, to: 95375, rate: 22 },{ from: 95376, to: 201050, rate: 24 },{ from: 201051, to: null, rate: 32 }], rules: { grantTypes: ['RSU','ISO','NSO'], txnTypes: ['Release','Exercise'] } },
-  { id: 'TXR-002', name: 'California State Tax', jurisdiction: 'CA', type: 'Income', status: 'active', effectiveDate: '2024-01-01', description: 'CA state income tax', bands: [{ from: 0, to: 10099, rate: 1 },{ from: 10100, to: 23942, rate: 2 },{ from: 23943, to: 37788, rate: 4 },{ from: 37789, to: null, rate: 6 }], rules: { grantTypes: ['RSU','ISO','NSO','SAR'], txnTypes: ['Release','Exercise','Sale'] } },
-  { id: 'TXR-003', name: 'FICA – Social Security', jurisdiction: 'Federal', type: 'FICA', status: 'active', effectiveDate: '2024-01-01', description: 'Social Security flat rate', bands: [{ from: 0, to: 160200, rate: 6.2 },{ from: 160201, to: null, rate: 0 }], rules: { grantTypes: ['RSU'], txnTypes: ['Release'] } },
-  { id: 'TXR-004', name: 'Medicare', jurisdiction: 'Federal', type: 'FICA', status: 'active', effectiveDate: '2024-01-01', description: 'Medicare + additional Medicare tax', bands: [{ from: 0, to: 200000, rate: 1.45 },{ from: 200001, to: null, rate: 2.35 }], rules: { grantTypes: ['RSU','ISO'], txnTypes: ['Release','Exercise'] } },
-  { id: 'TXR-005', name: 'NY State Tax', jurisdiction: 'NY', type: 'Income', status: 'inactive', effectiveDate: '2023-01-01', description: 'New York state income tax', bands: [{ from: 0, to: 17150, rate: 4 },{ from: 17151, to: 23600, rate: 4.5 },{ from: 23601, to: null, rate: 6.85 }], rules: { grantTypes: [], txnTypes: [] } }
+// Rule Builder field definitions
+const ruleFields = [
+  { id: 'grant_type',        label: 'Grant Type',          type: 'multi-select', options: grantTypeOptions, icon: '📜' },
+  { id: 'txn_type',          label: 'Transaction Type',    type: 'multi-select', options: txnTypeOptions, icon: '🔄' },
+  { id: 'participant_type',  label: 'Participant Type',    type: 'multi-select', options: ['Employee','Contractor','Director','NRA','Former Employee'], icon: '👤' },
+  { id: 'tax_residency',     label: 'Tax Residency',       type: 'select',       options: ['US','UK','IN','DE','FR','AU','CA','JP','SG','IE'], icon: '🌐' },
+  { id: 'employment_status', label: 'Employment Status',   type: 'select',       options: ['Active','Terminated','On Leave','Retired'], icon: '💼' },
+  { id: 'is_section_16',     label: 'Section 16 Officer',  type: 'boolean', icon: '🏛️' },
+  { id: 'is_insider',        label: 'Insider Status',      type: 'boolean', icon: '🔒' },
+  { id: 'holding_period',    label: 'Holding Period (days)', type: 'number', icon: '⏱️' },
+  { id: 'income_threshold',  label: 'Annual Income ($)',   type: 'number', icon: '💰' },
+  { id: 'department',        label: 'Department',          type: 'multi-select', options: ['Engineering','Sales','Finance','Legal','Operations','Product','Marketing','HR'], icon: '🏢' }
 ];
+
+// Operator definitions per field type
+const opsForType = {
+  'multi-select': [
+    { id: 'in', label: 'is any of' },
+    { id: 'not_in', label: 'is not any of' }
+  ],
+  'select': [
+    { id: 'equals', label: 'equals' },
+    { id: 'not_equals', label: 'does not equal' }
+  ],
+  'boolean': [
+    { id: 'is_true', label: 'is YES' },
+    { id: 'is_false', label: 'is NO' }
+  ],
+  'number': [
+    { id: 'equals', label: 'equals' },
+    { id: 'gt', label: 'greater than' },
+    { id: 'gte', label: 'at least' },
+    { id: 'lt', label: 'less than' },
+    { id: 'lte', label: 'at most' },
+    { id: 'between', label: 'between' }
+  ]
+};
+
+const ruleActions = [
+  { type: 'apply',     label: 'Apply rate at 100%',          color: 'green',  icon: '✓' },
+  { type: 'multiply',  label: 'Apply rate × multiplier',     color: 'blue',   icon: '×', requiresInput: 'number', inputLabel: 'Multiplier (e.g. 1.5)' },
+  { type: 'override',  label: 'Override with flat rate (%)', color: 'amber',  icon: '⚡', requiresInput: 'number', inputLabel: 'Flat rate %' },
+  { type: 'surcharge', label: 'Add surcharge (%)',           color: 'purple', icon: '+', requiresInput: 'number', inputLabel: 'Additional %' },
+  { type: 'skip',      label: 'Skip — do not apply rate',    color: 'red',    icon: '⊘' }
+];
+
+const taxRatesData = [
+  {
+    id: 'TXR-001', name: 'Federal Income – Standard', jurisdiction: 'Federal', type: 'Income', status: 'active', effectiveDate: '2024-01-01',
+    description: 'Standard federal income tax brackets (2024)',
+    bands: [{ from: 0, to: 11000, rate: 10 },{ from: 11001, to: 44725, rate: 12 },{ from: 44726, to: 95375, rate: 22 },{ from: 95376, to: 201050, rate: 24 },{ from: 201051, to: null, rate: 32 }],
+    rules: [
+      {
+        id: 'R-101', name: 'Default — US Employees', priority: 1, active: true, logic: 'AND',
+        conditions: [
+          { field: 'grant_type', op: 'in', values: ['RSU','ISO','NSO'] },
+          { field: 'txn_type', op: 'in', values: ['Release','Exercise'] },
+          { field: 'tax_residency', op: 'equals', value: 'US' },
+          { field: 'participant_type', op: 'in', values: ['Employee'] }
+        ],
+        action: { type: 'apply' }
+      },
+      {
+        id: 'R-102', name: 'High Earners — Supplemental', priority: 2, active: true, logic: 'AND',
+        conditions: [
+          { field: 'income_threshold', op: 'gt', value: 1000000 },
+          { field: 'txn_type', op: 'in', values: ['Release'] }
+        ],
+        action: { type: 'override', value: 37 }
+      }
+    ]
+  },
+  {
+    id: 'TXR-002', name: 'California State Tax', jurisdiction: 'CA', type: 'Income', status: 'active', effectiveDate: '2024-01-01',
+    description: 'CA state income tax',
+    bands: [{ from: 0, to: 10099, rate: 1 },{ from: 10100, to: 23942, rate: 2 },{ from: 23943, to: 37788, rate: 4 },{ from: 37789, to: null, rate: 6 }],
+    rules: [
+      {
+        id: 'R-201', name: 'CA Residents — All Equity', priority: 1, active: true, logic: 'AND',
+        conditions: [
+          { field: 'grant_type', op: 'in', values: ['RSU','ISO','NSO','SAR'] },
+          { field: 'txn_type', op: 'in', values: ['Release','Exercise','Sale'] },
+          { field: 'tax_residency', op: 'equals', value: 'US' }
+        ],
+        action: { type: 'apply' }
+      }
+    ]
+  },
+  {
+    id: 'TXR-003', name: 'FICA – Social Security', jurisdiction: 'Federal', type: 'FICA', status: 'active', effectiveDate: '2024-01-01',
+    description: 'Social Security flat rate',
+    bands: [{ from: 0, to: 160200, rate: 6.2 },{ from: 160201, to: null, rate: 0 }],
+    rules: [
+      {
+        id: 'R-301', name: 'W-2 Employees Only', priority: 1, active: true, logic: 'AND',
+        conditions: [
+          { field: 'grant_type', op: 'in', values: ['RSU'] },
+          { field: 'txn_type', op: 'in', values: ['Release'] },
+          { field: 'participant_type', op: 'equals', value: 'Employee' },
+          { field: 'employment_status', op: 'equals', value: 'Active' }
+        ],
+        action: { type: 'apply' }
+      },
+      {
+        id: 'R-302', name: 'Skip for Contractors', priority: 2, active: true, logic: 'AND',
+        conditions: [
+          { field: 'participant_type', op: 'equals', value: 'Contractor' }
+        ],
+        action: { type: 'skip' }
+      }
+    ]
+  },
+  {
+    id: 'TXR-004', name: 'Medicare', jurisdiction: 'Federal', type: 'FICA', status: 'active', effectiveDate: '2024-01-01',
+    description: 'Medicare + additional Medicare tax',
+    bands: [{ from: 0, to: 200000, rate: 1.45 },{ from: 200001, to: null, rate: 2.35 }],
+    rules: [
+      {
+        id: 'R-401', name: 'Standard Medicare', priority: 1, active: true, logic: 'AND',
+        conditions: [
+          { field: 'grant_type', op: 'in', values: ['RSU','ISO'] },
+          { field: 'txn_type', op: 'in', values: ['Release','Exercise'] }
+        ],
+        action: { type: 'apply' }
+      },
+      {
+        id: 'R-402', name: 'Additional Medicare ($200K+)', priority: 2, active: true, logic: 'AND',
+        conditions: [
+          { field: 'income_threshold', op: 'gt', value: 200000 }
+        ],
+        action: { type: 'surcharge', value: 0.9 }
+      }
+    ]
+  },
+  {
+    id: 'TXR-005', name: 'NY State Tax', jurisdiction: 'NY', type: 'Income', status: 'inactive', effectiveDate: '2023-01-01',
+    description: 'New York state income tax',
+    bands: [{ from: 0, to: 17150, rate: 4 },{ from: 17151, to: 23600, rate: 4.5 },{ from: 23601, to: null, rate: 6.85 }],
+    rules: []
+  }
+];
+
+// Helper functions for rule building
+function getFieldDef(fieldId) { return ruleFields.find(f => f.id === fieldId); }
+function getOpLabel(opId, fieldType) {
+  const op = opsForType[fieldType]?.find(o => o.id === opId);
+  return op ? op.label : opId;
+}
+function getActionDef(type) { return ruleActions.find(a => a.type === type); }
+
+function describeCondition(cond) {
+  const field = getFieldDef(cond.field);
+  if (!field) return '';
+  const opLabel = getOpLabel(cond.op, field.type);
+  let valStr = '';
+  if (field.type === 'multi-select') valStr = (cond.values || []).join(', ');
+  else if (field.type === 'boolean') valStr = '';
+  else if (cond.op === 'between') valStr = `${cond.min} – ${cond.max}`;
+  else valStr = cond.value !== undefined ? String(cond.value) : '';
+  if (field.type === 'number' && valStr) valStr = '$' + Number(valStr).toLocaleString();
+  return { field: field.label, op: opLabel, value: valStr, icon: field.icon };
+}
+
+function describeAction(action) {
+  const def = getActionDef(action.type);
+  if (!def) return '';
+  if (action.type === 'multiply') return `Apply rate × ${action.value || 1}`;
+  if (action.type === 'override') return `Override at ${action.value || 0}% flat`;
+  if (action.type === 'surcharge') return `Apply rate + ${action.value || 0}% surcharge`;
+  if (action.type === 'skip') return 'Skip — do not apply rate';
+  return 'Apply rate at 100%';
+}
 
 const taxCodesData = [
   { id: 'TXC-001', name: 'US Employee – Standard', description: 'Standard withholding package for US employees', status: 'active', jurisdiction: 'Federal + CA', rateIds: ['TXR-001','TXR-002','TXR-003','TXR-004'] },
@@ -7662,7 +8091,7 @@ function renderTaxRatesMetrics() {
   const allRates = taxRatesData.flatMap(r => r.bands.map(b => b.rate));
   const avgRate = allRates.length > 0 ? (allRates.reduce((a,b) => a+b, 0) / allRates.length).toFixed(1) : 0;
   const jurisdictions = new Set(taxRatesData.map(r => r.jurisdiction)).size;
-  const withRules = taxRatesData.filter(r => r.rules.grantTypes.length > 0 || r.rules.txnTypes.length > 0).length;
+  const withRules = taxRatesData.filter(r => (r.rules || []).length > 0).length;
 
   document.getElementById('tr-metrics').innerHTML = `
     <div class="tax-metric-card">
@@ -7706,8 +8135,10 @@ function renderTaxRatesTable() {
   document.getElementById('tr-result-count').innerHTML = `Showing <strong style="color:var(--text)">${filtered.length}</strong> of ${taxRatesData.length} rate${taxRatesData.length !== 1 ? 's' : ''}`;
 
   tbody.innerHTML = filtered.map(r => {
-    const hasRules = r.rules.grantTypes.length > 0 || r.rules.txnTypes.length > 0;
-    const ruleCount = r.rules.grantTypes.length + r.rules.txnTypes.length;
+    const rules = r.rules || [];
+    const hasRules = rules.length > 0;
+    const ruleCount = rules.length;
+    const activeRuleCount = rules.filter(rule => rule.active).length;
     const minRate = Math.min(...r.bands.map(b => b.rate));
     const maxRate = Math.max(...r.bands.map(b => b.rate));
     return `<tr style="cursor:pointer" onclick="openTaxRateDrawer('${r.id}')">
@@ -7735,7 +8166,7 @@ function renderTaxRatesTable() {
       </td>
       <td>
         ${hasRules
-          ? `<span class="rules-pill has-rules"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>${ruleCount} rule${ruleCount !== 1 ? 's' : ''}</span>`
+          ? `<span class="rules-pill has-rules" title="${activeRuleCount} of ${ruleCount} active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>${activeRuleCount}/${ruleCount} rule${ruleCount !== 1 ? 's' : ''}</span>`
           : `<span class="rules-pill no-rules">No rules</span>`
         }
       </td>
@@ -7767,7 +8198,7 @@ function openTaxRateDrawer(id) {
     <div class="stat-item"><span class="stat-label">Brackets</span><span class="stat-value">${rate.bands.length}</span></div>
     <div class="stat-item"><span class="stat-label">Rate Range</span><span class="stat-value" style="color:var(--accent)">${minRate}% – ${maxRate}%</span></div>
     <div class="stat-item"><span class="stat-label">Effective</span><span class="stat-value" style="font-size:13px">${rate.effectiveDate}</span></div>
-    <div class="stat-item"><span class="stat-label">Rules</span><span class="stat-value" style="color:${(rate.rules.grantTypes.length + rate.rules.txnTypes.length) > 0 ? 'var(--green)' : 'var(--textm)'}">${rate.rules.grantTypes.length + rate.rules.txnTypes.length}</span></div>
+    <div class="stat-item"><span class="stat-label">Rules</span><span class="stat-value" style="color:${(rate.rules || []).length > 0 ? 'var(--green)' : 'var(--textm)'}">${(rate.rules || []).length}</span></div>
   `;
 
   const maxRateForViz = Math.max(...rate.bands.map(b => b.rate));
@@ -7797,19 +8228,29 @@ function openTaxRateDrawer(id) {
     </button>
   </div>`;
 
-  if (rate.rules.grantTypes.length > 0 || rate.rules.txnTypes.length > 0) {
-    if (rate.rules.grantTypes.length > 0) {
-      html += `<div style="margin-bottom:14px">
-        <div style="font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Grant Types</div>
-        <div class="chip-grid">${rate.rules.grantTypes.map(g => `<span class="chip-toggle selected" style="cursor:default">${g}</span>`).join('')}</div>
+  const rateRules = (rate.rules || []).slice().sort((a,b) => a.priority - b.priority);
+  if (rateRules.length > 0) {
+    rateRules.forEach(rule => {
+      const conds = (rule.conditions || []).map(c => describeCondition(c)).filter(Boolean);
+      const actionDef = getActionDef(rule.action?.type || 'apply');
+      const actionLabel = describeAction(rule.action || { type: 'apply' });
+      let condsHtml = '';
+      conds.forEach((d, i) => {
+        condsHtml += `<div class="rule-condition-pill"><span class="rc-icon">${d.icon}</span><span class="rc-field">${d.field}</span><span class="rc-op">${d.op}</span>${d.value ? `<span class="rc-value">${d.value}</span>` : ''}</div>`;
+        if (i < conds.length - 1) condsHtml += `<div class="rule-logic-divider"><span class="rule-logic-pill ${rule.logic === 'OR' ? 'or' : 'and'}">${rule.logic || 'AND'}</span></div>`;
+      });
+      html += `<div class="rule-card ${rule.active ? '' : 'inactive'}" style="margin-bottom:10px">
+        <div class="rule-card-head">
+          <div class="rule-priority-badge">${rule.priority}</div>
+          <div class="rule-card-name">${rule.name}</div>
+          <span class="rules-pill ${rule.active ? 'has-rules' : 'no-rules'}" style="margin-left:auto">${rule.active ? 'Active' : 'Inactive'}</span>
+        </div>
+        <div class="rule-card-body">
+          ${conds.length > 0 ? `<div class="rule-clause"><div class="rule-clause-label lbl-if">IF</div><div class="rule-conditions-list">${condsHtml}</div></div>` : `<div style="font-size:11.5px;color:var(--textm);font-style:italic;padding:6px 0">No conditions</div>`}
+          <div class="rule-clause"><div class="rule-clause-label lbl-then">THEN</div><div style="flex:1"><span class="rule-action-pill action-${rule.action?.type || 'apply'}"><span class="rule-action-icon">${actionDef?.icon || '✓'}</span>${actionLabel}</span></div></div>
+        </div>
       </div>`;
-    }
-    if (rate.rules.txnTypes.length > 0) {
-      html += `<div>
-        <div style="font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Transaction Types</div>
-        <div class="chip-grid">${rate.rules.txnTypes.map(t => `<span class="chip-toggle selected" style="cursor:default">${t}</span>`).join('')}</div>
-      </div>`;
-    }
+    });
   } else {
     html += `<div class="tax-empty">
       <div class="tax-empty-icon">
@@ -7904,41 +8345,371 @@ function addBandRow() { const maxFrom = trBandsTemp.length > 0 ? Math.max(...trB
 
 function removeBandRow(idx) { trBandsTemp.splice(idx, 1); renderBandsTable(); }
 
+// State for rule builder
+let editingRuleId = null;     // currently expanded rule editor
+let workingRules = [];        // local working copy of rules being edited
+
 function openTaxRulesDrawer(id) {
   const rate = taxRatesData.find(r => r.id === id);
   if (!rate) return;
   // Close detail drawer if open, but preserve currentTRId
   document.getElementById('tr-detail-drawer-overlay').classList.remove('open');
   currentTRId = id;
+  workingRules = JSON.parse(JSON.stringify(rate.rules || []));
+  editingRuleId = null;
   document.getElementById('tr-rules-meta').innerHTML = `<span class="tag-code" style="background:rgba(255,255,255,0.15);color:#fff">${rate.id}</span> &nbsp; ${rate.name}`;
-  const grantGrid = document.getElementById('tr-rules-grant-grid');
-  grantGrid.innerHTML = grantTypeOptions.map(g => `<button class="chip-toggle ${rate.rules.grantTypes.includes(g) ? 'selected' : ''}" onclick="this.classList.toggle('selected'); updateRulesSummary()" data-type="grant" data-value="${g}">${g}</button>`).join('');
-  const txnGrid = document.getElementById('tr-rules-txn-grid');
-  txnGrid.innerHTML = txnTypeOptions.map(t => `<button class="chip-toggle ${rate.rules.txnTypes.includes(t) ? 'selected' : ''}" onclick="this.classList.toggle('selected'); updateRulesSummary()" data-type="txn" data-value="${t}">${t}</button>`).join('');
-  updateRulesSummary();
+  renderRulesList();
   document.getElementById('tr-rules-drawer-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 
-function closeTaxRulesDrawer() { document.getElementById('tr-rules-drawer-overlay').classList.remove('open'); document.body.style.overflow = ''; }
-
-function updateRulesSummary() {
-  const grantCount = document.querySelectorAll('#tr-rules-grant-grid .chip-toggle.selected').length;
-  const txnCount = document.querySelectorAll('#tr-rules-txn-grid .chip-toggle.selected').length;
-  const total = grantCount + txnCount;
-  const summary = total === 0
-    ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:var(--textm)"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> <span>No rules configured. Select grant and transaction types above.</span>`
-    : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:var(--green)"><polyline points="20 6 9 17 4 12"/></svg> <span>Applies to <strong>${grantCount}</strong> grant type${grantCount !== 1 ? 's' : ''} × <strong>${txnCount}</strong> transaction type${txnCount !== 1 ? 's' : ''} = <strong style="color:var(--accent)">${grantCount * txnCount}</strong> rule combinations</span>`;
-  const el = document.getElementById('tr-rules-summary');
-  el.innerHTML = summary;
-  el.style.display = 'flex';
-  el.style.alignItems = 'center';
-  el.style.gap = '8px';
-  el.style.background = total === 0 ? '#f8fafc' : 'linear-gradient(135deg, #ecfdf5, #d1fae5)';
-  el.style.border = total === 0 ? '1px solid var(--border)' : '1px solid #a7f3d0';
+function closeTaxRulesDrawer() {
+  document.getElementById('tr-rules-drawer-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  editingRuleId = null;
 }
 
-function saveTaxRules(id) { const rate = taxRatesData.find(r => r.id === id); if (!rate) return; rate.rules.grantTypes = Array.from(document.querySelectorAll('#tr-rules-grant-grid .chip-toggle.selected')).map(el => el.dataset.value); rate.rules.txnTypes = Array.from(document.querySelectorAll('#tr-rules-txn-grid .chip-toggle.selected')).map(el => el.dataset.value); closeTaxRulesDrawer(); renderTaxRatesTable(); }
+function renderRulesList() {
+  document.getElementById('tr-rules-count').textContent = workingRules.length;
+  const list = document.getElementById('tr-rules-list');
+  if (workingRules.length === 0) {
+    list.innerHTML = `<div class="rules-empty">
+      <div class="rules-empty-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:28px;height:28px"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      </div>
+      <div class="rules-empty-title">No rules configured</div>
+      <div class="rules-empty-sub">Build rules with conditions to control when this tax rate applies</div>
+      <button class="btn btn-primary" onclick="addNewRule()">+ Create First Rule</button>
+    </div>`;
+    return;
+  }
+  // Sort by priority
+  workingRules.sort((a, b) => a.priority - b.priority);
+  list.innerHTML = workingRules.map(rule => renderRuleCard(rule)).join('') +
+    `<button class="add-rule-btn" onclick="addNewRule()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add Another Rule
+    </button>`;
+}
+
+function renderRuleCard(rule) {
+  const isEditing = editingRuleId === rule.id;
+  return `<div class="rule-card ${rule.active ? '' : 'inactive'} ${isEditing ? 'editing' : ''}" data-rule-id="${rule.id}">
+    <div class="rule-card-head">
+      <div class="rule-priority-badge">${rule.priority}</div>
+      <div class="rule-card-name">${rule.name || 'Untitled Rule'}</div>
+      <div class="rule-status-toggle ${rule.active ? 'active' : ''}" onclick="toggleRuleActive('${rule.id}')" title="${rule.active ? 'Active' : 'Inactive'}"></div>
+      <button class="rule-actions-btn" onclick="${isEditing ? 'closeRuleEditor()' : `openRuleEditor('${rule.id}')`}" title="${isEditing ? 'Close' : 'Edit'}">
+        ${isEditing
+          ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`
+          : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19H4v-3L16.5 3.5z"/></svg>`}
+      </button>
+      <button class="rule-actions-btn" onclick="duplicateRule('${rule.id}')" title="Duplicate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+      <button class="rule-actions-btn" onclick="deleteRule('${rule.id}')" title="Delete" style="color:var(--red);border-color:#fecaca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg></button>
+    </div>
+
+    ${!isEditing ? renderRuleClause(rule) : renderRuleEditor(rule)}
+  </div>`;
+}
+
+function renderRuleClause(rule) {
+  const conds = (rule.conditions || []).map((c, i) => {
+    const d = describeCondition(c);
+    if (!d) return '';
+    return `<div class="rule-condition-pill">
+      <span class="rc-icon">${d.icon}</span>
+      <span class="rc-field">${d.field}</span>
+      <span class="rc-op">${d.op}</span>
+      ${d.value ? `<span class="rc-value">${d.value}</span>` : ''}
+    </div>`;
+  });
+  // Insert logic divider between conds
+  let condsHtml = '';
+  conds.forEach((c, i) => {
+    condsHtml += c;
+    if (i < conds.length - 1) {
+      condsHtml += `<div class="rule-logic-divider"><span class="rule-logic-pill ${rule.logic === 'OR' ? 'or' : 'and'}">${rule.logic || 'AND'}</span></div>`;
+    }
+  });
+
+  const actionType = rule.action?.type || 'apply';
+  const actionLabel = describeAction(rule.action || { type: 'apply' });
+  const actionDef = getActionDef(actionType);
+
+  return `<div class="rule-card-body">
+    ${conds.length > 0 ? `
+      <div class="rule-clause">
+        <div class="rule-clause-label lbl-if">IF</div>
+        <div class="rule-conditions-list">${condsHtml}</div>
+      </div>
+    ` : `<div style="font-size:11.5px;color:var(--textm);font-style:italic;padding:6px 0">No conditions — rule will not match anything</div>`}
+    <div class="rule-clause">
+      <div class="rule-clause-label lbl-then">THEN</div>
+      <div style="flex:1">
+        <span class="rule-action-pill action-${actionType}">
+          <span class="rule-action-icon">${actionDef?.icon || '✓'}</span>
+          ${actionLabel}
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="rule-card-foot">
+    <span><strong>${rule.conditions?.length || 0}</strong> condition${(rule.conditions?.length || 0) !== 1 ? 's' : ''} · Priority ${rule.priority}</span>
+    <span>${rule.active ? '● Active' : '○ Inactive'}</span>
+  </div>`;
+}
+
+function renderRuleEditor(rule) {
+  return `<div class="rule-editor">
+    <div class="rule-editor-section">
+      <div class="rule-editor-label">Rule Name</div>
+      <input type="text" id="re-name" class="form-input" value="${rule.name || ''}" placeholder="e.g. US Employees — Standard Withholding" oninput="updateWorkingRule('${rule.id}','name',this.value)">
+    </div>
+
+    <div style="display:flex;gap:14px;margin-bottom:14px">
+      <div style="flex:0 0 100px">
+        <div class="rule-editor-label">Priority</div>
+        <input type="number" min="1" max="99" value="${rule.priority}" class="form-input" oninput="updateWorkingRule('${rule.id}','priority',parseInt(this.value) || 1)">
+      </div>
+      <div style="flex:1">
+        <div class="rule-editor-label">Logic Between Conditions</div>
+        <div class="logic-toggle-group">
+          <button class="logic-toggle-btn ${(rule.logic || 'AND') === 'AND' ? 'active' : ''}" onclick="updateWorkingRule('${rule.id}','logic','AND')">ALL (AND)</button>
+          <button class="logic-toggle-btn ${rule.logic === 'OR' ? 'active' : ''}" onclick="updateWorkingRule('${rule.id}','logic','OR')">ANY (OR)</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="rule-editor-section">
+      <div class="rule-editor-label">When (Conditions)</div>
+      <div class="cond-builder" id="cond-builder-${rule.id}">
+        ${(rule.conditions || []).map((c, i) => renderConditionRow(rule.id, i, c)).join('')}
+      </div>
+      <button class="btn btn-ghost" style="margin-top:8px;padding:6px 12px;font-size:12px" onclick="addCondition('${rule.id}')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:12px;height:12px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Condition
+      </button>
+    </div>
+
+    <div class="rule-editor-section">
+      <div class="rule-editor-label">Then (Action)</div>
+      <div class="action-picker">
+        ${ruleActions.map(a => `
+          <div class="action-pick-card ${(rule.action?.type || 'apply') === a.type ? 'selected' : ''}" onclick="setRuleAction('${rule.id}','${a.type}')">
+            <div class="action-pick-icon" style="background:${a.color === 'green' ? 'var(--green-l)' : a.color === 'blue' ? '#eff6ff' : a.color === 'amber' ? 'var(--amber-l)' : a.color === 'purple' ? '#f5f3ff' : 'var(--red-l)'};color:${a.color === 'green' ? '#065f46' : a.color === 'blue' ? '#1e40af' : a.color === 'amber' ? '#92400e' : a.color === 'purple' ? '#6d28d9' : '#991b1b'}">${a.icon}</div>
+            <div class="action-pick-label">${a.label}</div>
+          </div>
+        `).join('')}
+      </div>
+      ${rule.action && getActionDef(rule.action.type)?.requiresInput ? `
+        <div style="margin-top:10px;display:flex;align-items:center;gap:10px">
+          <span style="font-size:12px;color:var(--text2)">${getActionDef(rule.action.type).inputLabel}:</span>
+          <input type="number" step="0.01" value="${rule.action.value || ''}" class="form-input" style="width:140px;padding:7px 10px;font-size:12px" oninput="updateWorkingRule('${rule.id}','actionValue',parseFloat(this.value) || 0)">
+        </div>
+      ` : ''}
+    </div>
+
+    <div class="rule-editor-foot">
+      <button class="btn btn-ghost" style="padding:7px 14px;font-size:12.5px" onclick="closeRuleEditor()">Done</button>
+    </div>
+  </div>`;
+}
+
+function renderConditionRow(ruleId, idx, cond) {
+  const field = getFieldDef(cond.field);
+  const fieldType = field?.type || 'multi-select';
+  const ops = opsForType[fieldType] || [];
+
+  let valueInputHtml = '';
+  if (fieldType === 'multi-select') {
+    const tags = (cond.values || []).map(v => `<span class="cond-multi-tag">${v}<span class="x-btn" onclick="event.stopPropagation(); removeMultiValue('${ruleId}',${idx},'${v}')">×</span></span>`).join('');
+    valueInputHtml = `<div class="cond-multi" onclick="openMultiPicker(event, '${ruleId}', ${idx})">
+      ${tags || '<span class="cond-multi-placeholder">Click to select values</span>'}
+    </div>`;
+  } else if (fieldType === 'select') {
+    const opts = (field?.options || []).map(o => `<option value="${o}" ${cond.value === o ? 'selected' : ''}>${o}</option>`).join('');
+    valueInputHtml = `<select onchange="updateCondition('${ruleId}',${idx},'value',this.value)"><option value="">— Select —</option>${opts}</select>`;
+  } else if (fieldType === 'boolean') {
+    valueInputHtml = `<div style="font-size:11.5px;color:var(--text2);padding:7px 0">(no value needed)</div>`;
+  } else if (fieldType === 'number') {
+    if (cond.op === 'between') {
+      valueInputHtml = `<div style="display:flex;gap:5px"><input type="number" placeholder="Min" value="${cond.min || ''}" onchange="updateCondition('${ruleId}',${idx},'min',parseFloat(this.value) || 0)"><input type="number" placeholder="Max" value="${cond.max || ''}" onchange="updateCondition('${ruleId}',${idx},'max',parseFloat(this.value) || 0)"></div>`;
+    } else {
+      valueInputHtml = `<input type="number" placeholder="Value" value="${cond.value !== undefined ? cond.value : ''}" onchange="updateCondition('${ruleId}',${idx},'value',parseFloat(this.value) || 0)">`;
+    }
+  }
+
+  return `<div class="cond-row">
+    <div class="cond-row-num">${idx + 1}</div>
+    <select onchange="changeConditionField('${ruleId}',${idx},this.value)">
+      <option value="">— Field —</option>
+      ${ruleFields.map(f => `<option value="${f.id}" ${cond.field === f.id ? 'selected' : ''}>${f.icon} ${f.label}</option>`).join('')}
+    </select>
+    <select onchange="updateCondition('${ruleId}',${idx},'op',this.value)" ${!field ? 'disabled' : ''}>
+      ${ops.map(o => `<option value="${o.id}" ${cond.op === o.id ? 'selected' : ''}>${o.label}</option>`).join('')}
+    </select>
+    ${valueInputHtml}
+    <button class="cond-row-remove" onclick="removeCondition('${ruleId}',${idx})" title="Remove">×</button>
+  </div>`;
+}
+
+// — Rule operations —
+function findRule(ruleId) { return workingRules.find(r => r.id === ruleId); }
+function newRuleId() { return 'R-' + Date.now().toString().slice(-6); }
+
+function addNewRule() {
+  const maxPriority = workingRules.length > 0 ? Math.max(...workingRules.map(r => r.priority)) : 0;
+  const newRule = {
+    id: newRuleId(),
+    name: `New Rule ${workingRules.length + 1}`,
+    priority: maxPriority + 1,
+    active: true,
+    logic: 'AND',
+    conditions: [],
+    action: { type: 'apply' }
+  };
+  workingRules.push(newRule);
+  editingRuleId = newRule.id;
+  renderRulesList();
+}
+
+function openRuleEditor(id) { editingRuleId = id; renderRulesList(); }
+function closeRuleEditor() { editingRuleId = null; renderRulesList(); }
+
+function toggleRuleActive(id) { const r = findRule(id); if (r) { r.active = !r.active; renderRulesList(); } }
+
+function duplicateRule(id) {
+  const r = findRule(id);
+  if (!r) return;
+  const copy = JSON.parse(JSON.stringify(r));
+  copy.id = newRuleId();
+  copy.name = r.name + ' (Copy)';
+  copy.priority = Math.max(...workingRules.map(x => x.priority)) + 1;
+  workingRules.push(copy);
+  renderRulesList();
+}
+
+function deleteRule(id) {
+  if (!confirm('Delete this rule?')) return;
+  workingRules = workingRules.filter(r => r.id !== id);
+  if (editingRuleId === id) editingRuleId = null;
+  renderRulesList();
+}
+
+function updateWorkingRule(id, key, value) {
+  const r = findRule(id);
+  if (!r) return;
+  if (key === 'actionValue') {
+    r.action = { ...r.action, value: value };
+  } else {
+    r[key] = value;
+  }
+  // Don't re-render if just typing in text fields — would lose focus
+  if (key === 'logic' || key === 'priority') renderRulesList();
+}
+
+function setRuleAction(id, type) {
+  const r = findRule(id);
+  if (!r) return;
+  r.action = { type, value: getActionDef(type)?.requiresInput ? (r.action?.value || 0) : undefined };
+  renderRulesList();
+}
+
+// — Condition operations —
+function addCondition(ruleId) {
+  const r = findRule(ruleId);
+  if (!r) return;
+  r.conditions = r.conditions || [];
+  r.conditions.push({ field: '', op: 'in', values: [] });
+  renderRulesList();
+}
+
+function removeCondition(ruleId, idx) {
+  const r = findRule(ruleId);
+  if (!r) return;
+  r.conditions.splice(idx, 1);
+  renderRulesList();
+}
+
+function changeConditionField(ruleId, idx, fieldId) {
+  const r = findRule(ruleId);
+  if (!r) return;
+  const field = getFieldDef(fieldId);
+  const fieldType = field?.type || 'multi-select';
+  const defaultOp = (opsForType[fieldType] || [])[0]?.id || 'equals';
+  r.conditions[idx] = { field: fieldId, op: defaultOp };
+  if (fieldType === 'multi-select') r.conditions[idx].values = [];
+  renderRulesList();
+}
+
+function updateCondition(ruleId, idx, key, value) {
+  const r = findRule(ruleId);
+  if (!r || !r.conditions[idx]) return;
+  r.conditions[idx][key] = value;
+  if (key === 'op') renderRulesList();
+}
+
+function removeMultiValue(ruleId, idx, value) {
+  const r = findRule(ruleId);
+  if (!r || !r.conditions[idx]) return;
+  r.conditions[idx].values = (r.conditions[idx].values || []).filter(v => v !== value);
+  renderRulesList();
+}
+
+// — Multi-select popover —
+let multiPickerCtx = null;
+function openMultiPicker(evt, ruleId, idx) {
+  evt.stopPropagation();
+  const r = findRule(ruleId);
+  if (!r || !r.conditions[idx]) return;
+  const cond = r.conditions[idx];
+  const field = getFieldDef(cond.field);
+  if (!field || !field.options) return;
+  multiPickerCtx = { ruleId, idx };
+  const pop = document.getElementById('multi-picker-pop');
+  pop.innerHTML = field.options.map(o => `
+    <label>
+      <input type="checkbox" value="${o}" ${(cond.values || []).includes(o) ? 'checked' : ''} onchange="toggleMultiValue('${o}')">
+      <span>${o}</span>
+    </label>
+  `).join('');
+  const rect = evt.currentTarget.getBoundingClientRect();
+  pop.style.top = (rect.bottom + 4) + 'px';
+  pop.style.left = rect.left + 'px';
+  pop.style.minWidth = rect.width + 'px';
+  pop.style.display = 'block';
+  setTimeout(() => document.addEventListener('click', closeMultiPicker, { once: true }), 0);
+}
+function closeMultiPicker() {
+  document.getElementById('multi-picker-pop').style.display = 'none';
+  multiPickerCtx = null;
+}
+function toggleMultiValue(value) {
+  if (!multiPickerCtx) return;
+  const r = findRule(multiPickerCtx.ruleId);
+  if (!r) return;
+  const cond = r.conditions[multiPickerCtx.idx];
+  cond.values = cond.values || [];
+  if (cond.values.includes(value)) cond.values = cond.values.filter(v => v !== value);
+  else cond.values.push(value);
+  renderRulesList();
+  // Re-show picker because re-render closed it
+  setTimeout(() => {
+    const conds = document.querySelectorAll(`[data-rule-id="${multiPickerCtx.ruleId}"] .cond-multi`);
+    if (conds[multiPickerCtx.idx]) {
+      const fakeEvt = { stopPropagation: () => {}, currentTarget: conds[multiPickerCtx.idx] };
+      openMultiPicker(fakeEvt, multiPickerCtx.ruleId, multiPickerCtx.idx);
+    }
+  }, 0);
+}
+
+function saveAllRules() {
+  const rate = taxRatesData.find(r => r.id === currentTRId);
+  if (!rate) return;
+  rate.rules = JSON.parse(JSON.stringify(workingRules));
+  closeTaxRulesDrawer();
+  renderTaxRatesTable();
+}
 
 function saveTaxRate() {
   const name = document.getElementById('tr-name').value.trim();
@@ -7948,7 +8719,7 @@ function saveTaxRate() {
   const status = document.getElementById('tr-status').value;
   const description = document.getElementById('tr-description').value;
   if (!name || !jurisdiction || !type || !effDate || trBandsTemp.length === 0) { alert('Please fill all fields and add at least one bracket'); return; }
-  if (currentTRId) { const rate = taxRatesData.find(r => r.id === currentTRId); Object.assign(rate, { name, jurisdiction, type, effectiveDate: effDate, status, description, bands: JSON.parse(JSON.stringify(trBandsTemp)) }); } else { const newId = 'TXR-' + String(Math.max(0, ...taxRatesData.map(r => parseInt(r.id.split('-')[1]) || 0)) + 1).padStart(3, '0'); taxRatesData.push({ id: newId, name, jurisdiction, type, status, effectiveDate: effDate, description, bands: JSON.parse(JSON.stringify(trBandsTemp)), rules: { grantTypes: [], txnTypes: [] } }); }
+  if (currentTRId) { const rate = taxRatesData.find(r => r.id === currentTRId); Object.assign(rate, { name, jurisdiction, type, effectiveDate: effDate, status, description, bands: JSON.parse(JSON.stringify(trBandsTemp)) }); } else { const newId = 'TXR-' + String(Math.max(0, ...taxRatesData.map(r => parseInt(r.id.split('-')[1]) || 0)) + 1).padStart(3, '0'); taxRatesData.push({ id: newId, name, jurisdiction, type, status, effectiveDate: effDate, description, bands: JSON.parse(JSON.stringify(trBandsTemp)), rules: [] }); }
   closeTaxRateModal();
   renderTaxRatesTable();
 }
