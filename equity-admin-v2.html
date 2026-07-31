@@ -2393,6 +2393,265 @@
     .txn-type-option svg { width: 20px; height: 20px; margin-bottom: 5px; }
     .txn-type-option-label { font-size: 12px; font-weight: 600; color: var(--text); }
 
+    /* ════════════ GLOBAL TAX MODULE (Rate Library + Rules Engine) ════════════ */
+
+    /* — Tabs — */
+    .gt-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 18px; }
+    .gt-tab {
+      padding: 10px 16px; font-size: 13px; font-weight: 600; color: var(--text2);
+      cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.14s;
+      display: flex; align-items: center; gap: 7px; white-space: nowrap;
+    }
+    .gt-tab:hover { color: var(--text); }
+    .gt-tab.active { color: var(--accent-dark); border-bottom-color: var(--accent); }
+    .gt-tab svg { width: 15px; height: 15px; }
+    .gt-tab-count {
+      background: #eef2f7; color: var(--text2); font-size: 10px; font-weight: 700;
+      padding: 1px 6px; border-radius: 8px; min-width: 18px; text-align: center;
+    }
+    .gt-tab.active .gt-tab-count { background: #dbeafe; color: var(--accent-dark); }
+    .gt-panel { display: none; }
+    .gt-panel.active { display: block; }
+
+    /* — Coordinate key chips (jurisdiction × tax type × flavour × tax year) — */
+    .coord-key { display: inline-flex; align-items: center; gap: 3px; flex-wrap: wrap; }
+    .coord-chip {
+      font-family: 'SF Mono', ui-monospace, monospace; font-size: 10px; font-weight: 700;
+      padding: 2px 6px; border-radius: 5px; letter-spacing: 0.2px; white-space: nowrap;
+    }
+    .coord-juris { background: #e0e7ff; color: #4338ca; }
+    .coord-type  { background: #dbeafe; color: #1d4ed8; }
+    .coord-flav  { background: #f3e8ff; color: #7e22ce; }
+    .coord-year  { background: #e2e8f0; color: #475569; }
+    .coord-sep { color: var(--textm); font-size: 10px; font-weight: 700; }
+
+    /* — Generic small badges — */
+    .gt-badge {
+      display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700;
+      padding: 2px 7px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.4px;
+      white-space: nowrap;
+    }
+    .gt-badge.b-published  { background: var(--green-l); color: #047857; }
+    .gt-badge.b-draft      { background: #e2e8f0; color: #475569; }
+    .gt-badge.b-review     { background: var(--amber-l); color: #b45309; }
+    .gt-badge.b-superseded { background: #f1f5f9; color: var(--textm); }
+    .gt-badge.b-source     { background: var(--green-l); color: #047857; }
+    .gt-badge.b-authored   { background: #dbeafe; color: #1d4ed8; }
+    .gt-badge.b-inferred   { background: var(--amber-l); color: #b45309; }
+    .gt-badge.b-gap        { background: var(--red-l); color: #b91c1c; }
+    .gt-badge.b-neutral    { background: #f1f5f9; color: var(--text2); }
+    .gt-badge.b-withhold   { background: var(--green-l); color: #047857; }
+    .gt-badge.b-reportonly { background: var(--amber-l); color: #b45309; }
+    .gt-badge.b-nottaxable { background: #f1f5f9; color: var(--text2); }
+    .gt-badge.b-employee   { background: #dbeafe; color: #1d4ed8; }
+    .gt-badge.b-employer   { background: #ffedd5; color: #c2410c; }
+    .gt-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+    /* — Structure pill — */
+    .struct-pill {
+      display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600;
+      padding: 3px 8px; border-radius: 6px; background: #f8fafc; border: 1px solid var(--border);
+      color: var(--text2);
+    }
+    .struct-pill svg { width: 12px; height: 12px; }
+
+    /* — Mini band visualisation — */
+    .band-mini { display: flex; align-items: flex-end; gap: 2px; height: 22px; }
+    .band-mini-seg { width: 7px; border-radius: 2px 2px 0 0; background: var(--accent); min-height: 3px; }
+
+    /* — Jurisdiction tree — */
+    .juris-tree { font-size: 13px; }
+    .juris-node {
+      display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 8px;
+      cursor: pointer; transition: background 0.12s;
+    }
+    .juris-node:hover { background: #f8fafc; }
+    .juris-node.selected { background: #eff6ff; }
+    .juris-flag { font-size: 15px; line-height: 1; }
+    .juris-name { font-weight: 600; color: var(--text); }
+    .juris-level {
+      font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+      color: var(--textm); background: #f1f5f9; padding: 1px 5px; border-radius: 4px;
+    }
+    .juris-children { margin-left: 20px; border-left: 1px dashed var(--border); padding-left: 10px; }
+    .juris-meta { margin-left: auto; font-size: 11px; color: var(--textm); }
+
+    /* — Two-column split layout — */
+    .gt-split { display: grid; grid-template-columns: 300px 1fr; gap: 18px; align-items: start; }
+    .gt-side-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 14px; box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+    }
+    .gt-side-title {
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px;
+      color: var(--textm); margin-bottom: 10px;
+    }
+
+    /* — Claim / Treatment cards — */
+    .gt-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      margin-bottom: 12px; overflow: hidden; transition: box-shadow 0.16s, border-color 0.16s;
+    }
+    .gt-card:hover { box-shadow: 0 4px 16px rgba(15,23,42,0.07); border-color: #cbd5e1; }
+    .gt-card-head {
+      display: flex; align-items: center; gap: 10px; padding: 12px 14px;
+      border-bottom: 1px solid #f1f5f9; background: #fcfdfe;
+    }
+    .gt-card-title { font-size: 13.5px; font-weight: 700; color: var(--text); }
+    .gt-card-id {
+      font-family: 'SF Mono', ui-monospace, monospace; font-size: 10.5px; font-weight: 700;
+      color: var(--accent-dark); background: #eff6ff; padding: 2px 6px; border-radius: 5px;
+    }
+    .gt-card-body { padding: 12px 14px; }
+    .gt-card-foot {
+      padding: 9px 14px; background: #fafbfd; border-top: 1px solid #f1f5f9;
+      display: flex; align-items: center; gap: 10px; font-size: 11px; color: var(--text2);
+    }
+
+    /* — "reads as one sentence" rule grammar — */
+    .gt-grammar { font-size: 12.5px; line-height: 2.1; color: var(--text2); }
+    .gt-kw { font-weight: 700; color: var(--textm); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.6px; }
+    .gt-val {
+      display: inline-block; background: #f1f5f9; border: 1px solid var(--border);
+      color: var(--text); font-weight: 600; padding: 1px 7px; border-radius: 6px;
+      font-size: 11.5px; margin: 0 1px;
+    }
+    .gt-val.v-juris { background: #e0e7ff; border-color: #c7d2fe; color: #4338ca; }
+    .gt-val.v-event { background: #dbeafe; border-color: #bfdbfe; color: #1d4ed8; }
+    .gt-val.v-grant { background: #dcfce7; border-color: #bbf7d0; color: #15803d; }
+    .gt-val.v-cond  { background: #fef3c7; border-color: #fde68a; color: #b45309; }
+    .gt-val.v-expr  { font-family: 'SF Mono', ui-monospace, monospace; background: #0d1526; border-color: #0d1526; color: #a5d8ff; }
+
+    /* — Component lines within a treatment — */
+    .comp-line {
+      display: grid; grid-template-columns: 22px 1fr auto; gap: 10px; align-items: center;
+      padding: 9px 11px; border: 1px solid var(--border); border-radius: 9px;
+      background: #fcfdfe; margin-bottom: 7px;
+    }
+    .comp-seq {
+      width: 20px; height: 20px; border-radius: 6px; background: #e2e8f0; color: var(--text2);
+      font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    }
+    .comp-expr {
+      font-family: 'SF Mono', ui-monospace, monospace; font-size: 11px; color: var(--text);
+      background: #f1f5f9; padding: 2px 6px; border-radius: 5px; display: inline-block;
+    }
+
+    /* — Precedence ladder — */
+    .prec-ladder { display: flex; flex-direction: column; gap: 5px; }
+    .prec-step {
+      display: flex; align-items: center; gap: 9px; padding: 7px 10px; border-radius: 8px;
+      border: 1px solid var(--border); background: #fcfdfe; font-size: 12px;
+    }
+    .prec-step.hit { border-color: var(--green); background: #f0fdf4; font-weight: 600; }
+    .prec-step.skipped { opacity: 0.45; }
+    .prec-num {
+      width: 18px; height: 18px; border-radius: 50%; background: #e2e8f0; color: var(--text2);
+      font-size: 9.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .prec-step.hit .prec-num { background: var(--green); color: #fff; }
+
+    /* — Simulator — */
+    .sim-layout { display: grid; grid-template-columns: 320px 1fr; gap: 18px; align-items: start; }
+    .sim-scenario {
+      padding: 11px 12px; border: 1px solid var(--border); border-radius: 10px; cursor: pointer;
+      margin-bottom: 8px; transition: all 0.14s; background: var(--card);
+    }
+    .sim-scenario:hover { border-color: var(--accent); background: #f8fafc; }
+    .sim-scenario.active { border-color: var(--accent); background: #eff6ff; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+    .sim-scenario-name { font-size: 12.5px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+    .sim-scenario-desc { font-size: 11px; color: var(--text2); line-height: 1.45; }
+    .sim-scenario-ref {
+      font-family: 'SF Mono', ui-monospace, monospace; font-size: 9.5px; color: var(--textm);
+      margin-top: 5px; display: block;
+    }
+
+    /* — Pipeline steps — */
+    .pipe-step { display: flex; gap: 11px; margin-bottom: 2px; }
+    .pipe-rail { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+    .pipe-num {
+      width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: #fff;
+      font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; z-index: 1;
+    }
+    .pipe-line { width: 2px; flex: 1; background: #e2e8f0; margin: 2px 0; min-height: 8px; }
+    .pipe-step:last-child .pipe-line { display: none; }
+    .pipe-body { padding-bottom: 16px; flex: 1; min-width: 0; }
+    .pipe-title {
+      font-size: 12px; font-weight: 700; color: var(--text); text-transform: uppercase;
+      letter-spacing: 0.5px; margin-bottom: 2px;
+    }
+    .pipe-layer {
+      font-size: 10px; font-weight: 700; color: var(--accent-dark); background: #eff6ff;
+      padding: 1px 6px; border-radius: 5px; margin-left: 7px; text-transform: none; letter-spacing: 0;
+    }
+    .pipe-content { font-size: 12px; color: var(--text2); margin-top: 6px; }
+
+    /* — Trace box — */
+    .trace-box {
+      background: #0d1526; border-radius: 10px; padding: 13px 15px;
+      font-family: 'SF Mono', ui-monospace, monospace; font-size: 11px; line-height: 1.75;
+      color: #cbd5e1; overflow-x: auto;
+    }
+    .trace-key { color: #64748b; }
+    .trace-val { color: #a5d8ff; }
+    .trace-ok { color: #6ee7b7; }
+    .trace-warn { color: #fcd34d; }
+    .trace-dim { color: #475569; }
+
+    /* — Result lines — */
+    .result-line {
+      display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center;
+      padding: 11px 13px; border: 1px solid var(--border); border-radius: 10px;
+      background: var(--card); margin-bottom: 8px;
+    }
+    .result-line.total { background: #0d1526; border-color: #0d1526; color: #fff; }
+    .result-amount { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .result-sub { font-size: 11px; color: var(--text2); margin-top: 3px; }
+    .result-line.total .result-sub { color: rgba(255,255,255,0.6); }
+
+    /* — Band math table — */
+    .band-math { width: 100%; border-collapse: collapse; font-size: 11.5px; }
+    .band-math th {
+      text-align: left; font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.6px;
+      color: var(--textm); font-weight: 700; padding: 5px 8px; border-bottom: 1px solid var(--border);
+    }
+    .band-math td { padding: 6px 8px; border-bottom: 1px solid #f1f5f9; font-variant-numeric: tabular-nums; }
+    .band-math tr.applied td { background: #f0fdf4; font-weight: 600; }
+    .band-math td.num { text-align: right; }
+
+    /* — Info callout — */
+    .gt-callout {
+      display: flex; gap: 10px; padding: 11px 13px; border-radius: 10px;
+      background: #eff6ff; border: 1px solid #bfdbfe; font-size: 12px; color: #1e40af;
+      line-height: 1.55; margin-bottom: 14px;
+    }
+    .gt-callout svg { width: 15px; height: 15px; flex-shrink: 0; margin-top: 1px; }
+    .gt-callout.warn { background: #fffbeb; border-color: #fde68a; color: #92400e; }
+
+    /* — Coverage / meta grid in drawer — */
+    .gt-kv-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 16px; }
+    .gt-kv-label {
+      font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;
+      color: var(--textm); margin-bottom: 2px;
+    }
+    .gt-kv-value { font-size: 12.5px; font-weight: 600; color: var(--text); }
+
+    /* — Version timeline — */
+    .ver-row {
+      display: flex; align-items: center; gap: 10px; padding: 8px 10px;
+      border-left: 2px solid var(--border); margin-left: 5px; font-size: 12px;
+    }
+    .ver-row.current { border-left-color: var(--green); background: #f0fdf4; }
+    .ver-no {
+      font-family: 'SF Mono', ui-monospace, monospace; font-size: 10.5px; font-weight: 700;
+      color: var(--text2);
+    }
+
+    @media (max-width: 1100px) {
+      .gt-split, .sim-layout { grid-template-columns: 1fr; }
+    }
+
   </style>
 </head>
 <body>
@@ -2476,6 +2735,8 @@
       <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
     </div>
     <div class="nav-sub" id="sub-tax">
+      <div class="nav-sub-item" onclick="setActive(this); switchView('rate-library')">Global Rate Library</div>
+      <div class="nav-sub-item" onclick="setActive(this); switchView('rules-engine')">Tax Rules Engine</div>
       <div class="nav-sub-item" onclick="setActive(this); switchView('tax-rates')">Tax Rates</div>
       <div class="nav-sub-item" onclick="setActive(this); switchView('tax-codes')">Tax Codes</div>
     </div>
@@ -4903,6 +5164,310 @@
       </div>
     </div><!-- /view-tax-codes -->
 
+    <!-- ═══════════════ GLOBAL RATE LIBRARY VIEW ═══════════════ -->
+    <div class="view-section" id="view-rate-library">
+      <div class="tax-page-head">
+        <div class="page-title-row">
+          <div class="tax-page-icon" style="background:linear-gradient(135deg,#6366f1 0%,#4338ca 100%);box-shadow:0 4px 14px rgba(99,102,241,0.3)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          <div>
+            <div class="page-title" style="margin:0">Global Rate Library</div>
+            <div class="page-sub" style="margin-top:4px">Governed platform rate repository — jurisdiction × tax type × flavour × tax year</div>
+          </div>
+        </div>
+        <div class="head-actions">
+          <button class="btn btn-ghost" onclick="alert('Bulk import — Capability B (staging + validation, not in this prototype)')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Bulk Import
+          </button>
+          <button class="btn btn-primary" onclick="alert('New rate schedule — opens as DRAFT, then follows maker-checker publish workflow (TAX-RR-005)')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Rate Schedule
+          </button>
+        </div>
+      </div>
+
+      <div class="tax-metrics-row" id="rl-metrics"></div>
+
+      <div class="gt-tabs">
+        <div class="gt-tab active" data-rltab="schedules" onclick="switchRLTab('schedules')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+          Rate Schedules <span class="gt-tab-count" id="rl-count-sched">0</span>
+        </div>
+        <div class="gt-tab" data-rltab="jurisdictions" onclick="switchRLTab('jurisdictions')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg>
+          Jurisdiction Hierarchy <span class="gt-tab-count" id="rl-count-juris">0</span>
+        </div>
+        <div class="gt-tab" data-rltab="calendars" onclick="switchRLTab('calendars')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Tax Year Calendars <span class="gt-tab-count" id="rl-count-cal">0</span>
+        </div>
+        <div class="gt-tab" data-rltab="flavours" onclick="switchRLTab('flavours')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 6 6 1-4.5 4.5 1 6.5L12 17l-5.5 3 1-6.5L3 9l6-1z"/></svg>
+          Rate Flavours <span class="gt-tab-count" id="rl-count-flav">0</span>
+        </div>
+      </div>
+
+      <!-- Tab: Rate Schedules -->
+      <div class="gt-panel active" id="rl-panel-schedules">
+        <div class="gt-callout">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <div><strong>Four-coordinate resolution key.</strong> Every published rate is uniquely identified by <em>jurisdiction × tax type × flavour × tax year</em>, plus an as-of date selecting the version. A Tax Treatment stores only tax type + flavour — the claim supplies the jurisdiction and the event date supplies the year — so a January rate update is a single library row change with no treatment edits.</div>
+        </div>
+
+        <div class="tax-filter-bar">
+          <input class="filter-search-input" id="rl-search" placeholder="🔍 Search jurisdiction, tax type or schedule ID…" oninput="renderRateSchedules()">
+          <select class="filter-select-sm" id="rl-country-filter" onchange="renderRateSchedules()"><option value="">All Countries</option></select>
+          <select class="filter-select-sm" id="rl-type-filter" onchange="renderRateSchedules()"><option value="">All Tax Types</option></select>
+          <select class="filter-select-sm" id="rl-flavour-filter" onchange="renderRateSchedules()"><option value="">All Flavours</option></select>
+          <select class="filter-select-sm" id="rl-status-filter" onchange="renderRateSchedules()">
+            <option value="">All Statuses</option>
+            <option value="PUBLISHED">Published</option>
+            <option value="IN_REVIEW">In Review</option>
+            <option value="DRAFT">Draft</option>
+            <option value="SUPERSEDED">Superseded</option>
+          </select>
+          <select class="filter-select-sm" id="rl-coverage-filter" onchange="renderRateSchedules()">
+            <option value="">All Coverage</option>
+            <option value="PUBLISHED_SOURCE">Published Source</option>
+            <option value="AUTHORED">Authored</option>
+            <option value="INFERRED">Inferred</option>
+            <option value="GAP">Gap</option>
+          </select>
+          <div style="flex:1"></div>
+          <div id="rl-result-count" style="font-size:12px;color:var(--text2);font-weight:500"></div>
+        </div>
+
+        <div class="ag-table-wrap">
+          <table class="ag-table" id="rl-table">
+            <thead>
+              <tr>
+                <th style="width:96px">Schedule</th>
+                <th style="min-width:300px">Resolution Key</th>
+                <th style="width:120px">Structure</th>
+                <th style="width:170px">Rate</th>
+                <th style="width:120px">Effective From</th>
+                <th style="width:60px">Ver</th>
+                <th style="width:110px">Status</th>
+                <th style="width:130px">Coverage</th>
+                <th style="width:100px">Source</th>
+              </tr>
+            </thead>
+            <tbody id="rl-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab: Jurisdiction Hierarchy -->
+      <div class="gt-panel" id="rl-panel-jurisdictions">
+        <div class="gt-callout">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <div><strong>The repository stores the hierarchy; it does not walk it.</strong> Which jurisdictions are in play for an event is decided by the Jurisdiction Claim tree in the Rules Engine. The library answers a lookup for one named jurisdiction at a time — so a published San Francisco rate is never retrieved unless a claim admits San Francisco.</div>
+        </div>
+        <div class="gt-split">
+          <div class="gt-side-card">
+            <div class="gt-side-title">Levels</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.9">
+              <div><span class="juris-level">Country</span> &nbsp;ISO-mapped, owns currency + tax-year calendar</div>
+              <div style="margin-top:8px"><span class="juris-level">Subnational</span> &nbsp;State / Province / Canton / Prefecture</div>
+              <div style="margin-top:8px"><span class="juris-level">Local</span> &nbsp;City / Municipality</div>
+            </div>
+            <div style="border-top:1px solid var(--border);margin:14px 0 12px"></div>
+            <div class="gt-side-title">Note</div>
+            <div style="font-size:11.5px;color:var(--text2);line-height:1.6">
+              <code style="font-size:11px;background:#f1f5f9;padding:1px 4px;border-radius:4px">level</code> is the canonical tier.
+              "State" is not a level — it is a <code style="font-size:11px;background:#f1f5f9;padding:1px 4px;border-radius:4px">level_label</code> for US subnational.
+            </div>
+          </div>
+          <div class="gt-side-card">
+            <div class="gt-side-title">Jurisdiction Tree</div>
+            <div class="juris-tree" id="rl-juris-tree"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Tax Year Calendars -->
+      <div class="gt-panel" id="rl-panel-calendars">
+        <div class="gt-callout warn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div><strong>Jurisdictions do not share a year.</strong> An event on 10 April 2026 falls in tax year <strong>2026</strong> for the US, <strong>2026/27</strong> for the UK, and <strong>2026-27</strong> for India. A single mobile event claimed by several jurisdictions is assigned to a differently-labelled year by each one.</div>
+        </div>
+        <div class="ag-table-wrap">
+          <table class="ag-table">
+            <thead>
+              <tr>
+                <th style="width:200px">Jurisdiction</th>
+                <th style="width:130px">Tax Year Label</th>
+                <th style="width:130px">Starts</th>
+                <th style="width:130px">Ends</th>
+                <th>Event on 10 Apr 2026 resolves to</th>
+              </tr>
+            </thead>
+            <tbody id="rl-cal-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab: Rate Flavours -->
+      <div class="gt-panel" id="rl-panel-flavours">
+        <div class="gt-callout">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <div><strong>Flavour is not structure.</strong> Structure describes the arithmetic (flat, banded, capped). Flavour describes which published method the jurisdiction says to use. Without this dimension a treatment can only ask for "income tax" and cannot express "income tax, supplemental method" — the near-universal case for equity withholding.</div>
+        </div>
+        <div class="ag-table-wrap">
+          <table class="ag-table">
+            <thead>
+              <tr>
+                <th style="width:210px">Flavour Code</th>
+                <th style="width:180px">Falls back to</th>
+                <th>Meaning</th>
+                <th style="width:90px">Schedules</th>
+              </tr>
+            </thead>
+            <tbody id="rl-flav-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div><!-- /view-rate-library -->
+
+    <!-- ═══════════════ TAX RULES ENGINE VIEW ═══════════════ -->
+    <div class="view-section" id="view-rules-engine">
+      <div class="tax-page-head">
+        <div class="page-title-row">
+          <div class="tax-page-icon" style="background:linear-gradient(135deg,#0ea5e9 0%,#0369a1 100%);box-shadow:0 4px 14px rgba(14,165,233,0.3)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          </div>
+          <div>
+            <div class="page-title" style="margin:0">Tax Rules Engine — Global</div>
+            <div class="page-sub" style="margin-top:4px">Two-layer evaluation — Jurisdiction Claims decide <em>where</em>, Tax Treatments decide <em>how much</em></div>
+          </div>
+        </div>
+        <div class="head-actions">
+          <button class="btn btn-ghost" onclick="switchRETab('simulator')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Run Simulation
+          </button>
+          <button class="btn btn-primary" onclick="alert('New rule — Claims and Treatments are versioned, effective-dated and approval-gated (TAX-RE-013)')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Rule
+          </button>
+        </div>
+      </div>
+
+      <div class="tax-metrics-row" id="re-metrics"></div>
+
+      <div class="gt-tabs">
+        <div class="gt-tab active" data-retab="claims" onclick="switchRETab('claims')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Jurisdiction Claims <span class="gt-tab-count" id="re-count-claims">0</span>
+        </div>
+        <div class="gt-tab" data-retab="treatments" onclick="switchRETab('treatments')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-4"/><polyline points="9 11 12 14 15 11"/><line x1="12" y1="2" x2="12" y2="14"/></svg>
+          Tax Treatments <span class="gt-tab-count" id="re-count-treatments">0</span>
+        </div>
+        <div class="gt-tab" data-retab="bases" onclick="switchRETab('bases')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>
+          Base Definitions <span class="gt-tab-count" id="re-count-bases">0</span>
+        </div>
+        <div class="gt-tab" data-retab="simulator" onclick="switchRETab('simulator')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Simulator
+        </div>
+      </div>
+
+      <!-- Tab: Jurisdiction Claims -->
+      <div class="gt-panel active" id="re-panel-claims">
+        <div class="gt-callout">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <div><strong>Layer 1 · "Where".</strong> A Claim states that a jurisdiction has a taxing right over an award. Claims are evaluated <em>before</em> any Treatment fires, and each admitted claim causes the Treatment layer to run exactly once — so every Treatment evaluation sees exactly one jurisdiction. Sub-national claims nest inside a country claim but may use a different sourcing method and their own admitted share.</div>
+        </div>
+        <div id="re-claims-list"></div>
+      </div>
+
+      <!-- Tab: Tax Treatments -->
+      <div class="gt-panel" id="re-panel-treatments">
+        <div class="gt-callout">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <div><strong>Layer 2 · "How much".</strong> One Treatment wins per claim, and it declares taxability explicitly as <em>withhold</em>, <em>report only</em>, or <em>not taxable here</em>. A single Treatment may emit several components — each with its own base, tax type, flavour and payer — which is what covers multi-component cases like a qualifying ESPP disposition without duplicating rules.</div>
+        </div>
+        <div id="re-treatments-list"></div>
+      </div>
+
+      <!-- Tab: Base Definitions -->
+      <div class="gt-panel" id="re-panel-bases">
+        <div class="gt-callout">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <div><strong>Bases are data, not code.</strong> Each definition is a small serialized expression over a fixed operand set with <code>+ − ×</code> and <code>max/min</code> — enough to express every equity base without a general-purpose language. This is the construct that turns "add a new taxable event" from an engine change into a data change.</div>
+        </div>
+        <div class="ag-table-wrap">
+          <table class="ag-table">
+            <thead>
+              <tr>
+                <th style="width:100px">ID</th>
+                <th style="width:230px">Name</th>
+                <th style="min-width:300px">Expression</th>
+                <th style="width:150px">Operands</th>
+                <th style="width:100px">Version</th>
+              </tr>
+            </thead>
+            <tbody id="re-bases-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab: Simulator -->
+      <div class="gt-panel" id="re-panel-simulator">
+        <div class="sim-layout">
+          <div>
+            <div class="gt-side-card">
+              <div class="gt-side-title">Scenarios</div>
+              <div id="re-sim-scenarios"></div>
+            </div>
+            <div class="gt-side-card" style="margin-top:14px">
+              <div class="gt-side-title">Rate Resolution Precedence</div>
+              <div class="prec-ladder" id="re-sim-precedence"></div>
+            </div>
+          </div>
+          <div>
+            <div class="gt-side-card">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+                <div>
+                  <div style="font-size:14px;font-weight:700;color:var(--text)" id="re-sim-title">—</div>
+                  <div style="font-size:11.5px;color:var(--text2);margin-top:2px" id="re-sim-sub">—</div>
+                </div>
+                <div class="gt-badge b-neutral" id="re-sim-ref">—</div>
+              </div>
+              <div id="re-sim-pipeline"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /view-rules-engine -->
+
+    <!-- Rate schedule detail drawer -->
+    <div class="ledger-drawer-overlay" id="rl-drawer-overlay" onclick="closeRLDrawer()">
+      <div class="ledger-drawer" onclick="event.stopPropagation()">
+        <div class="ledger-drawer-head">
+          <div class="ledger-drawer-title-row">
+            <div>
+              <div class="ledger-drawer-title" id="rl-drawer-title">—</div>
+              <div class="ledger-drawer-meta" id="rl-drawer-meta">—</div>
+            </div>
+            <button class="ledger-drawer-close" onclick="closeRLDrawer()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+          <div class="ledger-drawer-badges" id="rl-drawer-badges"></div>
+        </div>
+        <div class="ledger-drawer-body" id="rl-drawer-body" style="flex:1;overflow-y:auto"></div>
+        <div style="padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;background:#fafbfd">
+          <button class="btn btn-ghost" onclick="closeRLDrawer()">Close</button>
+          <button class="btn btn-primary" id="rl-drawer-action">Submit for Review</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Simulate panel (outside view-section, fullscreen overlay) -->
     <div class="rel-sim-overlay" id="rel-sim-overlay" onclick="closeRelSimulate(event)">
       <div class="rel-sim-panel" onclick="event.stopPropagation()">
@@ -6393,6 +6958,11 @@ function switchView(viewId) {
   document.querySelectorAll('.nav-item, .nav-sub-item').forEach(n => n.classList.remove('active'));
   document.getElementById('nav-' + viewId.split('-')[0])?.classList.add('active');
 
+  // Tax Management sub-views all live under the same parent nav item
+  if (['tax-rates','tax-codes','rate-library','rules-engine'].includes(viewId)) {
+    document.getElementById('nav-tax')?.classList.add('active');
+  }
+
   if (viewId === 'grant-txns') renderGrantsTable();
   else if (viewId === 'long-share-txns') renderLongShareTable();
   else if (viewId === 'approvals') renderApprovalsTable();
@@ -6401,6 +6971,8 @@ function switchView(viewId) {
   else if (viewId === 'release-mgmt') renderReleaseMgmt();
   else if (viewId === 'tax-rates') renderTaxRatesTable();
   else if (viewId === 'tax-codes') renderTaxCodesTable();
+  else if (viewId === 'rate-library') renderRateLibrary();
+  else if (viewId === 'rules-engine') renderRulesEngine();
 }
 
 // ── Equity Plans ──
@@ -8968,6 +9540,1223 @@ function toggleRatePick(checkbox, rateId) {
 function addRatesToCode() { const code = taxCodesData.find(c => c.id === currentTCId); if (!code) return; code.rateIds.push(...tcRatesSelectedIds); closeTCRatesDrawer(); openTaxCodeDrawer(currentTCId); renderTaxCodesTable(); }
 
 function removeRateFromCode(codeId, rateId) { const code = taxCodesData.find(c => c.id === codeId); if (code) { code.rateIds = code.rateIds.filter(r => r !== rateId); openTaxCodeDrawer(codeId); renderTaxCodesTable(); } }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   GLOBAL TAX MODULE — Capability A (Global Rate Library)
+                     + Capability F (Tax Rules Engine)
+   Prototype per "PRD: Global Tax Module for Equity Administration Platform"
+   ══════════════════════════════════════════════════════════════════════════ */
+
+// ── Formatting helpers ──
+const gtMoney = (n, cur = 'USD') => {
+  const sym = { USD: '$', GBP: '£', EUR: '€', CHF: 'CHF ', INR: '₹', CAD: 'C$', JPY: '¥' }[cur] || '';
+  return sym + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+};
+const gtPct = n => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+const gtEsc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+// ══════════════════════ CAPABILITY A — REFERENCE DATA ══════════════════════
+
+// Jurisdiction hierarchy: COUNTRY → SUBNATIONAL → LOCAL  (TAX-RR-001)
+const gtJurisdictions = [
+  { id: 'US', flag: '🇺🇸', name: 'United States', level: 'COUNTRY', levelLabel: 'Country', iso: 'US', currency: 'USD', children: [
+      { id: 'US-CA', name: 'California',  level: 'SUBNATIONAL', levelLabel: 'State', iso: 'US-CA', currency: 'USD', children: [
+          { id: 'US-CA-SF', name: 'San Francisco', level: 'LOCAL', levelLabel: 'City', iso: 'US-CA-SF', currency: 'USD', children: [] } ] },
+      { id: 'US-NY', name: 'New York',    level: 'SUBNATIONAL', levelLabel: 'State', iso: 'US-NY', currency: 'USD', children: [
+          { id: 'US-NY-NYC', name: 'New York City', level: 'LOCAL', levelLabel: 'City', iso: 'US-NY-NYC', currency: 'USD', children: [] } ] },
+      { id: 'US-NJ', name: 'New Jersey',  level: 'SUBNATIONAL', levelLabel: 'State', iso: 'US-NJ', currency: 'USD', children: [] },
+      { id: 'US-TX', name: 'Texas',       level: 'SUBNATIONAL', levelLabel: 'State', iso: 'US-TX', currency: 'USD', children: [] },
+      { id: 'US-FL', name: 'Florida',     level: 'SUBNATIONAL', levelLabel: 'State', iso: 'US-FL', currency: 'USD', children: [] } ] },
+  { id: 'GB', flag: '🇬🇧', name: 'United Kingdom', level: 'COUNTRY', levelLabel: 'Country', iso: 'GB', currency: 'GBP', children: [] },
+  { id: 'DE', flag: '🇩🇪', name: 'Germany',        level: 'COUNTRY', levelLabel: 'Country', iso: 'DE', currency: 'EUR', children: [] },
+  { id: 'IE', flag: '🇮🇪', name: 'Ireland',        level: 'COUNTRY', levelLabel: 'Country', iso: 'IE', currency: 'EUR', children: [] },
+  { id: 'FR', flag: '🇫🇷', name: 'France',         level: 'COUNTRY', levelLabel: 'Country', iso: 'FR', currency: 'EUR', children: [] },
+  { id: 'IN', flag: '🇮🇳', name: 'India',          level: 'COUNTRY', levelLabel: 'Country', iso: 'IN', currency: 'INR', children: [] },
+  { id: 'CA', flag: '🇨🇦', name: 'Canada',         level: 'COUNTRY', levelLabel: 'Country', iso: 'CA', currency: 'CAD', children: [
+      { id: 'CA-ON', name: 'Ontario',          level: 'SUBNATIONAL', levelLabel: 'Province', iso: 'CA-ON', currency: 'CAD', children: [] },
+      { id: 'CA-BC', name: 'British Columbia', level: 'SUBNATIONAL', levelLabel: 'Province', iso: 'CA-BC', currency: 'CAD', children: [] } ] },
+  { id: 'CH', flag: '🇨🇭', name: 'Switzerland',    level: 'COUNTRY', levelLabel: 'Country', iso: 'CH', currency: 'CHF', children: [
+      { id: 'CH-ZH', name: 'Zürich',  level: 'SUBNATIONAL', levelLabel: 'Canton', iso: 'CH-ZH', currency: 'CHF', children: [] },
+      { id: 'CH-GE', name: 'Genève',  level: 'SUBNATIONAL', levelLabel: 'Canton', iso: 'CH-GE', currency: 'CHF', children: [] } ] },
+  { id: 'JP', flag: '🇯🇵', name: 'Japan',          level: 'COUNTRY', levelLabel: 'Country', iso: 'JP', currency: 'JPY', children: [] },
+];
+
+// Tax types (TAX-RR-002)
+const gtTaxTypes = [
+  { code: 'INCOME_WH',  name: 'Income Tax Withholding', base: 'TAXABLE_INCOME', payer: 'EMPLOYEE' },
+  { code: 'SOC_SEC_EE', name: 'Social Security (EE)',   base: 'TAXABLE_INCOME', payer: 'EMPLOYEE' },
+  { code: 'SOC_SEC_ER', name: 'Social Security (ER)',   base: 'TAXABLE_INCOME', payer: 'EMPLOYER' },
+  { code: 'HEALTH',     name: 'Health / Medicare Levy', base: 'TAXABLE_INCOME', payer: 'EMPLOYEE' },
+  { code: 'CAP_GAINS',  name: 'Capital Gains',          base: 'GAIN',           payer: 'EMPLOYEE' },
+  { code: 'SURTAX',     name: 'Surtax / Solidarity',    base: 'TAX_AMOUNT',     payer: 'EMPLOYEE' },
+  { code: 'CUSTOM',     name: 'Custom (tenant)',        base: 'TAXABLE_INCOME', payer: 'EMPLOYEE' },
+];
+
+// Rate flavours with explicit fallback chain (TAX-RR-008)
+const gtFlavours = [
+  { code: 'STANDARD',            fallback: null,         desc: 'The ordinary graduated method published by the jurisdiction.' },
+  { code: 'SUPPLEMENTAL',        fallback: 'STANDARD',   desc: 'Flat method many jurisdictions permit for irregular or bonus-type income.' },
+  { code: 'SUPPLEMENTAL_EQUITY', fallback: 'SUPPLEMENTAL', desc: 'Published specifically for stock awards where the jurisdiction distinguishes it.' },
+  { code: 'AGGREGATE',           fallback: 'STANDARD',   desc: 'Event income aggregated with regular wages, then withheld at the graduated rate.' },
+  { code: 'FLAT_MANDATED',       fallback: null,         desc: 'A flat rate the jurisdiction mandates — no election available.' },
+  { code: 'EXEMPT',              fallback: null,         desc: 'Jurisdiction asserts no withholding for this tax type.' },
+  { code: 'CUSTOM',              fallback: 'STANDARD',   desc: 'Client-definable extension, scoped to the tenant.' },
+];
+
+// Tax-year calendars — jurisdictions do not share a year (TAX-RR-009)
+const gtTaxYearCalendars = [
+  { juris: 'United States', jid: 'US', label: '2026',    starts: '1 Jan 2026',  ends: '31 Dec 2026', resolves: '2026' },
+  { juris: 'United Kingdom', jid: 'GB', label: '2026/27', starts: '6 Apr 2026',  ends: '5 Apr 2027',  resolves: '2026/27' },
+  { juris: 'India',          jid: 'IN', label: '2026-27', starts: '1 Apr 2026',  ends: '31 Mar 2027', resolves: '2026-27' },
+  { juris: 'Germany',        jid: 'DE', label: '2026',    starts: '1 Jan 2026',  ends: '31 Dec 2026', resolves: '2026' },
+  { juris: 'Ireland',        jid: 'IE', label: '2026',    starts: '1 Jan 2026',  ends: '31 Dec 2026', resolves: '2026' },
+  { juris: 'France',         jid: 'FR', label: '2026',    starts: '1 Jan 2026',  ends: '31 Dec 2026', resolves: '2026' },
+  { juris: 'Canada',         jid: 'CA', label: '2026',    starts: '1 Jan 2026',  ends: '31 Dec 2026', resolves: '2026' },
+  { juris: 'Switzerland',    jid: 'CH', label: '2026',    starts: '1 Jan 2026',  ends: '31 Dec 2026', resolves: '2026' },
+  { juris: 'Japan',          jid: 'JP', label: '2026',    starts: '1 Jan 2026',  ends: '31 Dec 2026', resolves: '2026' },
+];
+
+// Rate schedules — the four-coordinate key (TAX-RR-003/004/005)
+const gtRateSchedules = [
+  { id: 'RS-0001', country: 'US', juris: 'US Federal', jurisLabel: 'Country', taxType: 'INCOME_WH', flavour: 'SUPPLEMENTAL', taxYear: '2026',
+    structure: 'CAPPED', effectiveFrom: '2026-01-01', effectiveTo: null, version: 4, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
+    citation: 'IRS Publication 15 (Circular E), 2026 — supplemental wage withholding',
+    summary: '22% → 37% above $1,000,000', currency: 'USD',
+    bands: [{ from: 0, to: 1000000, rate: 22, basis: 'YTD_SUPPLEMENTAL' }, { from: 1000000, to: null, rate: 37, basis: 'YTD_SUPPLEMENTAL' }],
+    cap: null, payer: 'EMPLOYEE',
+    versions: [{ v: 4, from: '2026-01-01', status: 'PUBLISHED', by: 'T. Okonkwo', note: 'FY2026 threshold confirmed' },
+               { v: 3, from: '2025-01-01', status: 'SUPERSEDED', by: 'T. Okonkwo', note: 'FY2025' },
+               { v: 2, from: '2024-01-01', status: 'SUPERSEDED', by: 'A. Reyes', note: 'FY2024' }] },
+
+  { id: 'RS-0002', country: 'US', juris: 'US Federal', jurisLabel: 'Country', taxType: 'INCOME_WH', flavour: 'STANDARD', taxYear: '2026',
+    structure: 'BANDED', effectiveFrom: '2026-01-01', effectiveTo: null, version: 3, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
+    citation: 'IRS Publication 15-T, 2026 — percentage method tables',
+    summary: '10% – 37% graduated', currency: 'USD',
+    bands: [{ from: 0, to: 11925, rate: 10, basis: 'YTD_TOTAL_INCOME' }, { from: 11925, to: 48475, rate: 12, basis: 'YTD_TOTAL_INCOME' },
+            { from: 48475, to: 103350, rate: 22, basis: 'YTD_TOTAL_INCOME' }, { from: 103350, to: 197300, rate: 24, basis: 'YTD_TOTAL_INCOME' },
+            { from: 197300, to: 250525, rate: 32, basis: 'YTD_TOTAL_INCOME' }, { from: 250525, to: 626350, rate: 35, basis: 'YTD_TOTAL_INCOME' },
+            { from: 626350, to: null, rate: 37, basis: 'YTD_TOTAL_INCOME' }],
+    cap: null, payer: 'EMPLOYEE', versions: [{ v: 3, from: '2026-01-01', status: 'PUBLISHED', by: 'T. Okonkwo', note: 'FY2026 indexation' }] },
+
+  { id: 'RS-0003', country: 'US', juris: 'US Federal', jurisLabel: 'Country', taxType: 'SOC_SEC_EE', flavour: 'STANDARD', taxYear: '2026',
+    structure: 'CAPPED', effectiveFrom: '2026-01-01', effectiveTo: null, version: 5, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
+    citation: 'SSA 2026 wage base announcement', summary: '6.2% to wage base $184,500', currency: 'USD',
+    bands: [{ from: 0, to: 184500, rate: 6.2, basis: 'YTD_TOTAL_INCOME' }],
+    cap: { type: 'WAGE_BASE', ceiling: 184500, aboveRate: 0 }, payer: 'EMPLOYEE',
+    versions: [{ v: 5, from: '2026-01-01', status: 'PUBLISHED', by: 'T. Okonkwo', note: 'FY2026 wage base' }] },
+
+  { id: 'RS-0004', country: 'US', juris: 'US Federal', jurisLabel: 'Country', taxType: 'HEALTH', flavour: 'STANDARD', taxYear: '2026',
+    structure: 'TIERED', effectiveFrom: '2026-01-01', effectiveTo: null, version: 2, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
+    citation: 'IRC §3101(b) — Medicare + Additional Medicare', summary: '1.45%, +0.9% above $200,000', currency: 'USD',
+    bands: [{ from: 0, to: 200000, rate: 1.45, basis: 'YTD_TOTAL_INCOME' }, { from: 200000, to: null, rate: 2.35, basis: 'YTD_TOTAL_INCOME' }],
+    cap: null, payer: 'EMPLOYEE', versions: [{ v: 2, from: '2026-01-01', status: 'PUBLISHED', by: 'A. Reyes', note: 'No change FY2026' }] },
+
+  { id: 'RS-0005', country: 'US', juris: 'California', jurisLabel: 'State', taxType: 'INCOME_WH', flavour: 'SUPPLEMENTAL_EQUITY', taxYear: '2026',
+    structure: 'FLAT', effectiveFrom: '2026-01-01', effectiveTo: null, version: 3, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
+    citation: 'CA EDD DE 44 — stock options & bonuses supplemental rate',
+    summary: '10.23% flat (stock awards)', currency: 'USD',
+    bands: [{ from: 0, to: null, rate: 10.23, basis: 'EVENT_INCOME' }], cap: null, payer: 'EMPLOYEE',
+    versions: [{ v: 3, from: '2026-01-01', status: 'PUBLISHED', by: 'T. Okonkwo', note: 'FY2026 confirmed' }] },
+
+  { id: 'RS-0006', country: 'US', juris: 'California', jurisLabel: 'State', taxType: 'INCOME_WH', flavour: 'SUPPLEMENTAL', taxYear: '2026',
+    structure: 'FLAT', effectiveFrom: '2026-01-01', effectiveTo: null, version: 3, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
+    citation: 'CA EDD DE 44 — general supplemental rate', summary: '6.60% flat', currency: 'USD',
+    bands: [{ from: 0, to: null, rate: 6.6, basis: 'EVENT_INCOME' }], cap: null, payer: 'EMPLOYEE',
+    versions: [{ v: 3, from: '2026-01-01', status: 'PUBLISHED', by: 'T. Okonkwo', note: 'FY2026' }] },
+
+  { id: 'RS-0007', country: 'US', juris: 'New York', jurisLabel: 'State', taxType: 'INCOME_WH', flavour: 'SUPPLEMENTAL', taxYear: '2026',
+    structure: 'FLAT', effectiveFrom: '2026-01-01', effectiveTo: null, version: 2, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
+    citation: 'NYS Publication NYS-50-T-NYS (2026)', summary: '11.70% flat', currency: 'USD',
+    bands: [{ from: 0, to: null, rate: 11.7, basis: 'EVENT_INCOME' }], cap: null, payer: 'EMPLOYEE',
+    versions: [{ v: 2, from: '2026-01-01', status: 'PUBLISHED', by: 'A. Reyes', note: 'FY2026' }] },
+
+  { id: 'RS-0008', country: 'US', juris: 'New York', jurisLabel: 'State', taxType: 'INCOME_WH', flavour: 'STANDARD', taxYear: '2026',
+    structure: 'BANDED', effectiveFrom: '2026-01-01', effectiveTo: null, version: 2, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
+    citation: 'NYS Publication NYS-50-T-NYS (2026) — graduated tables', summary: '4% – 10.9% graduated', currency: 'USD',
+    bands: [{ from: 0, to: 17150, rate: 4, basis: 'YTD_TOTAL_INCOME' }, { from: 17150, to: 80650, rate: 5.5, basis: 'YTD_TOTAL_INCOME' },
+            { from: 80650, to: 215400, rate: 6, basis: 'YTD_TOTAL_INCOME' }, { from: 215400, to: 1077550, rate: 6.85, basis: 'YTD_TOTAL_INCOME' },
+            { from: 1077550, to: null, rate: 10.9, basis: 'YTD_TOTAL_INCOME' }],
+    cap: null, payer: 'EMPLOYEE', versions: [{ v: 2, from: '2026-01-01', status: 'PUBLISHED', by: 'A. Reyes', note: 'FY2026' }] },
+
+  { id: 'RS-0009', country: 'US', juris: 'New York City', jurisLabel: 'City', taxType: 'INCOME_WH', flavour: 'SUPPLEMENTAL', taxYear: '2026',
+    structure: 'FLAT', effectiveFrom: '2026-01-01', effectiveTo: null, version: 1, status: 'PUBLISHED', coverage: 'AUTHORED', source: 'MANUAL',
+    citation: 'NYC Administrative Code §11-1701; authored from published guidance', summary: '4.25% flat', currency: 'USD',
+    bands: [{ from: 0, to: null, rate: 4.25, basis: 'EVENT_INCOME' }], cap: null, payer: 'EMPLOYEE',
+    versions: [{ v: 1, from: '2026-01-01', status: 'PUBLISHED', by: 'M. Duarte', note: 'Initial authoring' }] },
+
+  { id: 'RS-0010', country: 'US', juris: 'Texas', jurisLabel: 'State', taxType: 'INCOME_WH', flavour: 'EXEMPT', taxYear: '2026',
+    structure: 'FIXED', effectiveFrom: '2026-01-01', effectiveTo: null, version: 1, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
+    citation: 'Texas imposes no personal income tax', summary: 'No state income tax', currency: 'USD',
+    bands: [{ from: 0, to: null, rate: 0, basis: 'EVENT_INCOME' }], cap: null, payer: 'EMPLOYEE',
+    versions: [{ v: 1, from: '2026-01-01', status: 'PUBLISHED', by: 'A. Reyes', note: 'Standing' }] },
+
+  { id: 'RS-0011', country: 'US', juris: 'Florida', jurisLabel: 'State', taxType: 'INCOME_WH', flavour: 'EXEMPT', taxYear: '2026',
+    structure: 'FIXED', effectiveFrom: '2026-01-01', effectiveTo: null, version: 1, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
+    citation: 'Florida imposes no personal income tax', summary: 'No state income tax', currency: 'USD',
+    bands: [{ from: 0, to: null, rate: 0, basis: 'EVENT_INCOME' }], cap: null, payer: 'EMPLOYEE',
+    versions: [{ v: 1, from: '2026-01-01', status: 'PUBLISHED', by: 'A. Reyes', note: 'Standing' }] },
+
+  { id: 'RS-0012', country: 'GB', juris: 'United Kingdom', jurisLabel: 'Country', taxType: 'INCOME_WH', flavour: 'STANDARD', taxYear: '2026/27',
+    structure: 'BANDED', effectiveFrom: '2026-04-06', effectiveTo: null, version: 6, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
+    citation: 'HMRC PAYE rates and thresholds 2026/27', summary: '0% / 20% / 40% / 45% PAYE', currency: 'GBP',
+    bands: [{ from: 0, to: 12570, rate: 0, basis: 'YTD_TOTAL_INCOME' }, { from: 12570, to: 50270, rate: 20, basis: 'YTD_TOTAL_INCOME' },
+            { from: 50270, to: 125140, rate: 40, basis: 'YTD_TOTAL_INCOME' }, { from: 125140, to: null, rate: 45, basis: 'YTD_TOTAL_INCOME' }],
+    cap: null, payer: 'EMPLOYEE',
+    versions: [{ v: 6, from: '2026-04-06', status: 'PUBLISHED', by: 'T. Okonkwo', note: 'TY 2026/27 thresholds' },
+               { v: 5, from: '2025-04-06', status: 'SUPERSEDED', by: 'T. Okonkwo', note: 'TY 2025/26' }] },
+
+  { id: 'RS-0013', country: 'GB', juris: 'United Kingdom', jurisLabel: 'Country', taxType: 'SOC_SEC_EE', flavour: 'STANDARD', taxYear: '2026/27',
+    structure: 'TIERED', effectiveFrom: '2026-04-06', effectiveTo: null, version: 4, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
+    citation: 'HMRC Class 1 NIC employee rates 2026/27', summary: '8% to UEL, 2% above', currency: 'GBP',
+    bands: [{ from: 12570, to: 50270, rate: 8, basis: 'YTD_TOTAL_INCOME' }, { from: 50270, to: null, rate: 2, basis: 'YTD_TOTAL_INCOME' }],
+    cap: null, payer: 'EMPLOYEE', versions: [{ v: 4, from: '2026-04-06', status: 'PUBLISHED', by: 'T. Okonkwo', note: 'TY 2026/27' }] },
+
+  { id: 'RS-0014', country: 'DE', juris: 'Germany', jurisLabel: 'Country', taxType: 'INCOME_WH', flavour: 'STANDARD', taxYear: '2026',
+    structure: 'BANDED', effectiveFrom: '2026-01-01', effectiveTo: null, version: 3, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
+    citation: 'Einkommensteuertarif §32a EStG 2026', summary: '0% – 45% progressive', currency: 'EUR',
+    bands: [{ from: 0, to: 12096, rate: 0, basis: 'YTD_TOTAL_INCOME' }, { from: 12096, to: 68430, rate: 24, basis: 'YTD_TOTAL_INCOME' },
+            { from: 68430, to: 277825, rate: 42, basis: 'YTD_TOTAL_INCOME' }, { from: 277825, to: null, rate: 45, basis: 'YTD_TOTAL_INCOME' }],
+    cap: null, payer: 'EMPLOYEE', versions: [{ v: 3, from: '2026-01-01', status: 'PUBLISHED', by: 'M. Duarte', note: 'FY2026 tariff' }] },
+
+  { id: 'RS-0015', country: 'DE', juris: 'Germany', jurisLabel: 'Country', taxType: 'SURTAX', flavour: 'STANDARD', taxYear: '2026',
+    structure: 'FLAT', effectiveFrom: '2026-01-01', effectiveTo: null, version: 2, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
+    citation: 'Solidaritätszuschlaggesetz — 5.5% of assessed income tax',
+    summary: '5.5% on tax amount (tax-on-tax)', currency: 'EUR', taxOnTax: true,
+    bands: [{ from: 0, to: null, rate: 5.5, basis: 'EVENT_INCOME' }], cap: null, payer: 'EMPLOYEE',
+    versions: [{ v: 2, from: '2026-01-01', status: 'PUBLISHED', by: 'M. Duarte', note: 'FY2026' }] },
+
+  { id: 'RS-0016', country: 'DE', juris: 'Germany', jurisLabel: 'Country', taxType: 'SOC_SEC_ER', flavour: 'STANDARD', taxYear: '2026',
+    structure: 'CAPPED', effectiveFrom: '2026-01-01', effectiveTo: null, version: 2, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
+    citation: 'Sozialversicherung employer contribution ceilings 2026', summary: '~20.6% to contribution ceiling', currency: 'EUR',
+    bands: [{ from: 0, to: 96600, rate: 20.6, basis: 'YTD_TOTAL_INCOME' }],
+    cap: { type: 'WAGE_BASE', ceiling: 96600, aboveRate: 0 }, payer: 'EMPLOYER',
+    versions: [{ v: 2, from: '2026-01-01', status: 'PUBLISHED', by: 'M. Duarte', note: 'FY2026 ceilings' }] },
+
+  { id: 'RS-0017', country: 'IE', juris: 'Ireland', jurisLabel: 'Country', taxType: 'HEALTH', flavour: 'STANDARD', taxYear: '2026',
+    structure: 'BANDED', effectiveFrom: '2027-01-01', effectiveTo: null, version: 5, status: 'IN_REVIEW', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
+    citation: 'Revenue eBrief — USC rates and bands 2027 (provider sync)', summary: '0.5% / 2% / 3% / 8% USC', currency: 'EUR',
+    bands: [{ from: 0, to: 12012, rate: 0.5, basis: 'YTD_TOTAL_INCOME' }, { from: 12012, to: 27382, rate: 2, basis: 'YTD_TOTAL_INCOME' },
+            { from: 27382, to: 70044, rate: 3, basis: 'YTD_TOTAL_INCOME' }, { from: 70044, to: null, rate: 8, basis: 'YTD_TOTAL_INCOME' }],
+    cap: null, payer: 'EMPLOYEE',
+    versions: [{ v: 5, from: '2027-01-01', status: 'IN_REVIEW', by: 'Tapestry sync', note: 'Nightly sync — awaiting maker-checker approval' },
+               { v: 4, from: '2026-01-01', status: 'PUBLISHED', by: 'T. Okonkwo', note: 'FY2026 in force' }] },
+
+  { id: 'RS-0018', country: 'IE', juris: 'Ireland', jurisLabel: 'Country', taxType: 'SOC_SEC_ER', flavour: 'STANDARD', taxYear: '2026',
+    structure: 'FLAT', effectiveFrom: '2026-01-01', effectiveTo: null, version: 3, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
+    citation: 'Employer PRSI Class A1 2026', summary: '11.15% employer PRSI', currency: 'EUR',
+    bands: [{ from: 0, to: null, rate: 11.15, basis: 'EVENT_INCOME' }], cap: null, payer: 'EMPLOYER',
+    versions: [{ v: 3, from: '2026-01-01', status: 'PUBLISHED', by: 'T. Okonkwo', note: 'FY2026' }] },
+
+  { id: 'RS-0019', country: 'FR', juris: 'France', jurisLabel: 'Country', taxType: 'INCOME_WH', flavour: 'STANDARD', taxYear: '2026',
+    structure: 'BANDED', effectiveFrom: '2026-01-01', effectiveTo: null, version: 2, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
+    citation: 'Barème de l\'impôt sur le revenu 2026', summary: '0% – 45% progressive', currency: 'EUR',
+    bands: [{ from: 0, to: 11497, rate: 0, basis: 'YTD_TOTAL_INCOME' }, { from: 11497, to: 29315, rate: 11, basis: 'YTD_TOTAL_INCOME' },
+            { from: 29315, to: 83823, rate: 30, basis: 'YTD_TOTAL_INCOME' }, { from: 83823, to: 180294, rate: 41, basis: 'YTD_TOTAL_INCOME' },
+            { from: 180294, to: null, rate: 45, basis: 'YTD_TOTAL_INCOME' }],
+    cap: null, payer: 'EMPLOYEE', versions: [{ v: 2, from: '2026-01-01', status: 'PUBLISHED', by: 'M. Duarte', note: 'FY2026 barème' }] },
+
+  { id: 'RS-0020', country: 'FR', juris: 'France', jurisLabel: 'Country', taxType: 'SOC_SEC_EE', flavour: 'STANDARD', taxYear: '2026',
+    structure: 'FLAT', effectiveFrom: '2026-01-01', effectiveTo: null, version: 2, status: 'PUBLISHED', coverage: 'AUTHORED', source: 'MANUAL',
+    citation: 'CSG/CRDS on equity income — authored from client tax advisor memo', summary: '9.70% CSG/CRDS', currency: 'EUR',
+    bands: [{ from: 0, to: null, rate: 9.7, basis: 'EVENT_INCOME' }], cap: null, payer: 'EMPLOYEE',
+    versions: [{ v: 2, from: '2026-01-01', status: 'PUBLISHED', by: 'M. Duarte', note: 'Advisor memo attached' }] },
+
+  { id: 'RS-0021', country: 'IN', juris: 'India', jurisLabel: 'Country', taxType: 'INCOME_WH', flavour: 'STANDARD', taxYear: '2026-27',
+    structure: 'BANDED', effectiveFrom: '2026-04-01', effectiveTo: null, version: 3, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
+    citation: 'Income-tax Act — new regime slabs AY 2027-28', summary: '0% – 30% slabs', currency: 'INR',
+    bands: [{ from: 0, to: 400000, rate: 0, basis: 'YTD_TOTAL_INCOME' }, { from: 400000, to: 800000, rate: 5, basis: 'YTD_TOTAL_INCOME' },
+            { from: 800000, to: 1200000, rate: 10, basis: 'YTD_TOTAL_INCOME' }, { from: 1200000, to: 1600000, rate: 15, basis: 'YTD_TOTAL_INCOME' },
+            { from: 1600000, to: 2400000, rate: 20, basis: 'YTD_TOTAL_INCOME' }, { from: 2400000, to: null, rate: 30, basis: 'YTD_TOTAL_INCOME' }],
+    cap: null, payer: 'EMPLOYEE', versions: [{ v: 3, from: '2026-04-01', status: 'PUBLISHED', by: 'T. Okonkwo', note: 'TY 2026-27' }] },
+
+  { id: 'RS-0022', country: 'CH', juris: 'Zürich', jurisLabel: 'Canton', taxType: 'INCOME_WH', flavour: 'STANDARD', taxYear: '2026',
+    structure: 'BANDED', effectiveFrom: '2026-01-01', effectiveTo: null, version: 1, status: 'DRAFT', coverage: 'INFERRED', source: 'MANUAL',
+    citation: 'Cantonal tariff not published for equity income — derived from wage-withholding tables',
+    summary: '≈ 8% – 22% (inferred)', currency: 'CHF',
+    bands: [{ from: 0, to: 30000, rate: 8, basis: 'YTD_TOTAL_INCOME' }, { from: 30000, to: 120000, rate: 15, basis: 'YTD_TOTAL_INCOME' },
+            { from: 120000, to: null, rate: 22, basis: 'YTD_TOTAL_INCOME' }],
+    cap: null, payer: 'EMPLOYEE',
+    versions: [{ v: 1, from: '2026-01-01', status: 'DRAFT', by: 'M. Duarte', note: 'Inferred — requires client acknowledgement before it calculates' }] },
+
+  { id: 'RS-0023', country: 'JP', juris: 'Japan', jurisLabel: 'Country', taxType: 'INCOME_WH', flavour: 'SUPPLEMENTAL_EQUITY', taxYear: '2026',
+    structure: 'FIXED', effectiveFrom: '2026-01-01', effectiveTo: null, version: 1, status: 'DRAFT', coverage: 'GAP', source: 'MANUAL',
+    citation: 'No equity-specific withholding method identified — events route to the exception queue',
+    summary: 'No rule — exception queue', currency: 'JPY',
+    bands: [], cap: null, payer: 'EMPLOYEE',
+    versions: [{ v: 1, from: '2026-01-01', status: 'DRAFT', by: 'System', note: 'Gap flagged by coverage report' }] },
+
+  { id: 'RS-0024', country: 'CA', juris: 'Ontario', jurisLabel: 'Province', taxType: 'INCOME_WH', flavour: 'SUPPLEMENTAL', taxYear: '2026',
+    structure: 'BANDED', effectiveFrom: '2026-01-01', effectiveTo: null, version: 2, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
+    citation: 'CRA lump-sum withholding rates — Ontario', summary: '10% / 20% / 30% lump-sum', currency: 'CAD',
+    bands: [{ from: 0, to: 5000, rate: 10, basis: 'EVENT_INCOME' }, { from: 5000, to: 15000, rate: 20, basis: 'EVENT_INCOME' },
+            { from: 15000, to: null, rate: 30, basis: 'EVENT_INCOME' }],
+    cap: null, payer: 'EMPLOYEE', versions: [{ v: 2, from: '2026-01-01', status: 'PUBLISHED', by: 'A. Reyes', note: 'FY2026' }] },
+];
+
+// ══════════════════════ CAPABILITY F — RULES ENGINE DATA ══════════════════════
+
+// Layer 1 — Jurisdiction Claims (TAX-JC-001 … TAX-JC-005)
+const gtClaims = [
+  { id: 'JC-001', name: 'Germany — outbound equity sourcing', juris: 'Germany', level: 'COUNTRY', flag: '🇩🇪',
+    anchorStart: 'Grant date', anchorEnd: 'Vest date', method: 'Time apportionment — calendar days',
+    splitBasis: 'Pro-rata with co-claiming jurisdictions', conditions: [], version: 3, status: 'Active', effectiveFrom: '2024-01-01',
+    note: 'OECD-style workday sourcing over the grant-to-vest period; trailing liability survives departure.' },
+
+  { id: 'JC-002', name: 'United States — federal sourcing', juris: 'US Federal', level: 'COUNTRY', flag: '🇺🇸',
+    anchorStart: 'Grant date', anchorEnd: 'Vest date', method: 'Time apportionment — workdays',
+    splitBasis: 'Pro-rata with co-claiming jurisdictions', conditions: [], version: 4, status: 'Active', effectiveFrom: '2024-01-01',
+    note: 'Federal claim is admitted at the participant\'s US-sourced share; state claims are evaluated independently beneath it.' },
+
+  { id: 'JC-003', name: 'New York — workday allocation (trailing)', juris: 'New York', level: 'SUBNATIONAL', flag: '🇺🇸',
+    anchorStart: 'Grant date', anchorEnd: 'Vest date', method: 'Workday allocation — NY-specific',
+    splitBasis: 'Independent of federal share', conditions: [], version: 2, status: 'Active', effectiveFrom: '2024-01-01',
+    note: 'NY pulls a departed employee\'s later vesting income back to NY even where federal sourcing would not. Its admitted share is independent of the country-level share.' },
+
+  { id: 'JC-004', name: 'California — residence at vest', juris: 'California', level: 'SUBNATIONAL', flag: '🇺🇸',
+    anchorStart: 'Grant date', anchorEnd: 'Vest date', method: 'Allocation by state of residence over period',
+    splitBasis: 'Independent of federal share', conditions: [], version: 2, status: 'Active', effectiveFrom: '2024-01-01',
+    note: 'Distinguishes work state from state of residence — both may be admitted, with resident-credit mechanics left to the treatment layer.' },
+
+  { id: 'JC-005', name: 'Texas / Florida — no claim asserted', juris: 'Texas, Florida', level: 'SUBNATIONAL', flag: '🇺🇸',
+    anchorStart: '—', anchorEnd: '—', method: 'No claim',
+    splitBasis: 'n/a', conditions: [], version: 1, status: 'Active', effectiveFrom: '2024-01-01',
+    note: 'States with no personal income tax assert no claim, so no state Treatment is evaluated and no state line is produced.' },
+
+  { id: 'JC-006', name: 'New Jersey — residence-state claim', juris: 'New Jersey', level: 'SUBNATIONAL', flag: '🇺🇸',
+    anchorStart: 'Grant date', anchorEnd: 'Vest date', method: 'Full taxation by state of residence',
+    splitBasis: 'May co-claim with a work state', conditions: [], version: 1, status: 'Active', effectiveFrom: '2024-01-01',
+    note: 'A residence state and a work state can both assert; both surface as separate lines for the treatment layer to reconcile.' },
+
+  { id: 'JC-007', name: 'United Kingdom — de minimis presence test', juris: 'United Kingdom', level: 'COUNTRY', flag: '🇬🇧',
+    anchorStart: 'Grant date', anchorEnd: 'Vest date', method: 'Time apportionment — workdays',
+    splitBasis: 'Pro-rata; base reallocated to remaining claimants if test fails',
+    conditions: [{ operand: 'workdays_in_jurisdiction', op: '≥', value: '183 workdays' }],
+    version: 2, status: 'Active', effectiveFrom: '2025-01-01',
+    note: 'A failed condition means the jurisdiction has no claim at all and no Treatment is evaluated for it.' },
+
+  { id: 'JC-008', name: 'Payroll entity country — employer charges', juris: '⟨payroll entity country⟩', level: 'COUNTRY', flag: '🏛',
+    anchorStart: 'Grant date', anchorEnd: 'Vest date', method: 'Full source — payroll entity',
+    splitBasis: 'Mirrors employee allocation', conditions: [], version: 1, status: 'Active', effectiveFrom: '2025-06-01',
+    note: 'Relative jurisdiction reference resolved from the participant profile at evaluation time — employer social charges follow the payroll entity, not the participant\'s tax jurisdiction.' },
+];
+
+// Base definitions — serialized expressions over a fixed operand set (TAX-RE-011)
+const gtBaseDefs = [
+  { id: 'BD-001', name: 'RSU release — ordinary income', expr: 'fmv × shares', operands: ['fmv', 'shares'], version: 2 },
+  { id: 'BD-002', name: 'Option exercise — spread', expr: '(fmv − strike) × shares', operands: ['fmv', 'strike', 'shares'], version: 3 },
+  { id: 'BD-003', name: 'ESPP qualifying — ordinary component', expr: 'min(grant_discount, actual_gain)', operands: ['grant_discount', 'actual_gain'], version: 1 },
+  { id: 'BD-004', name: 'ESPP qualifying — capital component', expr: 'gain − prior_taxed', operands: ['gain', 'prior_taxed'], version: 1 },
+  { id: 'BD-005', name: 'ISO disqualifying — ordinary at exercise', expr: '(fmv_at_exercise − strike) × shares − prior_taxed', operands: ['fmv_at_exercise', 'strike', 'shares', 'prior_taxed'], version: 2 },
+  { id: 'BD-006', name: 'Sale — gain over basis', expr: '(sale_price − basis) × shares', operands: ['sale_price', 'basis', 'shares'], version: 1 },
+  { id: 'BD-007', name: 'Surtax — on assessed tax', expr: 'tax_amount', operands: ['tax_amount'], version: 1 },
+];
+
+// Layer 2 — Tax Treatments (TAX-RE-001/002/014/015/016/017/018)
+const gtTreatments = [
+  { id: 'TT-001', name: 'US — RSU release, active employee', taxability: 'WITHHOLD', version: 5, status: 'Active', effectiveFrom: '2026-01-01',
+    match: { event: 'Release', grant: 'RSU', juris: 'US Federal', status: 'Active employee' }, conditions: [],
+    components: [
+      { seq: 1, name: 'Ordinary income', base: 'BD-001', expr: 'fmv × shares', taxType: 'INCOME_WH', flavour: 'SUPPLEMENTAL_EQUITY', payer: 'EMPLOYEE' },
+      { seq: 2, name: 'Social security',  base: 'BD-001', expr: 'fmv × shares', taxType: 'SOC_SEC_EE', flavour: 'STANDARD', payer: 'EMPLOYEE' },
+      { seq: 3, name: 'Medicare',         base: 'BD-001', expr: 'fmv × shares', taxType: 'HEALTH',     flavour: 'STANDARD', payer: 'EMPLOYEE' } ] },
+
+  { id: 'TT-002', name: 'Germany — RSU release with solidarity surcharge', taxability: 'WITHHOLD', version: 3, status: 'Active', effectiveFrom: '2026-01-01',
+    match: { event: 'Release', grant: 'RSU', juris: 'Germany', status: 'Active employee' }, conditions: [],
+    components: [
+      { seq: 1, name: 'Income tax',           base: 'BD-001', expr: 'fmv × shares', taxType: 'INCOME_WH', flavour: 'STANDARD', payer: 'EMPLOYEE' },
+      { seq: 2, name: 'Solidarity surcharge', base: 'BD-007', expr: 'tax_amount',   taxType: 'SURTAX',    flavour: 'STANDARD', payer: 'EMPLOYEE', note: 'tax-on-tax — resolves after base taxes' },
+      { seq: 3, name: 'Employer social',      base: 'BD-001', expr: 'fmv × shares', taxType: 'SOC_SEC_ER', flavour: 'STANDARD', payer: 'EMPLOYER' } ] },
+
+  { id: 'TT-003', name: 'Germany — former employee, trailing liability', taxability: 'REPORT_ONLY', version: 2, status: 'Active', effectiveFrom: '2025-07-01',
+    match: { event: 'Exercise', grant: 'NSO', juris: 'Germany', status: 'Former employee' },
+    conditions: [{ operand: 'employment_status', op: '=', value: 'FORMER' }, { operand: 'active_payroll_in_jurisdiction', op: '=', value: 'false' }],
+    components: [
+      { seq: 1, name: 'Reportable income', base: 'BD-002', expr: '(fmv − strike) × shares', taxType: 'INCOME_WH', flavour: 'STANDARD', payer: 'EMPLOYEE', note: 'reported, not withheld' } ] },
+
+  { id: 'TT-004', name: 'US — RSA vest with valid 83(b) election', taxability: 'NOT_TAXABLE', version: 2, status: 'Active', effectiveFrom: '2025-01-01',
+    match: { event: 'Vest', grant: 'RSA', juris: 'US Federal', status: 'Any' },
+    conditions: [{ operand: 'section_83b_election', op: '=', value: 'true' }],
+    components: [] },
+
+  { id: 'TT-005', name: 'US — ESPP qualifying disposition (multi-component)', taxability: 'WITHHOLD', version: 2, status: 'Active', effectiveFrom: '2026-01-01',
+    match: { event: 'Sale', grant: 'ESPP (423)', juris: 'US Federal', status: 'Any' },
+    conditions: [{ operand: 'holding_period', op: '≥', value: 'qualifying_threshold' }],
+    components: [
+      { seq: 1, name: 'Ordinary income', base: 'BD-003', expr: 'min(grant_discount, actual_gain)', taxType: 'INCOME_WH', flavour: 'SUPPLEMENTAL', payer: 'EMPLOYEE' },
+      { seq: 2, name: 'Capital gain',    base: 'BD-004', expr: 'gain − prior_taxed',               taxType: 'CAP_GAINS', flavour: 'STANDARD',     payer: 'EMPLOYEE' } ] },
+
+  { id: 'TT-006', name: 'US — ISO disqualifying disposition', taxability: 'WITHHOLD', version: 1, status: 'Active', effectiveFrom: '2026-01-01',
+    match: { event: 'Sale', grant: 'ISO', juris: 'US Federal', status: 'Any' },
+    conditions: [{ operand: 'holding_period', op: '<', value: 'qualifying_threshold' }],
+    components: [
+      { seq: 1, name: 'Ordinary income at original exercise', base: 'BD-005', expr: '(fmv_at_exercise − strike) × shares − prior_taxed', taxType: 'INCOME_WH', flavour: 'SUPPLEMENTAL', payer: 'EMPLOYEE', note: 'spread measured at exercise, not at sale' } ] },
+
+  { id: 'TT-007', name: 'France employee / payroll-entity employer charges', taxability: 'WITHHOLD', version: 1, status: 'Active', effectiveFrom: '2026-01-01',
+    match: { event: 'Release', grant: 'RSU', juris: 'France', status: 'Active employee' }, conditions: [],
+    components: [
+      { seq: 1, name: 'Income tax',       base: 'BD-001', expr: 'fmv × shares', taxType: 'INCOME_WH',  flavour: 'STANDARD', payer: 'EMPLOYEE' },
+      { seq: 2, name: 'CSG / CRDS',       base: 'BD-001', expr: 'fmv × shares', taxType: 'SOC_SEC_EE', flavour: 'STANDARD', payer: 'EMPLOYEE' },
+      { seq: 3, name: 'Employer PRSI',    base: 'BD-001', expr: 'fmv × shares', taxType: 'SOC_SEC_ER', flavour: 'STANDARD', payer: 'EMPLOYER', note: 'jurisdiction from payroll entity (Ireland), not participant' } ] },
+
+  { id: 'TT-008', name: 'UK — RSU release, PAYE', taxability: 'WITHHOLD', version: 3, status: 'Active', effectiveFrom: '2026-04-06',
+    match: { event: 'Release', grant: 'RSU', juris: 'United Kingdom', status: 'Active employee' }, conditions: [],
+    components: [
+      { seq: 1, name: 'PAYE income tax', base: 'BD-001', expr: 'fmv × shares', taxType: 'INCOME_WH',  flavour: 'STANDARD', payer: 'EMPLOYEE' },
+      { seq: 2, name: 'Employee NIC',    base: 'BD-001', expr: 'fmv × shares', taxType: 'SOC_SEC_EE', flavour: 'STANDARD', payer: 'EMPLOYEE' } ] },
+];
+
+// ══════════════════════ SIMULATOR SCENARIOS ══════════════════════
+const gtScenarios = [
+  {
+    id: 'SC-1', name: 'Mobile RSU release — Germany → US', ref: 'TAX-RE-003',
+    desc: 'RSU granted while working in Germany, relocation to US (California) 18 months into a 36-month vest.',
+    ctx: { event: 'Release', grant: 'RSU', shares: 4000, fmv: 42.50, date: '15 Mar 2026', participant: 'L. Brandt', status: 'Active employee', payrollEntity: 'US' },
+    base: 170000,
+    claims: [
+      { juris: 'Germany', flag: '🇩🇪', level: 'COUNTRY', pct: 50, method: 'Time apportionment — calendar days', period: 'Grant 1 Jan 2023 → Vest 1 Jan 2026', claim: 'JC-001', admitted: true, note: '18 of 36 months worked in DE' },
+      { juris: 'US Federal', flag: '🇺🇸', level: 'COUNTRY', pct: 50, method: 'Time apportionment — workdays', period: 'Grant 1 Jan 2023 → Vest 1 Jan 2026', claim: 'JC-002', admitted: true, note: '18 of 36 months worked in US' },
+      { juris: 'California', flag: '🇺🇸', level: 'SUBNATIONAL', pct: 50, method: 'Allocation by state of residence', period: 'Grant 1 Jan 2023 → Vest 1 Jan 2026', claim: 'JC-004', admitted: true, note: 'Nests under US claim; share resolved independently' },
+    ],
+    years: [{ juris: 'Germany', year: '2026', window: '1 Jan – 31 Dec 2026' }, { juris: 'US Federal', year: '2026', window: '1 Jan – 31 Dec 2026' }, { juris: 'California', year: '2026', window: '1 Jan – 31 Dec 2026' }],
+    treatments: [
+      { juris: 'Germany', tt: 'TT-002', name: 'Germany — RSU release with solidarity surcharge', taxability: 'WITHHOLD' },
+      { juris: 'US Federal', tt: 'TT-001', name: 'US — RSU release, active employee', taxability: 'WITHHOLD' },
+      { juris: 'California', tt: 'TT-001', name: 'US — RSU release, active employee', taxability: 'WITHHOLD' },
+    ],
+    lines: [
+      { juris: 'Germany',    flag: '🇩🇪', taxType: 'INCOME_WH', flavour: 'STANDARD', alloc: 85000, rate: '42.00%', tax: 35700.00, payer: 'EMPLOYEE', sched: 'RS-0014', note: 'Band placement on YTD total income' },
+      { juris: 'Germany',    flag: '🇩🇪', taxType: 'SURTAX',    flavour: 'STANDARD', alloc: 35700, rate: '5.50%',  tax: 1963.50,  payer: 'EMPLOYEE', sched: 'RS-0015', note: 'tax-on-tax — base is the assessed income tax' },
+      { juris: 'US Federal', flag: '🇺🇸', taxType: 'INCOME_WH', flavour: 'SUPPLEMENTAL_EQUITY→SUPPLEMENTAL', alloc: 85000, rate: '22.00%', tax: 18700.00, payer: 'EMPLOYEE', sched: 'RS-0001', fallback: true, note: 'No federal SUPPLEMENTAL_EQUITY row — fell back to SUPPLEMENTAL' },
+      { juris: 'California', flag: '🇺🇸', taxType: 'INCOME_WH', flavour: 'SUPPLEMENTAL_EQUITY', alloc: 85000, rate: '10.23%', tax: 8695.50, payer: 'EMPLOYEE', sched: 'RS-0005', note: 'CA publishes a stock-award-specific supplemental rate' },
+      { juris: 'US Federal', flag: '🇺🇸', taxType: 'SOC_SEC_EE', flavour: 'STANDARD', alloc: 85000, rate: '0.00%', tax: 0.00, payer: 'EMPLOYEE', sched: 'RS-0003', capped: true, note: 'YTD already above $184,500 wage base — zero headroom' },
+      { juris: 'US Federal', flag: '🇺🇸', taxType: 'HEALTH', flavour: 'STANDARD', alloc: 85000, rate: '1.45%', tax: 1232.50, payer: 'EMPLOYEE', sched: 'RS-0004', note: '' },
+      { juris: 'Germany',    flag: '🇩🇪', taxType: 'SOC_SEC_ER', flavour: 'STANDARD', alloc: 85000, rate: '0.00%', tax: 0.00, payer: 'EMPLOYER', sched: 'RS-0016', capped: true, note: 'Employer charge — above contribution ceiling; excluded from net settlement' },
+    ],
+    trace: [
+      ['claim.evaluate', 'candidate jurisdictions = [DE, US, US-CA] from location segments'],
+      ['claim.DE', 'sourcing 2023-01-01 → 2026-01-01 · calendar days · 548/1096 = 50.00% · ADMITTED'],
+      ['claim.US', 'sourcing 2023-01-01 → 2026-01-01 · workdays · 391/782 = 50.00% · ADMITTED'],
+      ['claim.US-CA', 'residence allocation · 50.00% · ADMITTED (independent of federal share)'],
+      ['taxyear.DE', 'event 2026-03-15 → TY 2026 (1 Jan – 31 Dec)'],
+      ['taxyear.US', 'event 2026-03-15 → TY 2026 (1 Jan – 31 Dec)'],
+      ['treatment.DE', 'TT-002 v3 matched · specificity 4 · taxability = WITHHOLD'],
+      ['treatment.US', 'TT-001 v5 matched · specificity 4 · taxability = WITHHOLD'],
+      ['base.DE', 'BD-001 (fmv × shares) = 42.50 × 4000 = 170,000.00 · allocated 50% = 85,000.00'],
+      ['rate.US.INCOME_WH', 'requested SUPPLEMENTAL_EQUITY · no row · FALLBACK → SUPPLEMENTAL · RS-0001 v4'],
+      ['rate.US-CA.INCOME_WH', 'SUPPLEMENTAL_EQUITY resolved directly · RS-0005 v3 · 10.23%'],
+      ['ytd.US.SOC_SEC_EE', 'payroll YTD 191,400.00 + platform-accrued 0.00 → headroom 0.00 · CAPPED'],
+      ['surtax.DE', 'base = TAX_AMOUNT · topological pass 2 · 35,700.00 × 5.5% = 1,963.50'],
+      ['fx', 'EUR→USD 1.0850 at event date · client configured source: ECB'],
+    ],
+  },
+  {
+    id: 'SC-2', name: 'US supplemental threshold crossover', ref: 'TAX-RE-005',
+    desc: 'YTD supplemental wages of $950,000 with a $200,000 release — the 22% → 37% tier boundary falls mid-event.',
+    ctx: { event: 'Release', grant: 'RSU', shares: 4706, fmv: 42.50, date: '12 Nov 2026', participant: 'S. Chen', status: 'Active employee', payrollEntity: 'US' },
+    base: 200000,
+    claims: [{ juris: 'US Federal', flag: '🇺🇸', level: 'COUNTRY', pct: 100, method: 'Full source — single jurisdiction', period: 'Grant → Vest (no mobility)', claim: 'JC-002', admitted: true, note: 'No location changes in the sourcing period' }],
+    years: [{ juris: 'US Federal', year: '2026', window: '1 Jan – 31 Dec 2026' }],
+    treatments: [{ juris: 'US Federal', tt: 'TT-001', name: 'US — RSU release, active employee', taxability: 'WITHHOLD' }],
+    bandMath: { label: 'US Federal · INCOME_WH · SUPPLEMENTAL · TY2026 (RS-0001 v4)', ytd: 950000, event: 200000,
+      rows: [ { band: '0 – 1,000,000', rate: 22, applies: 50000, tax: 11000, applied: true, note: 'headroom below $1M threshold' },
+              { band: '1,000,000 – ∞', rate: 37, applies: 150000, tax: 55500, applied: true, note: 'crossover — remainder at higher tier' } ] },
+    lines: [
+      { juris: 'US Federal', flag: '🇺🇸', taxType: 'INCOME_WH', flavour: 'SUPPLEMENTAL', alloc: 200000, rate: '22% / 37%', tax: 66500.00, payer: 'EMPLOYEE', sched: 'RS-0001', note: 'Event income placed on top of YTD position' },
+      { juris: 'US Federal', flag: '🇺🇸', taxType: 'SOC_SEC_EE', flavour: 'STANDARD', alloc: 200000, rate: '0.00%', tax: 0.00, payer: 'EMPLOYEE', sched: 'RS-0003', capped: true, note: 'Wage base fully consumed earlier in the year' },
+      { juris: 'US Federal', flag: '🇺🇸', taxType: 'HEALTH', flavour: 'STANDARD', alloc: 200000, rate: '2.35%', tax: 4700.00, payer: 'EMPLOYEE', sched: 'RS-0004', note: 'Additional Medicare tier — YTD already above $200,000' },
+    ],
+    trace: [
+      ['claim.US', 'single jurisdiction · 100.00% · ADMITTED'],
+      ['taxyear.US', 'event 2026-11-12 → TY 2026'],
+      ['treatment.US', 'TT-001 v5 matched · taxability = WITHHOLD'],
+      ['base', 'BD-001 (fmv × shares) = 42.50 × 4706 = 200,005.00 → rounded 200,000.00'],
+      ['ytd.US.INCOME_WH', 'payroll snapshot 2026-10-31: 950,000.00 · platform-accrued since: 0.00'],
+      ['band.1', 'ytd_basis = YTD_SUPPLEMENTAL · 950,000 → 1,000,000 · 50,000.00 @ 22% = 11,000.00'],
+      ['band.2', '1,000,000 → 1,150,000 · 150,000.00 @ 37% = 55,500.00'],
+      ['ytd.US.SOC_SEC_EE', 'headroom 0.00 · CAPPED at 184,500.00 wage base'],
+      ['ytd.US.HEALTH', 'YTD > 200,000 → additional Medicare tier 2.35% applies to full event'],
+    ],
+  },
+  {
+    id: 'SC-3', name: 'Dual claim on 3 April — UK & US tax years diverge', ref: 'TAX-RE-019',
+    desc: 'One event date, two claiming jurisdictions, two differently-labelled tax years.',
+    ctx: { event: 'Release', grant: 'RSU', shares: 2000, fmv: 42.50, date: '3 Apr 2026', participant: 'R. Aldridge', status: 'Active employee', payrollEntity: 'GB' },
+    base: 85000,
+    claims: [
+      { juris: 'United Kingdom', flag: '🇬🇧', level: 'COUNTRY', pct: 60, method: 'Time apportionment — workdays', period: 'Grant → Vest', claim: 'JC-007', admitted: true, note: 'Presence test passed — 402 workdays ≥ 183' },
+      { juris: 'US Federal', flag: '🇺🇸', level: 'COUNTRY', pct: 40, method: 'Time apportionment — workdays', period: 'Grant → Vest', claim: 'JC-002', admitted: true, note: '' },
+    ],
+    years: [
+      { juris: 'United Kingdom', year: '2025/26', window: '6 Apr 2025 – 5 Apr 2026', highlight: true },
+      { juris: 'US Federal', year: '2026', window: '1 Jan – 31 Dec 2026', highlight: true },
+    ],
+    treatments: [
+      { juris: 'United Kingdom', tt: 'TT-008', name: 'UK — RSU release, PAYE', taxability: 'WITHHOLD' },
+      { juris: 'US Federal', tt: 'TT-001', name: 'US — RSU release, active employee', taxability: 'WITHHOLD' },
+    ],
+    lines: [
+      { juris: 'United Kingdom', flag: '🇬🇧', taxType: 'INCOME_WH', flavour: 'STANDARD', alloc: 51000, rate: '40% / 45%', tax: 20400.83, payer: 'EMPLOYEE', sched: 'RS-0012', note: '£40,157 on YTD £85,000 → crosses additional-rate threshold' },
+      { juris: 'United Kingdom', flag: '🇬🇧', taxType: 'SOC_SEC_EE', flavour: 'STANDARD', alloc: 51000, rate: '2.00%', tax: 1020.00, payer: 'EMPLOYEE', sched: 'RS-0013', note: 'Above upper earnings limit — 2% marginal NIC' },
+      { juris: 'US Federal', flag: '🇺🇸', taxType: 'INCOME_WH', flavour: 'SUPPLEMENTAL', alloc: 34000, rate: '22.00%', tax: 7480.00, payer: 'EMPLOYEE', sched: 'RS-0001', note: '' },
+      { juris: 'US Federal', flag: '🇺🇸', taxType: 'HEALTH', flavour: 'STANDARD', alloc: 34000, rate: '1.45%', tax: 493.00, payer: 'EMPLOYEE', sched: 'RS-0004', note: '' },
+    ],
+    trace: [
+      ['claim.GB', 'condition workdays_in_jurisdiction 402 ≥ 183 · PASS · ADMITTED 60.00%'],
+      ['claim.US', 'ADMITTED 40.00%'],
+      ['taxyear.GB', 'event 2026-04-03 · GB calendar 6 Apr → 5 Apr · resolves TY 2025/26 (ends 5 Apr 2026)'],
+      ['taxyear.US', 'event 2026-04-03 · US calendar 1 Jan → 31 Dec · resolves TY 2026'],
+      ['ytd.GB', 'position fetched within TY 2025/26 · £85,000.00'],
+      ['ytd.US', 'position fetched within TY 2026 · $0.00 (year just started)'],
+      ['fx', 'USD→GBP 0.7874 at event date · £40,157.48 allocated'],
+      ['band.GB.1', '£85,000 → £125,140 · £40,140.00 @ 40% = £16,056.00'],
+      ['band.GB.2', '£125,140 → £125,157 · £17.48 @ 45% = £7.87'],
+      ['note', 'Same event date, two tax years — this is why tax_year is keyed per jurisdiction, not per calendar'],
+    ],
+  },
+  {
+    id: 'SC-4', name: 'Former employee — German trailing liability', ref: 'TAX-RE-018',
+    desc: 'NSO exercise by a leaver with a German trailing obligation and no active German payroll.',
+    ctx: { event: 'Exercise', grant: 'NSO', shares: 3000, fmv: 52.00, strike: 28.75, date: '22 Jun 2026', participant: 'K. Osei', status: 'Former employee (left 30 Sep 2025)', payrollEntity: 'US' },
+    base: 69750,
+    claims: [
+      { juris: 'Germany', flag: '🇩🇪', level: 'COUNTRY', pct: 40, method: 'Time apportionment — calendar days', period: 'Grant → Exercise', claim: 'JC-001', admitted: true, note: 'Trailing liability survives departure' },
+      { juris: 'US Federal', flag: '🇺🇸', level: 'COUNTRY', pct: 60, method: 'Time apportionment — workdays', period: 'Grant → Exercise', claim: 'JC-002', admitted: true, note: '' },
+    ],
+    years: [{ juris: 'Germany', year: '2026', window: '1 Jan – 31 Dec 2026' }, { juris: 'US Federal', year: '2026', window: '1 Jan – 31 Dec 2026' }],
+    treatments: [
+      { juris: 'Germany', tt: 'TT-003', name: 'Germany — former employee, trailing liability', taxability: 'REPORT_ONLY' },
+      { juris: 'US Federal', tt: 'TT-001', name: 'US — RSU release, active employee', taxability: 'WITHHOLD' },
+    ],
+    lines: [
+      { juris: 'Germany', flag: '🇩🇪', taxType: 'INCOME_WH', flavour: 'STANDARD', alloc: 27900, rate: '—', tax: 0.00, payer: 'EMPLOYEE', sched: 'RS-0014', reportOnly: true, note: 'REPORT ONLY — reportable €27,900.00, no withholding instruction generated' },
+      { juris: 'US Federal', flag: '🇺🇸', taxType: 'INCOME_WH', flavour: 'SUPPLEMENTAL', alloc: 41850, rate: '22.00%', tax: 9207.00, payer: 'EMPLOYEE', sched: 'RS-0001', note: '' },
+      { juris: 'US Federal', flag: '🇺🇸', taxType: 'HEALTH', flavour: 'STANDARD', alloc: 41850, rate: '1.45%', tax: 606.83, payer: 'EMPLOYEE', sched: 'RS-0004', note: '' },
+    ],
+    trace: [
+      ['context', 'employment_status = FORMER · leaver_date = 2025-09-30 (effective-dated segment)'],
+      ['claim.DE', 'ADMITTED 40.00% · trailing liability — claim survives departure'],
+      ['claim.US', 'ADMITTED 60.00%'],
+      ['treatment.DE', 'TT-003 v2 matched · conditions: employment_status=FORMER PASS, active_payroll=false PASS'],
+      ['treatment.DE.taxability', 'REPORT_ONLY — reporting obligation outlives the withholding obligation'],
+      ['base', 'BD-002 ((fmv − strike) × shares) = (52.00 − 28.75) × 3000 = 69,750.00'],
+      ['output.DE', 'reportable record emitted · no withholding instruction · no settlement impact'],
+      ['output.US', 'withholding instruction emitted · 9,813.83 total'],
+    ],
+  },
+  {
+    id: 'SC-5', name: 'NY trailing claim, Florida asserts none', ref: 'TAX-JC-004',
+    desc: 'Worked in New York for the first half of the vest, relocated to Florida before vesting.',
+    ctx: { event: 'Release', grant: 'RSU', shares: 5000, fmv: 42.50, date: '1 Feb 2026', participant: 'D. Whitfield', status: 'Active employee', payrollEntity: 'US' },
+    base: 212500,
+    claims: [
+      { juris: 'US Federal', flag: '🇺🇸', level: 'COUNTRY', pct: 100, method: 'Time apportionment — workdays', period: 'Grant → Vest', claim: 'JC-002', admitted: true, note: 'All work performed in the US' },
+      { juris: 'New York', flag: '🇺🇸', level: 'SUBNATIONAL', pct: 50, method: 'Workday allocation — NY-specific', period: 'Grant → Vest', claim: 'JC-003', admitted: true, note: 'NY pulls back the NY-sourced portion despite residence at vest being FL' },
+      { juris: 'Florida', flag: '🇺🇸', level: 'SUBNATIONAL', pct: 0, method: 'No claim', period: '—', claim: 'JC-005', admitted: false, note: 'No personal income tax — no claim, no Treatment evaluated' },
+    ],
+    years: [{ juris: 'US Federal', year: '2026', window: '1 Jan – 31 Dec 2026' }, { juris: 'New York', year: '2026', window: '1 Jan – 31 Dec 2026' }],
+    treatments: [
+      { juris: 'US Federal', tt: 'TT-001', name: 'US — RSU release, active employee', taxability: 'WITHHOLD' },
+      { juris: 'New York', tt: 'TT-001', name: 'US — RSU release, active employee', taxability: 'WITHHOLD' },
+      { juris: 'Florida', tt: '—', name: 'No Treatment evaluated — claim not admitted', taxability: 'NOT_TAXABLE' },
+    ],
+    lines: [
+      { juris: 'US Federal', flag: '🇺🇸', taxType: 'INCOME_WH', flavour: 'SUPPLEMENTAL', alloc: 212500, rate: '22.00%', tax: 46750.00, payer: 'EMPLOYEE', sched: 'RS-0001', note: '' },
+      { juris: 'New York', flag: '🇺🇸', taxType: 'INCOME_WH', flavour: 'SUPPLEMENTAL', alloc: 106250, rate: '11.70%', tax: 12431.25, payer: 'EMPLOYEE', sched: 'RS-0007', note: 'Independent share — 50% of base, not 50% of the federal line' },
+      { juris: 'US Federal', flag: '🇺🇸', taxType: 'SOC_SEC_EE', flavour: 'STANDARD', alloc: 212500, rate: '0.00%', tax: 0.00, payer: 'EMPLOYEE', sched: 'RS-0003', capped: true, note: 'Wage base consumed' },
+      { juris: 'US Federal', flag: '🇺🇸', taxType: 'HEALTH', flavour: 'STANDARD', alloc: 212500, rate: '1.45%', tax: 3081.25, payer: 'EMPLOYEE', sched: 'RS-0004', note: '' },
+    ],
+    trace: [
+      ['claim.US', 'ADMITTED 100.00% at country level'],
+      ['claim.US-NY', 'workday allocation 261/522 = 50.00% · ADMITTED · trailing (residence at vest = FL)'],
+      ['claim.US-FL', 'sourcing method = NO_CLAIM · NOT ADMITTED · no Treatment evaluated'],
+      ['note', 'Sub-national share is independent of the country-level share — 100% federal, 50% NY'],
+      ['treatment.US', 'TT-001 v5 · WITHHOLD'],
+      ['treatment.US-NY', 'TT-001 v5 · WITHHOLD · resolves NY rate path and NY YTD context independently'],
+      ['rate.US-NY', 'RS-0007 v2 · SUPPLEMENTAL · 11.70% flat'],
+      ['output', '3 lines produced from one event: federal, NY state, federal Medicare · no FL line'],
+    ],
+  },
+  {
+    id: 'SC-6', name: 'Payer split — France employee, Ireland employer', ref: 'TAX-RE-017',
+    desc: 'Participant taxed in France whose payroll entity sits in Ireland — employer charges resolve elsewhere.',
+    ctx: { event: 'Release', grant: 'RSU', shares: 3000, fmv: 42.50, date: '18 Sep 2026', participant: 'C. Lefèvre', status: 'Active employee', payrollEntity: 'Ireland' },
+    base: 127500,
+    claims: [
+      { juris: 'France', flag: '🇫🇷', level: 'COUNTRY', pct: 100, method: 'Full source — country of work', period: 'Grant → Vest', claim: 'JC-001', admitted: true, note: 'Participant tax jurisdiction' },
+      { juris: 'Ireland ⟨payroll entity⟩', flag: '🇮🇪', level: 'COUNTRY', pct: 100, method: 'Full source — payroll entity', period: 'Grant → Vest', claim: 'JC-008', admitted: true, note: 'Relative reference resolved from participant profile at evaluation time' },
+    ],
+    years: [{ juris: 'France', year: '2026', window: '1 Jan – 31 Dec 2026' }, { juris: 'Ireland', year: '2026', window: '1 Jan – 31 Dec 2026' }],
+    treatments: [
+      { juris: 'France', tt: 'TT-007', name: 'France employee / payroll-entity employer charges', taxability: 'WITHHOLD' },
+      { juris: 'Ireland ⟨payroll entity⟩', tt: 'TT-007', name: 'France employee / payroll-entity employer charges', taxability: 'WITHHOLD' },
+    ],
+    lines: [
+      { juris: 'France', flag: '🇫🇷', taxType: 'INCOME_WH', flavour: 'STANDARD', alloc: 127500, rate: '41.00%', tax: 52275.00, payer: 'EMPLOYEE', sched: 'RS-0019', note: 'Band placement on YTD total income' },
+      { juris: 'France', flag: '🇫🇷', taxType: 'SOC_SEC_EE', flavour: 'STANDARD', alloc: 127500, rate: '9.70%', tax: 12367.50, payer: 'EMPLOYEE', sched: 'RS-0020', note: 'CSG / CRDS — coverage AUTHORED, advisor memo attached' },
+      { juris: 'Ireland', flag: '🇮🇪', taxType: 'SOC_SEC_ER', flavour: 'STANDARD', alloc: 127500, rate: '11.15%', tax: 14216.25, payer: 'EMPLOYER', sched: 'RS-0018', note: 'Employer PRSI — excluded from participant net settlement, routed to accrual' },
+    ],
+    trace: [
+      ['claim.FR', 'participant tax jurisdiction · ADMITTED 100.00%'],
+      ['claim.payroll_entity', 'relative reference ⟨payroll entity country⟩ → resolved IE from profile'],
+      ['treatment', 'TT-007 v1 matched · 3 components'],
+      ['component.1', 'payer=EMPLOYEE · jurisdiction from participant → FR · RS-0019 v2'],
+      ['component.2', 'payer=EMPLOYEE · jurisdiction from participant → FR · RS-0020 v2 · coverage=AUTHORED'],
+      ['component.3', 'payer=EMPLOYER · jurisdiction from payroll entity → IE · RS-0018 v3'],
+      ['settlement', 'employee 64,642.50 withheld · employer 14,216.25 accrued, not deducted from participant'],
+    ],
+  },
+];
+
+// ══════════════════════ TAB SWITCHING ══════════════════════
+function switchRLTab(tab) {
+  document.querySelectorAll('#view-rate-library .gt-tab').forEach(t => t.classList.toggle('active', t.dataset.rltab === tab));
+  document.querySelectorAll('#view-rate-library .gt-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('rl-panel-' + tab).classList.add('active');
+}
+function switchRETab(tab) {
+  document.querySelectorAll('#view-rules-engine .gt-tab').forEach(t => t.classList.toggle('active', t.dataset.retab === tab));
+  document.querySelectorAll('#view-rules-engine .gt-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('re-panel-' + tab).classList.add('active');
+}
+
+// ══════════════════════ RATE LIBRARY RENDERING ══════════════════════
+const gtStatusBadge = s => {
+  const m = { PUBLISHED: ['b-published', 'Published'], DRAFT: ['b-draft', 'Draft'], IN_REVIEW: ['b-review', 'In Review'], SUPERSEDED: ['b-superseded', 'Superseded'] };
+  const [cls, label] = m[s] || ['b-neutral', s];
+  return `<span class="gt-badge ${cls}"><span class="gt-dot"></span>${label}</span>`;
+};
+const gtCoverageBadge = c => {
+  const m = { PUBLISHED_SOURCE: ['b-source', 'Published Source'], AUTHORED: ['b-authored', 'Authored'], INFERRED: ['b-inferred', 'Inferred'], GAP: ['b-gap', 'Gap'] };
+  const [cls, label] = m[c] || ['b-neutral', c];
+  return `<span class="gt-badge ${cls}">${label}</span>`;
+};
+const gtStructIcon = s => ({
+  FLAT:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/></svg>',
+  BANDED: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 18 9 18 9 12 15 12 15 6 21 6"/></svg>',
+  CAPPED: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 16 10 16 10 8 21 8"/></svg>',
+  TIERED: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 18 8 18 8 13 13 13 13 8 21 8"/></svg>',
+  FIXED:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="8" y1="12" x2="16" y2="12"/></svg>',
+}[s] || '');
+
+function gtCoordKey(s) {
+  return `<div class="coord-key">
+    <span class="coord-chip coord-juris">${gtEsc(s.juris)}</span><span class="coord-sep">×</span>
+    <span class="coord-chip coord-type">${s.taxType}</span><span class="coord-sep">×</span>
+    <span class="coord-chip coord-flav">${s.flavour}</span><span class="coord-sep">×</span>
+    <span class="coord-chip coord-year">${s.taxYear}</span>
+  </div>`;
+}
+
+function gtBandMini(bands) {
+  if (!bands || !bands.length) return '<span style="color:var(--textm);font-size:11px">—</span>';
+  const max = Math.max(...bands.map(b => b.rate), 1);
+  return `<div class="band-mini">${bands.map(b =>
+    `<div class="band-mini-seg" style="height:${Math.max(3, (b.rate / max) * 22)}px;opacity:${0.4 + (b.rate / max) * 0.6}" title="${b.rate}%"></div>`).join('')}</div>`;
+}
+
+function renderRLMetrics() {
+  const pub = gtRateSchedules.filter(s => s.status === 'PUBLISHED').length;
+  const review = gtRateSchedules.filter(s => s.status === 'IN_REVIEW').length;
+  const gaps = gtRateSchedules.filter(s => s.coverage === 'GAP' || s.coverage === 'INFERRED').length;
+  const countries = new Set(gtRateSchedules.map(s => s.country)).size;
+  const el = document.getElementById('rl-metrics');
+  if (!el) return;
+  el.innerHTML = `
+    <div class="tax-metric-card">
+      <div class="tm-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>Published Schedules</div>
+      <div class="tm-value">${pub}</div>
+      <div class="tm-sub"><strong>${gtRateSchedules.length}</strong> total across all states</div>
+    </div>
+    <div class="tax-metric-card tm-purple">
+      <div class="tm-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Countries Covered</div>
+      <div class="tm-value">${countries}</div>
+      <div class="tm-sub">${gtJurisdictions.reduce((a, j) => a + 1 + j.children.length, 0)} jurisdictions in hierarchy</div>
+    </div>
+    <div class="tax-metric-card tm-amber">
+      <div class="tm-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Awaiting Approval</div>
+      <div class="tm-value">${review}</div>
+      <div class="tm-sub">Maker-checker — author cannot self-approve</div>
+    </div>
+    <div class="tax-metric-card tm-green">
+      <div class="tm-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>Coverage Attention</div>
+      <div class="tm-value">${gaps}</div>
+      <div class="tm-sub">Inferred or gap — needs acknowledgement</div>
+    </div>`;
+}
+
+function gtPopulateRLFilters() {
+  const cSel = document.getElementById('rl-country-filter');
+  const tSel = document.getElementById('rl-type-filter');
+  const fSel = document.getElementById('rl-flavour-filter');
+  if (!cSel || cSel.dataset.filled) return;
+  const countryName = c => (gtJurisdictions.find(j => j.id === c) || {}).name || c;
+  [...new Set(gtRateSchedules.map(s => s.country))].sort().forEach(c => {
+    cSel.insertAdjacentHTML('beforeend', `<option value="${c}">${gtEsc(countryName(c))}</option>`); });
+  [...new Set(gtRateSchedules.map(s => s.taxType))].sort().forEach(t => {
+    tSel.insertAdjacentHTML('beforeend', `<option value="${t}">${t}</option>`); });
+  [...new Set(gtRateSchedules.map(s => s.flavour))].sort().forEach(f => {
+    fSel.insertAdjacentHTML('beforeend', `<option value="${f}">${f}</option>`); });
+  cSel.dataset.filled = '1';
+}
+
+function renderRateSchedules() {
+  const tbody = document.getElementById('rl-body');
+  if (!tbody) return;
+  const q = (document.getElementById('rl-search')?.value || '').toLowerCase();
+  const fC = document.getElementById('rl-country-filter')?.value || '';
+  const fT = document.getElementById('rl-type-filter')?.value || '';
+  const fF = document.getElementById('rl-flavour-filter')?.value || '';
+  const fS = document.getElementById('rl-status-filter')?.value || '';
+  const fV = document.getElementById('rl-coverage-filter')?.value || '';
+
+  const rows = gtRateSchedules.filter(s =>
+    (!q || (s.juris + s.taxType + s.flavour + s.id + s.summary).toLowerCase().includes(q)) &&
+    (!fC || s.country === fC) && (!fT || s.taxType === fT) && (!fF || s.flavour === fF) &&
+    (!fS || s.status === fS) && (!fV || s.coverage === fV));
+
+  document.getElementById('rl-result-count').textContent = `${rows.length} of ${gtRateSchedules.length} schedules`;
+  document.getElementById('rl-count-sched').textContent = gtRateSchedules.length;
+
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="9" style="padding:40px;text-align:center;color:var(--textm)">No rate schedules match these filters.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = rows.map(s => `
+    <tr style="cursor:pointer" onclick="openRLDrawer('${s.id}')">
+      <td style="font-family:'SF Mono',monospace;font-size:11.5px;font-weight:700;color:var(--accent-dark)">${s.id}</td>
+      <td>${gtCoordKey(s)}</td>
+      <td><span class="struct-pill">${gtStructIcon(s.structure)}${s.structure}</span></td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px">
+          ${gtBandMini(s.bands)}
+          <span style="font-size:11.5px;color:var(--text2);font-weight:500">${gtEsc(s.summary)}</span>
+        </div>
+      </td>
+      <td style="font-size:12px;color:var(--text2)">${s.effectiveFrom}</td>
+      <td style="font-family:'SF Mono',monospace;font-size:11px;font-weight:700;color:var(--text2)">v${s.version}</td>
+      <td>${gtStatusBadge(s.status)}</td>
+      <td>${gtCoverageBadge(s.coverage)}</td>
+      <td><span class="gt-badge b-neutral">${s.source}</span></td>
+    </tr>`).join('');
+}
+
+function renderJurisTree() {
+  const el = document.getElementById('rl-juris-tree');
+  if (!el) return;
+  const count = jid => gtRateSchedules.filter(s => s.juris === jid).length;
+  const node = (j, flag) => {
+    const n = gtRateSchedules.filter(s => s.juris === j.name || (j.id === 'US' && s.juris === 'US Federal')).length;
+    return `<div>
+      <div class="juris-node">
+        <span class="juris-flag">${flag || '•'}</span>
+        <span class="juris-name">${gtEsc(j.name)}</span>
+        <span class="juris-level">${j.levelLabel}</span>
+        <span style="font-family:'SF Mono',monospace;font-size:10px;color:var(--textm)">${j.iso}</span>
+        <span class="juris-meta">${n} schedule${n === 1 ? '' : 's'} · ${j.currency}</span>
+      </div>
+      ${j.children.length ? `<div class="juris-children">${j.children.map(c => node(c, '')).join('')}</div>` : ''}
+    </div>`;
+  };
+  el.innerHTML = gtJurisdictions.map(j => node(j, j.flag)).join('');
+  const total = gtJurisdictions.reduce((a, j) => a + 1 + j.children.reduce((b, c) => b + 1 + c.children.length, 0), 0);
+  document.getElementById('rl-count-juris').textContent = total;
+}
+
+function renderTaxYearCalendars() {
+  const tbody = document.getElementById('rl-cal-body');
+  if (!tbody) return;
+  tbody.innerHTML = gtTaxYearCalendars.map(c => {
+    const divergent = c.label !== '2026';
+    return `<tr>
+      <td style="font-weight:600">${gtEsc(c.juris)}</td>
+      <td><span class="coord-chip coord-year">${c.label}</span></td>
+      <td style="font-size:12px;color:var(--text2)">${c.starts}</td>
+      <td style="font-size:12px;color:var(--text2)">${c.ends}</td>
+      <td>
+        <span class="coord-chip coord-year" style="${divergent ? 'background:#fef3c7;color:#b45309' : ''}">${c.resolves}</span>
+        ${divergent ? '<span style="font-size:11px;color:var(--amber);margin-left:8px;font-weight:600">← diverges from calendar year</span>' : ''}
+      </td>
+    </tr>`;
+  }).join('');
+  document.getElementById('rl-count-cal').textContent = gtTaxYearCalendars.length;
+}
+
+function renderFlavours() {
+  const tbody = document.getElementById('rl-flav-body');
+  if (!tbody) return;
+  tbody.innerHTML = gtFlavours.map(f => {
+    const n = gtRateSchedules.filter(s => s.flavour === f.code).length;
+    return `<tr>
+      <td><span class="coord-chip coord-flav" style="font-size:11px">${f.code}</span></td>
+      <td>${f.fallback ? `<span style="color:var(--text2);font-size:12px">→ <span class="coord-chip coord-flav">${f.fallback}</span></span>`
+                       : '<span style="color:var(--textm);font-size:11.5px">no fallback</span>'}</td>
+      <td style="font-size:12px;color:var(--text2)">${gtEsc(f.desc)}</td>
+      <td style="text-align:right;font-weight:700;color:${n ? 'var(--accent)' : 'var(--textm)'}">${n}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('rl-count-flav').textContent = gtFlavours.length;
+}
+
+function renderRateLibrary() {
+  gtPopulateRLFilters();
+  renderRLMetrics();
+  renderRateSchedules();
+  renderJurisTree();
+  renderTaxYearCalendars();
+  renderFlavours();
+}
+
+// ── Rate schedule drawer ──
+let gtCurrentRS = null;
+function openRLDrawer(id) {
+  const s = gtRateSchedules.find(x => x.id === id);
+  if (!s) return;
+  gtCurrentRS = id;
+  document.getElementById('rl-drawer-title').textContent = s.juris + ' — ' + (gtTaxTypes.find(t => t.code === s.taxType) || {}).name;
+  document.getElementById('rl-drawer-meta').innerHTML =
+    `<span style="font-family:'SF Mono',monospace">${s.id}</span> · v${s.version} · effective ${s.effectiveFrom}${s.effectiveTo ? ' → ' + s.effectiveTo : ' → open'}`;
+  document.getElementById('rl-drawer-badges').innerHTML = gtStatusBadge(s.status) + gtCoverageBadge(s.coverage) +
+    `<span class="gt-badge b-neutral">${s.source}</span>`;
+
+  const tt = gtTaxTypes.find(t => t.code === s.taxType) || {};
+  const flav = gtFlavours.find(f => f.code === s.flavour) || {};
+
+  let html = `<div style="padding:18px 20px">`;
+
+  html += `<div style="margin-bottom:16px">
+    <div class="gt-side-title">Resolution Key</div>
+    ${gtCoordKey(s)}
+    <div style="font-size:11.5px;color:var(--text2);margin-top:8px;line-height:1.55">
+      Unique among published rows. An as-of date selects the version within this key.
+    </div>
+  </div>`;
+
+  html += `<div style="border-top:1px solid var(--border);padding-top:14px;margin-bottom:16px">
+    <div class="gt-kv-grid">
+      <div><div class="gt-kv-label">Structure</div><div class="gt-kv-value">${s.structure}</div></div>
+      <div><div class="gt-kv-label">Computation Base</div><div class="gt-kv-value">${tt.base || '—'}</div></div>
+      <div><div class="gt-kv-label">Payer</div><div class="gt-kv-value"><span class="gt-badge ${s.payer === 'EMPLOYER' ? 'b-employer' : 'b-employee'}">${s.payer}</span></div></div>
+      <div><div class="gt-kv-label">Currency</div><div class="gt-kv-value">${s.currency}</div></div>
+      <div><div class="gt-kv-label">Flavour Fallback</div><div class="gt-kv-value">${flav.fallback ? '→ ' + flav.fallback : 'none'}</div></div>
+      <div><div class="gt-kv-label">Tax Year</div><div class="gt-kv-value">${s.taxYear}</div></div>
+    </div>
+  </div>`;
+
+  if (s.taxOnTax) {
+    html += `<div class="gt-callout warn" style="margin-bottom:16px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      <div><strong>Tax-on-tax.</strong> Base is <code>TAX_AMOUNT</code>, not taxable income. The engine computes base taxes first, then runs surtax components in a second topologically ordered pass.</div>
+    </div>`;
+  }
+
+  if (s.coverage === 'INFERRED') {
+    html += `<div class="gt-callout warn" style="margin-bottom:16px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>
+      <div><strong>Inferred coverage.</strong> Derived where the jurisdiction is silent. Requires client acknowledgement before it calculates — the platform never silently asserts an inference as settled law.</div>
+    </div>`;
+  }
+  if (s.coverage === 'GAP') {
+    html += `<div class="gt-callout warn" style="margin-bottom:16px;background:#fef2f2;border-color:#fecaca;color:#991b1b">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+      <div><strong>Coverage gap.</strong> No rule exists for this coordinate. Events resolving here route to the client exception queue — never a silent zero-tax event.</div>
+    </div>`;
+  }
+
+  if (s.bands.length) {
+    html += `<div style="margin-bottom:16px">
+      <div class="gt-side-title">Bands</div>
+      <table class="band-math">
+        <thead><tr><th>#</th><th>Lower</th><th>Upper</th><th class="num">Rate</th><th>YTD Basis</th></tr></thead>
+        <tbody>${s.bands.map((b, i) => `<tr>
+          <td style="color:var(--textm)">${i + 1}</td>
+          <td>${b.from.toLocaleString()}</td>
+          <td>${b.to === null ? '<span style="color:var(--textm)">∞</span>' : b.to.toLocaleString()}</td>
+          <td class="num" style="font-weight:700;color:var(--accent-dark)">${b.rate}%</td>
+          <td style="font-size:10.5px;color:var(--text2)">${b.basis}</td>
+        </tr>`).join('')}</tbody>
+      </table>
+    </div>`;
+  }
+
+  if (s.cap) {
+    html += `<div style="margin-bottom:16px">
+      <div class="gt-side-title">Cap</div>
+      <div style="font-size:12.5px;color:var(--text)">
+        <strong>${s.cap.type}</strong> — annual ceiling ${gtMoney(s.cap.ceiling, s.currency)}, rate above ceiling ${s.cap.aboveRate}%
+      </div>
+      <div style="font-size:11.5px;color:var(--text2);margin-top:5px">Caps consume remaining headroom only — the engine reads the participant's YTD position for this tax year first.</div>
+    </div>`;
+  }
+
+  html += `<div style="margin-bottom:16px;border-top:1px solid var(--border);padding-top:14px">
+    <div class="gt-side-title">Source &amp; Citation</div>
+    <div style="font-size:12px;color:var(--text);line-height:1.6">${gtEsc(s.citation)}</div>
+  </div>`;
+
+  html += `<div style="border-top:1px solid var(--border);padding-top:14px">
+    <div class="gt-side-title">Version History <span style="text-transform:none;letter-spacing:0;font-weight:500">— append-only, immutable once published</span></div>
+    ${s.versions.map(v => `<div class="ver-row ${v.status === 'PUBLISHED' || v.status === 'IN_REVIEW' ? 'current' : ''}">
+      <span class="ver-no">v${v.v}</span>
+      <span style="font-size:11.5px;color:var(--text2);width:88px">${v.from}</span>
+      ${gtStatusBadge(v.status)}
+      <span style="font-size:11.5px;color:var(--text2);flex:1">${gtEsc(v.note)}</span>
+      <span style="font-size:11px;color:var(--textm)">${gtEsc(v.by)}</span>
+    </div>`).join('')}
+  </div>`;
+
+  html += `</div>`;
+  document.getElementById('rl-drawer-body').innerHTML = html;
+
+  const btn = document.getElementById('rl-drawer-action');
+  const actions = { DRAFT: 'Submit for Review', IN_REVIEW: 'Approve &amp; Publish', PUBLISHED: 'Create New Version', SUPERSEDED: 'View Successor' };
+  btn.innerHTML = actions[s.status] || 'Open';
+  btn.onclick = () => alert(`${s.id} — "${actions[s.status]}"\n\nPublish workflow runs on the shared platform Approvals domain with maker-checker: the author cannot self-approve, and only PUBLISHED versions are visible to tenants or used in calculations (TAX-RR-005).`);
+
+  document.getElementById('rl-drawer-overlay').classList.add('open');
+}
+function closeRLDrawer() { document.getElementById('rl-drawer-overlay').classList.remove('open'); }
+
+// ══════════════════════ RULES ENGINE RENDERING ══════════════════════
+const gtTaxabilityBadge = t => {
+  const m = { WITHHOLD: ['b-withhold', 'Withhold'], REPORT_ONLY: ['b-reportonly', 'Report Only'], NOT_TAXABLE: ['b-nottaxable', 'Not Taxable Here'] };
+  const [cls, label] = m[t] || ['b-neutral', t];
+  return `<span class="gt-badge ${cls}">${label}</span>`;
+};
+
+function renderREMetrics() {
+  const el = document.getElementById('re-metrics');
+  if (!el) return;
+  const comps = gtTreatments.reduce((a, t) => a + t.components.length, 0);
+  const withCond = gtClaims.filter(c => c.conditions.length).length + gtTreatments.filter(t => t.conditions.length).length;
+  el.innerHTML = `
+    <div class="tax-metric-card">
+      <div class="tm-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Jurisdiction Claims</div>
+      <div class="tm-value">${gtClaims.length}</div>
+      <div class="tm-sub">Layer 1 — evaluated before any treatment</div>
+    </div>
+    <div class="tax-metric-card tm-purple">
+      <div class="tm-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-4"/><polyline points="9 11 12 14 15 11"/></svg>Tax Treatments</div>
+      <div class="tm-value">${gtTreatments.length}</div>
+      <div class="tm-sub"><strong>${comps}</strong> components across all treatments</div>
+    </div>
+    <div class="tax-metric-card tm-green">
+      <div class="tm-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/></svg>Base Definitions</div>
+      <div class="tm-value">${gtBaseDefs.length}</div>
+      <div class="tm-sub">Versioned expressions — data, not code</div>
+    </div>
+    <div class="tax-metric-card tm-amber">
+      <div class="tm-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Conditional Rules</div>
+      <div class="tm-value">${withCond}</div>
+      <div class="tm-sub">Safe predicate AST — no free-form code</div>
+    </div>`;
+}
+
+function renderClaims() {
+  const el = document.getElementById('re-claims-list');
+  if (!el) return;
+  document.getElementById('re-count-claims').textContent = gtClaims.length;
+  el.innerHTML = gtClaims.map(c => `
+    <div class="gt-card">
+      <div class="gt-card-head">
+        <span style="font-size:16px">${c.flag}</span>
+        <span class="gt-card-id">${c.id}</span>
+        <span class="gt-card-title">${gtEsc(c.name)}</span>
+        <span class="juris-level">${c.level}</span>
+        <div style="flex:1"></div>
+        <span class="gt-badge b-published"><span class="gt-dot"></span>${c.status}</span>
+      </div>
+      <div class="gt-card-body">
+        <div class="gt-grammar">
+          <div><span class="gt-kw">jurisdiction</span> <span class="gt-val v-juris">${gtEsc(c.juris)}</span></div>
+          <div><span class="gt-kw">sourcing period</span> <span class="gt-val">${gtEsc(c.anchorStart)}</span> → <span class="gt-val">${gtEsc(c.anchorEnd)}</span></div>
+          <div><span class="gt-kw">method</span> <span class="gt-val v-event">${gtEsc(c.method)}</span></div>
+          <div><span class="gt-kw">split basis</span> <span class="gt-val">${gtEsc(c.splitBasis)}</span></div>
+          ${c.conditions.length ? `<div><span class="gt-kw">admitted if</span> ${c.conditions.map(x =>
+            `<span class="gt-val v-cond">${gtEsc(x.operand)} ${gtEsc(x.op)} ${gtEsc(x.value)}</span>`).join(' <span class="gt-kw">and</span> ')}</div>` : ''}
+        </div>
+        <div style="font-size:11.5px;color:var(--text2);margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);line-height:1.55">${gtEsc(c.note)}</div>
+      </div>
+      <div class="gt-card-foot">
+        <span>Version <strong>v${c.version}</strong></span><span>·</span>
+        <span>Effective from <strong>${c.effectiveFrom}</strong></span><span>·</span>
+        <span>Approval-gated</span>
+      </div>
+    </div>`).join('');
+}
+
+function renderTreatments() {
+  const el = document.getElementById('re-treatments-list');
+  if (!el) return;
+  document.getElementById('re-count-treatments').textContent = gtTreatments.length;
+  el.innerHTML = gtTreatments.map(t => `
+    <div class="gt-card">
+      <div class="gt-card-head">
+        <span class="gt-card-id">${t.id}</span>
+        <span class="gt-card-title">${gtEsc(t.name)}</span>
+        <div style="flex:1"></div>
+        ${gtTaxabilityBadge(t.taxability)}
+      </div>
+      <div class="gt-card-body">
+        <div class="gt-grammar" style="margin-bottom:12px">
+          <div>
+            <span class="gt-kw">when</span>
+            <span class="gt-val v-event">${gtEsc(t.match.event)}</span>
+            <span class="gt-kw">on</span>
+            <span class="gt-val v-grant">${gtEsc(t.match.grant)}</span>
+            <span class="gt-kw">in</span>
+            <span class="gt-val v-juris">${gtEsc(t.match.juris)}</span>
+            <span class="gt-kw">for</span>
+            <span class="gt-val">${gtEsc(t.match.status)}</span>
+          </div>
+          ${t.conditions.length ? `<div><span class="gt-kw">and</span> ${t.conditions.map(c =>
+            `<span class="gt-val v-cond">${gtEsc(c.operand)} ${gtEsc(c.op)} ${gtEsc(c.value)}</span>`).join(' <span class="gt-kw">and</span> ')}</div>` : ''}
+          <div><span class="gt-kw">then</span> ${gtTaxabilityBadge(t.taxability)}</div>
+        </div>
+        ${t.components.length ? `
+          <div class="gt-side-title" style="margin-bottom:7px">Components <span style="text-transform:none;letter-spacing:0;font-weight:500">— one treatment may emit several</span></div>
+          ${t.components.map(c => `
+            <div class="comp-line">
+              <div class="comp-seq">${c.seq}</div>
+              <div>
+                <div style="font-size:12.5px;font-weight:600;color:var(--text);margin-bottom:4px">${gtEsc(c.name)}</div>
+                <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+                  <span class="comp-expr">${gtEsc(c.expr)}</span>
+                  <span style="font-size:10px;color:var(--textm)">${c.base}</span>
+                  <span class="coord-chip coord-type">${c.taxType}</span>
+                  <span class="coord-chip coord-flav">${c.flavour}</span>
+                </div>
+                ${c.note ? `<div style="font-size:11px;color:var(--text2);margin-top:5px;font-style:italic">${gtEsc(c.note)}</div>` : ''}
+              </div>
+              <span class="gt-badge ${c.payer === 'EMPLOYER' ? 'b-employer' : 'b-employee'}">${c.payer}</span>
+            </div>`).join('')}`
+        : `<div style="font-size:12px;color:var(--text2);font-style:italic;padding:10px;background:#f8fafc;border-radius:8px">
+             No components — taxability is <strong>not taxable here</strong>, so no withholding instruction is generated. The taxable treatment sits on the grant event instead.
+           </div>`}
+      </div>
+      <div class="gt-card-foot">
+        <span>Version <strong>v${t.version}</strong></span><span>·</span>
+        <span>Effective from <strong>${t.effectiveFrom}</strong></span><span>·</span>
+        <span>Calculations pin the version in force on the event date</span>
+      </div>
+    </div>`).join('');
+}
+
+function renderBaseDefs() {
+  const tbody = document.getElementById('re-bases-body');
+  if (!tbody) return;
+  document.getElementById('re-count-bases').textContent = gtBaseDefs.length;
+  tbody.innerHTML = gtBaseDefs.map(b => `
+    <tr>
+      <td style="font-family:'SF Mono',monospace;font-size:11.5px;font-weight:700;color:var(--accent-dark)">${b.id}</td>
+      <td style="font-weight:600;font-size:12.5px">${gtEsc(b.name)}</td>
+      <td><span class="gt-val v-expr">${gtEsc(b.expr)}</span></td>
+      <td style="font-size:10.5px;color:var(--text2);font-family:'SF Mono',monospace">${b.operands.join(', ')}</td>
+      <td style="font-family:'SF Mono',monospace;font-size:11px;color:var(--text2)">v${b.version}</td>
+    </tr>`).join('');
+}
+
+// ── Simulator ──
+let gtCurrentScenario = 'SC-1';
+
+function renderScenarioList() {
+  const el = document.getElementById('re-sim-scenarios');
+  if (!el) return;
+  el.innerHTML = gtScenarios.map(s => `
+    <div class="sim-scenario ${s.id === gtCurrentScenario ? 'active' : ''}" onclick="selectScenario('${s.id}')">
+      <div class="sim-scenario-name">${gtEsc(s.name)}</div>
+      <div class="sim-scenario-desc">${gtEsc(s.desc)}</div>
+      <span class="sim-scenario-ref">${s.ref}</span>
+    </div>`).join('');
+}
+
+function selectScenario(id) {
+  gtCurrentScenario = id;
+  renderScenarioList();
+  renderSimulation();
+}
+
+function renderSimulation() {
+  const s = gtScenarios.find(x => x.id === gtCurrentScenario);
+  if (!s) return;
+  document.getElementById('re-sim-title').textContent = s.name;
+  document.getElementById('re-sim-sub').textContent = s.desc;
+  document.getElementById('re-sim-ref').textContent = s.ref;
+
+  const employeeTax = s.lines.filter(l => l.payer === 'EMPLOYEE').reduce((a, l) => a + l.tax, 0);
+  const employerTax = s.lines.filter(l => l.payer === 'EMPLOYER').reduce((a, l) => a + l.tax, 0);
+  const effRate = s.base ? (employeeTax / s.base * 100) : 0;
+
+  const step = (n, title, layer, content) => `
+    <div class="pipe-step">
+      <div class="pipe-rail"><div class="pipe-num">${n}</div><div class="pipe-line"></div></div>
+      <div class="pipe-body">
+        <div class="pipe-title">${title}${layer ? `<span class="pipe-layer">${layer}</span>` : ''}</div>
+        <div class="pipe-content">${content}</div>
+      </div>
+    </div>`;
+
+  let html = '';
+
+  // 1 — Event context
+  html += step(1, 'Event Context Assembly', '', `
+    <div class="gt-kv-grid" style="grid-template-columns:repeat(4,1fr)">
+      <div><div class="gt-kv-label">Event</div><div class="gt-kv-value">${gtEsc(s.ctx.event)}</div></div>
+      <div><div class="gt-kv-label">Grant Type</div><div class="gt-kv-value">${gtEsc(s.ctx.grant)}</div></div>
+      <div><div class="gt-kv-label">Shares</div><div class="gt-kv-value">${s.ctx.shares.toLocaleString()}</div></div>
+      <div><div class="gt-kv-label">FMV</div><div class="gt-kv-value">${gtMoney(s.ctx.fmv)}</div></div>
+      <div><div class="gt-kv-label">Event Date</div><div class="gt-kv-value">${gtEsc(s.ctx.date)}</div></div>
+      <div><div class="gt-kv-label">Participant</div><div class="gt-kv-value">${gtEsc(s.ctx.participant)}</div></div>
+      <div><div class="gt-kv-label">Status</div><div class="gt-kv-value" style="font-size:11.5px">${gtEsc(s.ctx.status)}</div></div>
+      <div><div class="gt-kv-label">Payroll Entity</div><div class="gt-kv-value">${gtEsc(s.ctx.payrollEntity)}</div></div>
+    </div>`);
+
+  // 2 — Claim evaluation
+  html += step(2, 'Claim Evaluation', 'Layer 1 · Where', `
+    ${s.claims.map(c => `
+      <div class="comp-line" style="grid-template-columns:26px 1fr auto;${c.admitted ? '' : 'opacity:0.55'}">
+        <div style="font-size:15px">${c.flag}</div>
+        <div>
+          <div style="font-size:12.5px;font-weight:600;color:var(--text)">
+            ${gtEsc(c.juris)} <span class="juris-level" style="margin-left:5px">${c.level}</span>
+            <span style="font-family:'SF Mono',monospace;font-size:10px;color:var(--textm);margin-left:5px">${c.claim}</span>
+          </div>
+          <div style="font-size:11px;color:var(--text2);margin-top:3px">${gtEsc(c.method)} · ${gtEsc(c.period)}</div>
+          ${c.note ? `<div style="font-size:11px;color:var(--text2);margin-top:3px;font-style:italic">${gtEsc(c.note)}</div>` : ''}
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:15px;font-weight:700;color:${c.admitted ? 'var(--accent-dark)' : 'var(--textm)'}">${c.pct}%</div>
+          <div style="font-size:9.5px;font-weight:700;letter-spacing:0.5px;color:${c.admitted ? 'var(--green)' : 'var(--red)'}">${c.admitted ? 'ADMITTED' : 'NO CLAIM'}</div>
+        </div>
+      </div>`).join('')}`);
+
+  // 3 — Tax-year assignment
+  html += step(3, 'Tax-Year Assignment', '', `
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      ${s.years.map(y => `
+        <div style="padding:8px 11px;border:1px solid ${y.highlight ? 'var(--amber)' : 'var(--border)'};border-radius:9px;background:${y.highlight ? '#fffbeb' : '#fcfdfe'}">
+          <div style="font-size:11px;color:var(--text2)">${gtEsc(y.juris)}</div>
+          <div style="font-size:13px;font-weight:700;color:var(--text);margin-top:2px">${y.year}</div>
+          <div style="font-size:10.5px;color:var(--textm);margin-top:2px">${gtEsc(y.window)}</div>
+        </div>`).join('')}
+    </div>`);
+
+  // 4 — Treatment match
+  html += step(4, 'Treatment Match', 'Layer 2 · once per claim', `
+    ${s.treatments.map(t => `
+      <div class="comp-line" style="grid-template-columns:1fr auto">
+        <div>
+          <div style="font-size:12.5px;font-weight:600;color:var(--text)">
+            <span class="coord-chip coord-juris">${gtEsc(t.juris)}</span>
+            <span style="margin:0 6px;color:var(--textm)">→</span>
+            <span style="font-family:'SF Mono',monospace;font-size:11px;color:var(--accent-dark);font-weight:700">${t.tt}</span>
+          </div>
+          <div style="font-size:11.5px;color:var(--text2);margin-top:3px">${gtEsc(t.name)}</div>
+        </div>
+        ${gtTaxabilityBadge(t.taxability)}
+      </div>`).join('')}`);
+
+  // 5 — Base resolution
+  html += step(5, 'Base Resolution', 'per component', `
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <span class="gt-val v-expr">${s.ctx.strike ? '(fmv − strike) × shares' : 'fmv × shares'}</span>
+      <span style="color:var(--textm)">=</span>
+      <span style="font-size:14px;font-weight:700;color:var(--text)">${gtMoney(s.base)}</span>
+      <span style="font-size:11.5px;color:var(--text2)">then allocated by each claim's share, net of any previously-taxed amount</span>
+    </div>`);
+
+  // 6 — Rate resolution
+  html += step(6, 'Rate Resolution', 'precedence', `
+    <div style="font-size:11.5px;color:var(--text2);margin-bottom:8px">
+      Participant override → Grant association → Tenant override → Global default. Payer determines the jurisdiction: participant tax jurisdiction for employee charges, payroll-entity jurisdiction for employer charges.
+    </div>
+    ${s.lines.map(l => `
+      <div style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:11.5px;border-bottom:1px solid #f1f5f9">
+        <span style="width:18px">${l.flag}</span>
+        <span class="coord-chip coord-type">${l.taxType}</span>
+        <span class="coord-chip coord-flav" style="${l.fallback ? 'background:#fef3c7;color:#b45309' : ''}">${gtEsc(l.flavour)}</span>
+        ${l.fallback ? '<span style="font-size:10px;color:var(--amber);font-weight:700">FALLBACK</span>' : ''}
+        <div style="flex:1"></div>
+        <span style="font-family:'SF Mono',monospace;font-size:10.5px;color:var(--text2)">${l.sched}</span>
+      </div>`).join('')}`);
+
+  // 7 — YTD + 8 — Compute (band math where present)
+  html += step(7, 'YTD Position &amp; Computation', '', `
+    ${s.bandMath ? `
+      <div style="margin-bottom:10px;font-size:11.5px;color:var(--text2)">
+        ${gtEsc(s.bandMath.label)} — event income of <strong>${gtMoney(s.bandMath.event)}</strong> placed on top of a YTD position of <strong>${gtMoney(s.bandMath.ytd)}</strong>.
+      </div>
+      <table class="band-math">
+        <thead><tr><th>Band</th><th class="num">Rate</th><th class="num">Applies to</th><th class="num">Tax</th><th>Note</th></tr></thead>
+        <tbody>${s.bandMath.rows.map(r => `<tr class="${r.applied ? 'applied' : ''}">
+          <td>${r.band}</td><td class="num">${r.rate}%</td>
+          <td class="num">${gtMoney(r.applies)}</td>
+          <td class="num" style="font-weight:700">${gtMoney(r.tax)}</td>
+          <td style="font-size:11px;color:var(--text2)">${gtEsc(r.note)}</td>
+        </tr>`).join('')}</tbody>
+      </table>` : `
+      <div style="font-size:11.5px;color:var(--text2)">
+        Band placement on the YTD basis, marginal amounts, cap headroom, then a second pass for tax-on-tax surtaxes, then FX to settlement currency.
+      </div>`}`);
+
+  // 8 — Result
+  html += step(8, 'Result — Jurisdiction Tax Lines', '', `
+    ${s.lines.map(l => `
+      <div class="result-line">
+        <div>
+          <div style="font-size:12.5px;font-weight:600;color:var(--text)">
+            ${l.flag} ${gtEsc(l.juris)}
+            <span class="coord-chip coord-type" style="margin-left:6px">${l.taxType}</span>
+            <span class="gt-badge ${l.payer === 'EMPLOYER' ? 'b-employer' : 'b-employee'}" style="margin-left:4px">${l.payer}</span>
+            ${l.capped ? '<span class="gt-badge b-inferred" style="margin-left:4px">Capped</span>' : ''}
+            ${l.reportOnly ? '<span class="gt-badge b-reportonly" style="margin-left:4px">Report Only</span>' : ''}
+          </div>
+          <div class="result-sub">
+            Allocated base ${gtMoney(l.alloc)} · rate ${gtEsc(l.rate)} · schedule ${l.sched}
+            ${l.note ? ` · ${gtEsc(l.note)}` : ''}
+          </div>
+        </div>
+        <div class="result-amount" style="color:${l.tax > 0 ? 'var(--text)' : 'var(--textm)'}">${gtMoney(l.tax)}</div>
+      </div>`).join('')}
+    <div class="result-line total">
+      <div>
+        <div style="font-size:13px;font-weight:700">Employee withholding${employerTax ? ' (employer charges shown separately)' : ''}</div>
+        <div class="result-sub">Taxable base ${gtMoney(s.base)} · effective rate ${gtPct(effRate)}${employerTax ? ` · employer accrual ${gtMoney(employerTax)}, excluded from net settlement` : ''}</div>
+      </div>
+      <div class="result-amount">${gtMoney(employeeTax)}</div>
+    </div>`);
+
+  // 9 — Trace
+  html += step(9, 'Explanation Trace', 'immutable, version-pinned', `
+    <div class="trace-box">${s.trace.map(([k, v]) =>
+      `<div><span class="trace-key">${gtEsc(k)}</span> <span class="trace-dim">·</span> <span class="${v.includes('ADMITTED') || v.includes('PASS') ? 'trace-ok' : v.includes('FALLBACK') || v.includes('CAPPED') || v.includes('REPORT_ONLY') ? 'trace-warn' : 'trace-val'}">${gtEsc(v)}</span></div>`).join('')}
+    </div>
+    <div style="font-size:11px;color:var(--text2);margin-top:8px;line-height:1.55">
+      Every calculation persists the rule matched, location segments used, sourcing allocation, rate source with version IDs, YTD inputs, band-by-band math, caps applied and FX rates. Retrievable via UI and API, retained ≥ 7 years.
+    </div>`);
+
+  document.getElementById('re-sim-pipeline').innerHTML = html;
+
+  // Precedence ladder — highlight where this scenario resolved
+  document.getElementById('re-sim-precedence').innerHTML = `
+    <div class="prec-step skipped"><div class="prec-num">1</div><div>Participant override</div></div>
+    <div class="prec-step skipped"><div class="prec-num">2</div><div>Grant-level association</div></div>
+    <div class="prec-step skipped"><div class="prec-num">3</div><div>Tenant (client) override</div></div>
+    <div class="prec-step hit"><div class="prec-num">4</div><div>Global platform default</div></div>
+    <div style="font-size:10.5px;color:var(--text2);margin-top:8px;line-height:1.5">
+      This scenario resolved at the global layer. Higher-precedence sources are checked first and short-circuit when present; whichever layer answers is recorded in the trace.
+    </div>`;
+}
+
+function renderRulesEngine() {
+  renderREMetrics();
+  renderClaims();
+  renderTreatments();
+  renderBaseDefs();
+  renderScenarioList();
+  renderSimulation();
+}
+
 </script>
 </body>
 </html>
