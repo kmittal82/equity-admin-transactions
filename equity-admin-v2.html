@@ -2652,6 +2652,121 @@
       .gt-split, .sim-layout { grid-template-columns: 1fr; }
     }
 
+    /* ════════════ RATE LIBRARY v2 — JURISDICTION TREE ════════════ */
+    .rl2-split { display: grid; grid-template-columns: 340px 1fr; gap: 18px; align-items: start; }
+    .rl2-panel {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+    }
+    .rl2-tree-head { padding: 12px 14px; border-bottom: 1px solid var(--border); }
+    .rl2-tree-body { padding: 8px; max-height: 640px; overflow-y: auto; }
+
+    .jt-row {
+      display: flex; align-items: center; gap: 7px; padding: 6px 8px; border-radius: 8px;
+      cursor: pointer; transition: background 0.12s; user-select: none;
+    }
+    .jt-row:hover { background: #f5f8fc; }
+    .jt-row.selected { background: #eff6ff; box-shadow: inset 2px 0 0 var(--accent); }
+    .jt-caret {
+      width: 15px; height: 15px; flex-shrink: 0; color: var(--textm);
+      transition: transform 0.15s; display: flex; align-items: center; justify-content: center;
+    }
+    .jt-caret svg { width: 11px; height: 11px; }
+    .jt-caret.open { transform: rotate(90deg); }
+    .jt-caret.leaf { visibility: hidden; }
+    .jt-flag { font-size: 14px; line-height: 1; flex-shrink: 0; }
+    .jt-name { font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .jt-row.selected .jt-name { color: var(--accent-dark); }
+    .jt-iso {
+      font-family: 'SF Mono', ui-monospace, monospace; font-size: 10px; font-weight: 700;
+      color: var(--text2); background: #f1f5f9; padding: 1px 5px; border-radius: 4px;
+      flex-shrink: 0; letter-spacing: 0.2px;
+    }
+    .jt-row.selected .jt-iso { background: #dbeafe; color: var(--accent-dark); }
+    .jt-count {
+      margin-left: auto; font-size: 10px; font-weight: 700; color: #fff; background: var(--accent);
+      min-width: 17px; height: 17px; border-radius: 9px; display: flex; align-items: center;
+      justify-content: center; padding: 0 5px; flex-shrink: 0;
+    }
+    .jt-count.zero { background: #e2e8f0; color: var(--textm); }
+    .jt-children { margin-left: 14px; border-left: 1px solid #eef2f7; padding-left: 6px; }
+    .jt-children.collapsed { display: none; }
+
+    /* — Detail panel — */
+    .rl2-detail-head { padding: 18px 20px; border-bottom: 1px solid var(--border); }
+    .rl2-detail-title { font-size: 19px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 10px; }
+    .rl2-iso-big {
+      font-family: 'SF Mono', ui-monospace, monospace; font-size: 12px; font-weight: 700;
+      background: #0d1526; color: #a5d8ff; padding: 3px 9px; border-radius: 6px; letter-spacing: 0.4px;
+    }
+    .rl2-crumb { font-size: 12px; color: var(--text2); margin-top: 6px; }
+    .rl2-crumb span { color: var(--textm); }
+    .rl2-level-tag {
+      font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;
+      padding: 2px 7px; border-radius: 5px; background: #f1f5f9; color: var(--text2);
+    }
+    .rl2-level-tag.country { background: #e0e7ff; color: #4338ca; }
+    .rl2-level-tag.state { background: #dbeafe; color: #1d4ed8; }
+    .rl2-level-tag.municipality { background: #f3e8ff; color: #7e22ce; }
+
+    .rl2-section { padding: 16px 20px; }
+    .rl2-section-head {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
+    }
+    .rl2-section-title { font-size: 13px; font-weight: 700; color: var(--text); }
+    .rl2-section-sub { font-size: 11.5px; color: var(--text2); margin-top: 2px; }
+
+    /* — Rate row — */
+    .rate-row {
+      display: grid; grid-template-columns: 1fr 130px 120px 100px 76px; gap: 12px;
+      align-items: center; padding: 11px 13px; border: 1px solid var(--border);
+      border-radius: 10px; margin-bottom: 8px; background: var(--card); transition: border-color 0.14s;
+    }
+    .rate-row:hover { border-color: #cbd5e1; }
+    .rate-name { font-size: 13px; font-weight: 600; color: var(--text); }
+    .rate-meta { font-size: 11px; color: var(--text2); margin-top: 2px; }
+    .rate-value { font-size: 15px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+    .rate-method {
+      font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 5px;
+      text-transform: uppercase; letter-spacing: 0.4px; white-space: nowrap;
+    }
+    .rate-method.standard { background: #e2e8f0; color: #475569; }
+    .rate-method.supplemental { background: #dbeafe; color: #1d4ed8; }
+    .rate-method.equity { background: #f3e8ff; color: #7e22ce; }
+    .rate-actions { display: flex; gap: 5px; justify-content: flex-end; }
+    .rate-icon-btn {
+      width: 28px; height: 28px; border: 1px solid var(--border); background: #fff;
+      border-radius: 7px; cursor: pointer; display: flex; align-items: center;
+      justify-content: center; color: var(--text2); transition: all 0.14s;
+    }
+    .rate-icon-btn:hover { border-color: var(--accent); color: var(--accent); background: #f8fafc; }
+    .rate-icon-btn.danger:hover { border-color: var(--red); color: var(--red); background: #fef2f2; }
+    .rate-icon-btn svg { width: 13px; height: 13px; }
+
+    .rate-row.inherited { background: #fbfcfe; border-style: dashed; }
+    .rate-row.inherited .rate-value, .rate-row.inherited .rate-name { color: var(--text2); }
+    .rate-from {
+      font-size: 10px; font-weight: 700; color: var(--textm); text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .rl2-empty {
+      padding: 30px 20px; text-align: center; border: 1px dashed var(--border);
+      border-radius: 10px; background: #fbfcfe;
+    }
+    .rl2-empty-title { font-size: 13px; font-weight: 600; color: var(--text2); }
+    .rl2-empty-sub { font-size: 11.5px; color: var(--textm); margin-top: 4px; }
+
+    /* — Band editor rows in modal — */
+    .band-edit-row { display: grid; grid-template-columns: 1fr 1fr 34px; gap: 10px; align-items: end; margin-bottom: 9px; }
+    .band-del {
+      width: 34px; height: 36px; border: 1px solid var(--border); background: #fff;
+      border-radius: 8px; cursor: pointer; color: var(--textm); font-size: 16px;
+    }
+    .band-del:hover { border-color: var(--red); color: var(--red); }
+
+    @media (max-width: 1000px) { .rl2-split { grid-template-columns: 1fr; } }
+
   </style>
 </head>
 <body>
@@ -5164,7 +5279,7 @@
       </div>
     </div><!-- /view-tax-codes -->
 
-    <!-- ═══════════════ GLOBAL RATE LIBRARY VIEW ═══════════════ -->
+    <!-- ═══════════════ TAX RATE LIBRARY ═══════════════ -->
     <div class="view-section" id="view-rate-library">
       <div class="tax-page-head">
         <div class="page-title-row">
@@ -5172,162 +5287,30 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
           </div>
           <div>
-            <div class="page-title" style="margin:0">Global Rate Library</div>
-            <div class="page-sub" style="margin-top:4px">Governed platform rate repository — jurisdiction × tax type × flavour × tax year</div>
+            <div class="page-title" style="margin:0">Tax Rate Library</div>
+            <div class="page-sub" style="margin-top:4px">Rates set by ISO code — country, state, municipality</div>
           </div>
         </div>
         <div class="head-actions">
-          <button class="btn btn-ghost" onclick="alert('Bulk import — Capability B (staging + validation, not in this prototype)')">
+          <button class="btn btn-ghost" onclick="alert('Import rates from CSV — not wired in this prototype')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-            Bulk Import
+            Import
           </button>
-          <button class="btn btn-primary" onclick="alert('New rate schedule — opens as DRAFT, then follows maker-checker publish workflow (TAX-RR-005)')">
+          <button class="btn btn-primary" onclick="openRateModal(null)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            New Rate Schedule
+            Add Rate
           </button>
         </div>
       </div>
 
-      <div class="tax-metrics-row" id="rl-metrics"></div>
-
-      <div class="gt-tabs">
-        <div class="gt-tab active" data-rltab="schedules" onclick="switchRLTab('schedules')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
-          Rate Schedules <span class="gt-tab-count" id="rl-count-sched">0</span>
-        </div>
-        <div class="gt-tab" data-rltab="jurisdictions" onclick="switchRLTab('jurisdictions')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg>
-          Jurisdiction Hierarchy <span class="gt-tab-count" id="rl-count-juris">0</span>
-        </div>
-        <div class="gt-tab" data-rltab="calendars" onclick="switchRLTab('calendars')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          Tax Year Calendars <span class="gt-tab-count" id="rl-count-cal">0</span>
-        </div>
-        <div class="gt-tab" data-rltab="flavours" onclick="switchRLTab('flavours')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 6 6 1-4.5 4.5 1 6.5L12 17l-5.5 3 1-6.5L3 9l6-1z"/></svg>
-          Rate Flavours <span class="gt-tab-count" id="rl-count-flav">0</span>
-        </div>
-      </div>
-
-      <!-- Tab: Rate Schedules -->
-      <div class="gt-panel active" id="rl-panel-schedules">
-        <div class="gt-callout">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-          <div><strong>Four-coordinate resolution key.</strong> Every published rate is uniquely identified by <em>jurisdiction × tax type × flavour × tax year</em>, plus an as-of date selecting the version. A Tax Treatment stores only tax type + flavour — the claim supplies the jurisdiction and the event date supplies the year — so a January rate update is a single library row change with no treatment edits.</div>
-        </div>
-
-        <div class="tax-filter-bar">
-          <input class="filter-search-input" id="rl-search" placeholder="🔍 Search jurisdiction, tax type or schedule ID…" oninput="renderRateSchedules()">
-          <select class="filter-select-sm" id="rl-country-filter" onchange="renderRateSchedules()"><option value="">All Countries</option></select>
-          <select class="filter-select-sm" id="rl-type-filter" onchange="renderRateSchedules()"><option value="">All Tax Types</option></select>
-          <select class="filter-select-sm" id="rl-flavour-filter" onchange="renderRateSchedules()"><option value="">All Flavours</option></select>
-          <select class="filter-select-sm" id="rl-status-filter" onchange="renderRateSchedules()">
-            <option value="">All Statuses</option>
-            <option value="PUBLISHED">Published</option>
-            <option value="IN_REVIEW">In Review</option>
-            <option value="DRAFT">Draft</option>
-            <option value="SUPERSEDED">Superseded</option>
-          </select>
-          <select class="filter-select-sm" id="rl-coverage-filter" onchange="renderRateSchedules()">
-            <option value="">All Coverage</option>
-            <option value="PUBLISHED_SOURCE">Published Source</option>
-            <option value="AUTHORED">Authored</option>
-            <option value="INFERRED">Inferred</option>
-            <option value="GAP">Gap</option>
-          </select>
-          <div style="flex:1"></div>
-          <div id="rl-result-count" style="font-size:12px;color:var(--text2);font-weight:500"></div>
-        </div>
-
-        <div class="ag-table-wrap">
-          <table class="ag-table" id="rl-table">
-            <thead>
-              <tr>
-                <th style="width:96px">Schedule</th>
-                <th style="min-width:300px">Resolution Key</th>
-                <th style="width:120px">Structure</th>
-                <th style="width:170px">Rate</th>
-                <th style="width:120px">Effective From</th>
-                <th style="width:60px">Ver</th>
-                <th style="width:110px">Status</th>
-                <th style="width:130px">Coverage</th>
-                <th style="width:100px">Source</th>
-              </tr>
-            </thead>
-            <tbody id="rl-body"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Tab: Jurisdiction Hierarchy -->
-      <div class="gt-panel" id="rl-panel-jurisdictions">
-        <div class="gt-callout">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-          <div><strong>The repository stores the hierarchy; it does not walk it.</strong> Which jurisdictions are in play for an event is decided by the Jurisdiction Claim tree in the Rules Engine. The library answers a lookup for one named jurisdiction at a time — so a published San Francisco rate is never retrieved unless a claim admits San Francisco.</div>
-        </div>
-        <div class="gt-split">
-          <div class="gt-side-card">
-            <div class="gt-side-title">Levels</div>
-            <div style="font-size:12px;color:var(--text2);line-height:1.9">
-              <div><span class="juris-level">Country</span> &nbsp;ISO-mapped, owns currency + tax-year calendar</div>
-              <div style="margin-top:8px"><span class="juris-level">Subnational</span> &nbsp;State / Province / Canton / Prefecture</div>
-              <div style="margin-top:8px"><span class="juris-level">Local</span> &nbsp;City / Municipality</div>
-            </div>
-            <div style="border-top:1px solid var(--border);margin:14px 0 12px"></div>
-            <div class="gt-side-title">Note</div>
-            <div style="font-size:11.5px;color:var(--text2);line-height:1.6">
-              <code style="font-size:11px;background:#f1f5f9;padding:1px 4px;border-radius:4px">level</code> is the canonical tier.
-              "State" is not a level — it is a <code style="font-size:11px;background:#f1f5f9;padding:1px 4px;border-radius:4px">level_label</code> for US subnational.
-            </div>
+      <div class="rl2-split">
+        <div class="rl2-panel">
+          <div class="rl2-tree-head">
+            <input class="form-input" id="rl2-search" placeholder="🔍 Search name or ISO code…" oninput="renderRateTree()" style="font-size:12.5px;padding:8px 11px">
           </div>
-          <div class="gt-side-card">
-            <div class="gt-side-title">Jurisdiction Tree</div>
-            <div class="juris-tree" id="rl-juris-tree"></div>
-          </div>
+          <div class="rl2-tree-body" id="rl2-tree"></div>
         </div>
-      </div>
-
-      <!-- Tab: Tax Year Calendars -->
-      <div class="gt-panel" id="rl-panel-calendars">
-        <div class="gt-callout warn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <div><strong>Jurisdictions do not share a year.</strong> An event on 10 April 2026 falls in tax year <strong>2026</strong> for the US, <strong>2026/27</strong> for the UK, and <strong>2026-27</strong> for India. A single mobile event claimed by several jurisdictions is assigned to a differently-labelled year by each one.</div>
-        </div>
-        <div class="ag-table-wrap">
-          <table class="ag-table">
-            <thead>
-              <tr>
-                <th style="width:200px">Jurisdiction</th>
-                <th style="width:130px">Tax Year Label</th>
-                <th style="width:130px">Starts</th>
-                <th style="width:130px">Ends</th>
-                <th>Event on 10 Apr 2026 resolves to</th>
-              </tr>
-            </thead>
-            <tbody id="rl-cal-body"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Tab: Rate Flavours -->
-      <div class="gt-panel" id="rl-panel-flavours">
-        <div class="gt-callout">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-          <div><strong>Flavour is not structure.</strong> Structure describes the arithmetic (flat, banded, capped). Flavour describes which published method the jurisdiction says to use. Without this dimension a treatment can only ask for "income tax" and cannot express "income tax, supplemental method" — the near-universal case for equity withholding.</div>
-        </div>
-        <div class="ag-table-wrap">
-          <table class="ag-table">
-            <thead>
-              <tr>
-                <th style="width:210px">Flavour Code</th>
-                <th style="width:180px">Falls back to</th>
-                <th>Meaning</th>
-                <th style="width:90px">Schedules</th>
-              </tr>
-            </thead>
-            <tbody id="rl-flav-body"></tbody>
-          </table>
-        </div>
+        <div class="rl2-panel" id="rl2-detail"></div>
       </div>
     </div><!-- /view-rate-library -->
 
@@ -5445,25 +5428,87 @@
       </div>
     </div><!-- /view-rules-engine -->
 
-    <!-- Rate schedule detail drawer -->
-    <div class="ledger-drawer-overlay" id="rl-drawer-overlay" onclick="closeRLDrawer()">
-      <div class="ledger-drawer" onclick="event.stopPropagation()">
-        <div class="ledger-drawer-head">
-          <div class="ledger-drawer-title-row">
-            <div>
-              <div class="ledger-drawer-title" id="rl-drawer-title">—</div>
-              <div class="ledger-drawer-meta" id="rl-drawer-meta">—</div>
-            </div>
-            <button class="ledger-drawer-close" onclick="closeRLDrawer()">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-            </button>
+    <!-- Rate editor -->
+    <div class="modal-overlay" id="rate-modal">
+      <div class="modal-box" style="width:560px" onclick="event.stopPropagation()">
+        <div class="modal-head">
+          <div>
+            <div class="modal-title" id="rate-modal-title">Add Rate</div>
+            <div style="font-size:12px;color:var(--text2);margin-top:3px" id="rate-modal-sub"></div>
           </div>
-          <div class="ledger-drawer-badges" id="rl-drawer-badges"></div>
+          <button class="modal-close" onclick="closeRateModal()">×</button>
         </div>
-        <div class="ledger-drawer-body" id="rl-drawer-body" style="flex:1;overflow-y:auto"></div>
-        <div style="padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;background:#fafbfd">
-          <button class="btn btn-ghost" onclick="closeRLDrawer()">Close</button>
-          <button class="btn btn-primary" id="rl-drawer-action">Submit for Review</button>
+        <div class="modal-body">
+          <div class="form-grid">
+            <div class="form-group full">
+              <label class="form-label">Jurisdiction</label>
+              <select class="form-select" id="rate-f-iso"></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tax Type <span class="req">*</span></label>
+              <select class="form-select" id="rate-f-type">
+                <option>Income Tax</option>
+                <option>Social Security</option>
+                <option>Medicare / Health</option>
+                <option>Capital Gains</option>
+                <option>Surtax</option>
+                <option>Local Wage Tax</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Method</label>
+              <select class="form-select" id="rate-f-method">
+                <option value="Standard">Standard</option>
+                <option value="Supplemental">Supplemental</option>
+                <option value="Equity">Equity (stock awards)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Rate Type</label>
+              <select class="form-select" id="rate-f-structure" onchange="onRateStructureChange()">
+                <option value="Flat">Flat rate</option>
+                <option value="Banded">Banded (progressive)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Effective From</label>
+              <input class="form-input" id="rate-f-eff" type="date" value="2026-01-01">
+            </div>
+
+            <div class="form-group full" id="rate-flat-wrap">
+              <label class="form-label">Rate (%)</label>
+              <input class="form-input" id="rate-f-rate" type="number" step="0.01" placeholder="e.g. 22.00">
+            </div>
+
+            <div class="form-group full" id="rate-bands-wrap" style="display:none">
+              <label class="form-label">Bands</label>
+              <div id="rate-bands-list"></div>
+              <button class="btn btn-ghost" style="margin-top:4px;font-size:12px;padding:6px 10px" onclick="addBandRow()">+ Add band</button>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Status</label>
+              <select class="form-select" id="rate-f-status">
+                <option value="Active">Active</option>
+                <option value="Draft">Draft</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Cap (optional)</label>
+              <input class="form-input" id="rate-f-cap" type="number" placeholder="e.g. 184500">
+            </div>
+          </div>
+          <div class="alert-box alert-info" style="margin-top:16px;margin-bottom:0">
+            Rates are keyed to the jurisdiction's ISO code. A participant in a municipality picks up that
+            municipality's rates plus everything inherited from its state and country.
+          </div>
+        </div>
+        <div class="modal-foot modal-foot-split">
+          <button class="btn btn-ghost" id="rate-delete-btn" style="color:var(--red)" onclick="deleteRate()">Delete</button>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-ghost" onclick="closeRateModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="saveRate()">Save Rate</button>
+          </div>
         </div>
       </div>
     </div>
@@ -9555,242 +9600,98 @@ const gtMoney = (n, cur = 'USD') => {
 const gtPct = n => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
 const gtEsc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-// ══════════════════════ CAPABILITY A — REFERENCE DATA ══════════════════════
+// ══════════════════════ TAX RATE LIBRARY — JURISDICTIONS + RATES ══════════════════════
+// Rates are keyed to a jurisdiction's ISO code. US is modelled in depth
+// (country → state → municipality); other countries are generic country-level nodes.
 
-// Jurisdiction hierarchy: COUNTRY → SUBNATIONAL → LOCAL  (TAX-RR-001)
-const gtJurisdictions = [
-  { id: 'US', flag: '🇺🇸', name: 'United States', level: 'COUNTRY', levelLabel: 'Country', iso: 'US', currency: 'USD', children: [
-      { id: 'US-CA', name: 'California',  level: 'SUBNATIONAL', levelLabel: 'State', iso: 'US-CA', currency: 'USD', children: [
-          { id: 'US-CA-SF', name: 'San Francisco', level: 'LOCAL', levelLabel: 'City', iso: 'US-CA-SF', currency: 'USD', children: [] } ] },
-      { id: 'US-NY', name: 'New York',    level: 'SUBNATIONAL', levelLabel: 'State', iso: 'US-NY', currency: 'USD', children: [
-          { id: 'US-NY-NYC', name: 'New York City', level: 'LOCAL', levelLabel: 'City', iso: 'US-NY-NYC', currency: 'USD', children: [] } ] },
-      { id: 'US-NJ', name: 'New Jersey',  level: 'SUBNATIONAL', levelLabel: 'State', iso: 'US-NJ', currency: 'USD', children: [] },
-      { id: 'US-TX', name: 'Texas',       level: 'SUBNATIONAL', levelLabel: 'State', iso: 'US-TX', currency: 'USD', children: [] },
-      { id: 'US-FL', name: 'Florida',     level: 'SUBNATIONAL', levelLabel: 'State', iso: 'US-FL', currency: 'USD', children: [] } ] },
-  { id: 'GB', flag: '🇬🇧', name: 'United Kingdom', level: 'COUNTRY', levelLabel: 'Country', iso: 'GB', currency: 'GBP', children: [] },
-  { id: 'DE', flag: '🇩🇪', name: 'Germany',        level: 'COUNTRY', levelLabel: 'Country', iso: 'DE', currency: 'EUR', children: [] },
-  { id: 'IE', flag: '🇮🇪', name: 'Ireland',        level: 'COUNTRY', levelLabel: 'Country', iso: 'IE', currency: 'EUR', children: [] },
-  { id: 'FR', flag: '🇫🇷', name: 'France',         level: 'COUNTRY', levelLabel: 'Country', iso: 'FR', currency: 'EUR', children: [] },
-  { id: 'IN', flag: '🇮🇳', name: 'India',          level: 'COUNTRY', levelLabel: 'Country', iso: 'IN', currency: 'INR', children: [] },
-  { id: 'CA', flag: '🇨🇦', name: 'Canada',         level: 'COUNTRY', levelLabel: 'Country', iso: 'CA', currency: 'CAD', children: [
-      { id: 'CA-ON', name: 'Ontario',          level: 'SUBNATIONAL', levelLabel: 'Province', iso: 'CA-ON', currency: 'CAD', children: [] },
-      { id: 'CA-BC', name: 'British Columbia', level: 'SUBNATIONAL', levelLabel: 'Province', iso: 'CA-BC', currency: 'CAD', children: [] } ] },
-  { id: 'CH', flag: '🇨🇭', name: 'Switzerland',    level: 'COUNTRY', levelLabel: 'Country', iso: 'CH', currency: 'CHF', children: [
-      { id: 'CH-ZH', name: 'Zürich',  level: 'SUBNATIONAL', levelLabel: 'Canton', iso: 'CH-ZH', currency: 'CHF', children: [] },
-      { id: 'CH-GE', name: 'Genève',  level: 'SUBNATIONAL', levelLabel: 'Canton', iso: 'CH-GE', currency: 'CHF', children: [] } ] },
-  { id: 'JP', flag: '🇯🇵', name: 'Japan',          level: 'COUNTRY', levelLabel: 'Country', iso: 'JP', currency: 'JPY', children: [] },
+const gtJurisTree = [
+  { iso: 'US', name: 'United States', level: 'COUNTRY', flag: '🇺🇸', currency: 'USD', children: [
+    { iso: 'US-CA', name: 'California',     level: 'STATE', currency: 'USD', children: [
+      { iso: 'US-CA-SFO', name: 'San Francisco', level: 'MUNICIPALITY', currency: 'USD', children: [] } ] },
+    { iso: 'US-NY', name: 'New York',       level: 'STATE', currency: 'USD', children: [
+      { iso: 'US-NY-NYC', name: 'New York City', level: 'MUNICIPALITY', currency: 'USD', children: [] } ] },
+    { iso: 'US-PA', name: 'Pennsylvania',   level: 'STATE', currency: 'USD', children: [
+      { iso: 'US-PA-PHL', name: 'Philadelphia', level: 'MUNICIPALITY', currency: 'USD', children: [] } ] },
+    { iso: 'US-NJ', name: 'New Jersey',     level: 'STATE', currency: 'USD', children: [] },
+    { iso: 'US-MA', name: 'Massachusetts',  level: 'STATE', currency: 'USD', children: [] },
+    { iso: 'US-IL', name: 'Illinois',       level: 'STATE', currency: 'USD', children: [] },
+    { iso: 'US-CO', name: 'Colorado',       level: 'STATE', currency: 'USD', children: [] },
+    { iso: 'US-GA', name: 'Georgia',        level: 'STATE', currency: 'USD', children: [] },
+    { iso: 'US-NC', name: 'North Carolina', level: 'STATE', currency: 'USD', children: [] },
+    { iso: 'US-VA', name: 'Virginia',       level: 'STATE', currency: 'USD', children: [] },
+    { iso: 'US-AZ', name: 'Arizona',        level: 'STATE', currency: 'USD', children: [] },
+    { iso: 'US-OH', name: 'Ohio',           level: 'STATE', currency: 'USD', children: [] },
+    { iso: 'US-MI', name: 'Michigan',       level: 'STATE', currency: 'USD', children: [] },
+    { iso: 'US-MN', name: 'Minnesota',      level: 'STATE', currency: 'USD', children: [] },
+    { iso: 'US-OR', name: 'Oregon',         level: 'STATE', currency: 'USD', children: [] },
+    { iso: 'US-CT', name: 'Connecticut',    level: 'STATE', currency: 'USD', children: [] },
+    { iso: 'US-TX', name: 'Texas',          level: 'STATE', currency: 'USD', children: [] },
+    { iso: 'US-FL', name: 'Florida',        level: 'STATE', currency: 'USD', children: [] },
+    { iso: 'US-WA', name: 'Washington',     level: 'STATE', currency: 'USD', children: [] },
+    { iso: 'US-TN', name: 'Tennessee',      level: 'STATE', currency: 'USD', children: [] },
+  ] },
+  { iso: 'GB', name: 'United Kingdom', level: 'COUNTRY', flag: '🇬🇧', currency: 'GBP', generic: true, children: [] },
+  { iso: 'DE', name: 'Germany',        level: 'COUNTRY', flag: '🇩🇪', currency: 'EUR', generic: true, children: [] },
+  { iso: 'FR', name: 'France',         level: 'COUNTRY', flag: '🇫🇷', currency: 'EUR', generic: true, children: [] },
+  { iso: 'IE', name: 'Ireland',        level: 'COUNTRY', flag: '🇮🇪', currency: 'EUR', generic: true, children: [] },
+  { iso: 'NL', name: 'Netherlands',    level: 'COUNTRY', flag: '🇳🇱', currency: 'EUR', generic: true, children: [] },
+  { iso: 'CH', name: 'Switzerland',    level: 'COUNTRY', flag: '🇨🇭', currency: 'CHF', generic: true, children: [] },
+  { iso: 'CA', name: 'Canada',         level: 'COUNTRY', flag: '🇨🇦', currency: 'CAD', generic: true, children: [] },
+  { iso: 'IN', name: 'India',          level: 'COUNTRY', flag: '🇮🇳', currency: 'INR', generic: true, children: [] },
+  { iso: 'SG', name: 'Singapore',      level: 'COUNTRY', flag: '🇸🇬', currency: 'SGD', generic: true, children: [] },
+  { iso: 'JP', name: 'Japan',          level: 'COUNTRY', flag: '🇯🇵', currency: 'JPY', generic: true, children: [] },
+  { iso: 'AU', name: 'Australia',      level: 'COUNTRY', flag: '🇦🇺', currency: 'AUD', generic: true, children: [] },
 ];
 
-// Tax types (TAX-RR-002)
-const gtTaxTypes = [
-  { code: 'INCOME_WH',  name: 'Income Tax Withholding', base: 'TAXABLE_INCOME', payer: 'EMPLOYEE' },
-  { code: 'SOC_SEC_EE', name: 'Social Security (EE)',   base: 'TAXABLE_INCOME', payer: 'EMPLOYEE' },
-  { code: 'SOC_SEC_ER', name: 'Social Security (ER)',   base: 'TAXABLE_INCOME', payer: 'EMPLOYER' },
-  { code: 'HEALTH',     name: 'Health / Medicare Levy', base: 'TAXABLE_INCOME', payer: 'EMPLOYEE' },
-  { code: 'CAP_GAINS',  name: 'Capital Gains',          base: 'GAIN',           payer: 'EMPLOYEE' },
-  { code: 'SURTAX',     name: 'Surtax / Solidarity',    base: 'TAX_AMOUNT',     payer: 'EMPLOYEE' },
-  { code: 'CUSTOM',     name: 'Custom (tenant)',        base: 'TAXABLE_INCOME', payer: 'EMPLOYEE' },
-];
+let gtRates = [
+  // ── United States — federal ──
+  { id: 'R-001', iso: 'US', taxType: 'Income Tax', method: 'Supplemental', structure: 'Banded',
+    bands: [{ to: 1000000, rate: 22 }, { to: null, rate: 37 }], effectiveFrom: '2026-01-01', status: 'Active' },
+  { id: 'R-002', iso: 'US', taxType: 'Social Security', method: 'Standard', structure: 'Flat',
+    rate: 6.2, cap: 184500, effectiveFrom: '2026-01-01', status: 'Active' },
+  { id: 'R-003', iso: 'US', taxType: 'Medicare / Health', method: 'Standard', structure: 'Flat',
+    rate: 1.45, effectiveFrom: '2026-01-01', status: 'Active' },
 
-// Rate flavours with explicit fallback chain (TAX-RR-008)
-const gtFlavours = [
-  { code: 'STANDARD',            fallback: null,         desc: 'The ordinary graduated method published by the jurisdiction.' },
-  { code: 'SUPPLEMENTAL',        fallback: 'STANDARD',   desc: 'Flat method many jurisdictions permit for irregular or bonus-type income.' },
-  { code: 'SUPPLEMENTAL_EQUITY', fallback: 'SUPPLEMENTAL', desc: 'Published specifically for stock awards where the jurisdiction distinguishes it.' },
-  { code: 'AGGREGATE',           fallback: 'STANDARD',   desc: 'Event income aggregated with regular wages, then withheld at the graduated rate.' },
-  { code: 'FLAT_MANDATED',       fallback: null,         desc: 'A flat rate the jurisdiction mandates — no election available.' },
-  { code: 'EXEMPT',              fallback: null,         desc: 'Jurisdiction asserts no withholding for this tax type.' },
-  { code: 'CUSTOM',              fallback: 'STANDARD',   desc: 'Client-definable extension, scoped to the tenant.' },
-];
+  // ── US states ──
+  { id: 'R-010', iso: 'US-CA', taxType: 'Income Tax', method: 'Equity',       structure: 'Flat', rate: 10.23, effectiveFrom: '2026-01-01', status: 'Active' },
+  { id: 'R-011', iso: 'US-CA', taxType: 'Income Tax', method: 'Supplemental', structure: 'Flat', rate: 6.60,  effectiveFrom: '2026-01-01', status: 'Active' },
+  { id: 'R-012', iso: 'US-NY', taxType: 'Income Tax', method: 'Supplemental', structure: 'Flat', rate: 11.70, effectiveFrom: '2026-01-01', status: 'Active' },
+  { id: 'R-013', iso: 'US-PA', taxType: 'Income Tax', method: 'Standard',     structure: 'Flat', rate: 3.07,  effectiveFrom: '2026-01-01', status: 'Active' },
+  { id: 'R-014', iso: 'US-NJ', taxType: 'Income Tax', method: 'Supplemental', structure: 'Flat', rate: 10.75, effectiveFrom: '2026-01-01', status: 'Active' },
+  { id: 'R-015', iso: 'US-MA', taxType: 'Income Tax', method: 'Supplemental', structure: 'Flat', rate: 5.00,  effectiveFrom: '2026-01-01', status: 'Active' },
+  { id: 'R-016', iso: 'US-IL', taxType: 'Income Tax', method: 'Supplemental', structure: 'Flat', rate: 4.95,  effectiveFrom: '2026-01-01', status: 'Active' },
+  { id: 'R-017', iso: 'US-CO', taxType: 'Income Tax', method: 'Supplemental', structure: 'Flat', rate: 4.40,  effectiveFrom: '2026-01-01', status: 'Active' },
+  { id: 'R-018', iso: 'US-GA', taxType: 'Income Tax', method: 'Supplemental', structure: 'Flat', rate: 5.39,  effectiveFrom: '2026-01-01', status: 'Active' },
+  { id: 'R-019', iso: 'US-NC', taxType: 'Income Tax', method: 'Supplemental', structure: 'Flat', rate: 4.25,  effectiveFrom: '2026-01-01', status: 'Active' },
+  { id: 'R-020', iso: 'US-VA', taxType: 'Income Tax', method: 'Supplemental', structure: 'Flat', rate: 5.75,  effectiveFrom: '2026-01-01', status: 'Active' },
+  { id: 'R-021', iso: 'US-AZ', taxType: 'Income Tax', method: 'Supplemental', structure: 'Flat', rate: 2.50,  effectiveFrom: '2026-01-01', status: 'Active' },
+  { id: 'R-022', iso: 'US-OH', taxType: 'Income Tax', method: 'Supplemental', structure: 'Flat', rate: 3.50,  effectiveFrom: '2026-01-01', status: 'Active' },
+  { id: 'R-023', iso: 'US-MI', taxType: 'Income Tax', method: 'Supplemental', structure: 'Flat', rate: 4.25,  effectiveFrom: '2026-01-01', status: 'Active' },
+  { id: 'R-024', iso: 'US-MN', taxType: 'Income Tax', method: 'Supplemental', structure: 'Flat', rate: 6.25,  effectiveFrom: '2026-01-01', status: 'Active' },
+  { id: 'R-025', iso: 'US-OR', taxType: 'Income Tax', method: 'Supplemental', structure: 'Flat', rate: 8.00,  effectiveFrom: '2026-01-01', status: 'Active' },
+  { id: 'R-026', iso: 'US-CT', taxType: 'Income Tax', method: 'Supplemental', structure: 'Flat', rate: 6.99,  effectiveFrom: '2026-01-01', status: 'Active' },
 
-// Tax-year calendars — jurisdictions do not share a year (TAX-RR-009)
-const gtTaxYearCalendars = [
-  { juris: 'United States', jid: 'US', label: '2026',    starts: '1 Jan 2026',  ends: '31 Dec 2026', resolves: '2026' },
-  { juris: 'United Kingdom', jid: 'GB', label: '2026/27', starts: '6 Apr 2026',  ends: '5 Apr 2027',  resolves: '2026/27' },
-  { juris: 'India',          jid: 'IN', label: '2026-27', starts: '1 Apr 2026',  ends: '31 Mar 2027', resolves: '2026-27' },
-  { juris: 'Germany',        jid: 'DE', label: '2026',    starts: '1 Jan 2026',  ends: '31 Dec 2026', resolves: '2026' },
-  { juris: 'Ireland',        jid: 'IE', label: '2026',    starts: '1 Jan 2026',  ends: '31 Dec 2026', resolves: '2026' },
-  { juris: 'France',         jid: 'FR', label: '2026',    starts: '1 Jan 2026',  ends: '31 Dec 2026', resolves: '2026' },
-  { juris: 'Canada',         jid: 'CA', label: '2026',    starts: '1 Jan 2026',  ends: '31 Dec 2026', resolves: '2026' },
-  { juris: 'Switzerland',    jid: 'CH', label: '2026',    starts: '1 Jan 2026',  ends: '31 Dec 2026', resolves: '2026' },
-  { juris: 'Japan',          jid: 'JP', label: '2026',    starts: '1 Jan 2026',  ends: '31 Dec 2026', resolves: '2026' },
-];
+  // ── US municipalities ──
+  { id: 'R-030', iso: 'US-NY-NYC', taxType: 'Income Tax',     method: 'Supplemental', structure: 'Flat', rate: 4.25, effectiveFrom: '2026-01-01', status: 'Active' },
+  { id: 'R-031', iso: 'US-PA-PHL', taxType: 'Local Wage Tax', method: 'Standard',     structure: 'Flat', rate: 3.75, effectiveFrom: '2026-01-01', status: 'Active' },
 
-// Rate schedules — the four-coordinate key (TAX-RR-003/004/005)
-const gtRateSchedules = [
-  { id: 'RS-0001', country: 'US', juris: 'US Federal', jurisLabel: 'Country', taxType: 'INCOME_WH', flavour: 'SUPPLEMENTAL', taxYear: '2026',
-    structure: 'CAPPED', effectiveFrom: '2026-01-01', effectiveTo: null, version: 4, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
-    citation: 'IRS Publication 15 (Circular E), 2026 — supplemental wage withholding',
-    summary: '22% → 37% above $1,000,000', currency: 'USD',
-    bands: [{ from: 0, to: 1000000, rate: 22, basis: 'YTD_SUPPLEMENTAL' }, { from: 1000000, to: null, rate: 37, basis: 'YTD_SUPPLEMENTAL' }],
-    cap: null, payer: 'EMPLOYEE',
-    versions: [{ v: 4, from: '2026-01-01', status: 'PUBLISHED', by: 'T. Okonkwo', note: 'FY2026 threshold confirmed' },
-               { v: 3, from: '2025-01-01', status: 'SUPERSEDED', by: 'T. Okonkwo', note: 'FY2025' },
-               { v: 2, from: '2024-01-01', status: 'SUPERSEDED', by: 'A. Reyes', note: 'FY2024' }] },
-
-  { id: 'RS-0002', country: 'US', juris: 'US Federal', jurisLabel: 'Country', taxType: 'INCOME_WH', flavour: 'STANDARD', taxYear: '2026',
-    structure: 'BANDED', effectiveFrom: '2026-01-01', effectiveTo: null, version: 3, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
-    citation: 'IRS Publication 15-T, 2026 — percentage method tables',
-    summary: '10% – 37% graduated', currency: 'USD',
-    bands: [{ from: 0, to: 11925, rate: 10, basis: 'YTD_TOTAL_INCOME' }, { from: 11925, to: 48475, rate: 12, basis: 'YTD_TOTAL_INCOME' },
-            { from: 48475, to: 103350, rate: 22, basis: 'YTD_TOTAL_INCOME' }, { from: 103350, to: 197300, rate: 24, basis: 'YTD_TOTAL_INCOME' },
-            { from: 197300, to: 250525, rate: 32, basis: 'YTD_TOTAL_INCOME' }, { from: 250525, to: 626350, rate: 35, basis: 'YTD_TOTAL_INCOME' },
-            { from: 626350, to: null, rate: 37, basis: 'YTD_TOTAL_INCOME' }],
-    cap: null, payer: 'EMPLOYEE', versions: [{ v: 3, from: '2026-01-01', status: 'PUBLISHED', by: 'T. Okonkwo', note: 'FY2026 indexation' }] },
-
-  { id: 'RS-0003', country: 'US', juris: 'US Federal', jurisLabel: 'Country', taxType: 'SOC_SEC_EE', flavour: 'STANDARD', taxYear: '2026',
-    structure: 'CAPPED', effectiveFrom: '2026-01-01', effectiveTo: null, version: 5, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
-    citation: 'SSA 2026 wage base announcement', summary: '6.2% to wage base $184,500', currency: 'USD',
-    bands: [{ from: 0, to: 184500, rate: 6.2, basis: 'YTD_TOTAL_INCOME' }],
-    cap: { type: 'WAGE_BASE', ceiling: 184500, aboveRate: 0 }, payer: 'EMPLOYEE',
-    versions: [{ v: 5, from: '2026-01-01', status: 'PUBLISHED', by: 'T. Okonkwo', note: 'FY2026 wage base' }] },
-
-  { id: 'RS-0004', country: 'US', juris: 'US Federal', jurisLabel: 'Country', taxType: 'HEALTH', flavour: 'STANDARD', taxYear: '2026',
-    structure: 'TIERED', effectiveFrom: '2026-01-01', effectiveTo: null, version: 2, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
-    citation: 'IRC §3101(b) — Medicare + Additional Medicare', summary: '1.45%, +0.9% above $200,000', currency: 'USD',
-    bands: [{ from: 0, to: 200000, rate: 1.45, basis: 'YTD_TOTAL_INCOME' }, { from: 200000, to: null, rate: 2.35, basis: 'YTD_TOTAL_INCOME' }],
-    cap: null, payer: 'EMPLOYEE', versions: [{ v: 2, from: '2026-01-01', status: 'PUBLISHED', by: 'A. Reyes', note: 'No change FY2026' }] },
-
-  { id: 'RS-0005', country: 'US', juris: 'California', jurisLabel: 'State', taxType: 'INCOME_WH', flavour: 'SUPPLEMENTAL_EQUITY', taxYear: '2026',
-    structure: 'FLAT', effectiveFrom: '2026-01-01', effectiveTo: null, version: 3, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
-    citation: 'CA EDD DE 44 — stock options & bonuses supplemental rate',
-    summary: '10.23% flat (stock awards)', currency: 'USD',
-    bands: [{ from: 0, to: null, rate: 10.23, basis: 'EVENT_INCOME' }], cap: null, payer: 'EMPLOYEE',
-    versions: [{ v: 3, from: '2026-01-01', status: 'PUBLISHED', by: 'T. Okonkwo', note: 'FY2026 confirmed' }] },
-
-  { id: 'RS-0006', country: 'US', juris: 'California', jurisLabel: 'State', taxType: 'INCOME_WH', flavour: 'SUPPLEMENTAL', taxYear: '2026',
-    structure: 'FLAT', effectiveFrom: '2026-01-01', effectiveTo: null, version: 3, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
-    citation: 'CA EDD DE 44 — general supplemental rate', summary: '6.60% flat', currency: 'USD',
-    bands: [{ from: 0, to: null, rate: 6.6, basis: 'EVENT_INCOME' }], cap: null, payer: 'EMPLOYEE',
-    versions: [{ v: 3, from: '2026-01-01', status: 'PUBLISHED', by: 'T. Okonkwo', note: 'FY2026' }] },
-
-  { id: 'RS-0007', country: 'US', juris: 'New York', jurisLabel: 'State', taxType: 'INCOME_WH', flavour: 'SUPPLEMENTAL', taxYear: '2026',
-    structure: 'FLAT', effectiveFrom: '2026-01-01', effectiveTo: null, version: 2, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
-    citation: 'NYS Publication NYS-50-T-NYS (2026)', summary: '11.70% flat', currency: 'USD',
-    bands: [{ from: 0, to: null, rate: 11.7, basis: 'EVENT_INCOME' }], cap: null, payer: 'EMPLOYEE',
-    versions: [{ v: 2, from: '2026-01-01', status: 'PUBLISHED', by: 'A. Reyes', note: 'FY2026' }] },
-
-  { id: 'RS-0008', country: 'US', juris: 'New York', jurisLabel: 'State', taxType: 'INCOME_WH', flavour: 'STANDARD', taxYear: '2026',
-    structure: 'BANDED', effectiveFrom: '2026-01-01', effectiveTo: null, version: 2, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
-    citation: 'NYS Publication NYS-50-T-NYS (2026) — graduated tables', summary: '4% – 10.9% graduated', currency: 'USD',
-    bands: [{ from: 0, to: 17150, rate: 4, basis: 'YTD_TOTAL_INCOME' }, { from: 17150, to: 80650, rate: 5.5, basis: 'YTD_TOTAL_INCOME' },
-            { from: 80650, to: 215400, rate: 6, basis: 'YTD_TOTAL_INCOME' }, { from: 215400, to: 1077550, rate: 6.85, basis: 'YTD_TOTAL_INCOME' },
-            { from: 1077550, to: null, rate: 10.9, basis: 'YTD_TOTAL_INCOME' }],
-    cap: null, payer: 'EMPLOYEE', versions: [{ v: 2, from: '2026-01-01', status: 'PUBLISHED', by: 'A. Reyes', note: 'FY2026' }] },
-
-  { id: 'RS-0009', country: 'US', juris: 'New York City', jurisLabel: 'City', taxType: 'INCOME_WH', flavour: 'SUPPLEMENTAL', taxYear: '2026',
-    structure: 'FLAT', effectiveFrom: '2026-01-01', effectiveTo: null, version: 1, status: 'PUBLISHED', coverage: 'AUTHORED', source: 'MANUAL',
-    citation: 'NYC Administrative Code §11-1701; authored from published guidance', summary: '4.25% flat', currency: 'USD',
-    bands: [{ from: 0, to: null, rate: 4.25, basis: 'EVENT_INCOME' }], cap: null, payer: 'EMPLOYEE',
-    versions: [{ v: 1, from: '2026-01-01', status: 'PUBLISHED', by: 'M. Duarte', note: 'Initial authoring' }] },
-
-  { id: 'RS-0010', country: 'US', juris: 'Texas', jurisLabel: 'State', taxType: 'INCOME_WH', flavour: 'EXEMPT', taxYear: '2026',
-    structure: 'FIXED', effectiveFrom: '2026-01-01', effectiveTo: null, version: 1, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
-    citation: 'Texas imposes no personal income tax', summary: 'No state income tax', currency: 'USD',
-    bands: [{ from: 0, to: null, rate: 0, basis: 'EVENT_INCOME' }], cap: null, payer: 'EMPLOYEE',
-    versions: [{ v: 1, from: '2026-01-01', status: 'PUBLISHED', by: 'A. Reyes', note: 'Standing' }] },
-
-  { id: 'RS-0011', country: 'US', juris: 'Florida', jurisLabel: 'State', taxType: 'INCOME_WH', flavour: 'EXEMPT', taxYear: '2026',
-    structure: 'FIXED', effectiveFrom: '2026-01-01', effectiveTo: null, version: 1, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
-    citation: 'Florida imposes no personal income tax', summary: 'No state income tax', currency: 'USD',
-    bands: [{ from: 0, to: null, rate: 0, basis: 'EVENT_INCOME' }], cap: null, payer: 'EMPLOYEE',
-    versions: [{ v: 1, from: '2026-01-01', status: 'PUBLISHED', by: 'A. Reyes', note: 'Standing' }] },
-
-  { id: 'RS-0012', country: 'GB', juris: 'United Kingdom', jurisLabel: 'Country', taxType: 'INCOME_WH', flavour: 'STANDARD', taxYear: '2026/27',
-    structure: 'BANDED', effectiveFrom: '2026-04-06', effectiveTo: null, version: 6, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
-    citation: 'HMRC PAYE rates and thresholds 2026/27', summary: '0% / 20% / 40% / 45% PAYE', currency: 'GBP',
-    bands: [{ from: 0, to: 12570, rate: 0, basis: 'YTD_TOTAL_INCOME' }, { from: 12570, to: 50270, rate: 20, basis: 'YTD_TOTAL_INCOME' },
-            { from: 50270, to: 125140, rate: 40, basis: 'YTD_TOTAL_INCOME' }, { from: 125140, to: null, rate: 45, basis: 'YTD_TOTAL_INCOME' }],
-    cap: null, payer: 'EMPLOYEE',
-    versions: [{ v: 6, from: '2026-04-06', status: 'PUBLISHED', by: 'T. Okonkwo', note: 'TY 2026/27 thresholds' },
-               { v: 5, from: '2025-04-06', status: 'SUPERSEDED', by: 'T. Okonkwo', note: 'TY 2025/26' }] },
-
-  { id: 'RS-0013', country: 'GB', juris: 'United Kingdom', jurisLabel: 'Country', taxType: 'SOC_SEC_EE', flavour: 'STANDARD', taxYear: '2026/27',
-    structure: 'TIERED', effectiveFrom: '2026-04-06', effectiveTo: null, version: 4, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
-    citation: 'HMRC Class 1 NIC employee rates 2026/27', summary: '8% to UEL, 2% above', currency: 'GBP',
-    bands: [{ from: 12570, to: 50270, rate: 8, basis: 'YTD_TOTAL_INCOME' }, { from: 50270, to: null, rate: 2, basis: 'YTD_TOTAL_INCOME' }],
-    cap: null, payer: 'EMPLOYEE', versions: [{ v: 4, from: '2026-04-06', status: 'PUBLISHED', by: 'T. Okonkwo', note: 'TY 2026/27' }] },
-
-  { id: 'RS-0014', country: 'DE', juris: 'Germany', jurisLabel: 'Country', taxType: 'INCOME_WH', flavour: 'STANDARD', taxYear: '2026',
-    structure: 'BANDED', effectiveFrom: '2026-01-01', effectiveTo: null, version: 3, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
-    citation: 'Einkommensteuertarif §32a EStG 2026', summary: '0% – 45% progressive', currency: 'EUR',
-    bands: [{ from: 0, to: 12096, rate: 0, basis: 'YTD_TOTAL_INCOME' }, { from: 12096, to: 68430, rate: 24, basis: 'YTD_TOTAL_INCOME' },
-            { from: 68430, to: 277825, rate: 42, basis: 'YTD_TOTAL_INCOME' }, { from: 277825, to: null, rate: 45, basis: 'YTD_TOTAL_INCOME' }],
-    cap: null, payer: 'EMPLOYEE', versions: [{ v: 3, from: '2026-01-01', status: 'PUBLISHED', by: 'M. Duarte', note: 'FY2026 tariff' }] },
-
-  { id: 'RS-0015', country: 'DE', juris: 'Germany', jurisLabel: 'Country', taxType: 'SURTAX', flavour: 'STANDARD', taxYear: '2026',
-    structure: 'FLAT', effectiveFrom: '2026-01-01', effectiveTo: null, version: 2, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
-    citation: 'Solidaritätszuschlaggesetz — 5.5% of assessed income tax',
-    summary: '5.5% on tax amount (tax-on-tax)', currency: 'EUR', taxOnTax: true,
-    bands: [{ from: 0, to: null, rate: 5.5, basis: 'EVENT_INCOME' }], cap: null, payer: 'EMPLOYEE',
-    versions: [{ v: 2, from: '2026-01-01', status: 'PUBLISHED', by: 'M. Duarte', note: 'FY2026' }] },
-
-  { id: 'RS-0016', country: 'DE', juris: 'Germany', jurisLabel: 'Country', taxType: 'SOC_SEC_ER', flavour: 'STANDARD', taxYear: '2026',
-    structure: 'CAPPED', effectiveFrom: '2026-01-01', effectiveTo: null, version: 2, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
-    citation: 'Sozialversicherung employer contribution ceilings 2026', summary: '~20.6% to contribution ceiling', currency: 'EUR',
-    bands: [{ from: 0, to: 96600, rate: 20.6, basis: 'YTD_TOTAL_INCOME' }],
-    cap: { type: 'WAGE_BASE', ceiling: 96600, aboveRate: 0 }, payer: 'EMPLOYER',
-    versions: [{ v: 2, from: '2026-01-01', status: 'PUBLISHED', by: 'M. Duarte', note: 'FY2026 ceilings' }] },
-
-  { id: 'RS-0017', country: 'IE', juris: 'Ireland', jurisLabel: 'Country', taxType: 'HEALTH', flavour: 'STANDARD', taxYear: '2026',
-    structure: 'BANDED', effectiveFrom: '2027-01-01', effectiveTo: null, version: 5, status: 'IN_REVIEW', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
-    citation: 'Revenue eBrief — USC rates and bands 2027 (provider sync)', summary: '0.5% / 2% / 3% / 8% USC', currency: 'EUR',
-    bands: [{ from: 0, to: 12012, rate: 0.5, basis: 'YTD_TOTAL_INCOME' }, { from: 12012, to: 27382, rate: 2, basis: 'YTD_TOTAL_INCOME' },
-            { from: 27382, to: 70044, rate: 3, basis: 'YTD_TOTAL_INCOME' }, { from: 70044, to: null, rate: 8, basis: 'YTD_TOTAL_INCOME' }],
-    cap: null, payer: 'EMPLOYEE',
-    versions: [{ v: 5, from: '2027-01-01', status: 'IN_REVIEW', by: 'Tapestry sync', note: 'Nightly sync — awaiting maker-checker approval' },
-               { v: 4, from: '2026-01-01', status: 'PUBLISHED', by: 'T. Okonkwo', note: 'FY2026 in force' }] },
-
-  { id: 'RS-0018', country: 'IE', juris: 'Ireland', jurisLabel: 'Country', taxType: 'SOC_SEC_ER', flavour: 'STANDARD', taxYear: '2026',
-    structure: 'FLAT', effectiveFrom: '2026-01-01', effectiveTo: null, version: 3, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
-    citation: 'Employer PRSI Class A1 2026', summary: '11.15% employer PRSI', currency: 'EUR',
-    bands: [{ from: 0, to: null, rate: 11.15, basis: 'EVENT_INCOME' }], cap: null, payer: 'EMPLOYER',
-    versions: [{ v: 3, from: '2026-01-01', status: 'PUBLISHED', by: 'T. Okonkwo', note: 'FY2026' }] },
-
-  { id: 'RS-0019', country: 'FR', juris: 'France', jurisLabel: 'Country', taxType: 'INCOME_WH', flavour: 'STANDARD', taxYear: '2026',
-    structure: 'BANDED', effectiveFrom: '2026-01-01', effectiveTo: null, version: 2, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
-    citation: 'Barème de l\'impôt sur le revenu 2026', summary: '0% – 45% progressive', currency: 'EUR',
-    bands: [{ from: 0, to: 11497, rate: 0, basis: 'YTD_TOTAL_INCOME' }, { from: 11497, to: 29315, rate: 11, basis: 'YTD_TOTAL_INCOME' },
-            { from: 29315, to: 83823, rate: 30, basis: 'YTD_TOTAL_INCOME' }, { from: 83823, to: 180294, rate: 41, basis: 'YTD_TOTAL_INCOME' },
-            { from: 180294, to: null, rate: 45, basis: 'YTD_TOTAL_INCOME' }],
-    cap: null, payer: 'EMPLOYEE', versions: [{ v: 2, from: '2026-01-01', status: 'PUBLISHED', by: 'M. Duarte', note: 'FY2026 barème' }] },
-
-  { id: 'RS-0020', country: 'FR', juris: 'France', jurisLabel: 'Country', taxType: 'SOC_SEC_EE', flavour: 'STANDARD', taxYear: '2026',
-    structure: 'FLAT', effectiveFrom: '2026-01-01', effectiveTo: null, version: 2, status: 'PUBLISHED', coverage: 'AUTHORED', source: 'MANUAL',
-    citation: 'CSG/CRDS on equity income — authored from client tax advisor memo', summary: '9.70% CSG/CRDS', currency: 'EUR',
-    bands: [{ from: 0, to: null, rate: 9.7, basis: 'EVENT_INCOME' }], cap: null, payer: 'EMPLOYEE',
-    versions: [{ v: 2, from: '2026-01-01', status: 'PUBLISHED', by: 'M. Duarte', note: 'Advisor memo attached' }] },
-
-  { id: 'RS-0021', country: 'IN', juris: 'India', jurisLabel: 'Country', taxType: 'INCOME_WH', flavour: 'STANDARD', taxYear: '2026-27',
-    structure: 'BANDED', effectiveFrom: '2026-04-01', effectiveTo: null, version: 3, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
-    citation: 'Income-tax Act — new regime slabs AY 2027-28', summary: '0% – 30% slabs', currency: 'INR',
-    bands: [{ from: 0, to: 400000, rate: 0, basis: 'YTD_TOTAL_INCOME' }, { from: 400000, to: 800000, rate: 5, basis: 'YTD_TOTAL_INCOME' },
-            { from: 800000, to: 1200000, rate: 10, basis: 'YTD_TOTAL_INCOME' }, { from: 1200000, to: 1600000, rate: 15, basis: 'YTD_TOTAL_INCOME' },
-            { from: 1600000, to: 2400000, rate: 20, basis: 'YTD_TOTAL_INCOME' }, { from: 2400000, to: null, rate: 30, basis: 'YTD_TOTAL_INCOME' }],
-    cap: null, payer: 'EMPLOYEE', versions: [{ v: 3, from: '2026-04-01', status: 'PUBLISHED', by: 'T. Okonkwo', note: 'TY 2026-27' }] },
-
-  { id: 'RS-0022', country: 'CH', juris: 'Zürich', jurisLabel: 'Canton', taxType: 'INCOME_WH', flavour: 'STANDARD', taxYear: '2026',
-    structure: 'BANDED', effectiveFrom: '2026-01-01', effectiveTo: null, version: 1, status: 'DRAFT', coverage: 'INFERRED', source: 'MANUAL',
-    citation: 'Cantonal tariff not published for equity income — derived from wage-withholding tables',
-    summary: '≈ 8% – 22% (inferred)', currency: 'CHF',
-    bands: [{ from: 0, to: 30000, rate: 8, basis: 'YTD_TOTAL_INCOME' }, { from: 30000, to: 120000, rate: 15, basis: 'YTD_TOTAL_INCOME' },
-            { from: 120000, to: null, rate: 22, basis: 'YTD_TOTAL_INCOME' }],
-    cap: null, payer: 'EMPLOYEE',
-    versions: [{ v: 1, from: '2026-01-01', status: 'DRAFT', by: 'M. Duarte', note: 'Inferred — requires client acknowledgement before it calculates' }] },
-
-  { id: 'RS-0023', country: 'JP', juris: 'Japan', jurisLabel: 'Country', taxType: 'INCOME_WH', flavour: 'SUPPLEMENTAL_EQUITY', taxYear: '2026',
-    structure: 'FIXED', effectiveFrom: '2026-01-01', effectiveTo: null, version: 1, status: 'DRAFT', coverage: 'GAP', source: 'MANUAL',
-    citation: 'No equity-specific withholding method identified — events route to the exception queue',
-    summary: 'No rule — exception queue', currency: 'JPY',
-    bands: [], cap: null, payer: 'EMPLOYEE',
-    versions: [{ v: 1, from: '2026-01-01', status: 'DRAFT', by: 'System', note: 'Gap flagged by coverage report' }] },
-
-  { id: 'RS-0024', country: 'CA', juris: 'Ontario', jurisLabel: 'Province', taxType: 'INCOME_WH', flavour: 'SUPPLEMENTAL', taxYear: '2026',
-    structure: 'BANDED', effectiveFrom: '2026-01-01', effectiveTo: null, version: 2, status: 'PUBLISHED', coverage: 'PUBLISHED_SOURCE', source: 'TAPESTRY',
-    citation: 'CRA lump-sum withholding rates — Ontario', summary: '10% / 20% / 30% lump-sum', currency: 'CAD',
-    bands: [{ from: 0, to: 5000, rate: 10, basis: 'EVENT_INCOME' }, { from: 5000, to: 15000, rate: 20, basis: 'EVENT_INCOME' },
-            { from: 15000, to: null, rate: 30, basis: 'EVENT_INCOME' }],
-    cap: null, payer: 'EMPLOYEE', versions: [{ v: 2, from: '2026-01-01', status: 'PUBLISHED', by: 'A. Reyes', note: 'FY2026' }] },
+  // ── Generic country-level ──
+  { id: 'R-040', iso: 'GB', taxType: 'Income Tax', method: 'Standard', structure: 'Banded',
+    bands: [{ to: 12570, rate: 0 }, { to: 50270, rate: 20 }, { to: 125140, rate: 40 }, { to: null, rate: 45 }], effectiveFrom: '2026-04-06', status: 'Active' },
+  { id: 'R-041', iso: 'GB', taxType: 'Social Security', method: 'Standard', structure: 'Flat', rate: 8.00, effectiveFrom: '2026-04-06', status: 'Active' },
+  { id: 'R-042', iso: 'DE', taxType: 'Income Tax', method: 'Standard', structure: 'Banded',
+    bands: [{ to: 12096, rate: 0 }, { to: 68430, rate: 24 }, { to: null, rate: 42 }], effectiveFrom: '2026-01-01', status: 'Active' },
+  { id: 'R-043', iso: 'DE', taxType: 'Surtax', method: 'Standard', structure: 'Flat', rate: 5.50, effectiveFrom: '2026-01-01', status: 'Active' },
+  { id: 'R-044', iso: 'FR', taxType: 'Income Tax', method: 'Standard', structure: 'Flat', rate: 41.00, effectiveFrom: '2026-01-01', status: 'Active' },
+  { id: 'R-045', iso: 'IE', taxType: 'Income Tax', method: 'Standard', structure: 'Flat', rate: 40.00, effectiveFrom: '2026-01-01', status: 'Active' },
+  { id: 'R-046', iso: 'NL', taxType: 'Income Tax', method: 'Standard', structure: 'Flat', rate: 49.50, effectiveFrom: '2026-01-01', status: 'Active' },
+  { id: 'R-047', iso: 'CH', taxType: 'Income Tax', method: 'Standard', structure: 'Flat', rate: 22.00, effectiveFrom: '2026-01-01', status: 'Draft' },
+  { id: 'R-048', iso: 'CA', taxType: 'Income Tax', method: 'Supplemental', structure: 'Banded',
+    bands: [{ to: 5000, rate: 10 }, { to: 15000, rate: 20 }, { to: null, rate: 30 }], effectiveFrom: '2026-01-01', status: 'Active' },
+  { id: 'R-049', iso: 'IN', taxType: 'Income Tax', method: 'Standard', structure: 'Flat', rate: 30.00, effectiveFrom: '2026-04-01', status: 'Active' },
+  { id: 'R-050', iso: 'SG', taxType: 'Income Tax', method: 'Standard', structure: 'Flat', rate: 22.00, effectiveFrom: '2026-01-01', status: 'Active' },
+  { id: 'R-051', iso: 'JP', taxType: 'Income Tax', method: 'Standard', structure: 'Flat', rate: 20.42, effectiveFrom: '2026-01-01', status: 'Active' },
+  { id: 'R-052', iso: 'AU', taxType: 'Income Tax', method: 'Standard', structure: 'Flat', rate: 47.00, effectiveFrom: '2026-01-01', status: 'Active' },
 ];
 
 // ══════════════════════ CAPABILITY F — RULES ENGINE DATA ══════════════════════
@@ -10107,315 +10008,278 @@ const gtScenarios = [
   },
 ];
 
-// ══════════════════════ TAB SWITCHING ══════════════════════
-function switchRLTab(tab) {
-  document.querySelectorAll('#view-rate-library .gt-tab').forEach(t => t.classList.toggle('active', t.dataset.rltab === tab));
-  document.querySelectorAll('#view-rate-library .gt-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('rl-panel-' + tab).classList.add('active');
-}
+// ══════════════════════ TAB SWITCHING (rules engine) ══════════════════════
 function switchRETab(tab) {
   document.querySelectorAll('#view-rules-engine .gt-tab').forEach(t => t.classList.toggle('active', t.dataset.retab === tab));
   document.querySelectorAll('#view-rules-engine .gt-panel').forEach(p => p.classList.remove('active'));
   document.getElementById('re-panel-' + tab).classList.add('active');
 }
 
-// ══════════════════════ RATE LIBRARY RENDERING ══════════════════════
-const gtStatusBadge = s => {
-  const m = { PUBLISHED: ['b-published', 'Published'], DRAFT: ['b-draft', 'Draft'], IN_REVIEW: ['b-review', 'In Review'], SUPERSEDED: ['b-superseded', 'Superseded'] };
-  const [cls, label] = m[s] || ['b-neutral', s];
-  return `<span class="gt-badge ${cls}"><span class="gt-dot"></span>${label}</span>`;
-};
-const gtCoverageBadge = c => {
-  const m = { PUBLISHED_SOURCE: ['b-source', 'Published Source'], AUTHORED: ['b-authored', 'Authored'], INFERRED: ['b-inferred', 'Inferred'], GAP: ['b-gap', 'Gap'] };
-  const [cls, label] = m[c] || ['b-neutral', c];
-  return `<span class="gt-badge ${cls}">${label}</span>`;
-};
-const gtStructIcon = s => ({
-  FLAT:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/></svg>',
-  BANDED: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 18 9 18 9 12 15 12 15 6 21 6"/></svg>',
-  CAPPED: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 16 10 16 10 8 21 8"/></svg>',
-  TIERED: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 18 8 18 8 13 13 13 13 8 21 8"/></svg>',
-  FIXED:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="8" y1="12" x2="16" y2="12"/></svg>',
-}[s] || '');
+// ══════════════════════ RATE LIBRARY — TREE + DETAIL ══════════════════════
+let gtSelectedIso = 'US';
+let gtExpanded = new Set(['US']);
+let gtEditingRate = null;
 
-function gtCoordKey(s) {
-  return `<div class="coord-key">
-    <span class="coord-chip coord-juris">${gtEsc(s.juris)}</span><span class="coord-sep">×</span>
-    <span class="coord-chip coord-type">${s.taxType}</span><span class="coord-sep">×</span>
-    <span class="coord-chip coord-flav">${s.flavour}</span><span class="coord-sep">×</span>
-    <span class="coord-chip coord-year">${s.taxYear}</span>
-  </div>`;
+// Flatten the tree into iso → { node, parent, path }
+function gtIndex() {
+  const map = {};
+  const walk = (nodes, parent, path) => nodes.forEach(n => {
+    map[n.iso] = { node: n, parent, path: [...path, n] };
+    walk(n.children || [], n, [...path, n]);
+  });
+  walk(gtJurisTree, null, []);
+  return map;
+}
+const gtRatesFor = iso => gtRates.filter(r => r.iso === iso);
+const gtLevelLabel = l => ({ COUNTRY: 'Country', STATE: 'State', MUNICIPALITY: 'Municipality' }[l] || l);
+
+// Rate count including descendants (so a collapsed country still shows depth)
+function gtSubtreeCount(node) {
+  let n = gtRatesFor(node.iso).length;
+  (node.children || []).forEach(c => { n += gtSubtreeCount(c); });
+  return n;
 }
 
-function gtBandMini(bands) {
-  if (!bands || !bands.length) return '<span style="color:var(--textm);font-size:11px">—</span>';
-  const max = Math.max(...bands.map(b => b.rate), 1);
-  return `<div class="band-mini">${bands.map(b =>
-    `<div class="band-mini-seg" style="height:${Math.max(3, (b.rate / max) * 22)}px;opacity:${0.4 + (b.rate / max) * 0.6}" title="${b.rate}%"></div>`).join('')}</div>`;
-}
-
-function renderRLMetrics() {
-  const pub = gtRateSchedules.filter(s => s.status === 'PUBLISHED').length;
-  const review = gtRateSchedules.filter(s => s.status === 'IN_REVIEW').length;
-  const gaps = gtRateSchedules.filter(s => s.coverage === 'GAP' || s.coverage === 'INFERRED').length;
-  const countries = new Set(gtRateSchedules.map(s => s.country)).size;
-  const el = document.getElementById('rl-metrics');
-  if (!el) return;
-  el.innerHTML = `
-    <div class="tax-metric-card">
-      <div class="tm-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>Published Schedules</div>
-      <div class="tm-value">${pub}</div>
-      <div class="tm-sub"><strong>${gtRateSchedules.length}</strong> total across all states</div>
-    </div>
-    <div class="tax-metric-card tm-purple">
-      <div class="tm-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Countries Covered</div>
-      <div class="tm-value">${countries}</div>
-      <div class="tm-sub">${gtJurisdictions.reduce((a, j) => a + 1 + j.children.length, 0)} jurisdictions in hierarchy</div>
-    </div>
-    <div class="tax-metric-card tm-amber">
-      <div class="tm-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Awaiting Approval</div>
-      <div class="tm-value">${review}</div>
-      <div class="tm-sub">Maker-checker — author cannot self-approve</div>
-    </div>
-    <div class="tax-metric-card tm-green">
-      <div class="tm-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>Coverage Attention</div>
-      <div class="tm-value">${gaps}</div>
-      <div class="tm-sub">Inferred or gap — needs acknowledgement</div>
-    </div>`;
-}
-
-function gtPopulateRLFilters() {
-  const cSel = document.getElementById('rl-country-filter');
-  const tSel = document.getElementById('rl-type-filter');
-  const fSel = document.getElementById('rl-flavour-filter');
-  if (!cSel || cSel.dataset.filled) return;
-  const countryName = c => (gtJurisdictions.find(j => j.id === c) || {}).name || c;
-  [...new Set(gtRateSchedules.map(s => s.country))].sort().forEach(c => {
-    cSel.insertAdjacentHTML('beforeend', `<option value="${c}">${gtEsc(countryName(c))}</option>`); });
-  [...new Set(gtRateSchedules.map(s => s.taxType))].sort().forEach(t => {
-    tSel.insertAdjacentHTML('beforeend', `<option value="${t}">${t}</option>`); });
-  [...new Set(gtRateSchedules.map(s => s.flavour))].sort().forEach(f => {
-    fSel.insertAdjacentHTML('beforeend', `<option value="${f}">${f}</option>`); });
-  cSel.dataset.filled = '1';
-}
-
-function renderRateSchedules() {
-  const tbody = document.getElementById('rl-body');
-  if (!tbody) return;
-  const q = (document.getElementById('rl-search')?.value || '').toLowerCase();
-  const fC = document.getElementById('rl-country-filter')?.value || '';
-  const fT = document.getElementById('rl-type-filter')?.value || '';
-  const fF = document.getElementById('rl-flavour-filter')?.value || '';
-  const fS = document.getElementById('rl-status-filter')?.value || '';
-  const fV = document.getElementById('rl-coverage-filter')?.value || '';
-
-  const rows = gtRateSchedules.filter(s =>
-    (!q || (s.juris + s.taxType + s.flavour + s.id + s.summary).toLowerCase().includes(q)) &&
-    (!fC || s.country === fC) && (!fT || s.taxType === fT) && (!fF || s.flavour === fF) &&
-    (!fS || s.status === fS) && (!fV || s.coverage === fV));
-
-  document.getElementById('rl-result-count').textContent = `${rows.length} of ${gtRateSchedules.length} schedules`;
-  document.getElementById('rl-count-sched').textContent = gtRateSchedules.length;
-
-  if (!rows.length) {
-    tbody.innerHTML = `<tr><td colspan="9" style="padding:40px;text-align:center;color:var(--textm)">No rate schedules match these filters.</td></tr>`;
-    return;
+function gtRateValue(r) {
+  if (r.structure === 'Banded' && r.bands && r.bands.length) {
+    const lo = Math.min(...r.bands.map(b => b.rate));
+    const hi = Math.max(...r.bands.map(b => b.rate));
+    return lo === hi ? lo.toFixed(2) + '%' : lo.toFixed(2) + '–' + hi.toFixed(2) + '%';
   }
-
-  tbody.innerHTML = rows.map(s => `
-    <tr style="cursor:pointer" onclick="openRLDrawer('${s.id}')">
-      <td style="font-family:'SF Mono',monospace;font-size:11.5px;font-weight:700;color:var(--accent-dark)">${s.id}</td>
-      <td>${gtCoordKey(s)}</td>
-      <td><span class="struct-pill">${gtStructIcon(s.structure)}${s.structure}</span></td>
-      <td>
-        <div style="display:flex;align-items:center;gap:8px">
-          ${gtBandMini(s.bands)}
-          <span style="font-size:11.5px;color:var(--text2);font-weight:500">${gtEsc(s.summary)}</span>
-        </div>
-      </td>
-      <td style="font-size:12px;color:var(--text2)">${s.effectiveFrom}</td>
-      <td style="font-family:'SF Mono',monospace;font-size:11px;font-weight:700;color:var(--text2)">v${s.version}</td>
-      <td>${gtStatusBadge(s.status)}</td>
-      <td>${gtCoverageBadge(s.coverage)}</td>
-      <td><span class="gt-badge b-neutral">${s.source}</span></td>
-    </tr>`).join('');
+  return (r.rate != null ? Number(r.rate).toFixed(2) : '0.00') + '%';
 }
 
-function renderJurisTree() {
-  const el = document.getElementById('rl-juris-tree');
+// ── Tree ──
+function toggleJt(iso, ev) {
+  if (ev) ev.stopPropagation();
+  if (gtExpanded.has(iso)) gtExpanded.delete(iso); else gtExpanded.add(iso);
+  renderRateTree();
+}
+
+function selectJuris(iso) {
+  gtSelectedIso = iso;
+  renderRateTree();
+  renderJurisDetail();
+}
+
+function renderRateTree() {
+  const el = document.getElementById('rl2-tree');
   if (!el) return;
-  const count = jid => gtRateSchedules.filter(s => s.juris === jid).length;
-  const node = (j, flag) => {
-    const n = gtRateSchedules.filter(s => s.juris === j.name || (j.id === 'US' && s.juris === 'US Federal')).length;
+  const q = (document.getElementById('rl2-search')?.value || '').toLowerCase().trim();
+
+  const matches = n => !q || n.name.toLowerCase().includes(q) || n.iso.toLowerCase().includes(q);
+  const subtreeMatches = n => matches(n) || (n.children || []).some(subtreeMatches);
+
+  const caret = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg>`;
+
+  const row = n => {
+    if (q && !subtreeMatches(n)) return '';
+    const kids = n.children || [];
+    const open = q ? true : gtExpanded.has(n.iso);
+    const count = gtSubtreeCount(n);
     return `<div>
-      <div class="juris-node">
-        <span class="juris-flag">${flag || '•'}</span>
-        <span class="juris-name">${gtEsc(j.name)}</span>
-        <span class="juris-level">${j.levelLabel}</span>
-        <span style="font-family:'SF Mono',monospace;font-size:10px;color:var(--textm)">${j.iso}</span>
-        <span class="juris-meta">${n} schedule${n === 1 ? '' : 's'} · ${j.currency}</span>
+      <div class="jt-row ${n.iso === gtSelectedIso ? 'selected' : ''}" onclick="selectJuris('${n.iso}')">
+        <div class="jt-caret ${kids.length ? (open ? 'open' : '') : 'leaf'}" onclick="toggleJt('${n.iso}',event)">${caret}</div>
+        ${n.flag ? `<span class="jt-flag">${n.flag}</span>` : ''}
+        <span class="jt-name">${n.name}</span>
+        <span class="jt-iso">${n.iso}</span>
+        <span class="jt-count ${count ? '' : 'zero'}">${count}</span>
       </div>
-      ${j.children.length ? `<div class="juris-children">${j.children.map(c => node(c, '')).join('')}</div>` : ''}
+      ${kids.length ? `<div class="jt-children ${open ? '' : 'collapsed'}">${kids.map(row).join('')}</div>` : ''}
     </div>`;
   };
-  el.innerHTML = gtJurisdictions.map(j => node(j, j.flag)).join('');
-  const total = gtJurisdictions.reduce((a, j) => a + 1 + j.children.reduce((b, c) => b + 1 + c.children.length, 0), 0);
-  document.getElementById('rl-count-juris').textContent = total;
+
+  el.innerHTML = gtJurisTree.map(row).join('') || `<div style="padding:20px;text-align:center;color:var(--textm);font-size:12px">No match</div>`;
 }
 
-function renderTaxYearCalendars() {
-  const tbody = document.getElementById('rl-cal-body');
-  if (!tbody) return;
-  tbody.innerHTML = gtTaxYearCalendars.map(c => {
-    const divergent = c.label !== '2026';
-    return `<tr>
-      <td style="font-weight:600">${gtEsc(c.juris)}</td>
-      <td><span class="coord-chip coord-year">${c.label}</span></td>
-      <td style="font-size:12px;color:var(--text2)">${c.starts}</td>
-      <td style="font-size:12px;color:var(--text2)">${c.ends}</td>
-      <td>
-        <span class="coord-chip coord-year" style="${divergent ? 'background:#fef3c7;color:#b45309' : ''}">${c.resolves}</span>
-        ${divergent ? '<span style="font-size:11px;color:var(--amber);margin-left:8px;font-weight:600">← diverges from calendar year</span>' : ''}
-      </td>
-    </tr>`;
-  }).join('');
-  document.getElementById('rl-count-cal').textContent = gtTaxYearCalendars.length;
+// ── Detail ──
+function renderJurisDetail() {
+  const el = document.getElementById('rl2-detail');
+  if (!el) return;
+  const idx = gtIndex();
+  const entry = idx[gtSelectedIso];
+  if (!entry) { el.innerHTML = ''; return; }
+  const n = entry.node;
+  const own = gtRatesFor(n.iso);
+  const ancestors = entry.path.slice(0, -1);
+  const inherited = ancestors.flatMap(a => gtRatesFor(a.iso).map(r => ({ r, from: a })));
+
+  const rateRow = (r, from) => `
+    <div class="rate-row ${from ? 'inherited' : ''}">
+      <div>
+        <div class="rate-name">${r.taxType}</div>
+        <div class="rate-meta">
+          ${r.structure}${r.cap ? ` · cap ${Number(r.cap).toLocaleString()}` : ''}
+          ${from ? ` · <span class="rate-from">from ${from.iso}</span>` : ''}
+        </div>
+      </div>
+      <div><span class="rate-method ${r.method.toLowerCase()}">${r.method}</span></div>
+      <div class="rate-value">${gtRateValue(r)}</div>
+      <div style="font-size:11.5px;color:var(--text2)">${r.effectiveFrom}</div>
+      <div class="rate-actions">
+        ${from ? `<span style="font-size:10px;color:var(--textm)">inherited</span>` : `
+          <button class="rate-icon-btn" title="Edit" onclick="openRateModal('${r.id}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>
+          </button>
+          <button class="rate-icon-btn danger" title="Delete" onclick="deleteRate('${r.id}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+          </button>`}
+      </div>
+    </div>`;
+
+  const crumb = entry.path.map(p => p.name).join(' <span>›</span> ');
+
+  el.innerHTML = `
+    <div class="rl2-detail-head">
+      <div class="rl2-detail-title">
+        ${n.flag ? n.flag : ''} ${n.name}
+        <span class="rl2-iso-big">${n.iso}</span>
+        <span class="rl2-level-tag ${n.level.toLowerCase()}">${gtLevelLabel(n.level)}</span>
+        ${n.generic ? `<span class="rl2-level-tag">Generic</span>` : ''}
+      </div>
+      <div class="rl2-crumb">${crumb} &nbsp;·&nbsp; ${n.currency} &nbsp;·&nbsp;
+        <strong>${own.length}</strong> rate${own.length === 1 ? '' : 's'} set here${inherited.length ? ` · <strong>${inherited.length}</strong> inherited` : ''}
+      </div>
+    </div>
+
+    <div class="rl2-section">
+      <div class="rl2-section-head">
+        <div>
+          <div class="rl2-section-title">Rates set at ${n.iso}</div>
+          <div class="rl2-section-sub">Applied to anyone in this jurisdiction and everything beneath it</div>
+        </div>
+        <button class="btn btn-primary" style="padding:7px 13px;font-size:12.5px" onclick="openRateModal(null)">+ Add Rate</button>
+      </div>
+      ${own.length ? own.map(r => rateRow(r, null)).join('') : `
+        <div class="rl2-empty">
+          <div class="rl2-empty-title">No rates set at this level</div>
+          <div class="rl2-empty-sub">${n.level === 'STATE' ? 'Some states levy no personal income tax — leaving this empty is a valid configuration.' : 'Add a rate to configure this jurisdiction.'}</div>
+        </div>`}
+    </div>
+
+    ${inherited.length ? `
+      <div class="rl2-section" style="border-top:1px solid var(--border);background:#fcfdfe">
+        <div class="rl2-section-head">
+          <div>
+            <div class="rl2-section-title">Also applies here</div>
+            <div class="rl2-section-sub">Inherited from parent jurisdictions — edit them at their own level</div>
+          </div>
+        </div>
+        ${inherited.map(x => rateRow(x.r, x.from)).join('')}
+      </div>` : ''}
+  `;
 }
 
-function renderFlavours() {
-  const tbody = document.getElementById('rl-flav-body');
-  if (!tbody) return;
-  tbody.innerHTML = gtFlavours.map(f => {
-    const n = gtRateSchedules.filter(s => s.flavour === f.code).length;
-    return `<tr>
-      <td><span class="coord-chip coord-flav" style="font-size:11px">${f.code}</span></td>
-      <td>${f.fallback ? `<span style="color:var(--text2);font-size:12px">→ <span class="coord-chip coord-flav">${f.fallback}</span></span>`
-                       : '<span style="color:var(--textm);font-size:11.5px">no fallback</span>'}</td>
-      <td style="font-size:12px;color:var(--text2)">${gtEsc(f.desc)}</td>
-      <td style="text-align:right;font-weight:700;color:${n ? 'var(--accent)' : 'var(--textm)'}">${n}</td>
-    </tr>`;
-  }).join('');
-  document.getElementById('rl-count-flav').textContent = gtFlavours.length;
+// ── Rate editor ──
+function gtIsoOptions(sel) {
+  const idx = gtIndex();
+  const out = [];
+  const walk = (nodes, depth) => nodes.forEach(n => {
+    out.push(`<option value="${n.iso}" ${n.iso === sel ? 'selected' : ''}>${'  '.repeat(depth)}${n.name} — ${n.iso}</option>`);
+    walk(n.children || [], depth + 1);
+  });
+  walk(gtJurisTree, 0);
+  return out.join('');
+}
+
+function onRateStructureChange() {
+  const banded = document.getElementById('rate-f-structure').value === 'Banded';
+  document.getElementById('rate-flat-wrap').style.display = banded ? 'none' : '';
+  document.getElementById('rate-bands-wrap').style.display = banded ? '' : 'none';
+  if (banded && !document.querySelectorAll('#rate-bands-list .band-edit-row').length) addBandRow();
+}
+
+function addBandRow(upTo, rate) {
+  const list = document.getElementById('rate-bands-list');
+  const div = document.createElement('div');
+  div.className = 'band-edit-row';
+  div.innerHTML = `
+    <div><label class="form-label" style="font-size:10.5px">Up to (blank = no limit)</label>
+      <input class="form-input band-to" type="number" placeholder="∞" value="${upTo != null ? upTo : ''}"></div>
+    <div><label class="form-label" style="font-size:10.5px">Rate %</label>
+      <input class="form-input band-rate" type="number" step="0.01" value="${rate != null ? rate : ''}"></div>
+    <button class="band-del" onclick="this.parentElement.remove()">×</button>`;
+  list.appendChild(div);
+}
+
+function openRateModal(id) {
+  gtEditingRate = id;
+  const r = id ? gtRates.find(x => x.id === id) : null;
+  const iso = r ? r.iso : gtSelectedIso;
+
+  document.getElementById('rate-modal-title').textContent = r ? 'Edit Rate' : 'Add Rate';
+  document.getElementById('rate-modal-sub').textContent = r ? r.id : 'New rate for ' + iso;
+  document.getElementById('rate-f-iso').innerHTML = gtIsoOptions(iso);
+  document.getElementById('rate-f-type').value = r ? r.taxType : 'Income Tax';
+  document.getElementById('rate-f-method').value = r ? r.method : 'Supplemental';
+  document.getElementById('rate-f-structure').value = r ? r.structure : 'Flat';
+  document.getElementById('rate-f-eff').value = r ? r.effectiveFrom : '2026-01-01';
+  document.getElementById('rate-f-rate').value = r && r.rate != null ? r.rate : '';
+  document.getElementById('rate-f-status').value = r ? r.status : 'Active';
+  document.getElementById('rate-f-cap').value = r && r.cap ? r.cap : '';
+  document.getElementById('rate-bands-list').innerHTML = '';
+  if (r && r.bands) r.bands.forEach(b => addBandRow(b.to, b.rate));
+  document.getElementById('rate-delete-btn').style.display = r ? '' : 'none';
+  onRateStructureChange();
+  document.getElementById('rate-modal').classList.add('open');
+}
+function closeRateModal() { document.getElementById('rate-modal').classList.remove('open'); gtEditingRate = null; }
+
+function saveRate() {
+  const structure = document.getElementById('rate-f-structure').value;
+  const capVal = document.getElementById('rate-f-cap').value;
+  const rec = {
+    iso: document.getElementById('rate-f-iso').value,
+    taxType: document.getElementById('rate-f-type').value,
+    method: document.getElementById('rate-f-method').value,
+    structure,
+    effectiveFrom: document.getElementById('rate-f-eff').value,
+    status: document.getElementById('rate-f-status').value,
+    cap: capVal ? Number(capVal) : null,
+  };
+  if (structure === 'Banded') {
+    rec.bands = [...document.querySelectorAll('#rate-bands-list .band-edit-row')].map(row => ({
+      to: row.querySelector('.band-to').value ? Number(row.querySelector('.band-to').value) : null,
+      rate: Number(row.querySelector('.band-rate').value || 0),
+    })).filter(b => !isNaN(b.rate));
+    if (!rec.bands.length) { alert('Add at least one band.'); return; }
+    rec.rate = null;
+  } else {
+    const v = document.getElementById('rate-f-rate').value;
+    if (v === '') { alert('Enter a rate.'); return; }
+    rec.rate = Number(v);
+    rec.bands = null;
+  }
+
+  if (gtEditingRate) {
+    Object.assign(gtRates.find(x => x.id === gtEditingRate), rec);
+  } else {
+    const max = gtRates.reduce((a, r) => Math.max(a, parseInt(r.id.split('-')[1], 10) || 0), 0);
+    gtRates.push({ id: 'R-' + String(max + 1).padStart(3, '0'), ...rec });
+  }
+  closeRateModal();
+  gtSelectedIso = rec.iso;
+  gtIndex()[rec.iso]?.path.forEach(p => gtExpanded.add(p.iso));
+  renderRateTree();
+  renderJurisDetail();
+}
+
+function deleteRate(id) {
+  const target = id || gtEditingRate;
+  if (!target) return;
+  const r = gtRates.find(x => x.id === target);
+  if (!r) return;
+  if (!confirm(`Delete ${r.taxType} (${gtRateValue(r)}) at ${r.iso}?`)) return;
+  gtRates = gtRates.filter(x => x.id !== target);
+  if (gtEditingRate) closeRateModal();
+  renderRateTree();
+  renderJurisDetail();
 }
 
 function renderRateLibrary() {
-  gtPopulateRLFilters();
-  renderRLMetrics();
-  renderRateSchedules();
-  renderJurisTree();
-  renderTaxYearCalendars();
-  renderFlavours();
+  renderRateTree();
+  renderJurisDetail();
 }
-
-// ── Rate schedule drawer ──
-let gtCurrentRS = null;
-function openRLDrawer(id) {
-  const s = gtRateSchedules.find(x => x.id === id);
-  if (!s) return;
-  gtCurrentRS = id;
-  document.getElementById('rl-drawer-title').textContent = s.juris + ' — ' + (gtTaxTypes.find(t => t.code === s.taxType) || {}).name;
-  document.getElementById('rl-drawer-meta').innerHTML =
-    `<span style="font-family:'SF Mono',monospace">${s.id}</span> · v${s.version} · effective ${s.effectiveFrom}${s.effectiveTo ? ' → ' + s.effectiveTo : ' → open'}`;
-  document.getElementById('rl-drawer-badges').innerHTML = gtStatusBadge(s.status) + gtCoverageBadge(s.coverage) +
-    `<span class="gt-badge b-neutral">${s.source}</span>`;
-
-  const tt = gtTaxTypes.find(t => t.code === s.taxType) || {};
-  const flav = gtFlavours.find(f => f.code === s.flavour) || {};
-
-  let html = `<div style="padding:18px 20px">`;
-
-  html += `<div style="margin-bottom:16px">
-    <div class="gt-side-title">Resolution Key</div>
-    ${gtCoordKey(s)}
-    <div style="font-size:11.5px;color:var(--text2);margin-top:8px;line-height:1.55">
-      Unique among published rows. An as-of date selects the version within this key.
-    </div>
-  </div>`;
-
-  html += `<div style="border-top:1px solid var(--border);padding-top:14px;margin-bottom:16px">
-    <div class="gt-kv-grid">
-      <div><div class="gt-kv-label">Structure</div><div class="gt-kv-value">${s.structure}</div></div>
-      <div><div class="gt-kv-label">Computation Base</div><div class="gt-kv-value">${tt.base || '—'}</div></div>
-      <div><div class="gt-kv-label">Payer</div><div class="gt-kv-value"><span class="gt-badge ${s.payer === 'EMPLOYER' ? 'b-employer' : 'b-employee'}">${s.payer}</span></div></div>
-      <div><div class="gt-kv-label">Currency</div><div class="gt-kv-value">${s.currency}</div></div>
-      <div><div class="gt-kv-label">Flavour Fallback</div><div class="gt-kv-value">${flav.fallback ? '→ ' + flav.fallback : 'none'}</div></div>
-      <div><div class="gt-kv-label">Tax Year</div><div class="gt-kv-value">${s.taxYear}</div></div>
-    </div>
-  </div>`;
-
-  if (s.taxOnTax) {
-    html += `<div class="gt-callout warn" style="margin-bottom:16px">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-      <div><strong>Tax-on-tax.</strong> Base is <code>TAX_AMOUNT</code>, not taxable income. The engine computes base taxes first, then runs surtax components in a second topologically ordered pass.</div>
-    </div>`;
-  }
-
-  if (s.coverage === 'INFERRED') {
-    html += `<div class="gt-callout warn" style="margin-bottom:16px">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>
-      <div><strong>Inferred coverage.</strong> Derived where the jurisdiction is silent. Requires client acknowledgement before it calculates — the platform never silently asserts an inference as settled law.</div>
-    </div>`;
-  }
-  if (s.coverage === 'GAP') {
-    html += `<div class="gt-callout warn" style="margin-bottom:16px;background:#fef2f2;border-color:#fecaca;color:#991b1b">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-      <div><strong>Coverage gap.</strong> No rule exists for this coordinate. Events resolving here route to the client exception queue — never a silent zero-tax event.</div>
-    </div>`;
-  }
-
-  if (s.bands.length) {
-    html += `<div style="margin-bottom:16px">
-      <div class="gt-side-title">Bands</div>
-      <table class="band-math">
-        <thead><tr><th>#</th><th>Lower</th><th>Upper</th><th class="num">Rate</th><th>YTD Basis</th></tr></thead>
-        <tbody>${s.bands.map((b, i) => `<tr>
-          <td style="color:var(--textm)">${i + 1}</td>
-          <td>${b.from.toLocaleString()}</td>
-          <td>${b.to === null ? '<span style="color:var(--textm)">∞</span>' : b.to.toLocaleString()}</td>
-          <td class="num" style="font-weight:700;color:var(--accent-dark)">${b.rate}%</td>
-          <td style="font-size:10.5px;color:var(--text2)">${b.basis}</td>
-        </tr>`).join('')}</tbody>
-      </table>
-    </div>`;
-  }
-
-  if (s.cap) {
-    html += `<div style="margin-bottom:16px">
-      <div class="gt-side-title">Cap</div>
-      <div style="font-size:12.5px;color:var(--text)">
-        <strong>${s.cap.type}</strong> — annual ceiling ${gtMoney(s.cap.ceiling, s.currency)}, rate above ceiling ${s.cap.aboveRate}%
-      </div>
-      <div style="font-size:11.5px;color:var(--text2);margin-top:5px">Caps consume remaining headroom only — the engine reads the participant's YTD position for this tax year first.</div>
-    </div>`;
-  }
-
-  html += `<div style="margin-bottom:16px;border-top:1px solid var(--border);padding-top:14px">
-    <div class="gt-side-title">Source &amp; Citation</div>
-    <div style="font-size:12px;color:var(--text);line-height:1.6">${gtEsc(s.citation)}</div>
-  </div>`;
-
-  html += `<div style="border-top:1px solid var(--border);padding-top:14px">
-    <div class="gt-side-title">Version History <span style="text-transform:none;letter-spacing:0;font-weight:500">— append-only, immutable once published</span></div>
-    ${s.versions.map(v => `<div class="ver-row ${v.status === 'PUBLISHED' || v.status === 'IN_REVIEW' ? 'current' : ''}">
-      <span class="ver-no">v${v.v}</span>
-      <span style="font-size:11.5px;color:var(--text2);width:88px">${v.from}</span>
-      ${gtStatusBadge(v.status)}
-      <span style="font-size:11.5px;color:var(--text2);flex:1">${gtEsc(v.note)}</span>
-      <span style="font-size:11px;color:var(--textm)">${gtEsc(v.by)}</span>
-    </div>`).join('')}
-  </div>`;
-
-  html += `</div>`;
-  document.getElementById('rl-drawer-body').innerHTML = html;
-
-  const btn = document.getElementById('rl-drawer-action');
-  const actions = { DRAFT: 'Submit for Review', IN_REVIEW: 'Approve &amp; Publish', PUBLISHED: 'Create New Version', SUPERSEDED: 'View Successor' };
-  btn.innerHTML = actions[s.status] || 'Open';
-  btn.onclick = () => alert(`${s.id} — "${actions[s.status]}"\n\nPublish workflow runs on the shared platform Approvals domain with maker-checker: the author cannot self-approve, and only PUBLISHED versions are visible to tenants or used in calculations (TAX-RR-005).`);
-
-  document.getElementById('rl-drawer-overlay').classList.add('open');
-}
-function closeRLDrawer() { document.getElementById('rl-drawer-overlay').classList.remove('open'); }
 
 // ══════════════════════ RULES ENGINE RENDERING ══════════════════════
 const gtTaxabilityBadge = t => {
