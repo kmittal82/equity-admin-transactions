@@ -6092,6 +6092,92 @@
   </div>
 </div>
 
+<!-- ACCELERATE VESTING MODAL -->
+<div class="modal-overlay" id="modal-accelerate">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-title">Accelerate Vesting</div>
+      <button class="modal-close" onclick="closeModal('modal-accelerate')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="alert-box alert-warn">Acceleration vests shares ahead of the original schedule. It requires documented approval and may create an immediate taxable event for the participant.</div>
+
+      <div class="alert-box alert-info" id="acc-grant-info" style="margin-top:10px"></div>
+
+      <div class="form-grid" style="margin-top:20px">
+        <div class="form-group">
+          <label class="form-label">Acceleration Method <span class="req">*</span></label>
+          <select class="form-select" id="acc-method" onchange="updateAccelCalc()">
+            <option value="full">Full — vest all unvested shares</option>
+            <option value="percent">Percentage of unvested</option>
+            <option value="shares">Specific number of shares</option>
+            <option value="months">Months of vesting credit</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Effective Date <span class="req">*</span></label>
+          <input type="date" class="form-input" id="acc-date">
+        </div>
+        <div class="form-group full" id="acc-amount-group" style="display:none">
+          <label class="form-label" id="acc-amount-label">Amount</label>
+          <input type="number" class="form-input" id="acc-amount" oninput="updateAccelCalc()">
+          <div style="font-size:11px;color:var(--textm);margin-top:4px" id="acc-amount-hint"></div>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Trigger / Authority <span class="req">*</span></label>
+          <select class="form-select" id="acc-reason">
+            <option>Board discretion</option>
+            <option>Change in control — single trigger</option>
+            <option>Change in control — double trigger</option>
+            <option>Termination without cause</option>
+            <option>Retirement</option>
+            <option>Death / Disability</option>
+            <option>Separation agreement</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Approval Reference</label>
+          <input type="text" class="form-input" id="acc-ref" placeholder="e.g. Board Resolution #2026-14">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Notes</label>
+          <textarea class="form-input form-textarea" id="acc-notes" placeholder="Reason for this acceleration..."></textarea>
+        </div>
+      </div>
+
+      <div class="value-box">
+        <div style="font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">Acceleration Preview</div>
+        <div class="value-grid">
+          <div>
+            <div class="value-item-label">Shares Accelerated</div>
+            <div class="value-item-val" style="color:var(--accent)" id="acc-pv-shares">0</div>
+          </div>
+          <div>
+            <div class="value-item-label">New Vested Total</div>
+            <div class="value-item-val" style="color:var(--green)" id="acc-pv-vested">0</div>
+          </div>
+          <div>
+            <div class="value-item-label">Value at $42.50</div>
+            <div class="value-item-val" id="acc-pv-value">$0</div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-top:12px;padding-top:10px;border-top:1px solid var(--border)">
+          <span>Remaining unvested after acceleration</span>
+          <span style="font-weight:600" id="acc-pv-remaining">0</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-top:6px">
+          <span>Resulting grant status</span>
+          <span style="font-weight:600" id="acc-pv-status">Active</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('modal-accelerate')">Cancel</button>
+      <button class="btn btn-primary" id="acc-confirm-btn" onclick="confirmAcceleration()">Apply Acceleration</button>
+    </div>
+  </div>
+</div>
+
 <!-- EDIT GRANT MODAL -->
 <div class="modal-overlay" id="modal-edit">
   <div class="modal-box">
@@ -7384,6 +7470,8 @@ function renderGrantsTable() {
   tbody.innerHTML = filtered.map(g => {
     const canExercise = isExercisable(g.type) && g.status === 'active';
     const canRelease = isReleasable(g.type) && g.status === 'active' && g.vested > 0;
+    // Acceleration only makes sense while a grant is live and still has unvested units
+    const canAccelerate = g.status === 'active' && g.unvested > 0;
     return `
     <tr class="grant-row">
       <td class="col-actions" onclick="event.stopPropagation()">
@@ -7423,6 +7511,12 @@ function renderGrantsTable() {
                 <button class="kebab-menu-item" onclick="event.stopPropagation(); closeAllKebabs(); openReleaseDrawer('${g.id}')">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                   Release Shares
+                </button>
+              ` : ''}
+              ${canAccelerate ? `
+                <button class="kebab-menu-item" onclick="event.stopPropagation(); closeAllKebabs(); openAccelerateModal('${g.id}')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13,19 22,12 13,5"/><polygon points="2,19 11,12 2,5"/></svg>
+                  Accelerate Vesting
                 </button>
               ` : ''}
               <div class="kebab-divider"></div>
@@ -8343,6 +8437,129 @@ function showModalStep(step) {
 function openExerciseModal(grantId) {
   const grant = grantsData.find(g => g.id === grantId);
   openModal('modal-exercise');
+}
+
+// ─────────────────────────────────────────────
+// ACCELERATE VESTING
+// ─────────────────────────────────────────────
+const ACCEL_FMV = 42.50;
+let accelGrant = null;
+
+// Monthly vesting rate implied by the schedule label ('4yr/1yr cliff' → 4 years)
+function accelMonthlyRate(g) {
+  const yrs = parseInt(g.vesting, 10) || 4;
+  return g.shares / (yrs * 12);
+}
+
+function openAccelerateModal(grantId) {
+  const g = grantsData.find(x => x.id === grantId);
+  if (!g) return;
+  accelGrant = g;
+
+  document.getElementById('acc-grant-info').innerHTML =
+    `<strong>${g.id}</strong> — ${g.participant} · ${g.type} · ${g.vesting}<br>` +
+    `Granted ${g.shares.toLocaleString()} · Vested ${g.vested.toLocaleString()} · ` +
+    `<strong>Unvested ${g.unvested.toLocaleString()}</strong>`;
+
+  document.getElementById('acc-method').value = 'full';
+  document.getElementById('acc-date').value   = new Date().toISOString().slice(0, 10);
+  document.getElementById('acc-amount').value = '';
+  document.getElementById('acc-ref').value    = '';
+  document.getElementById('acc-notes').value  = '';
+
+  updateAccelCalc();
+  openModal('modal-accelerate');
+}
+
+// Shares that would vest under the current inputs, capped at what is actually unvested
+function accelShares() {
+  const g = accelGrant;
+  if (!g) return 0;
+  const method = document.getElementById('acc-method').value;
+  const amount = parseFloat(document.getElementById('acc-amount').value) || 0;
+
+  let n;
+  if (method === 'full')         n = g.unvested;
+  else if (method === 'percent') n = Math.round(g.unvested * (amount / 100));
+  else if (method === 'shares')  n = Math.round(amount);
+  else                           n = Math.round(accelMonthlyRate(g) * amount);
+
+  return Math.max(0, Math.min(n, g.unvested));
+}
+
+function updateAccelCalc() {
+  const g = accelGrant;
+  if (!g) return;
+
+  const method = document.getElementById('acc-method').value;
+  const group  = document.getElementById('acc-amount-group');
+  const input  = document.getElementById('acc-amount');
+
+  // Only the non-full methods need an amount, and each means something different
+  if (method === 'full') {
+    group.style.display = 'none';
+  } else {
+    group.style.display = '';
+    const cfg = {
+      percent: { label: 'Percentage of Unvested (%)', max: 100,
+                 hint: `100% = ${g.unvested.toLocaleString()} shares` },
+      shares:  { label: 'Shares to Accelerate',       max: g.unvested,
+                 hint: `Maximum available: ${g.unvested.toLocaleString()}` },
+      months:  { label: 'Months of Vesting Credit',   max: 120,
+                 hint: `≈ ${Math.round(accelMonthlyRate(g)).toLocaleString()} shares per month on this schedule` }
+    }[method];
+    document.getElementById('acc-amount-label').textContent = cfg.label;
+    document.getElementById('acc-amount-hint').textContent  = cfg.hint;
+    input.max = cfg.max;
+  }
+
+  const n         = accelShares();
+  const remaining = g.unvested - n;
+
+  document.getElementById('acc-pv-shares').textContent    = n.toLocaleString();
+  document.getElementById('acc-pv-vested').textContent    = (g.vested + n).toLocaleString();
+  document.getElementById('acc-pv-value').textContent     = '$' + Math.round(n * ACCEL_FMV).toLocaleString();
+  document.getElementById('acc-pv-remaining').textContent = remaining.toLocaleString();
+  document.getElementById('acc-pv-status').textContent    = remaining === 0 ? 'Fully vested (Complete)' : 'Active';
+
+  const btn = document.getElementById('acc-confirm-btn');
+  btn.disabled = n === 0;
+  btn.style.opacity = n === 0 ? '0.5' : '';
+  btn.style.cursor  = n === 0 ? 'not-allowed' : '';
+}
+
+function confirmAcceleration() {
+  const g = accelGrant;
+  if (!g) return;
+
+  const n = accelShares();
+  if (n === 0) { ptToast('Enter an amount greater than zero to accelerate', 'warn'); return; }
+
+  const date   = document.getElementById('acc-date').value || new Date().toISOString().slice(0, 10);
+  const reason = document.getElementById('acc-reason').value;
+  const ref    = document.getElementById('acc-ref').value.trim();
+  const notes  = document.getElementById('acc-notes').value.trim();
+
+  g.vested   += n;
+  g.unvested -= n;
+  if (g.unvested === 0) g.status = 'complete';
+
+  // Neutral ledger event — units move unvested → vested, outstanding balance is unchanged
+  if (!ledgerData[g.id]) ledgerData[g.id] = [];
+  ledgerData[g.id].push({
+    date: date,
+    type: 'Accelerated',
+    shares: n,
+    note: `${reason} — ${n.toLocaleString()} unvested units accelerated`
+        + (ref ? ' · ' + ref : '')
+        + (notes ? ' · ' + notes : '')
+        + ` · Vested ${g.vested.toLocaleString()} of ${g.shares.toLocaleString()}`
+  });
+
+  closeModal('modal-accelerate');
+  renderGrantsTable();
+  ptToast(`✓ ${n.toLocaleString()} shares accelerated on ${g.id}`, 'ok');
+  accelGrant = null;
 }
 
 // ═════════════════════════════════════════════
