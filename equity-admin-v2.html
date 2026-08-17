@@ -1180,6 +1180,182 @@
     }
     .empty-ledger-arrow { font-size: 28px; margin-bottom: 6px; }
 
+    /* ════════════ PARTICIPANTS ════════════ */
+    .pt-name-cell { display:flex; align-items:center; gap:10px; }
+    .pt-avatar {
+      width:30px; height:30px; border-radius:50%; flex-shrink:0; color:#fff;
+      display:flex; align-items:center; justify-content:center; font-size:10.5px; font-weight:700;
+    }
+    .pt-risk-wrap { display:flex; flex-direction:column; align-items:flex-end; gap:3px; }
+    .pt-risk-bar { height:4px; width:64px; background:#e2e8f0; border-radius:2px; overflow:hidden; }
+    .pt-risk-fill { height:100%; border-radius:2px; }
+
+    /* ════════════ TERMINATION MODELLER ════════════ */
+    .tm-overlay {
+      position:fixed; inset:0; background:var(--bg); z-index:950;
+      display:flex; flex-direction:column; opacity:0; pointer-events:none; transition:opacity 0.2s;
+    }
+    .tm-overlay.open { opacity:1; pointer-events:all; }
+    .tm-panel {
+      background:var(--bg); height:100vh; display:flex; flex-direction:column; overflow:hidden;
+    }
+    .tm-head {
+      background:var(--card); padding:18px 28px; border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between; gap:20px; flex-shrink:0;
+    }
+    .tm-head-info { flex:1; }
+    .tm-head-title {
+      font-size:18px; font-weight:700; color:var(--text); margin-bottom:4px;
+    }
+    .tm-head-sub {
+      font-size:12px; color:var(--text2);
+    }
+    .tm-head-meta {
+      display:flex; align-items:center; gap:12px; margin-top:6px;
+    }
+    .tm-head-id {
+      font-family:'SF Mono',monospace; font-size:11px; font-weight:700;
+      color:var(--accent-dark); background:#eff6ff; padding:4px 10px; border-radius:6px;
+    }
+    .tm-body {
+      flex:1; overflow-y:auto; padding:28px;
+      display:grid; grid-template-columns:300px 1fr; gap:28px;
+    }
+    .tm-sidebar {
+      display:flex; flex-direction:column; gap:24px;
+    }
+    .tm-sidebar-section { display:flex; flex-direction:column; gap:12px; }
+    .tm-section-label {
+      font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em;
+      color:var(--text2); margin-bottom:6px;
+    }
+    .tm-main {
+      display:flex; flex-direction:column; gap:24px;
+    }
+    .tm-sec-title {
+      font-size:14px; font-weight:700; color:var(--text); display:flex; align-items:center; gap:10px;
+    }
+    .tm-sec-icon {
+      width:24px; height:24px; border-radius:8px; display:flex; align-items:center;
+      justify-content:center; font-size:12px; font-weight:700; color:#fff;
+    }
+
+    .tm-inputs {
+      background:var(--card); border:1px solid var(--border); border-radius:12px;
+      padding:16px; display:grid; grid-template-columns:1fr; gap:14px;
+    }
+    .tm-field { display:flex; flex-direction:column; gap:6px; }
+    .tm-field label {
+      font-size:11px; font-weight:700; color:var(--text2);
+      text-transform:uppercase; letter-spacing:0.05em;
+    }
+    .tm-field input, .tm-field select {
+      font-family:inherit; font-size:13px; padding:10px 12px; border-radius:8px;
+      border:1px solid var(--border); background:var(--bg); color:var(--text); width:100%; outline:none;
+    }
+    .tm-field input:focus, .tm-field select:focus {
+      border-color:var(--accent); box-shadow:0 0 0 3px rgba(59,130,246,0.12);
+    }
+
+    .tm-banner {
+      background:linear-gradient(135deg,#3b82f6 0%,#1e40af 100%);
+      border-radius:12px; padding:20px; color:#fff; text-align:center;
+    }
+    .tm-banner-title {
+      font-size:11px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase;
+      opacity:0.7; margin-bottom:12px;
+    }
+    .tm-banner-val {
+      font-size:28px; font-weight:700; letter-spacing:-0.02em; line-height:1.1;
+    }
+    .tm-banner-sub {
+      font-size:12px; opacity:0.65; margin-top:6px;
+    }
+    .tm-banner-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+    .tm-stat {
+      background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2);
+      border-radius:10px; padding:14px; text-align:center;
+    }
+    .tm-stat-label { font-size:10px; text-transform:uppercase; letter-spacing:0.06em; opacity:0.65; font-weight:600; }
+    .tm-stat-val { font-size:20px; font-weight:700; margin-top:6px; }
+    .tm-stat-sub { font-size:11px; opacity:0.6; margin-top:3px; }
+
+    .tm-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+    .tm-grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    .tm-card {
+      background:var(--card); border:1px solid var(--border); border-radius:12px;
+      padding:18px; position:relative; overflow:hidden;
+    }
+    .tm-card::before {
+      content:''; position:absolute; left:0; top:0; width:4px; height:100%;
+      background:var(--accent);
+    }
+    .tm-card.red::before { background:#ef4444; }
+    .tm-card.green::before { background:#10b981; }
+    .tm-card.amber::before { background:#f59e0b; }
+    .tm-card-title { font-size:13px; font-weight:700; margin-bottom:12px; }
+    .tm-row {
+      display:flex; justify-content:space-between; align-items:center; gap:12px;
+      font-size:13px; padding:8px 0; border-bottom:1px solid var(--border);
+    }
+    .tm-row:last-child { border-bottom:none; }
+    .tm-row-label { color:var(--text2); }
+    .tm-row-val { font-weight:600; }
+
+    .tm-badge {
+      display:inline-block; font-size:11px; padding:4px 10px; border-radius:12px;
+      font-weight:600; letter-spacing:0.02em; white-space:nowrap;
+    }
+    .tmb-forfeited { background:#fee2e2; color:#991b1b; }
+    .tmb-retained  { background:#dbeafe; color:#1e40af; }
+    .tmb-expired   { background:#fef3c7; color:#92400e; }
+    .tmb-ok        { background:#d1fae5; color:#065f46; }
+    .tmb-neutral   { background:#f3f4f6; color:#374151; }
+
+    .tm-rules { width:100%; border-collapse:collapse; font-size:12px; }
+    .tm-rules th {
+      text-align:left; padding:10px 12px; background:var(--bg); color:var(--text2);
+      font-weight:700; text-transform:uppercase; font-size:10px; letter-spacing:0.05em;
+      border-bottom:1px solid var(--border);
+    }
+    .tm-rules td { padding:10px 12px; border-bottom:1px solid var(--border); color:var(--text2); }
+    .tm-rules td:first-child { color:var(--text); font-weight:600; }
+    .tm-rules tr.active td { background:#fffbeb; color:var(--text); }
+
+    .tm-bars { display:flex; flex-direction:column; gap:12px; }
+    .tm-bar-row { display:flex; align-items:center; gap:12px; font-size:12px; }
+    .tm-bar-label { width:100px; text-align:right; color:var(--text2); flex-shrink:0; font-weight:600; }
+    .tm-bar-track { flex:1; height:22px; background:var(--bg); border-radius:6px; overflow:hidden; display:flex; border:1px solid var(--border); }
+    .tm-bar-seg {
+      height:100%; display:flex; align-items:center; justify-content:center;
+      font-size:10px; color:#fff; font-weight:700; transition:width 0.4s ease; overflow:hidden;
+    }
+    .tm-legend { display:flex; gap:16px; margin-top:14px; font-size:12px; color:var(--text2); }
+    .tm-legend-dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px; vertical-align:middle; }
+
+    .tm-timeline { padding-left:6px; border-left:2px solid var(--border); margin-left:8px; }
+    .tm-tl-item { position:relative; padding:0 0 16px 20px; }
+    .tm-tl-item:last-child { padding-bottom:0; }
+    .tm-tl-dot { position:absolute; left:-6px; top:2px; width:10px; height:10px; border-radius:50%; border:2px solid var(--accent); background:#fff; }
+    .tm-tl-date { font-size:11px; color:var(--textm); font-weight:600; }
+    .tm-tl-text { font-size:13px; margin-top:2px; color:var(--text); }
+
+    .tm-foot {
+      background:var(--card); padding:16px 28px; border-top:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between; gap:12px; flex-shrink:0;
+    }
+    .tm-foot-note { font-size:12px; color:var(--text2); }
+
+    @media (max-width:1200px) {
+      .tm-body { grid-template-columns:1fr; }
+      .tm-grid-3 { grid-template-columns:repeat(2,1fr); }
+      .tm-grid-2 { grid-template-columns:1fr; }
+    }
+    @media (max-width:768px) {
+      .tm-head { flex-direction:column; align-items:flex-start; }
+      .tm-body { padding:16px; gap:16px; }
+    }
+
     /* ════════════ MODALS ════════════ */
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(15,23,42,0.45);
@@ -2612,7 +2788,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
       Dashboard
     </div>
-    <div class="nav-item" onclick="setActive(this)">
+    <div class="nav-item" id="nav-participants" onclick="setActive(this); switchView('participants')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       Participants
     </div>
@@ -3517,6 +3693,83 @@
       </div>
 
     </div><!-- /view-dashboard -->
+
+    <!-- ════ PARTICIPANTS ════ -->
+    <div class="view-section" id="view-participants">
+      <div class="page-head">
+        <div>
+          <div class="page-title">Participants</div>
+          <div class="page-sub">Equity holders across all plans &mdash; grants, plan enrolments and termination modelling</div>
+        </div>
+        <div class="head-actions">
+          <button class="btn btn-ghost" onclick="alert('Export queued — participant register (CSV)')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export
+          </button>
+          <button class="btn btn-primary" onclick="alert('Add Participant — opens onboarding wizard')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Participant
+          </button>
+        </div>
+      </div>
+
+      <div class="summary-row-6" id="pt-summary"></div>
+
+      <!-- Status tabs -->
+      <div class="txtype-tabs" id="pt-status-tabs">
+        <button class="txtype-tab active" onclick="filterPtTab(this,'all')">All <span class="tab-count" id="pt-tab-all">0</span></button>
+        <button class="txtype-tab" onclick="filterPtTab(this,'active')" style="color:var(--green)">Active <span class="tab-count" id="pt-tab-active">0</span></button>
+        <button class="txtype-tab" onclick="filterPtTab(this,'leave')" style="color:var(--amber)">On Leave <span class="tab-count" id="pt-tab-leave">0</span></button>
+        <button class="txtype-tab" onclick="filterPtTab(this,'notice')" style="color:#2563eb">Notice Period <span class="tab-count" id="pt-tab-notice">0</span></button>
+        <button class="txtype-tab tab-other" onclick="filterPtTab(this,'terminated')">Terminated <span class="tab-count" id="pt-tab-terminated">0</span></button>
+      </div>
+
+      <!-- Filter row -->
+      <div class="filter-row">
+        <div class="filter-search-wrap">
+          <span class="filter-search-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+          <input class="filter-search-input" id="pt-search" placeholder="Search by name, employee ID, email or department…" oninput="renderParticipantsTable()">
+        </div>
+        <select class="filter-select-sm" id="pt-dept-filter" onchange="renderParticipantsTable()">
+          <option value="">All Departments</option>
+        </select>
+        <select class="filter-select-sm" id="pt-country-filter" onchange="renderParticipantsTable()">
+          <option value="">All Jurisdictions</option>
+        </select>
+        <div class="filter-right-actions">
+          <div class="table-result-count" id="pt-result-count"></div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="ag-table-wrap">
+        <div class="table-toolbar">
+          <div class="table-result-count">Participant register &mdash; unvested units shown as at today</div>
+          <div class="table-toolbar-actions"></div>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="ag-table" id="participants-table">
+            <thead>
+              <tr>
+                <th style="width:44px">Actions</th>
+                <th style="width:200px">Participant</th>
+                <th style="width:110px">Employee ID</th>
+                <th style="width:130px">Department</th>
+                <th style="width:120px">Jurisdiction</th>
+                <th style="width:100px">Hire Date</th>
+                <th style="text-align:right;width:70px">Grants</th>
+                <th style="text-align:right;width:100px">Granted</th>
+                <th style="text-align:right;width:100px">Vested</th>
+                <th style="text-align:right;width:130px">Unvested (at risk)</th>
+                <th style="width:120px">Plan Enrolments</th>
+                <th style="width:110px">Status</th>
+              </tr>
+            </thead>
+            <tbody id="participants-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div><!-- /view-participants -->
 
     <!-- GRANT TRANSACTIONS VIEW -->
     <div class="view-section" id="view-grant-txns">
@@ -5415,6 +5668,166 @@
       </div>
     </div>
 
+    <!-- ════ TERMINATION MODELLER ════ -->
+    <div class="tm-overlay" id="tm-overlay" onclick="closeTermModel(event)">
+      <div class="tm-panel" onclick="event.stopPropagation()">
+        <!-- Header -->
+        <div class="tm-head">
+          <div class="tm-head-info">
+            <div class="tm-head-title" id="tm-title">Termination Modeller</div>
+            <div class="tm-head-sub" id="tm-sub">Simulate termination scenarios & view equity impact</div>
+            <div class="tm-head-meta">
+              <span class="tm-head-id" id="tm-emp-id">—</span>
+              <span class="tm-badge tmb-neutral" id="tm-mode-badge">Simulation</span>
+            </div>
+          </div>
+          <button class="modal-close" onclick="closeTermModel()">×</button>
+        </div>
+
+        <!-- Body: Sidebar + Main Content -->
+        <div class="tm-body">
+          <!-- LEFT SIDEBAR: Inputs & Summary -->
+          <div class="tm-sidebar">
+            <div class="tm-sidebar-section">
+              <div class="tm-section-label">Termination Assumptions</div>
+              <div class="tm-inputs">
+                <div class="tm-field">
+                  <label>Termination Date</label>
+                  <input type="date" id="tm-date" onchange="renderTermModel()">
+                </div>
+                <div class="tm-field">
+                  <label>Termination Type</label>
+                  <select id="tm-type" onchange="renderTermModel()">
+                    <option value="voluntary">Voluntary</option>
+                    <option value="involuntary">Involuntary (no cause)</option>
+                    <option value="cause">For Cause</option>
+                    <option value="retirement">Retirement</option>
+                    <option value="death">Death / Disability</option>
+                  </select>
+                </div>
+                <div class="tm-field">
+                  <label>Stock Price ($)</label>
+                  <input type="number" id="tm-fmv" step="0.25" value="42.50" oninput="renderTermModel()">
+                </div>
+                <div class="tm-field">
+                  <label>Discretionary Action</label>
+                  <select id="tm-accel" onchange="renderTermModel()">
+                    <option value="0">No acceleration</option>
+                    <option value="next">Accelerate next tranche</option>
+                    <option value="12">Accelerate 12 months</option>
+                    <option value="all">Full acceleration</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="tm-sidebar-section">
+              <div class="tm-section-label">Total Impact</div>
+              <div class="tm-banner">
+                <div class="tm-banner-title">Value at Termination</div>
+                <div class="tm-banner-val" id="tm-total-value">$0</div>
+                <div class="tm-banner-sub" id="tm-total-sub">All equity + cash plans</div>
+              </div>
+            </div>
+
+            <div class="tm-sidebar-section">
+              <div class="tm-section-label">Key Metrics</div>
+              <div class="tm-banner" style="background:linear-gradient(135deg,#10b981 0%,#059669 100%)">
+                <div class="tm-banner-grid">
+                  <div class="tm-stat">
+                    <div class="tm-stat-label">Vested</div>
+                    <div class="tm-stat-val" id="tm-metric-vested">0</div>
+                  </div>
+                  <div class="tm-stat">
+                    <div class="tm-stat-label">Forfeited</div>
+                    <div class="tm-stat-val" id="tm-metric-forfeited">0</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT MAIN CONTENT -->
+          <div class="tm-main">
+            <!-- Rules Matrix -->
+            <div>
+              <div class="tm-sec-title">
+                <span class="tm-sec-icon" style="background:var(--accent)">📋</span>
+                Termination Rules by Plan
+              </div>
+              <div class="tm-card" style="padding:0;overflow:hidden">
+                <div style="overflow-x:auto">
+                  <table class="tm-rules">
+                    <thead>
+                      <tr>
+                        <th style="width:160px">Scenario</th>
+                        <th>RSU / RSA</th>
+                        <th>Options</th>
+                        <th>ESPP</th>
+                        <th>Savings</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tm-rules-body"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Plan Impacts -->
+            <div>
+              <div class="tm-sec-title">
+                <span class="tm-sec-icon" style="background:#f59e0b">📊</span>
+                Impact by Award Type
+              </div>
+              <div class="tm-grid-3" id="tm-plan-impacts"></div>
+            </div>
+
+            <!-- Grant Analysis -->
+            <div>
+              <div class="tm-sec-title">
+                <span class="tm-sec-icon" style="background:#ef4444">📈</span>
+                Individual Grants
+              </div>
+              <div class="tm-grid-2" id="tm-grants"></div>
+            </div>
+
+            <!-- Visualization & Timeline -->
+            <div class="tm-grid-2">
+              <div class="tm-card">
+                <div class="tm-card-title">Share Distribution</div>
+                <div class="tm-bars" id="tm-bars"></div>
+                <div class="tm-legend">
+                  <span><span class="tm-legend-dot" style="background:var(--accent)"></span>Vested</span>
+                  <span><span class="tm-legend-dot" style="background:var(--red)"></span>Forfeited</span>
+                  <span><span class="tm-legend-dot" style="background:var(--amber)"></span>Expired</span>
+                </div>
+              </div>
+              <div class="tm-card">
+                <div class="tm-card-title">Impact Timeline</div>
+                <div class="tm-timeline" id="tm-timeline"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="tm-foot">
+          <div class="tm-foot-note" id="tm-foot-note">💡 Simulation only — no changes are committed until you confirm</div>
+          <div style="display:flex;gap:10px">
+            <button class="btn btn-ghost" onclick="closeTermModel()">Close</button>
+            <button class="btn btn-ghost" onclick="exportTermModel()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Export
+            </button>
+            <button class="btn btn-primary" id="tm-commit-btn" style="background:#ef4444;border-color:#ef4444" onclick="commitTermination()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/></svg>
+              Commit
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div><!-- /content -->
 </div><!-- /main -->
 
@@ -6864,6 +7277,7 @@ function switchView(viewId) {
   else if (viewId === 'tax-codes') renderTaxCodesTable();
   else if (viewId === 'rate-library') renderRateLibrary();
   else if (viewId === 'rules-engine') renderRulesEngine();
+  else if (viewId === 'participants') renderParticipantsView();
 }
 
 // ── Equity Plans ──
@@ -7903,6 +8317,663 @@ function openExerciseModal(grantId) {
   openModal('modal-exercise');
 }
 
+// ═════════════════════════════════════════════
+// PARTICIPANTS  +  TERMINATION MODELLER
+// ═════════════════════════════════════════════
+
+// Annual tranches, first on the 1st anniversary of the grant date
+function ptVest(granted, shares, years) {
+  const [y, m, d] = granted.split('-').map(Number);
+  const per = Math.floor(shares / years);
+  const out = [];
+  for (let i = 1; i <= years; i++) {
+    out.push({
+      date: `${y + i}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`,
+      shares: i === years ? shares - per * (years - 1) : per
+    });
+  }
+  return out;
+}
+function ptSchedule(g) {
+  if (!g._sched) g._sched = ptVest(g.granted, g.shares, g.years);
+  return g._sched;
+}
+
+const participantsData = [
+  { id:'EMP-20481', name:'Sarah Chen', email:'sarah.chen@equityos.com', dept:'Engineering', title:'Staff Engineer',
+    country:'United States', region:'California', hired:'2021-03-15', status:'active',
+    grants:[
+      { id:'GRT-2021-014', type:'RSU',  plan:'2020 RSU / RSA Plan',           granted:'2021-03-15', shares:4000, strike:0,     expires:null,         years:4 },
+      { id:'GRT-2021-041', type:'ISO',  plan:'2019 Equity Incentive Plan',    granted:'2021-06-01', shares:6000, strike:18.00, expires:'2031-06-01', years:4 },
+      { id:'GRT-2023-052', type:'PSU',  plan:'2022 Performance Share Plan',   granted:'2023-01-10', shares:2000, strike:0,     expires:null,         years:4 },
+      { id:'GRT-2023-088', type:'NQSO', plan:'2023 Global Stock Option Plan', granted:'2023-07-01', shares:3000, strike:38.00, expires:'2033-07-01', years:4 },
+    ],
+    espp:{ plan:'2025 ESPP — Section 423', enrolled:'2025-01-01', offeringEnd:'2025-12-31', perPay:250, paychecks:12, discount:0.15, lookback:35.00, reserved:120 },
+    savings:{ plan:'Employee Savings Plan (DCPP)', enrolled:'2022-06-01', perMonth:500, matchPct:0.5, balance:22500, match:11250, vests:'2025-06-01' } },
+
+  { id:'EMP-20517', name:'Marcus Johnson', email:'marcus.johnson@equityos.com', dept:'Product', title:'Director of Product',
+    country:'United States', region:'New York', hired:'2020-09-01', status:'notice',
+    grants:[
+      { id:'GRT-2020-006', type:'ISO',  plan:'2019 Equity Incentive Plan',  granted:'2020-09-01', shares:8000, strike:12.40, expires:'2030-09-01', years:4 },
+      { id:'GRT-2022-031', type:'RSU',  plan:'2020 RSU / RSA Plan',         granted:'2022-04-15', shares:5000, strike:0,     expires:null,         years:4 },
+      { id:'GRT-2024-019', type:'PSU',  plan:'2022 Performance Share Plan', granted:'2024-02-01', shares:3200, strike:0,     expires:null,         years:3 },
+    ],
+    espp:{ plan:'2025 ESPP — Section 423', enrolled:'2025-01-01', offeringEnd:'2025-12-31', perPay:400, paychecks:18, discount:0.15, lookback:35.00, reserved:210 },
+    savings:{ plan:'Employee Savings Plan (DCPP)', enrolled:'2021-01-01', perMonth:650, matchPct:0.5, balance:38400, match:19200, vests:'2024-01-01' } },
+
+  { id:'EMP-20620', name:'Emma Davis', email:'emma.davis@equityos.com', dept:'Sales', title:'Enterprise AE',
+    country:'United Kingdom', region:'London', hired:'2022-06-06', status:'active',
+    grants:[
+      { id:'GRT-2022-077', type:'RSU',  plan:'2020 RSU / RSA Plan',           granted:'2022-06-06', shares:3000, strike:0,     expires:null,         years:4 },
+      { id:'GRT-2024-044', type:'NQSO', plan:'2023 Global Stock Option Plan', granted:'2024-03-01', shares:2400, strike:34.10, expires:'2034-03-01', years:4 },
+    ],
+    espp:null,
+    savings:{ plan:'SAYE 2023-A (UK)', enrolled:'2023-07-01', perMonth:350, matchPct:0, balance:12600, match:0, vests:'2026-06-30' } },
+
+  { id:'EMP-20388', name:'James Park', email:'james.park@equityos.com', dept:'Engineering', title:'Principal Engineer',
+    country:'United States', region:'Washington', hired:'2019-11-04', status:'active',
+    grants:[
+      { id:'GRT-2019-021', type:'ISO',  plan:'2019 Equity Incentive Plan',    granted:'2019-11-04', shares:12000, strike:6.80,  expires:'2029-11-04', years:4 },
+      { id:'GRT-2023-012', type:'RSU',  plan:'2020 RSU / RSA Plan',           granted:'2023-03-01', shares:6000,  strike:0,     expires:null,         years:4 },
+      { id:'GRT-2025-007', type:'NQSO', plan:'2023 Global Stock Option Plan', granted:'2025-02-15', shares:4000,  strike:39.75, expires:'2035-02-15', years:4 },
+    ],
+    espp:{ plan:'2025 ESPP — Section 423', enrolled:'2025-01-01', offeringEnd:'2025-12-31', perPay:500, paychecks:24, discount:0.15, lookback:32.00, reserved:340 },
+    savings:{ plan:'Employee Savings Plan (DCPP)', enrolled:'2020-01-01', perMonth:800, matchPct:0.5, balance:57600, match:28800, vests:'2023-01-01' } },
+
+  { id:'EMP-20744', name:'Priya Sharma', email:'priya.sharma@equityos.com', dept:'Finance', title:'FP&A Manager',
+    country:'India', region:'Karnataka', hired:'2023-01-16', status:'active',
+    grants:[
+      { id:'GRT-2023-030', type:'RSU', plan:'2020 RSU / RSA Plan', granted:'2023-01-16', shares:2400, strike:0, expires:null, years:4 },
+      { id:'GRT-2025-021', type:'RSU', plan:'2020 RSU / RSA Plan', granted:'2025-01-16', shares:1800, strike:0, expires:null, years:4 },
+    ],
+    espp:null,
+    savings:null },
+
+  { id:'EMP-20105', name:'Lisa Wong', email:'lisa.wong@equityos.com', dept:'Engineering', title:'Engineering Manager',
+    country:'United States', region:'California', hired:'2018-05-21', status:'leave',
+    grants:[
+      { id:'GRT-2018-004', type:'RSA',  plan:'2018 Founder RSA Plan',      granted:'2018-05-21', shares:15000, strike:0,     expires:null,         years:4 },
+      { id:'GRT-2022-009', type:'ISO',  plan:'2019 Equity Incentive Plan', granted:'2022-01-10', shares:7000,  strike:20.50, expires:'2032-01-10', years:4 },
+      { id:'GRT-2024-061', type:'RSU',  plan:'2020 RSU / RSA Plan',        granted:'2024-08-01', shares:3600,  strike:0,     expires:null,         years:4 },
+    ],
+    espp:{ plan:'2025 ESPP — Section 423', enrolled:'2025-01-01', offeringEnd:'2025-12-31', perPay:630, paychecks:20, discount:0.15, lookback:32.18, reserved:392 },
+    savings:{ plan:'Employee Savings Plan (DCPP)', enrolled:'2019-01-01', perMonth:900, matchPct:0.5, balance:71200, match:35600, vests:'2022-01-01' } },
+
+  { id:'EMP-20899', name:'Carlos Rivera', email:'carlos.rivera@equityos.com', dept:'Sales', title:'Regional Director',
+    country:'Spain', region:'Madrid', hired:'2022-02-14', status:'active',
+    grants:[
+      { id:'GRT-2022-018', type:'NSO', plan:'2019 Equity Incentive Plan',    granted:'2022-02-14', shares:5000, strike:19.80, expires:'2032-02-14', years:4 },
+      { id:'GRT-2024-072', type:'RSU', plan:'2020 RSU / RSA Plan',           granted:'2024-05-01', shares:2800, strike:0,     expires:null,         years:4 },
+    ],
+    espp:null,
+    savings:{ plan:'Employee Savings Plan (International)', enrolled:'2022-06-01', perMonth:400, matchPct:0.5, balance:17600, match:8800, vests:'2027-02-14' } },
+
+  { id:'EMP-20233', name:'Nina Hartley', email:'nina.hartley@equityos.com', dept:'Legal', title:'General Counsel',
+    country:'United Kingdom', region:'London', hired:'2021-08-02', status:'active',
+    grants:[
+      { id:'GRT-2021-058', type:'NSO', plan:'2019 Equity Incentive Plan',  granted:'2021-08-02', shares:6500, strike:16.90, expires:'2031-08-02', years:4 },
+      { id:'GRT-2023-066', type:'PSU', plan:'2022 Performance Share Plan', granted:'2023-09-01', shares:2600, strike:0,     expires:null,         years:3 },
+    ],
+    espp:null,
+    savings:{ plan:'SAYE 2023-A (UK)', enrolled:'2023-07-01', perMonth:150, matchPct:0, balance:5400, match:0, vests:'2026-06-30' } },
+
+  { id:'EMP-20455', name:'Wei Zhang', email:'wei.zhang@equityos.com', dept:'Engineering', title:'Senior Engineer',
+    country:'Singapore', region:'Singapore', hired:'2022-10-10', status:'active',
+    grants:[
+      { id:'GRT-2022-091', type:'NQSO', plan:'2023 Global Stock Option Plan', granted:'2022-10-10', shares:4500, strike:24.60, expires:'2032-10-10', years:4 },
+      { id:'GRT-2025-033', type:'RSU',  plan:'2020 RSU / RSA Plan',           granted:'2025-04-01', shares:2200, strike:0,     expires:null,         years:4 },
+    ],
+    espp:null,
+    savings:null },
+
+  { id:'EMP-20678', name:'Amanda Foster', email:'amanda.foster@equityos.com', dept:'Operations', title:'VP Operations',
+    country:'United States', region:'Texas', hired:'2020-01-13', status:'active',
+    grants:[
+      { id:'GRT-2020-011', type:'NSO', plan:'2019 Equity Incentive Plan',  granted:'2020-01-13', shares:9000, strike:9.60, expires:'2030-01-13', years:4 },
+      { id:'GRT-2024-028', type:'RSU', plan:'2020 RSU / RSA Plan',         granted:'2024-01-15', shares:4200, strike:0,    expires:null,         years:4 },
+      { id:'GRT-2025-045', type:'PSU', plan:'2022 Performance Share Plan', granted:'2025-03-01', shares:2500, strike:0,    expires:null,         years:3 },
+    ],
+    espp:{ plan:'2025 ESPP — Section 423', enrolled:'2025-01-01', offeringEnd:'2025-12-31', perPay:300, paychecks:15, discount:0.15, lookback:35.00, reserved:160 },
+    savings:{ plan:'Employee Savings Plan (DCPP)', enrolled:'2020-06-01', perMonth:600, matchPct:0.5, balance:44800, match:22400, vests:'2023-06-01' } },
+
+  { id:'EMP-20811', name:'Tom Bradley', email:'tom.bradley@equityos.com', dept:'Marketing', title:'Head of Growth',
+    country:'United States', region:'Illinois', hired:'2021-11-29', status:'active',
+    grants:[
+      { id:'GRT-2021-093', type:'SAR', plan:'2016 Warrant Plan',   granted:'2021-11-29', shares:4000, strike:15.20, expires:'2031-11-29', years:4 },
+      { id:'GRT-2024-055', type:'RSU', plan:'2020 RSU / RSA Plan', granted:'2024-11-01', shares:3000, strike:0,     expires:null,         years:4 },
+    ],
+    espp:null,
+    savings:{ plan:'Employee Savings Plan (DCPP)', enrolled:'2022-01-01', perMonth:450, matchPct:0.5, balance:21600, match:10800, vests:'2025-01-01' } },
+
+  { id:'EMP-20044', name:'Rachel Green', email:'rachel.green@equityos.com', dept:'People', title:'CHRO',
+    country:'United States', region:'California', hired:'2019-02-04', status:'terminated', termDate:'2026-01-31', termType:'retirement',
+    grants:[
+      { id:'GRT-2019-002', type:'ISO', plan:'2019 Equity Incentive Plan', granted:'2019-02-04', shares:10000, strike:7.20, expires:'2029-02-04', years:4 },
+      { id:'GRT-2023-004', type:'RSU', plan:'2020 RSU / RSA Plan',        granted:'2023-02-04', shares:4800,  strike:0,    expires:null,         years:4 },
+    ],
+    espp:{ plan:'2025 ESPP — Section 423', enrolled:'2025-01-01', offeringEnd:'2025-12-31', perPay:500, paychecks:10, discount:0.15, lookback:35.00, reserved:142 },
+    savings:{ plan:'Employee Savings Plan (DCPP)', enrolled:'2019-06-01', perMonth:750, matchPct:0.5, balance:63000, match:31500, vests:'2022-06-01' } },
+];
+
+const TERM_RULES = [
+  { key:'voluntary',   label:'Voluntary resignation',    rsu:'Unvested forfeited',   opt:'90-day exercise window',  espp:'Withdrawn — contributions refunded', sav:'Unvested match forfeited' },
+  { key:'involuntary', label:'Involuntary (no cause)',   rsu:'Unvested forfeited',   opt:'90-day exercise window',  espp:'Withdrawn — contributions refunded', sav:'Unvested match forfeited' },
+  { key:'cause',       label:'Involuntary (with cause)', rsu:'All units forfeited',  opt:'Immediate cancellation',  espp:'Withdrawn — contributions refunded', sav:'Match fully forfeited' },
+  { key:'retirement',  label:'Retirement',               rsu:'Unvested forfeited',   opt:'12-month window',         espp:'Withdrawn — contributions refunded', sav:'Match fully vested' },
+  { key:'death',       label:'Death / Disability',       rsu:'Accelerated vesting',  opt:'12-month window',         espp:'Withdrawn — contributions refunded', sav:'Match fully vested' },
+];
+const TERM_WINDOWS   = { voluntary:90, involuntary:90, cause:0, retirement:365, death:365 };
+const TM_OPTION_TYPES = ['ISO','NSO','NQSO','SAR'];
+const PT_AVATAR_COLORS = ['#3b82f6','#8b5cf6','#10b981','#f59e0b','#ef4444','#06b6d4','#ec4899','#6366f1'];
+
+let ptStatusFilter = 'all';
+let tmParticipant  = null;
+
+// ── formatting helpers ──
+const tmNum   = n => Math.round(n).toLocaleString();
+const tmMoney = n => (n < 0 ? '-$' : '$') + Math.round(Math.abs(n)).toLocaleString();
+const tmDate  = s => !s ? '—' : new Date(s + 'T00:00:00').toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});
+const tmDateO = d => d.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});
+const tmToday = () => new Date().toISOString().slice(0,10);
+const tmInitials = n => n.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+const tmAvatarColor = id => PT_AVATAR_COLORS[[...id].reduce((a,c)=>a+c.charCodeAt(0),0) % PT_AVATAR_COLORS.length];
+
+// ── termination maths ──
+function calcTermGrant(g, termISO, type, accel) {
+  const td = new Date(termISO + 'T00:00:00');
+  let vested = 0, unvested = 0;
+  const future = [];
+  ptSchedule(g).forEach(t => {
+    if (new Date(t.date + 'T00:00:00') <= td) vested += t.shares;
+    else { unvested += t.shares; future.push(t); }
+  });
+
+  let accelerated = 0;
+  if (type === 'death') {
+    accelerated = unvested;
+  } else if (type !== 'cause' && accel !== '0') {
+    if (accel === 'all')        accelerated = unvested;
+    else if (accel === 'next')  accelerated = future.length ? future[0].shares : 0;
+    else if (accel === '12') {
+      const cutoff = new Date(td); cutoff.setFullYear(cutoff.getFullYear() + 1);
+      future.forEach(t => { if (new Date(t.date + 'T00:00:00') <= cutoff) accelerated += t.shares; });
+    }
+  }
+  vested += accelerated; unvested -= accelerated;
+
+  const isOpt = TM_OPTION_TYPES.includes(g.type);
+  let retained = 0, expiring = 0, forfeited = unvested;
+  if (type === 'cause') {
+    if (isOpt) { forfeited = unvested; expiring = vested; }
+    else       { forfeited = g.shares; vested = 0; }
+  } else if (isOpt) {
+    expiring = vested;
+  } else {
+    retained = vested;
+  }
+
+  // Exercise deadline — earlier of (term date + window) and the grant's own expiry
+  const win = TERM_WINDOWS[type];
+  let deadline = null;
+  if (isOpt && win > 0 && vested > 0) {
+    deadline = new Date(td); deadline.setDate(deadline.getDate() + win);
+    if (g.expires) {
+      const exp = new Date(g.expires + 'T00:00:00');
+      if (exp < deadline) deadline = exp;
+    }
+  }
+
+  const action = type === 'cause' ? 'Cancelled'
+    : accelerated > 0 && unvested === 0 ? 'Fully accelerated'
+    : accelerated > 0 ? 'Partly accelerated'
+    : 'Plan terms';
+
+  return { ...g, isOpt, vested, unvested, accelerated, retained, expiring, forfeited, deadline, action,
+           pct: Math.round(vested / g.shares * 100) };
+}
+
+function calcTermEspp(p) {
+  if (!p.espp) return null;
+  const e = p.espp;
+  const contributed = e.perPay * e.paychecks;
+  return { plan:e.plan, contributed, refund:contributed, reserved:e.reserved, discount:e.discount,
+           discountLost: Math.round(e.reserved * e.lookback * e.discount), lookback:e.lookback };
+}
+
+function calcTermSavings(p, termISO, type) {
+  if (!p.savings) return null;
+  const s = p.savings;
+  const vestedByDate = new Date(termISO + 'T00:00:00') >= new Date(s.vests + 'T00:00:00');
+  let kept = 0, lost = 0, note = '';
+  if (type === 'cause')                                { lost = s.match; note = 'Employer match fully forfeited (for cause)'; }
+  else if (type === 'retirement' || type === 'death')  { kept = s.match; note = 'Match fully vested under special provision'; }
+  else if (vestedByDate)                               { kept = s.match; note = 'Match vested at termination date — retained'; }
+  else                                                 { lost = s.match; note = 'Match unvested at termination date — forfeited'; }
+  return { plan:s.plan, vests:s.vests, balance:s.balance, match:s.match, kept, lost, note,
+           vestedByDate, payout: s.balance + kept };
+}
+
+// Totals as at today, for the register
+function ptTotals(p) {
+  const today = p.status === 'terminated' && p.termDate ? p.termDate : tmToday();
+  const td = new Date(today + 'T00:00:00');
+  let granted = 0, vested = 0;
+  p.grants.forEach(g => {
+    granted += g.shares;
+    ptSchedule(g).forEach(t => { if (new Date(t.date + 'T00:00:00') <= td) vested += t.shares; });
+  });
+  return { granted, vested, unvested: granted - vested };
+}
+
+// ── Participants register ──
+function renderParticipantsView() {
+  const deptSel = document.getElementById('pt-dept-filter');
+  const ctrySel = document.getElementById('pt-country-filter');
+  if (deptSel && deptSel.options.length === 1) {
+    [...new Set(participantsData.map(p => p.dept))].sort()
+      .forEach(d => deptSel.add(new Option(d, d)));
+    [...new Set(participantsData.map(p => p.country))].sort()
+      .forEach(c => ctrySel.add(new Option(c, c)));
+  }
+  renderParticipantsTable();
+}
+
+function filterPtTab(btn, status) {
+  document.querySelectorAll('#pt-status-tabs .txtype-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  ptStatusFilter = status;
+  renderParticipantsTable();
+}
+
+function renderParticipantsTable() {
+  const tbody = document.getElementById('participants-body');
+  if (!tbody) return;
+
+  const search = (document.getElementById('pt-search')?.value || '').toLowerCase();
+  const dept   = document.getElementById('pt-dept-filter')?.value || '';
+  const ctry   = document.getElementById('pt-country-filter')?.value || '';
+
+  // Summary + tab counts across the whole register
+  const counts = { all: participantsData.length, active:0, leave:0, notice:0, terminated:0 };
+  let unvestedTotal = 0, atRiskValue = 0;
+  participantsData.forEach(p => {
+    counts[p.status] = (counts[p.status] || 0) + 1;
+    if (p.status !== 'terminated') { const t = ptTotals(p); unvestedTotal += t.unvested; }
+  });
+  atRiskValue = unvestedTotal * 42.50;
+  Object.keys(counts).forEach(k => {
+    const el = document.getElementById('pt-tab-' + k);
+    if (el) el.textContent = counts[k];
+  });
+  document.getElementById('pt-summary').innerHTML = `
+    <div class="summary-card-sm"><div class="s-label">Total Participants</div><div class="s-value">${counts.all}</div><div class="s-sub">On the register</div></div>
+    <div class="summary-card-sm"><div class="s-label">Active</div><div class="s-value" style="color:var(--green)">${counts.active}</div><div class="s-sub">Vesting continues</div></div>
+    <div class="summary-card-sm"><div class="s-label">On Leave</div><div class="s-value" style="color:var(--amber)">${counts.leave}</div><div class="s-sub">Vesting may pause</div></div>
+    <div class="summary-card-sm"><div class="s-label">Notice Period</div><div class="s-value" style="color:#2563eb">${counts.notice}</div><div class="s-sub">Model before exit</div></div>
+    <div class="summary-card-sm"><div class="s-label">Terminated</div><div class="s-value" style="color:var(--red)">${counts.terminated}</div><div class="s-sub">Processed</div></div>
+    <div class="summary-card-sm"><div class="s-label">Unvested at Risk</div><div class="s-value">${tmNum(unvestedTotal)}</div><div class="s-sub">${tmMoney(atRiskValue)} @ $42.50</div></div>`;
+
+  const filtered = participantsData.filter(p => {
+    if (ptStatusFilter !== 'all' && p.status !== ptStatusFilter) return false;
+    if (dept && p.dept !== dept) return false;
+    if (ctry && p.country !== ctry) return false;
+    if (search && !p.name.toLowerCase().includes(search) && !p.id.toLowerCase().includes(search)
+        && !p.email.toLowerCase().includes(search) && !p.dept.toLowerCase().includes(search)) return false;
+    return true;
+  });
+
+  document.getElementById('pt-result-count').innerHTML =
+    `Showing <strong>${filtered.length}</strong> participant${filtered.length !== 1 ? 's' : ''}`;
+
+  const statusCfg = {
+    active:     { dot:'sdot-active',     label:'Active',        color:'var(--green)' },
+    leave:      { dot:'',                label:'On Leave',      color:'var(--amber)' },
+    notice:     { dot:'',                label:'Notice Period', color:'#2563eb'      },
+    terminated: { dot:'sdot-terminated', label:'Terminated',    color:'var(--red)'   },
+  };
+
+  tbody.innerHTML = filtered.map(p => {
+    const t   = ptTotals(p);
+    const sc  = statusCfg[p.status] || statusCfg.active;
+    const pct = t.granted ? Math.round(t.unvested / t.granted * 100) : 0;
+    const enrolments = [p.espp ? 'ESPP' : null, p.savings ? 'Savings' : null].filter(Boolean);
+    const isTerm = p.status === 'terminated';
+
+    return `<tr>
+      <td onclick="event.stopPropagation()">
+        <div class="kebab-wrap">
+          <button class="kebab-btn" onclick="event.stopPropagation();toggleKebab(this)" title="More actions">⋮</button>
+          <div class="kebab-menu">
+            <div class="kebab-menu-label">Participant</div>
+            <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();alert('Participant profile — ${p.name} (${p.id})')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>View Profile
+            </button>
+            <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();openLedgerDrawer('${p.grants[0].id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>View Grants (${p.grants.length})
+            </button>
+            <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();alert('Edit participant — ${p.name}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>Edit Details
+            </button>
+            <div class="kebab-divider"></div>
+            <div class="kebab-menu-label">Lifecycle</div>
+            <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();setPtStatus('${p.id}','leave')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="10" y1="15" x2="10" y2="9"/><line x1="14" y1="15" x2="14" y2="9"/></svg>Place on Leave
+            </button>
+            <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();setPtStatus('${p.id}','notice')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>Start Notice Period
+            </button>
+            <div class="kebab-divider"></div>
+            <div class="kebab-menu-label">Actions</div>
+            <button class="kebab-menu-item ${isTerm ? '' : 'danger'}" onclick="event.stopPropagation();closeAllKebabs();openTermModel('${p.id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/></svg>${isTerm ? 'Review Termination' : 'Terminate…'}
+            </button>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="pt-name-cell">
+          <div class="pt-avatar" style="background:${tmAvatarColor(p.id)}">${tmInitials(p.name)}</div>
+          <div>
+            <div class="participant-name">${p.name}</div>
+            <div class="participant-dept">${p.title}</div>
+          </div>
+        </div>
+      </td>
+      <td style="font-family:'SF Mono',monospace;font-size:11.5px;font-weight:700;color:var(--accent-dark)">${p.id}</td>
+      <td style="font-size:12.5px">${p.dept}</td>
+      <td style="font-size:12px;color:var(--text2)">${p.country}<div style="font-size:11px;color:var(--textm)">${p.region}</div></td>
+      <td style="font-size:12px;color:var(--text2)">${tmDate(p.hired)}</td>
+      <td style="text-align:right;font-weight:600">${p.grants.length}</td>
+      <td style="text-align:right;font-weight:600">${tmNum(t.granted)}</td>
+      <td style="text-align:right;font-weight:600;color:var(--accent-dark)">${tmNum(t.vested)}</td>
+      <td style="text-align:right">
+        <div class="pt-risk-wrap">
+          <span style="font-weight:700;color:${t.unvested ? 'var(--amber)' : 'var(--textm)'}">${tmNum(t.unvested)}</span>
+          <div class="pt-risk-bar"><div class="pt-risk-fill" style="width:${pct}%;background:${pct > 50 ? 'var(--red)' : 'var(--amber)'}"></div></div>
+          <span style="font-size:10px;color:var(--textm)">${tmMoney(t.unvested * 42.5)}</span>
+        </div>
+      </td>
+      <td>${enrolments.length
+            ? enrolments.map(e => `<span class="type-badge" style="background:${e==='ESPP'?'#ecfdf5':'#f5f3ff'};color:${e==='ESPP'?'#065f46':'#6d28d9'}">${e}</span>`).join(' ')
+            : '<span style="color:var(--textm);font-size:12px">—</span>'}</td>
+      <td><span class="sdot ${sc.dot}" style="color:${sc.color};font-size:12px">${sc.label}</span>
+        ${isTerm ? `<div style="font-size:10.5px;color:var(--textm)">${tmDate(p.termDate)}</div>` : ''}</td>
+    </tr>`;
+  }).join('') || `<tr><td colspan="12" style="text-align:center;padding:32px;color:var(--textm)">No participants found</td></tr>`;
+}
+
+function setPtStatus(id, status) {
+  const p = participantsData.find(x => x.id === id);
+  if (!p) return;
+  if (p.status === 'terminated') { ptToast('Participant is already terminated', 'warn'); return; }
+  p.status = status;
+  renderParticipantsTable();
+  ptToast(`✓ ${p.name} moved to ${status === 'leave' ? 'On Leave' : 'Notice Period'}`, 'ok');
+}
+
+// ── Termination modeller ──
+function openTermModel(id) {
+  const p = participantsData.find(x => x.id === id);
+  if (!p) return;
+  tmParticipant = p;
+
+  document.getElementById('tm-title').textContent  = 'Termination Modeller — ' + p.name;
+  document.getElementById('tm-emp-id').textContent = p.id;
+  document.getElementById('tm-sub').textContent    =
+    `${p.title} · ${p.dept} · ${p.region}, ${p.country} · Hired ${tmDate(p.hired)} · ${p.grants.length} grant${p.grants.length !== 1 ? 's' : ''}`;
+
+  const committed = p.status === 'terminated';
+  document.getElementById('tm-date').value  = p.termDate || tmToday();
+  document.getElementById('tm-type').value  = p.termType || 'voluntary';
+  document.getElementById('tm-fmv').value   = '42.50';
+  document.getElementById('tm-accel').value = '0';
+
+  const badge = document.getElementById('tm-mode-badge');
+  badge.className = 'tm-badge ' + (committed ? 'tmb-forfeited' : 'tmb-neutral');
+  badge.textContent = committed ? 'Committed — read-only replay' : 'Simulation — nothing committed';
+  const btn = document.getElementById('tm-commit-btn');
+  btn.style.display = committed ? 'none' : '';
+  document.getElementById('tm-foot-note').textContent = committed
+    ? `Termination committed on ${tmDate(p.termDate)}. Change the inputs to re-model — the ledger is unaffected.`
+    : 'Model only — no ledger entries are written until you commit.';
+
+  renderTermModel();
+  document.getElementById('tm-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeTermModel(e) {
+  if (e && e.target && !e.target.classList.contains('tm-overlay')) return;
+  document.getElementById('tm-overlay')?.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function renderTermModel() {
+  const p = tmParticipant;
+  if (!p) return;
+  const termISO = document.getElementById('tm-date').value || tmToday();
+  const type    = document.getElementById('tm-type').value;
+  const accel   = document.getElementById('tm-accel').value;
+  const fmv     = parseFloat(document.getElementById('tm-fmv').value) || 0;
+  const win     = TERM_WINDOWS[type];
+
+  const rows = p.grants.map(g => calcTermGrant(g, termISO, type, accel));
+  const espp = calcTermEspp(p);
+  const sav  = calcTermSavings(p, termISO, type);
+
+  const tot = rows.reduce((a, r) => ({
+    granted:   a.granted   + r.shares,
+    forfeited: a.forfeited + r.forfeited,
+    expiring:  a.expiring  + r.expiring,
+    retained:  a.retained  + r.retained,
+    accel:     a.accel     + r.accelerated,
+  }), { granted:0, forfeited:0, expiring:0, retained:0, accel:0 });
+
+  const forfeitValue  = tot.forfeited * fmv;
+  const retainedValue = tot.retained  * fmv;
+  const inTheMoney    = rows.filter(r => r.isOpt && r.expiring > 0 && fmv > r.strike)
+                            .reduce((a, r) => a + (fmv - r.strike) * r.expiring, 0);
+
+  // ── Aggregate banner ──
+  const expLabel = win === 0 ? 'Units Cancelled' : 'Units Expiring';
+  const expSub   = win === 0 ? 'Cancelled at termination'
+                             : (tot.expiring ? `Exercise by ${tmDateO(new Date(new Date(termISO+'T00:00:00').getTime() + win*864e5))}` : 'No option grants');
+  document.getElementById('tm-banner').innerHTML = `
+    <div class="tm-banner-title">Aggregated termination impact — ${TERM_RULES.find(r => r.key === type).label} · ${tmDate(termISO)}</div>
+    <div class="tm-banner-grid">
+      <div class="tm-stat"><div class="tm-stat-label">Units Forfeited</div>
+        <div class="tm-stat-val v-red">${tmNum(tot.forfeited)}</div>
+        <div class="tm-stat-sub">${tmMoney(forfeitValue)} of value lost</div></div>
+      <div class="tm-stat"><div class="tm-stat-label">${expLabel}</div>
+        <div class="tm-stat-val v-amber">${tmNum(tot.expiring)}</div>
+        <div class="tm-stat-sub">${expSub}</div></div>
+      <div class="tm-stat"><div class="tm-stat-label">ESPP Impact</div>
+        <div class="tm-stat-val v-green sm">${espp ? 'Withdrawn' : 'Not enrolled'}</div>
+        <div class="tm-stat-sub">${espp ? tmMoney(espp.refund) + ' refunded' : 'No purchase plan'}</div></div>
+      <div class="tm-stat"><div class="tm-stat-label">Savings Plan</div>
+        <div class="tm-stat-val sm ${!sav ? 'v-blue' : sav.lost > 0 ? 'v-purple' : 'v-green'}">${!sav ? 'Not enrolled' : sav.lost > 0 ? 'Match Forfeited' : 'Match Retained'}</div>
+        <div class="tm-stat-sub">${!sav ? 'No savings plan' : sav.lost > 0 ? tmMoney(sav.lost) + ' lost' : tmMoney(sav.kept) + ' kept'}</div></div>
+      <div class="tm-stat"><div class="tm-stat-label">Units Retained</div>
+        <div class="tm-stat-val v-blue">${tmNum(tot.retained)}</div>
+        <div class="tm-stat-sub">${tmMoney(retainedValue)} settled${tot.accel ? ` · ${tmNum(tot.accel)} accelerated` : ''}</div></div>
+    </div>`;
+
+  // ── Plan impact cards ──
+  const opts = rows.filter(r => r.isOpt);
+  document.getElementById('tm-plan-impacts').innerHTML = `
+    <div class="tm-card accent-l accent-green">
+      <div class="tm-card-title"><span class="tm-icon" style="background:var(--green)">E</span>Purchase Plan (ESPP)</div>
+      ${!espp ? '<div class="tm-muted">Participant is not enrolled in a purchase plan.</div>' : `
+      <div class="tm-row"><span class="tm-row-label">Plan</span><span class="tm-row-val">${espp.plan}</span></div>
+      <div class="tm-row"><span class="tm-row-label">Enrolment status</span><span class="tm-badge tmb-ok">Withdrawn</span></div>
+      <div class="tm-row"><span class="tm-row-label">Total contributions</span><span class="tm-row-val">${tmMoney(espp.contributed)}</span></div>
+      <div class="tm-row"><span class="tm-row-label">Refund to participant</span><span class="tm-row-val" style="color:var(--green)">${tmMoney(espp.refund)}</span></div>
+      <div class="tm-row"><span class="tm-row-label">Shares reserved (forfeited)</span><span class="tm-row-val" style="color:var(--red)">${tmNum(espp.reserved)}</span></div>
+      <div class="tm-row"><span class="tm-row-label">Unrealised discount lost</span><span class="tm-row-val" style="color:var(--amber)">${tmMoney(espp.discountLost)}</span></div>
+      <div class="tm-row"><span class="tm-row-label">Purchase discount</span><span class="tm-row-val">${(espp.discount*100).toFixed(0)}% on ${tmMoney(espp.lookback)} lookback</span></div>`}
+    </div>
+
+    <div class="tm-card accent-l accent-purple">
+      <div class="tm-card-title"><span class="tm-icon" style="background:var(--purple)">S</span>Savings Plan</div>
+      ${!sav ? '<div class="tm-muted">Participant is not enrolled in a savings plan.</div>' : `
+      <div class="tm-row"><span class="tm-row-label">Plan</span><span class="tm-row-val">${sav.plan}</span></div>
+      <div class="tm-row"><span class="tm-row-label">Status</span><span class="tm-badge ${sav.lost > 0 ? 'tmb-forfeited' : 'tmb-retained'}">${sav.lost > 0 ? 'Match Forfeited' : 'Match Retained'}</span></div>
+      <div class="tm-row"><span class="tm-row-label">Employee balance</span><span class="tm-row-val">${tmMoney(sav.balance)}</span></div>
+      <div class="tm-row"><span class="tm-row-label">Employer match accrued</span><span class="tm-row-val">${tmMoney(sav.match)}</span></div>
+      <div class="tm-row"><span class="tm-row-label">Match kept</span><span class="tm-row-val" style="color:${sav.kept > 0 ? 'var(--green)' : 'var(--textm)'}">${tmMoney(sav.kept)}</span></div>
+      <div class="tm-row"><span class="tm-row-label">Match forfeited</span><span class="tm-row-val" style="color:${sav.lost > 0 ? 'var(--red)' : 'var(--textm)'}">${tmMoney(sav.lost)}</span></div>
+      <div class="tm-row"><span class="tm-row-label">Match vests</span><span class="tm-row-val">${tmDate(sav.vests)}</span></div>
+      <div class="tm-row"><span class="tm-row-label">Total payout</span><span class="tm-row-val" style="color:var(--accent-dark);font-weight:700">${tmMoney(sav.payout)}</span></div>`}
+    </div>
+
+    <div class="tm-card accent-l accent-amber">
+      <div class="tm-card-title"><span class="tm-icon" style="background:var(--amber)">O</span>Options &amp; SARs</div>
+      ${!opts.length ? '<div class="tm-muted">No option or SAR grants held.</div>' : opts.map(o => `
+      <div class="tm-row"><span class="tm-row-label" style="font-family:'SF Mono',monospace;font-weight:700;color:var(--accent-dark)">${o.id}</span>
+        <span class="tm-badge ${win === 0 ? 'tmb-expired' : o.expiring > 0 ? 'tmb-retained' : 'tmb-neutral'}">${win === 0 ? 'Cancelled' : o.expiring > 0 ? 'Exercisable' : 'Nothing vested'}</span></div>
+      <div class="tm-row"><span class="tm-row-label">Vested (exercisable)</span><span class="tm-row-val" style="color:var(--accent-dark)">${tmNum(o.expiring)}</span></div>
+      <div class="tm-row"><span class="tm-row-label">Unvested (forfeited)</span><span class="tm-row-val" style="color:var(--red)">${tmNum(o.forfeited)}</span></div>
+      <div class="tm-row"><span class="tm-row-label">Exercise window</span><span class="tm-row-val">${win === 0 ? 'None — cancelled' : win + ' days'}</span></div>
+      <div class="tm-row"><span class="tm-row-label">Exercise by</span><span class="tm-row-val">${o.deadline ? tmDateO(o.deadline) : '—'}</span></div>
+      <div class="tm-row"><span class="tm-row-label">Grant expiry</span><span class="tm-row-val">${tmDate(o.expires)}</span></div>`).join('<div class="tm-hr"></div>')}
+    </div>`;
+
+  // ── Rules matrix ──
+  document.getElementById('tm-rules-body').innerHTML = TERM_RULES.map(r =>
+    `<tr class="${r.key === type ? 'active' : ''}"><td>${r.label}</td><td>${r.rsu}</td><td>${r.opt}</td><td>${r.espp}</td><td>${r.sav}</td></tr>`
+  ).join('');
+
+  // ── Grant-level cards ──
+  document.getElementById('tm-grants').innerHTML = rows.map(r => {
+    const badge = r.action === 'Cancelled' ? 'tmb-forfeited'
+                : r.action.includes('accelerated') ? 'tmb-ok'
+                : r.forfeited > 0 ? 'tmb-expired' : 'tmb-retained';
+    const itm = r.isOpt && r.expiring > 0 && fmv > r.strike
+      ? `<div class="tm-row"><span class="tm-row-label">In-the-money value</span><span class="tm-row-val" style="color:var(--green)">${tmMoney((fmv - r.strike) * r.expiring)}</span></div>` : '';
+    return `<div class="tm-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <span style="font-size:13px;font-weight:700">${r.id} · <span class="type-badge" style="background:#f1f5f9;color:var(--text2)">${r.type}</span></span>
+        <span class="tm-badge ${badge}">${r.action}</span>
+      </div>
+      <div style="font-size:11.5px;color:var(--text2);margin-bottom:9px">${r.plan} · Granted ${tmDate(r.granted)}${r.strike ? ' · Strike ' + tmMoney(r.strike) : ''}</div>
+      <div class="tm-prog"><div class="tm-prog-fill" style="width:${r.pct}%"></div></div>
+      <div class="tm-row"><span class="tm-row-label">Total granted</span><span class="tm-row-val">${tmNum(r.shares)}</span></div>
+      <div class="tm-row"><span class="tm-row-label">Vested at termination</span><span class="tm-row-val" style="color:var(--accent-dark)">${tmNum(r.vested)} (${r.pct}%)</span></div>
+      ${r.accelerated ? `<div class="tm-row"><span class="tm-row-label">of which accelerated</span><span class="tm-row-val" style="color:var(--green)">${tmNum(r.accelerated)}</span></div>` : ''}
+      <div class="tm-row"><span class="tm-row-label">Forfeited</span><span class="tm-row-val" style="color:var(--red)">${tmNum(r.forfeited)}</span></div>
+      ${r.expiring ? `<div class="tm-row"><span class="tm-row-label">${win === 0 ? 'Cancelled' : 'Subject to expiry'}</span><span class="tm-row-val" style="color:var(--amber)">${tmNum(r.expiring)}</span></div>` : ''}
+      <div class="tm-row"><span class="tm-row-label">Forfeiture value</span><span class="tm-row-val" style="color:var(--amber)">${tmMoney(r.forfeited * fmv)}</span></div>
+      ${itm}
+    </div>`;
+  }).join('');
+
+  // ── Bar chart ──
+  const mx = Math.max(...rows.map(r => r.shares), 1);
+  document.getElementById('tm-bars').innerHTML = rows.map(r => {
+    const seg = (n, cls, color) => {
+      const w = Math.round(n / mx * 100);
+      return w > 0 ? `<div class="tm-bar-seg" style="width:${w}%;background:${color}">${w > 7 ? tmNum(n) : ''}</div>` : '';
+    };
+    return `<div class="tm-bar-row">
+      <span class="tm-bar-label">${r.id.replace('GRT-','')} ${r.type}</span>
+      <div class="tm-bar-track">
+        ${seg(r.retained + (win === 0 ? 0 : r.expiring), 'v', 'var(--accent)')}
+        ${seg(r.forfeited, 'f', 'var(--red)')}
+        ${seg(win === 0 ? r.expiring : 0, 'e', 'var(--amber)')}
+      </div>
+    </div>`;
+  }).join('');
+
+  // ── Exercise window ──
+  document.getElementById('tm-exercise').innerHTML = !opts.length
+    ? '<div class="tm-muted">No option or SAR grants — nothing to exercise.</div>'
+    : (win === 0
+        ? `<div class="tm-row"><span class="tm-row-label">Window</span><span class="tm-badge tmb-forfeited">Cancelled immediately</span></div>
+           <div class="tm-row"><span class="tm-row-label">Vested options cancelled</span><span class="tm-row-val" style="color:var(--red)">${tmNum(tot.expiring)}</span></div>
+           <div class="tm-row"><span class="tm-row-label">Value forgone at ${tmMoney(fmv)}</span><span class="tm-row-val" style="color:var(--red)">${tmMoney(inTheMoney)}</span></div>
+           <div class="tm-muted" style="margin-top:6px">Termination for cause cancels vested awards under the plan rules.</div>`
+        : opts.map(o => `
+           <div class="tm-row"><span class="tm-row-label" style="font-family:'SF Mono',monospace;font-weight:700;color:var(--accent-dark)">${o.id}</span><span class="tm-row-val">${win} days</span></div>
+           <div class="tm-row"><span class="tm-row-label">Exercisable shares</span><span class="tm-row-val">${tmNum(o.expiring)}</span></div>
+           <div class="tm-row"><span class="tm-row-label">Exercise cost @ ${tmMoney(o.strike)}</span><span class="tm-row-val">${tmMoney(o.strike * o.expiring)}</span></div>
+           <div class="tm-row"><span class="tm-row-label">Exercise deadline</span><span class="tm-row-val" style="color:var(--amber)">${o.deadline ? tmDateO(o.deadline) : '—'}</span></div>
+           <div class="tm-row"><span class="tm-row-label">In-the-money value</span><span class="tm-row-val" style="color:${fmv > o.strike ? 'var(--green)' : 'var(--textm)'}">${fmv > o.strike ? tmMoney((fmv - o.strike) * o.expiring) : 'Underwater'}</span></div>
+           <div class="tm-hr"></div>`).join('')
+           + `<div class="tm-row"><span class="tm-row-label" style="font-weight:600;color:var(--text)">Total at risk if unexercised</span><span class="tm-row-val" style="color:var(--amber)">${tmMoney(inTheMoney)}</span></div>`);
+
+  // ── Issuance reconciliation ──
+  document.getElementById('tm-issuance').innerHTML = `
+    <div class="tm-row"><span class="tm-row-label">Total units granted</span><span class="tm-row-val">${tmNum(tot.granted)}</span></div>
+    <div class="tm-row"><span class="tm-row-label">Units vested &amp; settled</span><span class="tm-row-val" style="color:var(--accent-dark)">${tmNum(tot.retained)}</span></div>
+    <div class="tm-row"><span class="tm-row-label">Vested options ${win === 0 ? 'cancelled' : 'pending exercise'}</span><span class="tm-row-val" style="color:var(--amber)">${tmNum(tot.expiring)}</span></div>
+    <div class="tm-row"><span class="tm-row-label">Units forfeited (unvested)</span><span class="tm-row-val" style="color:var(--red)">${tmNum(tot.forfeited)}</span></div>
+    <div class="tm-hr"></div>
+    <div class="tm-row"><span class="tm-row-label">Forfeiture value @ ${tmMoney(fmv)}</span><span class="tm-row-val" style="color:var(--amber)">${tmMoney(forfeitValue)}</span></div>
+    <div class="tm-row"><span class="tm-row-label">Units returned to plan pool</span><span class="tm-row-val" style="color:var(--accent-dark)">+${tmNum(tot.forfeited + (win === 0 ? tot.expiring : 0))}</span></div>
+    <div class="tm-row"><span class="tm-row-label">Conditional return (unexercised)</span><span class="tm-row-val" style="color:var(--text2)">${win === 0 ? '—' : '+' + tmNum(tot.expiring)}</span></div>
+    <div class="tm-row"><span class="tm-row-label">ESPP contributions refunded</span><span class="tm-row-val" style="color:var(--green)">${espp ? tmMoney(espp.refund) : '—'}</span></div>
+    <div class="tm-row"><span class="tm-row-label">Savings plan payout</span><span class="tm-row-val" style="color:var(--accent-dark)">${sav ? tmMoney(sav.payout) : '—'}</span></div>`;
+
+  // ── Timeline ──
+  const ev = [
+    { d: tmDate(p.hired), c:'var(--accent)', t:`${p.name} hired — equity and benefits enrolment begins`, cls:'pos' },
+    { d: tmDate(termISO), c:'var(--red)',    t:`Termination (${TERM_RULES.find(r => r.key === type).label.toLowerCase()}) — all vesting stops`, cls:'neg' },
+  ];
+  if (tot.accel)      ev.push({ d: tmDate(termISO), c:'var(--green)',  t:`${tmNum(tot.accel)} units accelerated and vested on exit`, cls:'pos' });
+  if (tot.forfeited)  ev.push({ d: tmDate(termISO), c:'var(--red)',    t:`${tmNum(tot.forfeited)} unvested units forfeited (${tmMoney(forfeitValue)})`, cls:'neg' });
+  if (tot.expiring && win === 0)
+                      ev.push({ d: tmDate(termISO), c:'var(--amber)',  t:`${tmNum(tot.expiring)} vested options cancelled for cause (${tmMoney(inTheMoney)} forgone)`, cls:'warn' });
+  if (espp)           ev.push({ d: tmDate(termISO), c:'var(--green)',  t:`ESPP enrolment withdrawn — ${tmMoney(espp.refund)} contributions refunded, ${tmNum(espp.reserved)} reserved shares released`, cls:'' });
+  if (sav)            ev.push({ d: tmDate(termISO), c: sav.lost > 0 ? 'var(--purple)' : 'var(--green)', t:`Savings plan: ${sav.note} — ${tmMoney(sav.payout)} payable`, cls:'' });
+  if (opts.length && win > 0) {
+    const dl = new Date(new Date(termISO + 'T00:00:00').getTime() + win * 864e5);
+    ev.push({ d: tmDateO(dl), c:'var(--amber)', t:`Option exercise window closes — ${tmNum(tot.expiring)} options lapse if unexercised`, cls:'warn' });
+  }
+  ev.push({ d: tmDate(termISO), c:'var(--accent)', t:`${tmNum(tot.forfeited + (win === 0 ? tot.expiring : 0))} units returned to the equity plan pool`, cls:'pos' });
+
+  document.getElementById('tm-timeline').innerHTML = ev.map(e =>
+    `<div class="tm-tl-item"><div class="tm-tl-dot" style="background:${e.c}"></div>
+      <div class="tm-tl-date">${e.d}</div><div class="tm-tl-text ${e.cls}">${e.t}</div></div>`).join('');
+}
+
+function commitTermination() {
+  const p = tmParticipant;
+  if (!p) return;
+  const termISO = document.getElementById('tm-date').value || tmToday();
+  const type    = document.getElementById('tm-type').value;
+  const accel   = document.getElementById('tm-accel').value;
+  const rows    = p.grants.map(g => calcTermGrant(g, termISO, type, accel));
+  const forfeited = rows.reduce((a, r) => a + r.forfeited, 0);
+
+  if (!confirm(`Commit termination for ${p.name} (${p.id})?\n\n`
+    + `Effective ${tmDate(termISO)} — ${TERM_RULES.find(r => r.key === type).label}\n`
+    + `${tmNum(forfeited)} unvested units will be forfeited and returned to the plan pool.\n\n`
+    + `This writes ledger entries and cannot be undone from this screen.`)) return;
+
+  p.status   = 'terminated';
+  p.termDate = termISO;
+  p.termType = type;
+  closeTermModel();
+  renderParticipantsTable();
+  ptToast(`✓ Termination committed — ${p.name}, ${tmNum(forfeited)} units forfeited`, 'ok');
+}
+
+function exportTermModel() {
+  if (!tmParticipant) return;
+  ptToast(`✓ Termination model exported — ${tmParticipant.id}_termination_model.xlsx`, 'ok');
+}
+
+function ptToast(msg, kind) {
+  const t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:2000;'
+    + 'padding:11px 20px;border-radius:9px;font-size:13px;font-weight:600;color:#fff;'
+    + 'box-shadow:0 8px 24px rgba(15,23,42,.25);background:'
+    + (kind === 'warn' ? '#f59e0b' : '#0f172a');
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3200);
+}
+
 // ─────────────────────────────────────────────
 // EXERCISE MANAGEMENT
 // ─────────────────────────────────────────────
@@ -8256,6 +9327,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     closeLedgerDrawer();
     closeReleaseDrawer();
+    closeTermModel();
     document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
     closeAllKebabs();
   }
