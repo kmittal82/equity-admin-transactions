@@ -8569,17 +8569,20 @@ const DEFERRAL_ELECTIONS = new Set(['GRT-2023-005']);
 // Restricted stock awards with an 83(b) election on file
 const E83B_ON_FILE = new Set(['GRT-2023-007']);
 
-// Each trigger carries its plan reference and the default treatment that reference prescribes
+// Each trigger carries its plan reference and the default treatment that reference prescribes.
+// `leaver` says whether the trigger ends employment — which decides whether the unvested units
+// would otherwise have been forfeited, and therefore whether expense re-measures at today's FMV.
+// `leaverFixed:false` marks triggers where employment status genuinely depends on the deal.
 const ACC_TRIGGERS = [
-  { id:'death',       t:'Death',                             ref:'Plan §9.2(a)',           method:'full',     def:'100% acceleration' },
-  { id:'disability',  t:'Disability',                        ref:'Plan §9.2(b)',           method:'full',     def:'100% acceleration' },
-  { id:'retirement',  t:'Qualifying retirement',             ref:'Plan §9.3 · Rule of 70', method:'prorata',  def:'Pro-rata through separation date' },
-  { id:'invol',       t:'Involuntary, without cause',        ref:'Plan §9.4(a)',           method:'tranches', def:'Next 2 tranches', n:2 },
-  { id:'goodreason',  t:'Resignation for good reason',       ref:'Plan §9.4(b)',           method:'tranches', def:'Next 2 tranches', n:2 },
-  { id:'cic1',        t:'Change in control — single trigger',ref:'Plan §10.1',             method:'full',     def:'100% on closing' },
-  { id:'cic2',        t:'Change in control — double trigger',ref:'Plan §10.2',             method:'full',     def:'100% if terminated in the 24-month window' },
-  { id:'divest',      t:'M&A / divestiture of unit',         ref:'Plan §10.4',             method:'credit',   def:'12 months deemed service credit', months:12 },
-  { id:'discretion',  t:'Committee discretion',              ref:'Plan §4.2',              method:'manual',   def:'Manual configuration · committee approval required' }
+  { id:'death',       t:'Death',                             ref:'Plan §9.2(a)',           method:'full',     def:'100% acceleration',                          leaver:true,  leaverFixed:true },
+  { id:'disability',  t:'Disability',                        ref:'Plan §9.2(b)',           method:'full',     def:'100% acceleration',                          leaver:true,  leaverFixed:true },
+  { id:'retirement',  t:'Qualifying retirement',             ref:'Plan §9.3 · Rule of 70', method:'prorata',  def:'Pro-rata through separation date',           leaver:true,  leaverFixed:true },
+  { id:'invol',       t:'Involuntary, without cause',        ref:'Plan §9.4(a)',           method:'tranches', def:'Next 2 tranches', n:2,                        leaver:true,  leaverFixed:true },
+  { id:'goodreason',  t:'Resignation for good reason',       ref:'Plan §9.4(b)',           method:'tranches', def:'Next 2 tranches', n:2,                        leaver:true,  leaverFixed:true },
+  { id:'cic1',        t:'Change in control — single trigger',ref:'Plan §10.1',             method:'full',     def:'100% on closing',                            leaver:false, leaverFixed:true },
+  { id:'cic2',        t:'Change in control — double trigger',ref:'Plan §10.2',             method:'full',     def:'100% if terminated in the 24-month window',  leaver:true,  leaverFixed:true },
+  { id:'divest',      t:'M&A / divestiture of unit',         ref:'Plan §10.4',             method:'credit',   def:'12 months deemed service credit', months:12, leaver:false, leaverFixed:false },
+  { id:'discretion',  t:'Committee discretion',              ref:'Plan §4.2',              method:'manual',   def:'Manual configuration · committee approval required', leaver:false, leaverFixed:false }
 ];
 
 const ACC_METHODS = [
@@ -8594,6 +8597,7 @@ const ACC_METHODS = [
 const accelState = {
   step: 1, grantId: null, trigger: null,
   treat: null, effDate: null, withhold: 'net', notify: true,
+  leaver: false,            // does this acceleration end employment (drives re-measurement)
   submitted: false, txn: null
 };
 
@@ -8602,9 +8606,15 @@ const accFmt$  = n => '$' + Math.round(n).toLocaleString();
 const accFmtD  = d => d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'2-digit' });
 const accGrant = () => grantsData.find(g => g.id === accelState.grantId);
 
-// Grant-date fair value for ASC 718 — options carry a lower fair value than the share price
+// Grant-date fair value — options carry a lower fair value than the share price
 function accelGrantFV(g) {
   return ACCEL_OPT_TYPES.includes(g.type) ? g.price * 0.40 : g.price;
+}
+
+// Modification-date fair value — the basis when acceleration rescues units that
+// would otherwise have been forfeited, so the award is measured afresh today
+function accelModFV(g) {
+  return ACCEL_OPT_TYPES.includes(g.type) ? ACCEL_FMV * 0.40 : ACCEL_FMV;
 }
 
 // Build the remaining (unvested) tranche schedule implied by the grant's vesting label
@@ -8725,12 +8735,21 @@ function accelCompute() {
 function accelTotals() {
   const g = accGrant();
   const r = accelCompute();
-  if (!g) return { shares: 0, value: 0, wh: 0, exp: 0 };
+  if (!g) return { shares:0, value:0, wh:0, exp:0, expStay:0, expLeave:0, remeasured:false };
+
+  // Continuing employee: the award was always going to vest, so only the timing moves —
+  // cost stays at grant-date fair value. Leaver: the units were heading for forfeiture,
+  // so the acceleration is measured as a fresh award at today's fair value.
+  const expStay    = r.shares * accelGrantFV(g);
+  const expLeave   = r.shares * accelModFV(g);
+  const remeasured = !!accelState.leaver;
+
   return {
     shares: r.shares,
     value:  r.shares * ACCEL_FMV,
     wh:     ACCEL_FULL_VALUE.includes(g.type) ? r.shares * ACCEL_FMV * ACCEL_WH_RATE : 0,
-    exp:    r.shares * accelGrantFV(g)
+    exp:    remeasured ? expLeave : expStay,
+    expStay, expLeave, remeasured
   };
 }
 
@@ -8793,6 +8812,7 @@ function openAccelWizard(grantId) {
   accelState.effDate   = new Date().toISOString().slice(0, 10);
   accelState.withhold  = 'net';
   accelState.notify    = true;
+  accelState.leaver    = false;
   accelState.submitted = false;
   accelState.txn       = null;
 
@@ -8820,8 +8840,10 @@ function accelGo(n) {
 }
 
 function accelSetTrigger(id) {
+  const trig = ACC_TRIGGERS.find(t => t.id === id);
   accelState.trigger = id;
-  accelState.treat   = accelDefaultTreat(ACC_TRIGGERS.find(t => t.id === id));
+  accelState.treat   = accelDefaultTreat(trig);
+  accelState.leaver  = trig.leaver;   // employment status follows the trigger, overridable below
   renderAccel();
 }
 
@@ -8876,7 +8898,8 @@ function renderAccelSummary() {
       <div class="ac-sum-row"><span class="k">Of unvested balance</span><span class="v">${g ? accFmtSh(g.unvested) : '—'}</span></div>
       <div class="ac-sum-row"><span class="k">Value @ FMV $${ACCEL_FMV.toFixed(2)}</span><span class="v">${accFmt$(t.value)}</span></div>
       <div class="ac-sum-row"><span class="k">Est. tax withholding</span><span class="v">${accFmt$(t.wh)}</span></div>
-      <div class="ac-sum-row"><span class="k">ASC 718 pull-forward</span><span class="v">${accFmt$(t.exp)}</span></div>
+      <div class="ac-sum-row"><span class="k">Est. expense impact</span><span class="v">${accFmt$(t.exp)}${t.remeasured ? ' <span style="color:#fbbf24">*</span>' : ''}</span></div>
+      ${t.remeasured ? `<div style="font-size:10.5px;color:#fbbf24;padding-top:6px">* re-measured at today's fair value</div>` : ''}
     </div>`;
 }
 
@@ -9047,7 +9070,14 @@ function accelStep3() {
       <div class="box"><div class="k">Shares accelerating</div><div class="v">${accFmtSh(t.shares)}</div></div>
       <div class="box"><div class="k">Value @ FMV</div><div class="v">${accFmt$(t.value)}</div></div>
       <div class="box"><div class="k">Est. withholding</div><div class="v">${accFmt$(t.wh)} <small>${ACCEL_FULL_VALUE.includes(g.type) ? 'at vest' : 'none at vest'}</small></div></div>
-      <div class="box"><div class="k">ASC 718 pull-forward</div><div class="v">${accFmt$(t.exp)} <small>unamortized</small></div></div>
+      <div class="box"><div class="k">Est. expense impact</div><div class="v">${accFmt$(t.exp)}
+        <small>${t.remeasured
+          ? `re-measured @ $${accelModFV(g).toFixed(2)}`
+          : `grant-date FV $${accelGrantFV(g).toFixed(2)}`}</small></div></div>
+    </div>
+    <div style="font-size:11px;color:var(--textm);margin-top:8px;line-height:1.5">
+      Indicative only. Definitive ASC 718 treatment — attribution method, expense already recognised
+      and any reversal — is determined by Financial Reporting from the approval packet.
     </div>
 
     <div class="ac-ctl-row" style="margin-top:18px">
@@ -9059,10 +9089,17 @@ function accelStep3() {
           <option value="sell" ${accelState.withhold === 'sell' ? 'selected' : ''}>Sell-to-cover</option>
           <option value="cash" ${accelState.withhold === 'cash' ? 'selected' : ''}>Cash from participant</option>
         </select></div>
+      <div class="ac-ctl"><label>Employment status</label>
+        <select onchange="accelSetField('leaver', this.value === 'leave')">
+          <option value="stay"  ${!accelState.leaver ? 'selected' : ''}>Continuing employment</option>
+          <option value="leave" ${accelState.leaver  ? 'selected' : ''}>Terminating</option>
+        </select></div>
       ${accelState.trigger === 'cic2'
         ? `<div class="ac-ctl"><label>Qualifying termination date</label><input type="date" value="${accelState.effDate}"></div>`
         : ''}
     </div>
+
+    ${accelExpenseNote(g, t, trig)}
 
     <div style="font-size:13px;font-weight:700;margin-top:22px;color:var(--text)">Approval routing
       <span style="font-weight:400;color:var(--textm)">— determined by policy, not editable</span></div>
@@ -9074,6 +9111,30 @@ function accelStep3() {
     </label>
 
     ${r.shares === 0 ? `<div class="ac-note danger">Nothing is currently selected to accelerate — go back and widen the treatment.</div>` : ''}`;
+}
+
+// Explains which measurement basis is in play, and what the other one would have cost
+function accelExpenseNote(g, t, trig) {
+  if (t.shares === 0) return '';
+  const delta = Math.abs(t.expLeave - t.expStay);
+
+  if (t.remeasured) {
+    return `<div class="ac-note warn">
+      <b>Modification — expense re-measures.</b> ${trig.t} ends employment, so these
+      ${accFmtSh(t.shares)} unvested units would otherwise have been forfeited. Accelerating them is
+      measured as a fresh award made today: <b>${accFmt$(t.expLeave)}</b> at today's fair value
+      ($${accelModFV(g).toFixed(2)}), against <b>${accFmt$(t.expStay)}</b> at grant-date fair value
+      ($${accelGrantFV(g).toFixed(2)}) — a difference of <b>${accFmt$(delta)}</b>.
+      Expense already recognised on these units is reversed first.
+    </div>`;
+  }
+  return `<div class="ac-note info">
+    <b>Timing only.</b> Employment continues, so these units were going to vest regardless —
+    cost stays at grant-date fair value ($${accelGrantFV(g).toFixed(2)}) and total expense over the
+    life of the award is unchanged; ${accFmt$(t.expStay)} simply lands in this period instead of
+    spreading over the remaining schedule.
+    ${trig.leaverFixed ? '' : `<br>If this ${trig.t.toLowerCase()} in fact ends employment, switch the status above — the charge becomes <b>${accFmt$(t.expLeave)}</b>.`}
+  </div>`;
 }
 
 function accelSubmit() {
@@ -9090,7 +9151,9 @@ function accelSubmit() {
   g.pendingAccel = {
     txn: accelState.txn, shares: r.shares, value: t.value,
     trigger: accelState.trigger, effDate: accelState.effDate,
-    chain: chain.map(c => c.who)
+    chain: chain.map(c => c.who),
+    leaver: accelState.leaver, exp: t.exp,
+    expBasis: t.remeasured ? 'modification-date FV' : 'grant-date FV'
   };
 
   accelState.submitted = true;
@@ -9113,6 +9176,7 @@ function accelStepDone() {
     <div class="ac-audit">
       <div class="ac-audit-r"><span class="ts">${now}</span><span><b>Created</b> — trigger “${trig.t}”, ${accFmtSh(t.shares)} shares, effective ${accelState.effDate}</span></div>
       <div class="ac-audit-r"><span class="ts">${now}</span><span><b>Policy engine</b> — ${accelPolicyChecks().length} checks evaluated; exceptions attached to the approval packet</span></div>
+      <div class="ac-audit-r"><span class="ts">${now}</span><span><b>Financial reporting</b> — flagged as ${accelState.leaver ? 'a <b>modification</b> re-measured at modification-date fair value' : 'timing-only, measured at grant-date fair value'}; est. ${accFmt$(t.exp)} routed to Financial Reporting for definitive ASC 718 treatment</span></div>
       ${chain.map((a, i) => `<div class="ac-audit-r"><span class="ts">pending</span><span><b>Awaiting</b> ${a.who} (step ${i + 1} of ${chain.length}) — ${a.why}</span></div>`).join('')}
       ${accelState.notify ? `<div class="ac-audit-r"><span class="ts">on approval</span><span><b>Participant notice</b> — statement &amp; tax summary queued</span></div>` : ''}
     </div>`;
