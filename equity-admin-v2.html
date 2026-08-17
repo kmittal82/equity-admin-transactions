@@ -1371,6 +1371,183 @@
       .tm-banner-grid { grid-template-columns:1fr; }
     }
 
+    /* ════════════ ACCELERATION WIZARD ════════════ */
+    .ac-overlay {
+      position:fixed; inset:0; background:var(--bg); z-index:960;
+      display:flex; flex-direction:column; opacity:0; pointer-events:none; transition:opacity 0.2s;
+    }
+    .ac-overlay.open { opacity:1; pointer-events:all; }
+    .ac-panel { height:100vh; display:flex; flex-direction:column; overflow:hidden; }
+    .ac-head {
+      background:var(--card); padding:16px 26px; border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between; gap:16px; flex-shrink:0;
+    }
+    .ac-head-title { font-size:17px; font-weight:700; color:var(--text); }
+    .ac-head-sub { font-size:12px; color:var(--text2); margin-top:3px; }
+    .ac-body {
+      flex:1; overflow-y:auto; padding:24px 26px;
+      display:grid; grid-template-columns:190px minmax(0,1fr) 290px; gap:24px; align-items:start;
+    }
+    .ac-foot {
+      background:var(--card); padding:14px 26px; border-top:1px solid var(--border);
+      display:flex; align-items:center; gap:10px; flex-shrink:0;
+    }
+    .ac-stepct { margin-left:auto; font-family:'SF Mono',monospace; font-size:11px; color:var(--textm); }
+
+    .ac-rail { position:sticky; top:0; }
+    .ac-step {
+      display:flex; gap:10px; padding:10px 0 10px 14px;
+      border-left:2px solid var(--border); color:var(--textm);
+    }
+    .ac-step .n { font-family:'SF Mono',monospace; font-size:11px; font-weight:700; margin-top:2px; }
+    .ac-step .t { font-size:13px; font-weight:600; }
+    .ac-step .d { font-size:11.5px; line-height:1.35; margin-top:1px; }
+    .ac-step.active { border-left-color:var(--accent); color:var(--text); }
+    .ac-step.active .n { color:var(--accent); }
+    .ac-step.done { border-left-color:var(--green); color:var(--text2); }
+
+    .ac-sec-title { font-size:16px; font-weight:700; color:var(--text); letter-spacing:-0.01em; }
+    .ac-sec-sub { color:var(--text2); font-size:12.5px; margin-top:4px; }
+    .ac-eyebrow {
+      font-size:10px; font-weight:700; letter-spacing:0.1em;
+      text-transform:uppercase; color:var(--accent); margin-bottom:5px;
+    }
+
+    .ac-trig-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:16px; }
+    .ac-trig {
+      border:1.5px solid var(--border); border-radius:10px; padding:12px 13px;
+      background:var(--card); text-align:left; cursor:pointer; font-family:inherit; width:100%;
+      transition:border-color 0.15s;
+    }
+    .ac-trig:hover { border-color:#cbd5e1; }
+    .ac-trig.sel { border-color:var(--accent); background:#eff6ff; }
+    .ac-trig .t { font-weight:700; font-size:13px; color:var(--text); }
+    .ac-trig .ref { font-family:'SF Mono',monospace; font-size:10px; color:var(--textm); margin-top:2px; }
+    .ac-trig .def {
+      font-size:11px; margin-top:7px; color:var(--text2); background:var(--bg);
+      border-radius:6px; padding:4px 8px; display:inline-block;
+    }
+    .ac-trig.sel .def { background:#fff; }
+
+    .ac-ctl-row { display:flex; gap:14px; flex-wrap:wrap; align-items:flex-end; }
+    .ac-ctl { display:flex; flex-direction:column; gap:5px; }
+    .ac-ctl label {
+      font-size:10.5px; font-weight:700; color:var(--text2);
+      text-transform:uppercase; letter-spacing:0.05em;
+    }
+    .ac-ctl select, .ac-ctl input {
+      font-family:inherit; font-size:13px; padding:8px 10px; border:1px solid var(--border);
+      border-radius:8px; background:#fff; color:var(--text); min-width:160px; outline:none;
+    }
+    .ac-ctl input[type=number] { min-width:110px; }
+    .ac-ctl select:focus, .ac-ctl input:focus {
+      border-color:var(--accent); box-shadow:0 0 0 3px rgba(59,130,246,0.12);
+    }
+    .ac-ctl input[type=range] { accent-color:var(--accent); min-width:170px; padding:0; border:none; }
+
+    .ac-tr-list { display:grid; grid-template-columns:repeat(auto-fill,minmax(165px,1fr)); gap:6px; margin-top:12px; }
+    .ac-tr-chip {
+      display:flex; align-items:center; gap:8px; border:1.5px solid var(--border);
+      border-radius:8px; padding:7px 9px; font-size:11.5px; cursor:pointer; background:#fff;
+    }
+    .ac-tr-chip.on { border-color:var(--green); background:var(--green-l); }
+    .ac-tr-chip input { accent-color:var(--green); }
+
+    .ac-shift { margin-top:14px; background:var(--bg); border:1px solid var(--border); border-radius:9px; padding:12px 14px 8px; }
+    .ac-track-row { display:flex; align-items:center; gap:10px; height:30px; }
+    .ac-track-lbl {
+      font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;
+      color:var(--textm); width:52px; flex:none;
+    }
+    .ac-track { position:relative; flex:1; height:100%; }
+    .ac-track::before {
+      content:''; position:absolute; left:0; right:0; top:50%; height:2px;
+      background:#cbd5e1; border-radius:2px;
+    }
+    .ac-dot {
+      position:absolute; top:50%; width:11px; height:11px; border-radius:50%;
+      transform:translate(-50%,-50%); border:2px solid #fff;
+      transition:left 0.5s cubic-bezier(.22,1,.36,1), background 0.3s;
+    }
+    .ac-dot.orig { background:#94a3b8; }
+    .ac-dot.acc  { background:var(--green); }
+    .ac-dot.stay { background:#cbd5e1; }
+    .ac-axis {
+      display:flex; justify-content:space-between; font-family:'SF Mono',monospace;
+      font-size:9.5px; color:var(--textm); padding:4px 0 2px; margin-left:62px;
+    }
+    .ac-shift-cap { font-size:11px; color:var(--text2); margin-left:62px; margin-top:4px; }
+    .ac-shift-cap b { color:var(--green); font-weight:700; }
+    @media (prefers-reduced-motion:reduce) { .ac-dot { transition:none; } }
+
+    .ac-note { margin-top:10px; border-radius:8px; padding:9px 12px; font-size:12px; line-height:1.5; border:1px solid; }
+    .ac-note.info   { background:#eff6ff;        border-color:#c7d7fb; color:#1d37ae; }
+    .ac-note.warn   { background:var(--amber-l); border-color:#f2d9b5; color:#7a3e07; }
+    .ac-note.danger { background:var(--red-l);   border-color:#f1c1bc; color:#8a1b10; }
+    .ac-note.ok     { background:var(--green-l); border-color:#a7e3c6; color:#046c4e; }
+
+    .ac-sum { background:#0f172a; color:#fff; border-radius:10px; padding:16px 18px; }
+    .ac-sum h3 { font-size:11px; letter-spacing:0.09em; text-transform:uppercase; color:#8ea2ff; font-weight:700; }
+    .ac-sum-big { font-family:'SF Mono',monospace; font-size:24px; font-weight:600; margin-top:6px; }
+    .ac-sum-big small { font-size:11px; color:#94a3b8; font-family:inherit; font-weight:500; }
+    .ac-sum-row { display:flex; justify-content:space-between; gap:10px; font-size:12px; padding:7px 0; border-top:1px solid #1e293b; }
+    .ac-sum-row:first-of-type { margin-top:12px; }
+    .ac-sum-row .k { color:#94a3b8; }
+    .ac-sum-row .v { font-family:'SF Mono',monospace; }
+    .ac-checks { margin-top:14px; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:14px 16px; }
+    .ac-checks h3 { font-size:11px; letter-spacing:0.09em; text-transform:uppercase; color:var(--textm); font-weight:700; }
+    .ac-chk { display:flex; gap:9px; font-size:12px; line-height:1.45; padding:8px 0; border-bottom:1px solid var(--border); }
+    .ac-chk:last-child { border-bottom:none; }
+    .ac-chk .ic {
+      flex:none; width:16px; height:16px; border-radius:50%; font-size:10px; font-weight:800;
+      display:flex; align-items:center; justify-content:center; margin-top:1px;
+    }
+    .ac-chk.warn .ic   { background:var(--amber-l); color:#b45309; }
+    .ac-chk.danger .ic { background:var(--red-l);   color:#b42318; }
+    .ac-chk.ok .ic     { background:var(--green-l); color:#067647; }
+    .ac-chk.info .ic   { background:#eff6ff;        color:var(--accent); }
+
+    .ac-kv { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin-top:16px; }
+    .ac-kv .box { background:var(--bg); border:1px solid var(--border); border-radius:9px; padding:11px 13px; }
+    .ac-kv .k { font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--text2); }
+    .ac-kv .v { font-family:'SF Mono',monospace; font-size:17px; font-weight:600; margin-top:3px; color:var(--text); }
+    .ac-kv .v small { font-size:11px; color:var(--textm); font-weight:400; font-family:inherit; }
+    .ac-appr {
+      display:flex; gap:10px; align-items:center; border:1px solid var(--border);
+      border-radius:8px; padding:9px 12px; font-size:12.5px; margin-top:8px;
+    }
+    .ac-appr .n {
+      width:22px; height:22px; border-radius:50%; background:#eff6ff; color:var(--accent);
+      font-weight:700; font-size:11px; display:flex; align-items:center; justify-content:center; flex:none;
+    }
+    .ac-appr .why { margin-left:auto; color:var(--textm); font-size:11px; text-align:right; }
+    .ac-toggle { display:flex; align-items:center; gap:9px; font-size:12.5px; margin-top:12px; color:var(--text2); }
+    .ac-toggle input { accent-color:var(--accent); width:16px; height:16px; }
+
+    .ac-done-badge {
+      display:inline-flex; align-items:center; gap:8px; background:var(--green-l); color:#047857;
+      font-weight:700; border-radius:99px; padding:6px 14px; font-size:12.5px;
+    }
+    .ac-audit { margin-top:16px; border:1px solid var(--border); border-radius:9px; overflow:hidden; }
+    .ac-audit-r { display:flex; gap:12px; padding:10px 14px; font-size:12px; border-bottom:1px solid var(--border); background:var(--card); }
+    .ac-audit-r:last-child { border-bottom:none; }
+    .ac-audit-r .ts { font-family:'SF Mono',monospace; font-size:10.5px; color:var(--textm); flex:none; width:118px; }
+
+    .ac-pending {
+      display:inline-block; font-size:9.5px; font-weight:700; padding:2px 7px; border-radius:9px;
+      background:var(--amber-l); color:#b45309; margin-left:6px; white-space:nowrap;
+    }
+
+    @media (max-width:1180px) {
+      .ac-body { grid-template-columns:1fr; }
+      .ac-rail { position:static; }
+      .ac-trig-grid { grid-template-columns:repeat(2,1fr); }
+    }
+    @media (max-width:700px) {
+      .ac-trig-grid { grid-template-columns:1fr; }
+      .ac-body { padding:16px; }
+    }
+
     /* ════════════ MODALS ════════════ */
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(15,23,42,0.45);
@@ -6092,89 +6269,25 @@
   </div>
 </div>
 
-<!-- ACCELERATE VESTING MODAL -->
-<div class="modal-overlay" id="modal-accelerate">
-  <div class="modal-box">
-    <div class="modal-head">
-      <div class="modal-title">Accelerate Vesting</div>
-      <button class="modal-close" onclick="closeModal('modal-accelerate')">×</button>
-    </div>
-    <div class="modal-body">
-      <div class="alert-box alert-warn">Acceleration vests shares ahead of the original schedule. It requires documented approval and may create an immediate taxable event for the participant.</div>
-
-      <div class="alert-box alert-info" id="acc-grant-info" style="margin-top:10px"></div>
-
-      <div class="form-grid" style="margin-top:20px">
-        <div class="form-group">
-          <label class="form-label">Acceleration Method <span class="req">*</span></label>
-          <select class="form-select" id="acc-method" onchange="updateAccelCalc()">
-            <option value="full">Full — vest all unvested shares</option>
-            <option value="percent">Percentage of unvested</option>
-            <option value="shares">Specific number of shares</option>
-            <option value="months">Months of vesting credit</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Effective Date <span class="req">*</span></label>
-          <input type="date" class="form-input" id="acc-date">
-        </div>
-        <div class="form-group full" id="acc-amount-group" style="display:none">
-          <label class="form-label" id="acc-amount-label">Amount</label>
-          <input type="number" class="form-input" id="acc-amount" oninput="updateAccelCalc()">
-          <div style="font-size:11px;color:var(--textm);margin-top:4px" id="acc-amount-hint"></div>
-        </div>
-        <div class="form-group full">
-          <label class="form-label">Trigger / Authority <span class="req">*</span></label>
-          <select class="form-select" id="acc-reason">
-            <option>Board discretion</option>
-            <option>Change in control — single trigger</option>
-            <option>Change in control — double trigger</option>
-            <option>Termination without cause</option>
-            <option>Retirement</option>
-            <option>Death / Disability</option>
-            <option>Separation agreement</option>
-          </select>
-        </div>
-        <div class="form-group full">
-          <label class="form-label">Approval Reference</label>
-          <input type="text" class="form-input" id="acc-ref" placeholder="e.g. Board Resolution #2026-14">
-        </div>
-        <div class="form-group full">
-          <label class="form-label">Notes</label>
-          <textarea class="form-input form-textarea" id="acc-notes" placeholder="Reason for this acceleration..."></textarea>
-        </div>
+<!-- ACCELERATE VESTING WIZARD -->
+<div class="ac-overlay" id="ac-overlay">
+  <div class="ac-panel">
+    <div class="ac-head">
+      <div>
+        <div class="ac-head-title" id="ac-title">Accelerate Vesting</div>
+        <div class="ac-head-sub" id="ac-sub"></div>
       </div>
-
-      <div class="value-box">
-        <div style="font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">Acceleration Preview</div>
-        <div class="value-grid">
-          <div>
-            <div class="value-item-label">Shares Accelerated</div>
-            <div class="value-item-val" style="color:var(--accent)" id="acc-pv-shares">0</div>
-          </div>
-          <div>
-            <div class="value-item-label">New Vested Total</div>
-            <div class="value-item-val" style="color:var(--green)" id="acc-pv-vested">0</div>
-          </div>
-          <div>
-            <div class="value-item-label">Value at $42.50</div>
-            <div class="value-item-val" id="acc-pv-value">$0</div>
-          </div>
-        </div>
-        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-top:12px;padding-top:10px;border-top:1px solid var(--border)">
-          <span>Remaining unvested after acceleration</span>
-          <span style="font-weight:600" id="acc-pv-remaining">0</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-top:6px">
-          <span>Resulting grant status</span>
-          <span style="font-weight:600" id="acc-pv-status">Active</span>
-        </div>
-      </div>
+      <button class="modal-close" onclick="closeAccelWizard()">&times;</button>
     </div>
-    <div class="modal-foot">
-      <button class="btn btn-ghost" onclick="closeModal('modal-accelerate')">Cancel</button>
-      <button class="btn btn-primary" id="acc-confirm-btn" onclick="confirmAcceleration()">Apply Acceleration</button>
+    <div class="ac-body">
+      <nav class="ac-rail" id="ac-steps" aria-label="Acceleration steps"></nav>
+      <main id="ac-main"></main>
+      <aside class="ac-rail">
+        <div id="ac-sum"></div>
+        <div id="ac-checks"></div>
+      </aside>
     </div>
+    <div class="ac-foot" id="ac-foot"></div>
   </div>
 </div>
 
@@ -7470,8 +7583,9 @@ function renderGrantsTable() {
   tbody.innerHTML = filtered.map(g => {
     const canExercise = isExercisable(g.type) && g.status === 'active';
     const canRelease = isReleasable(g.type) && g.status === 'active' && g.vested > 0;
-    // Acceleration only makes sense while a grant is live and still has unvested units
-    const canAccelerate = g.status === 'active' && g.unvested > 0;
+    // Acceleration only makes sense while a grant is live, still has unvested units,
+    // and has no acceleration already awaiting approval
+    const canAccelerate = g.status === 'active' && g.unvested > 0 && !g.pendingAccel;
     return `
     <tr class="grant-row">
       <td class="col-actions" onclick="event.stopPropagation()">
@@ -7514,7 +7628,7 @@ function renderGrantsTable() {
                 </button>
               ` : ''}
               ${canAccelerate ? `
-                <button class="kebab-menu-item" onclick="event.stopPropagation(); closeAllKebabs(); openAccelerateModal('${g.id}')">
+                <button class="kebab-menu-item" onclick="event.stopPropagation(); closeAllKebabs(); openAccelWizard('${g.id}')">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13,19 22,12 13,5"/><polygon points="2,19 11,12 2,5"/></svg>
                   Accelerate Vesting
                 </button>
@@ -7552,7 +7666,7 @@ function renderGrantsTable() {
       <td class="col-vested mono" style="color:var(--green)">${g.vested.toLocaleString()}</td>
       <td class="col-unvested mono" style="color:${g.unvested > 0 ? 'var(--amber)' : 'var(--textm)'}">${g.unvested.toLocaleString()}</td>
       <td class="col-price mono">$${g.price.toFixed(2)}</td>
-      <td class="col-status"><span class="sdot sdot-${g.status === 'terminated' ? 'terminated' : g.status === 'complete' ? 'complete' : 'active'}">${g.status.charAt(0).toUpperCase() + g.status.slice(1)}</span></td>
+      <td class="col-status"><span class="sdot sdot-${g.status === 'terminated' ? 'terminated' : g.status === 'complete' ? 'complete' : 'active'}">${g.status.charAt(0).toUpperCase() + g.status.slice(1)}</span>${g.pendingAccel ? `<span class="ac-pending" title="${g.pendingAccel.txn} — ${g.pendingAccel.shares.toLocaleString()} shares awaiting ${g.pendingAccel.chain.join(' → ')}">ACCEL PENDING</span>` : ''}</td>
     </tr>
   `}).join('');
   document.getElementById('grant-count').textContent = `${filtered.length} of ${grantsData.length} grants`;
@@ -8440,126 +8554,568 @@ function openExerciseModal(grantId) {
 }
 
 // ─────────────────────────────────────────────
-// ACCELERATE VESTING
+// ACCELERATE VESTING — trigger-driven wizard
 // ─────────────────────────────────────────────
-const ACCEL_FMV = 42.50;
-let accelGrant = null;
+const ACCEL_FMV      = 42.50;   // current fair market value
+const ACCEL_WH_RATE  = 0.39;    // est. combined supplemental withholding
+const ACCEL_ISO_USED = 45000;   // ISO $100K limit already consumed this calendar year
+const ACCEL_OPT_TYPES = ['ISO', 'NSO', 'NQSO', 'SAR'];
+const ACCEL_FULL_VALUE = ['RSU', 'RSA', 'ESPP'];
 
-// Monthly vesting rate implied by the schedule label ('4yr/1yr cliff' → 4 years)
-function accelMonthlyRate(g) {
-  const yrs = parseInt(g.vesting, 10) || 4;
-  return g.shares / (yrs * 12);
+// Officers subject to Section 16 reporting — drives Comp Committee routing and Form 4
+const SECTION_16 = new Set(['Sarah Chen', 'Amanda Foster']);
+// Grants carrying a §409A settlement deferral election
+const DEFERRAL_ELECTIONS = new Set(['GRT-2023-005']);
+// Restricted stock awards with an 83(b) election on file
+const E83B_ON_FILE = new Set(['GRT-2023-007']);
+
+// Each trigger carries its plan reference and the default treatment that reference prescribes
+const ACC_TRIGGERS = [
+  { id:'death',       t:'Death',                             ref:'Plan §9.2(a)',           method:'full',     def:'100% acceleration' },
+  { id:'disability',  t:'Disability',                        ref:'Plan §9.2(b)',           method:'full',     def:'100% acceleration' },
+  { id:'retirement',  t:'Qualifying retirement',             ref:'Plan §9.3 · Rule of 70', method:'prorata',  def:'Pro-rata through separation date' },
+  { id:'invol',       t:'Involuntary, without cause',        ref:'Plan §9.4(a)',           method:'tranches', def:'Next 2 tranches', n:2 },
+  { id:'goodreason',  t:'Resignation for good reason',       ref:'Plan §9.4(b)',           method:'tranches', def:'Next 2 tranches', n:2 },
+  { id:'cic1',        t:'Change in control — single trigger',ref:'Plan §10.1',             method:'full',     def:'100% on closing' },
+  { id:'cic2',        t:'Change in control — double trigger',ref:'Plan §10.2',             method:'full',     def:'100% if terminated in the 24-month window' },
+  { id:'divest',      t:'M&A / divestiture of unit',         ref:'Plan §10.4',             method:'credit',   def:'12 months deemed service credit', months:12 },
+  { id:'discretion',  t:'Committee discretion',              ref:'Plan §4.2',              method:'manual',   def:'Manual configuration · committee approval required' }
+];
+
+const ACC_METHODS = [
+  { id:'full',     t:'Full — 100% of unvested' },
+  { id:'pct',      t:'Percentage of unvested' },
+  { id:'tranches', t:'Next N tranches' },
+  { id:'credit',   t:'Service credit (deemed months)' },
+  { id:'prorata',  t:'Pro-rata through date' },
+  { id:'manual',   t:'Select tranches manually' }
+];
+
+const accelState = {
+  step: 1, grantId: null, trigger: null,
+  treat: null, effDate: null, withhold: 'net', notify: true,
+  submitted: false, txn: null
+};
+
+const accFmtSh = n => Math.round(n).toLocaleString();
+const accFmt$  = n => '$' + Math.round(n).toLocaleString();
+const accFmtD  = d => d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'2-digit' });
+const accGrant = () => grantsData.find(g => g.id === accelState.grantId);
+
+// Grant-date fair value for ASC 718 — options carry a lower fair value than the share price
+function accelGrantFV(g) {
+  return ACCEL_OPT_TYPES.includes(g.type) ? g.price * 0.40 : g.price;
 }
 
-function openAccelerateModal(grantId) {
-  const g = grantsData.find(x => x.id === grantId);
-  if (!g) return;
-  accelGrant = g;
+// Build the remaining (unvested) tranche schedule implied by the grant's vesting label
+function accelTranches(g) {
+  if (g._accTranches) return g._accTranches;
 
-  document.getElementById('acc-grant-info').innerHTML =
-    `<strong>${g.id}</strong> — ${g.participant} · ${g.type} · ${g.vesting}<br>` +
-    `Granted ${g.shares.toLocaleString()} · Vested ${g.vested.toLocaleString()} · ` +
-    `<strong>Unvested ${g.unvested.toLocaleString()}</strong>`;
+  const yrs   = parseInt(g.vesting, 10) || 4;
+  const cliff = /cliff/i.test(g.vesting);
+  const start = new Date(g.date + 'T00:00:00');
+  const all   = [];
 
-  document.getElementById('acc-method').value = 'full';
-  document.getElementById('acc-date').value   = new Date().toISOString().slice(0, 10);
-  document.getElementById('acc-amount').value = '';
-  document.getElementById('acc-ref').value    = '';
-  document.getElementById('acc-notes').value  = '';
+  if (cliff) {
+    const cliffDate   = new Date(start);
+    cliffDate.setFullYear(cliffDate.getFullYear() + 1);
+    const cliffShares = Math.round(g.shares / yrs);
+    all.push({ date: cliffDate, shares: cliffShares });
 
-  updateAccelCalc();
-  openModal('modal-accelerate');
-}
-
-// Shares that would vest under the current inputs, capped at what is actually unvested
-function accelShares() {
-  const g = accelGrant;
-  if (!g) return 0;
-  const method = document.getElementById('acc-method').value;
-  const amount = parseFloat(document.getElementById('acc-amount').value) || 0;
-
-  let n;
-  if (method === 'full')         n = g.unvested;
-  else if (method === 'percent') n = Math.round(g.unvested * (amount / 100));
-  else if (method === 'shares')  n = Math.round(amount);
-  else                           n = Math.round(accelMonthlyRate(g) * amount);
-
-  return Math.max(0, Math.min(n, g.unvested));
-}
-
-function updateAccelCalc() {
-  const g = accelGrant;
-  if (!g) return;
-
-  const method = document.getElementById('acc-method').value;
-  const group  = document.getElementById('acc-amount-group');
-  const input  = document.getElementById('acc-amount');
-
-  // Only the non-full methods need an amount, and each means something different
-  if (method === 'full') {
-    group.style.display = 'none';
+    const rest = g.shares - cliffShares;
+    const nq   = (yrs - 1) * 4;
+    const per  = Math.floor(rest / nq);
+    for (let i = 1; i <= nq; i++) {
+      const d = new Date(cliffDate);
+      d.setMonth(d.getMonth() + 3 * i);
+      all.push({ date: d, shares: i === nq ? rest - per * (nq - 1) : per });
+    }
   } else {
-    group.style.display = '';
-    const cfg = {
-      percent: { label: 'Percentage of Unvested (%)', max: 100,
-                 hint: `100% = ${g.unvested.toLocaleString()} shares` },
-      shares:  { label: 'Shares to Accelerate',       max: g.unvested,
-                 hint: `Maximum available: ${g.unvested.toLocaleString()}` },
-      months:  { label: 'Months of Vesting Credit',   max: 120,
-                 hint: `≈ ${Math.round(accelMonthlyRate(g)).toLocaleString()} shares per month on this schedule` }
-    }[method];
-    document.getElementById('acc-amount-label').textContent = cfg.label;
-    document.getElementById('acc-amount-hint').textContent  = cfg.hint;
-    input.max = cfg.max;
+    const nq  = yrs * 4;
+    const per = Math.floor(g.shares / nq);
+    for (let i = 1; i <= nq; i++) {
+      const d = new Date(start);
+      d.setMonth(d.getMonth() + 3 * i);
+      all.push({ date: d, shares: i === nq ? g.shares - per * (nq - 1) : per });
+    }
   }
 
-  const n         = accelShares();
-  const remaining = g.unvested - n;
-
-  document.getElementById('acc-pv-shares').textContent    = n.toLocaleString();
-  document.getElementById('acc-pv-vested').textContent    = (g.vested + n).toLocaleString();
-  document.getElementById('acc-pv-value').textContent     = '$' + Math.round(n * ACCEL_FMV).toLocaleString();
-  document.getElementById('acc-pv-remaining').textContent = remaining.toLocaleString();
-  document.getElementById('acc-pv-status').textContent    = remaining === 0 ? 'Fully vested (Complete)' : 'Active';
-
-  const btn = document.getElementById('acc-confirm-btn');
-  btn.disabled = n === 0;
-  btn.style.opacity = n === 0 ? '0.5' : '';
-  btn.style.cursor  = n === 0 ? 'not-allowed' : '';
-}
-
-function confirmAcceleration() {
-  const g = accelGrant;
-  if (!g) return;
-
-  const n = accelShares();
-  if (n === 0) { ptToast('Enter an amount greater than zero to accelerate', 'warn'); return; }
-
-  const date   = document.getElementById('acc-date').value || new Date().toISOString().slice(0, 10);
-  const reason = document.getElementById('acc-reason').value;
-  const ref    = document.getElementById('acc-ref').value.trim();
-  const notes  = document.getElementById('acc-notes').value.trim();
-
-  g.vested   += n;
-  g.unvested -= n;
-  if (g.unvested === 0) g.status = 'complete';
-
-  // Neutral ledger event — units move unvested → vested, outstanding balance is unchanged
-  if (!ledgerData[g.id]) ledgerData[g.id] = [];
-  ledgerData[g.id].push({
-    date: date,
-    type: 'Accelerated',
-    shares: n,
-    note: `${reason} — ${n.toLocaleString()} unvested units accelerated`
-        + (ref ? ' · ' + ref : '')
-        + (notes ? ' · ' + notes : '')
-        + ` · Vested ${g.vested.toLocaleString()} of ${g.shares.toLocaleString()}`
+  // Walk off the shares already vested; what remains is the accelerable schedule
+  let consumed = g.vested;
+  const future = [];
+  all.forEach(t => {
+    if (consumed >= t.shares) { consumed -= t.shares; return; }
+    future.push({ date: t.date, shares: t.shares - consumed });
+    consumed = 0;
   });
 
-  closeModal('modal-accelerate');
+  // Reconcile rounding so the schedule sums exactly to the grant's unvested balance
+  const sum = future.reduce((a, t) => a + t.shares, 0);
+  if (future.length && sum !== g.unvested) future[future.length - 1].shares += g.unvested - sum;
+
+  g._accTranches = future.filter(t => t.shares > 0);
+  return g._accTranches;
+}
+
+function accelDefaultTreat(trig) {
+  return {
+    method: trig.method,
+    pct: 50,
+    n: trig.n || 2,
+    months: trig.months || 12,
+    date: '2027-06-30',
+    manual: new Set()
+  };
+}
+
+// Which tranches accelerate under the current treatment
+function accelCompute() {
+  const g = accGrant();
+  const t = accelState.treat;
+  if (!g || !t) return { shares: 0, tranches: [], isoSplit: null };
+
+  const tranches = accelTranches(g);
+  const today    = new Date();
+  let marks;
+
+  switch (t.method) {
+    case 'full':
+      marks = tranches.map(() => true);
+      break;
+    case 'pct': {
+      const want = Math.round(g.unvested * t.pct / 100);
+      let run = 0;
+      marks = tranches.map(x => { if (run < want) { run += x.shares; return true; } return false; });
+      break;
+    }
+    case 'tranches':
+      marks = tranches.map((x, i) => i < t.n);
+      break;
+    case 'credit': {
+      const cut = new Date(today);
+      cut.setMonth(cut.getMonth() + Number(t.months));
+      marks = tranches.map(x => x.date <= cut);
+      break;
+    }
+    case 'prorata': {
+      const cut = new Date(t.date + 'T00:00:00');
+      marks = tranches.map(x => x.date <= cut);
+      break;
+    }
+    case 'manual':
+      marks = tranches.map((x, i) => t.manual.has(i));
+      break;
+    default:
+      marks = tranches.map(() => false);
+  }
+
+  const marked = tranches.map((x, i) => ({ date: x.date, shares: x.shares, acc: marks[i] }));
+  const shares = marked.filter(x => x.acc).reduce((a, x) => a + x.shares, 0);
+
+  // ISO $100K first-exercisable limit — the excess reclassifies as NSO
+  let isoSplit = null;
+  if (g.type === 'ISO' && shares > 0) {
+    const capShares = Math.floor(Math.max(0, 100000 - ACCEL_ISO_USED) / g.price);
+    if (shares > capShares) isoSplit = { iso: capShares, nso: shares - capShares };
+  }
+
+  return { shares, tranches: marked, isoSplit };
+}
+
+function accelTotals() {
+  const g = accGrant();
+  const r = accelCompute();
+  if (!g) return { shares: 0, value: 0, wh: 0, exp: 0 };
+  return {
+    shares: r.shares,
+    value:  r.shares * ACCEL_FMV,
+    wh:     ACCEL_FULL_VALUE.includes(g.type) ? r.shares * ACCEL_FMV * ACCEL_WH_RATE : 0,
+    exp:    r.shares * accelGrantFV(g)
+  };
+}
+
+function accelPolicyChecks() {
+  const g = accGrant();
+  if (!g) return [];
+  const out = [];
+  const r   = accelCompute();
+  const t   = accelTotals();
+
+  if (SECTION_16.has(g.participant))
+    out.push({ cls:'danger', ic:'!', html:`<b>Section 16 officer</b> — routes to the Compensation Committee. Form 4 due within 2 business days of acceleration.` });
+  if (accelState.trigger === 'discretion')
+    out.push({ cls:'danger', ic:'!', html:`<b>Discretionary acceleration</b> always requires Compensation Committee approval per Plan §4.2.` });
+  if (t.value > 1000000)
+    out.push({ cls:'warn', ic:'!', html:`<b>${accFmt$(t.value)}</b> exceeds the $1.0M dual-approval threshold.` });
+
+  if (g.type === 'ISO' && r.shares > 0) {
+    out.push(r.isoSplit
+      ? { cls:'warn', ic:'!', html:`<b>ISO $100K limit</b> breached — <b>${accFmtSh(r.isoSplit.nso)} sh</b> reclassify as NSO (disqualified). ${accFmtSh(r.isoSplit.iso)} sh retain ISO status.` }
+      : { cls:'ok', ic:'✓', html:`<b>ISO check</b> — within the $100K first-exercisable limit, ISO status preserved. Post-termination exercise window 90 days (§5.6).` });
+  }
+  if (ACCEL_OPT_TYPES.includes(g.type) && g.type !== 'ISO' && r.shares > 0)
+    out.push({ cls:'info', ic:'i', html:`<b>${g.type}</b> — no tax at vest; ordinary income arises on exercise. Default post-termination window 90 days, extendable to 12 months under §5.7.` });
+  if (DEFERRAL_ELECTIONS.has(g.id) && r.shares > 0)
+    out.push({ cls:'warn', ic:'!', html:`<b>§409A</b> — settlement deferral election on file. Vesting accelerates, but <b>settlement stays on the deferral schedule</b>.` });
+  if (g.type === 'RSA' && r.shares > 0)
+    out.push(E83B_ON_FILE.has(g.id)
+      ? { cls:'ok', ic:'✓', html:`<b>83(b) on file</b> — no ordinary income at restriction lapse.` }
+      : { cls:'warn', ic:'!', html:`<b>No 83(b) on file</b> — ordinary income arises at restriction lapse.` });
+  if (accelState.withhold === 'sell' && r.shares > 0)
+    out.push({ cls:'warn', ic:'!', html:`<b>Sell-to-cover</b> — trading window is closed until Sep 4. Pre-clearance required, or switch to net settlement.` });
+
+  if (!out.length)
+    out.push({ cls:'ok', ic:'✓', html:'No policy exceptions detected for the current configuration.' });
+  return out;
+}
+
+// Routing is derived from policy, never chosen by the initiator
+function accelApprovalChain() {
+  const g = accGrant();
+  const t = accelTotals();
+  const chain = [{ who:'Plan Administrator', why:'Initiator review' }];
+  if (t.value > 1000000) chain.push({ who:'Head of Equity Compensation', why:'Value > $1.0M' });
+  if (g && (SECTION_16.has(g.participant) || accelState.trigger === 'discretion'))
+    chain.push({ who:'Compensation Committee',
+                 why: SECTION_16.has(g.participant) ? 'Section 16 officer' : 'Discretionary action (§4.2)' });
+  return chain;
+}
+
+// ── wizard shell ──
+function openAccelWizard(grantId) {
+  const g = grantsData.find(x => x.id === grantId);
+  if (!g) return;
+
+  accelState.step      = 1;
+  accelState.grantId   = grantId;
+  accelState.trigger   = null;
+  accelState.treat     = null;
+  accelState.effDate   = new Date().toISOString().slice(0, 10);
+  accelState.withhold  = 'net';
+  accelState.notify    = true;
+  accelState.submitted = false;
+  accelState.txn       = null;
+
+  document.getElementById('ac-title').textContent = 'Accelerate Vesting — ' + g.id;
+  document.getElementById('ac-sub').textContent   =
+    `${g.participant} · ${g.dept} · ${g.type} · ${g.vesting} · ${accFmtSh(g.unvested)} unvested of ${accFmtSh(g.shares)}`;
+
+  document.getElementById('ac-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderAccel();
+}
+
+function closeAccelWizard() {
+  document.getElementById('ac-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function accelGo(n) {
+  if (n === 2 && !accelState.treat) {
+    accelState.treat = accelDefaultTreat(ACC_TRIGGERS.find(t => t.id === accelState.trigger));
+  }
+  accelState.step = n;
+  renderAccel();
+  document.querySelector('.ac-body').scrollTop = 0;
+}
+
+function accelSetTrigger(id) {
+  accelState.trigger = id;
+  accelState.treat   = accelDefaultTreat(ACC_TRIGGERS.find(t => t.id === id));
+  renderAccel();
+}
+
+function accelUpd(k, v) {
+  accelState.treat[k] = (k === 'pct' || k === 'n' || k === 'months') ? Number(v) : v;
+  renderAccel();
+}
+
+function accelToggleTranche(i) {
+  const s = accelState.treat.manual;
+  if (s.has(i)) s.delete(i); else s.add(i);
+  renderAccel();
+}
+
+function accelSetField(k, v) {
+  accelState[k] = v;
+  renderAccel();
+}
+
+// ── rendering ──
+const ACC_STEPS = [
+  { n:1, t:'Trigger',   d:'Reason drives plan defaults' },
+  { n:2, t:'Treatment', d:'Method and tranche scope' },
+  { n:3, t:'Review',    d:'Impact, approvals, effective date' }
+];
+
+function renderAccel() {
+  renderAccelSteps();
+  renderAccelMain();
+  renderAccelSummary();
+  renderAccelChecks();
+  renderAccelFoot();
+}
+
+function renderAccelSteps() {
+  document.getElementById('ac-steps').innerHTML = ACC_STEPS.map(s => {
+    const cls = s.n === accelState.step ? 'active' : (s.n < accelState.step ? 'done' : '');
+    return `<div class="ac-step ${cls}">
+      <div class="n">0${s.n}</div>
+      <div><div class="t">${s.t}</div><div class="d">${s.d}</div></div>
+    </div>`;
+  }).join('');
+}
+
+function renderAccelSummary() {
+  const t = accelTotals();
+  const g = accGrant();
+  document.getElementById('ac-sum').innerHTML = `
+    <div class="ac-sum">
+      <h3>Live impact</h3>
+      <div class="ac-sum-big">${accFmtSh(t.shares)} <small>shares accelerating</small></div>
+      <div class="ac-sum-row"><span class="k">Of unvested balance</span><span class="v">${g ? accFmtSh(g.unvested) : '—'}</span></div>
+      <div class="ac-sum-row"><span class="k">Value @ FMV $${ACCEL_FMV.toFixed(2)}</span><span class="v">${accFmt$(t.value)}</span></div>
+      <div class="ac-sum-row"><span class="k">Est. tax withholding</span><span class="v">${accFmt$(t.wh)}</span></div>
+      <div class="ac-sum-row"><span class="k">ASC 718 pull-forward</span><span class="v">${accFmt$(t.exp)}</span></div>
+    </div>`;
+}
+
+function renderAccelChecks() {
+  document.getElementById('ac-checks').innerHTML = `
+    <div class="ac-checks">
+      <h3>Policy checks</h3>
+      ${accelPolicyChecks().map(c =>
+        `<div class="ac-chk ${c.cls}"><div class="ic">${c.ic}</div><div>${c.html}</div></div>`).join('')}
+    </div>`;
+}
+
+function renderAccelFoot() {
+  if (accelState.submitted) {
+    document.getElementById('ac-foot').innerHTML =
+      `<button class="btn btn-ghost" onclick="closeAccelWizard()">Close</button>
+       <span class="ac-stepct">SUBMITTED</span>`;
+    return;
+  }
+  const canNext = (accelState.step === 1 && accelState.trigger) || accelState.step === 2;
+  document.getElementById('ac-foot').innerHTML = `
+    ${accelState.step > 1 ? `<button class="btn btn-ghost" onclick="accelGo(${accelState.step - 1})">Back</button>` : ''}
+    <button class="btn btn-ghost" onclick="closeAccelWizard()">Cancel</button>
+    ${accelState.step < 3
+      ? `<button class="btn btn-primary" ${canNext ? '' : 'disabled style="opacity:.5;cursor:not-allowed"'} onclick="accelGo(${accelState.step + 1})">Continue</button>`
+      : `<button class="btn btn-primary" onclick="accelSubmit()">Submit for Approval</button>`}
+    <span class="ac-stepct">STEP ${accelState.step} / 3</span>`;
+}
+
+function renderAccelMain() {
+  const el = document.getElementById('ac-main');
+  el.innerHTML = accelState.submitted ? accelStepDone()
+               : accelState.step === 1 ? accelStep1()
+               : accelState.step === 2 ? accelStep2()
+               : accelStep3();
+}
+
+function accelStep1() {
+  return `
+    <div class="ac-eyebrow">Step 01 — Trigger</div>
+    <div class="ac-sec-title">Why is this acceleration happening?</div>
+    <div class="ac-sec-sub">The trigger determines the plan-rule defaults applied in the next step. Defaults can be overridden, and every override is written to the audit trail.</div>
+    <div class="ac-trig-grid">
+      ${ACC_TRIGGERS.map(t => `
+        <button class="ac-trig ${accelState.trigger === t.id ? 'sel' : ''}" onclick="accelSetTrigger('${t.id}')">
+          <div class="t">${t.t}</div>
+          <div class="ref">${t.ref}</div>
+          <div class="def">Default: ${t.def}</div>
+        </button>`).join('')}
+    </div>
+    ${accelState.trigger === 'cic2'
+      ? `<div class="ac-note info"><b>Double trigger:</b> acceleration requires both the change in control <i>and</i> a qualifying termination within the 24-month protection window. Record the termination date on the review step.</div>`
+      : ''}`;
+}
+
+function accelMethodControls(t) {
+  const g = accGrant();
+  const tr = accelTranches(g);
+  if (t.method === 'pct')
+    return `<div class="ac-ctl"><label>Percent of unvested</label>
+      <div style="display:flex;align-items:center;gap:10px">
+        <input type="range" min="5" max="100" step="5" value="${t.pct}" oninput="accelUpd('pct',this.value)">
+        <span class="mono" style="width:44px;font-size:12px">${t.pct}%</span>
+      </div></div>`;
+  if (t.method === 'tranches')
+    return `<div class="ac-ctl"><label>Number of tranches</label>
+      <input type="number" min="1" max="${tr.length}" value="${t.n}" onchange="accelUpd('n',this.value)"></div>`;
+  if (t.method === 'credit')
+    return `<div class="ac-ctl"><label>Deemed service (months)</label>
+      <input type="number" min="1" max="60" value="${t.months}" onchange="accelUpd('months',this.value)"></div>`;
+  if (t.method === 'prorata')
+    return `<div class="ac-ctl"><label>Vest tranches through</label>
+      <input type="date" value="${t.date}" onchange="accelUpd('date',this.value)"></div>`;
+  return '';
+}
+
+function accelTrancheChips(t) {
+  if (t.method !== 'manual') return '';
+  const tr = accelTranches(accGrant());
+  return `<div class="ac-tr-list">${tr.map((x, i) => `
+    <label class="ac-tr-chip ${t.manual.has(i) ? 'on' : ''}">
+      <input type="checkbox" ${t.manual.has(i) ? 'checked' : ''} onchange="accelToggleTranche(${i})">
+      <span><span class="mono">${accFmtD(x.date)}</span> · ${accFmtSh(x.shares)} sh</span>
+    </label>`).join('')}</div>`;
+}
+
+function accelShiftViz(r) {
+  if (!r.tranches.length) return '';
+  const start = new Date();
+  const last  = r.tranches[r.tranches.length - 1].date;
+  const end   = new Date(Math.max(last.getTime(), start.getTime() + 86400e3 * 365));
+  const pos   = d => Math.min(97, Math.max(1, (d - start) / (end - start) * 100));
+  const effX  = pos(new Date(accelState.effDate + 'T00:00:00'));
+
+  const orig  = r.tranches.map(x => `<div class="ac-dot orig" style="left:${pos(x.date)}%" title="${accFmtD(x.date)}"></div>`).join('');
+  const after = r.tranches.map(x =>
+    `<div class="ac-dot ${x.acc ? 'acc' : 'stay'}" style="left:${x.acc ? effX : pos(x.date)}%" title="${x.acc ? 'Accelerates to effective date' : accFmtD(x.date)}"></div>`).join('');
+  const n = r.tranches.filter(x => x.acc).length;
+
+  const mid = new Date((start.getTime() + end.getTime()) / 2);
+  return `<div class="ac-shift">
+    <div class="ac-track-row"><span class="ac-track-lbl">Current</span><div class="ac-track">${orig}</div></div>
+    <div class="ac-track-row"><span class="ac-track-lbl">After</span><div class="ac-track">${after}</div></div>
+    <div class="ac-axis"><span>${accFmtD(start)}</span><span>${accFmtD(mid)}</span><span>${accFmtD(end)}</span></div>
+    <div class="ac-shift-cap"><b>${n} tranche${n === 1 ? '' : 's'} pull forward</b> to the effective date · ${r.tranches.length - n} unchanged</div>
+  </div>`;
+}
+
+function accelStep2() {
+  const g    = accGrant();
+  const t    = accelState.treat;
+  const trig = ACC_TRIGGERS.find(x => x.id === accelState.trigger);
+  const r    = accelCompute();
+  const deviates = t.method !== trig.method;
+
+  return `
+    <div class="ac-eyebrow">Step 02 — Treatment</div>
+    <div class="ac-sec-title">How much accelerates?</div>
+    <div class="ac-sec-sub">Defaults come from <b>${trig.t}</b> (${trig.ref}). Overriding the default flags this transaction as a deviation in the approval packet.</div>
+
+    <div class="ac-ctl-row" style="margin-top:18px">
+      <div class="ac-ctl"><label>Vesting method</label>
+        <select onchange="accelUpd('method',this.value)">
+          ${ACC_METHODS.map(m => `<option value="${m.id}" ${t.method === m.id ? 'selected' : ''}>${m.t}</option>`).join('')}
+        </select></div>
+      ${accelMethodControls(t)}
+      <div class="ac-ctl"><label>Effective date</label>
+        <input type="date" value="${accelState.effDate}" onchange="accelSetField('effDate',this.value)"></div>
+    </div>
+
+    ${deviates ? `<div class="ac-note warn"><b>Deviation from plan default:</b> ${trig.ref} prescribes “${trig.def}”. This override will be highlighted for approvers.</div>` : ''}
+    ${accelTrancheChips(t)}
+    ${accelShiftViz(r)}
+    ${accelGrantNotes(g, r)}`;
+}
+
+function accelGrantNotes(g, r) {
+  let out = '';
+  if (g.type === 'ISO') {
+    out += r.isoSplit
+      ? `<div class="ac-note warn"><b>ISO $100K limit:</b> accelerating ${accFmtSh(r.shares)} sh at strike $${g.price.toFixed(2)} exceeds the remaining annual limit. <b>${accFmtSh(r.isoSplit.iso)} sh retain ISO status; ${accFmtSh(r.isoSplit.nso)} sh reclassify as NSO</b> (disqualified). Participant disclosure will be generated.</div>`
+      : `<div class="ac-note info"><b>ISO check:</b> acceleration stays within the $100K first-exercisable limit — ISO status preserved. Post-termination exercise window: 90 days (§5.6).</div>`;
+  }
+  if (g.type === 'NSO' || g.type === 'NQSO')
+    out += `<div class="ac-note info"><b>${g.type}:</b> no tax at vest — ordinary income at exercise. Confirm the post-termination exercise window (default 90 days; extendable to 12 months under §5.7 with approval).</div>`;
+  if (g.type === 'SAR')
+    out += `<div class="ac-note info"><b>SAR:</b> settles on the appreciation over $${g.price.toFixed(2)}. Accelerated units become exercisable on the effective date.</div>`;
+  if (g.type === 'RSA')
+    out += `<div class="ac-note info"><b>RSA:</b> shares are already outstanding — acceleration lapses the restrictions. ${E83B_ON_FILE.has(g.id) ? '83(b) election on file: no income event at lapse.' : 'No 83(b) on file: ordinary income at lapse.'}</div>`;
+  if (DEFERRAL_ELECTIONS.has(g.id))
+    out += `<div class="ac-note warn"><b>§409A:</b> settlement deferral election on file. Vesting accelerates on the effective date; <b>settlement stays on the deferral schedule</b> to avoid a 409A violation.</div>`;
+  return out;
+}
+
+function accelStep3() {
+  const g     = accGrant();
+  const t     = accelTotals();
+  const r     = accelCompute();
+  const trig  = ACC_TRIGGERS.find(x => x.id === accelState.trigger);
+  const chain = accelApprovalChain();
+
+  return `
+    <div class="ac-eyebrow">Step 03 — Review &amp; submit</div>
+    <div class="ac-sec-title">Impact, mechanics and approvals</div>
+    <div class="ac-sec-sub">Trigger: <b>${trig.t}</b> · ${g.id} · effective ${new Date(accelState.effDate + 'T00:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}</div>
+
+    <div class="ac-kv">
+      <div class="box"><div class="k">Shares accelerating</div><div class="v">${accFmtSh(t.shares)}</div></div>
+      <div class="box"><div class="k">Value @ FMV</div><div class="v">${accFmt$(t.value)}</div></div>
+      <div class="box"><div class="k">Est. withholding</div><div class="v">${accFmt$(t.wh)} <small>${ACCEL_FULL_VALUE.includes(g.type) ? 'at vest' : 'none at vest'}</small></div></div>
+      <div class="box"><div class="k">ASC 718 pull-forward</div><div class="v">${accFmt$(t.exp)} <small>unamortized</small></div></div>
+    </div>
+
+    <div class="ac-ctl-row" style="margin-top:18px">
+      <div class="ac-ctl"><label>Effective date</label>
+        <input type="date" value="${accelState.effDate}" onchange="accelSetField('effDate',this.value)"></div>
+      <div class="ac-ctl"><label>Withholding method</label>
+        <select onchange="accelSetField('withhold',this.value)">
+          <option value="net"  ${accelState.withhold === 'net'  ? 'selected' : ''}>Net share settlement</option>
+          <option value="sell" ${accelState.withhold === 'sell' ? 'selected' : ''}>Sell-to-cover</option>
+          <option value="cash" ${accelState.withhold === 'cash' ? 'selected' : ''}>Cash from participant</option>
+        </select></div>
+      ${accelState.trigger === 'cic2'
+        ? `<div class="ac-ctl"><label>Qualifying termination date</label><input type="date" value="${accelState.effDate}"></div>`
+        : ''}
+    </div>
+
+    <div style="font-size:13px;font-weight:700;margin-top:22px;color:var(--text)">Approval routing
+      <span style="font-weight:400;color:var(--textm)">— determined by policy, not editable</span></div>
+    ${chain.map((a, i) => `<div class="ac-appr"><div class="n">${i + 1}</div><div>${a.who}</div><div class="why">${a.why}</div></div>`).join('')}
+
+    <label class="ac-toggle">
+      <input type="checkbox" ${accelState.notify ? 'checked' : ''} onchange="accelSetField('notify',this.checked)">
+      Notify the participant on final approval (statement + tax summary)
+    </label>
+
+    ${r.shares === 0 ? `<div class="ac-note danger">Nothing is currently selected to accelerate — go back and widen the treatment.</div>` : ''}`;
+}
+
+function accelSubmit() {
+  const g = accGrant();
+  const r = accelCompute();
+  if (r.shares === 0) { ptToast('Nothing selected to accelerate', 'warn'); return; }
+
+  const t     = accelTotals();
+  const chain = accelApprovalChain();
+  const stamp = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+  accelState.txn = 'TXN-ACC-' + stamp + '-' + String(Math.floor(Math.random() * 900) + 100);
+
+  // Nothing vests on submit — the grant carries a pending record until the chain signs off
+  g.pendingAccel = {
+    txn: accelState.txn, shares: r.shares, value: t.value,
+    trigger: accelState.trigger, effDate: accelState.effDate,
+    chain: chain.map(c => c.who)
+  };
+
+  accelState.submitted = true;
+  renderAccel();
   renderGrantsTable();
-  ptToast(`✓ ${n.toLocaleString()} shares accelerated on ${g.id}`, 'ok');
-  accelGrant = null;
+  ptToast(`✓ ${accFmtSh(r.shares)} shares submitted for approval — ${accelState.txn}`, 'ok');
+}
+
+function accelStepDone() {
+  const g     = accGrant();
+  const t     = accelTotals();
+  const chain = accelApprovalChain();
+  const trig  = ACC_TRIGGERS.find(x => x.id === accelState.trigger);
+  const now   = new Date().toLocaleString('en-US', { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
+
+  return `
+    <div class="ac-done-badge">✓ Submitted — ${accelState.txn}</div>
+    <div class="ac-sec-title" style="margin-top:14px">Acceleration pending approval</div>
+    <div class="ac-sec-sub">${accFmtSh(t.shares)} shares on ${g.id} · ${accFmt$(t.value)} at current FMV. Nothing vests until the final approver signs off; the transaction can be recalled until then.</div>
+    <div class="ac-audit">
+      <div class="ac-audit-r"><span class="ts">${now}</span><span><b>Created</b> — trigger “${trig.t}”, ${accFmtSh(t.shares)} shares, effective ${accelState.effDate}</span></div>
+      <div class="ac-audit-r"><span class="ts">${now}</span><span><b>Policy engine</b> — ${accelPolicyChecks().length} checks evaluated; exceptions attached to the approval packet</span></div>
+      ${chain.map((a, i) => `<div class="ac-audit-r"><span class="ts">pending</span><span><b>Awaiting</b> ${a.who} (step ${i + 1} of ${chain.length}) — ${a.why}</span></div>`).join('')}
+      ${accelState.notify ? `<div class="ac-audit-r"><span class="ts">on approval</span><span><b>Participant notice</b> — statement &amp; tax summary queued</span></div>` : ''}
+    </div>`;
 }
 
 // ═════════════════════════════════════════════
