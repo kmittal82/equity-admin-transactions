@@ -1223,6 +1223,7 @@
     }
     .tm-sidebar {
       display:flex; flex-direction:column; gap:24px;
+      position:sticky; top:0; align-self:start;
     }
     .tm-sidebar-section { display:flex; flex-direction:column; gap:12px; }
     .tm-section-label {
@@ -1258,49 +1259,53 @@
     }
 
     .tm-banner {
-      background:linear-gradient(135deg,#3b82f6 0%,#1e40af 100%);
-      border-radius:12px; padding:20px; color:#fff; text-align:center;
+      background:linear-gradient(135deg,#0d1526 0%,#1e3a5f 100%);
+      border-radius:12px; padding:20px; color:#fff;
     }
     .tm-banner-title {
       font-size:11px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase;
-      opacity:0.7; margin-bottom:12px;
+      opacity:0.65; margin-bottom:14px;
     }
-    .tm-banner-val {
-      font-size:28px; font-weight:700; letter-spacing:-0.02em; line-height:1.1;
-    }
-    .tm-banner-sub {
-      font-size:12px; opacity:0.65; margin-top:6px;
-    }
-    .tm-banner-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+    .tm-banner-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; }
     .tm-stat {
-      background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2);
-      border-radius:10px; padding:14px; text-align:center;
+      background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.11);
+      border-radius:10px; padding:14px;
     }
-    .tm-stat-label { font-size:10px; text-transform:uppercase; letter-spacing:0.06em; opacity:0.65; font-weight:600; }
-    .tm-stat-val { font-size:20px; font-weight:700; margin-top:6px; }
-    .tm-stat-sub { font-size:11px; opacity:0.6; margin-top:3px; }
+    .tm-stat-label { font-size:10px; text-transform:uppercase; letter-spacing:0.06em; opacity:0.6; font-weight:600; }
+    .tm-stat-val { font-size:22px; font-weight:700; margin-top:6px; letter-spacing:-0.02em; line-height:1.1; }
+    .tm-stat-val.sm { font-size:15px; padding-top:5px; }
+    .tm-stat-sub { font-size:11px; opacity:0.55; margin-top:4px; }
+    .v-red{color:#fb7185}.v-amber{color:#fbbf24}.v-green{color:#4ade80}.v-blue{color:#60a5fa}.v-purple{color:#a78bfa}
 
-    .tm-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
-    .tm-grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    .tm-grid-2, .tm-g2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .tm-grid-3, .tm-plan-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
     .tm-card {
       background:var(--card); border:1px solid var(--border); border-radius:12px;
       padding:18px; position:relative; overflow:hidden;
     }
-    .tm-card::before {
+    .tm-card.accent-l::before {
       content:''; position:absolute; left:0; top:0; width:4px; height:100%;
       background:var(--accent);
     }
-    .tm-card.red::before { background:#ef4444; }
-    .tm-card.green::before { background:#10b981; }
-    .tm-card.amber::before { background:#f59e0b; }
-    .tm-card-title { font-size:13px; font-weight:700; margin-bottom:12px; }
+    .tm-card.accent-green::before  { background:var(--green); }
+    .tm-card.accent-purple::before { background:var(--purple); }
+    .tm-card.accent-amber::before  { background:var(--amber); }
+    .tm-card-title { font-size:13px; font-weight:700; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+    .tm-icon {
+      width:24px; height:24px; border-radius:7px; color:#fff; flex-shrink:0;
+      display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700;
+    }
     .tm-row {
       display:flex; justify-content:space-between; align-items:center; gap:12px;
-      font-size:13px; padding:8px 0; border-bottom:1px solid var(--border);
+      font-size:12.5px; padding:7px 0; border-bottom:1px solid var(--border);
     }
     .tm-row:last-child { border-bottom:none; }
     .tm-row-label { color:var(--text2); }
-    .tm-row-val { font-weight:600; }
+    .tm-row-val { font-weight:600; text-align:right; }
+    .tm-muted { font-size:12.5px; color:var(--textm); padding:6px 0; }
+    .tm-hr { border-top:1px solid var(--border); margin:10px 0; }
+    .tm-prog { height:7px; background:var(--red-l); border-radius:4px; overflow:hidden; margin-bottom:10px; }
+    .tm-prog-fill { height:100%; background:var(--accent); border-radius:4px; transition:width 0.4s ease; }
 
     .tm-badge {
       display:inline-block; font-size:11px; padding:4px 10px; border-radius:12px;
@@ -1336,9 +1341,12 @@
     .tm-timeline { padding-left:6px; border-left:2px solid var(--border); margin-left:8px; }
     .tm-tl-item { position:relative; padding:0 0 16px 20px; }
     .tm-tl-item:last-child { padding-bottom:0; }
-    .tm-tl-dot { position:absolute; left:-6px; top:2px; width:10px; height:10px; border-radius:50%; border:2px solid var(--accent); background:#fff; }
+    .tm-tl-dot { position:absolute; left:-7px; top:4px; width:10px; height:10px; border-radius:50%; border:2px solid #fff; }
     .tm-tl-date { font-size:11px; color:var(--textm); font-weight:600; }
     .tm-tl-text { font-size:13px; margin-top:2px; color:var(--text); }
+    .tm-tl-text.neg  { color:#b91c1c; }
+    .tm-tl-text.warn { color:#b45309; }
+    .tm-tl-text.pos  { color:var(--accent-dark); }
 
     .tm-foot {
       background:var(--card); padding:16px 28px; border-top:1px solid var(--border);
@@ -1346,14 +1354,21 @@
     }
     .tm-foot-note { font-size:12px; color:var(--text2); }
 
+    @media (max-width:1400px) {
+      .tm-banner-grid { grid-template-columns:repeat(3,1fr); }
+    }
     @media (max-width:1200px) {
       .tm-body { grid-template-columns:1fr; }
-      .tm-grid-3 { grid-template-columns:repeat(2,1fr); }
-      .tm-grid-2 { grid-template-columns:1fr; }
+      .tm-sidebar { position:static; }
+      .tm-inputs { grid-template-columns:repeat(2,1fr); }
+      .tm-grid-3, .tm-plan-grid { grid-template-columns:1fr; }
+      .tm-grid-2, .tm-g2 { grid-template-columns:1fr; }
     }
     @media (max-width:768px) {
       .tm-head { flex-direction:column; align-items:flex-start; }
       .tm-body { padding:16px; gap:16px; }
+      .tm-inputs { grid-template-columns:1fr; }
+      .tm-banner-grid { grid-template-columns:1fr; }
     }
 
     /* ════════════ MODALS ════════════ */
@@ -5686,7 +5701,7 @@
 
         <!-- Body: Sidebar + Main Content -->
         <div class="tm-body">
-          <!-- LEFT SIDEBAR: Inputs & Summary -->
+          <!-- LEFT SIDEBAR: Assumptions -->
           <div class="tm-sidebar">
             <div class="tm-sidebar-section">
               <div class="tm-section-label">Termination Assumptions</div>
@@ -5698,23 +5713,23 @@
                 <div class="tm-field">
                   <label>Termination Type</label>
                   <select id="tm-type" onchange="renderTermModel()">
-                    <option value="voluntary">Voluntary</option>
-                    <option value="involuntary">Involuntary (no cause)</option>
-                    <option value="cause">For Cause</option>
+                    <option value="voluntary">Voluntary resignation</option>
+                    <option value="involuntary">Involuntary (without cause)</option>
+                    <option value="cause">Involuntary (with cause)</option>
                     <option value="retirement">Retirement</option>
                     <option value="death">Death / Disability</option>
                   </select>
                 </div>
                 <div class="tm-field">
-                  <label>Stock Price ($)</label>
+                  <label>FMV on Termination Date ($)</label>
                   <input type="number" id="tm-fmv" step="0.25" value="42.50" oninput="renderTermModel()">
                 </div>
                 <div class="tm-field">
-                  <label>Discretionary Action</label>
+                  <label>Discretionary Acceleration</label>
                   <select id="tm-accel" onchange="renderTermModel()">
-                    <option value="0">No acceleration</option>
+                    <option value="0">None — plan terms apply</option>
                     <option value="next">Accelerate next tranche</option>
-                    <option value="12">Accelerate 12 months</option>
+                    <option value="12">Accelerate 12 months of vesting</option>
                     <option value="all">Full acceleration</option>
                   </select>
                 </div>
@@ -5722,26 +5737,11 @@
             </div>
 
             <div class="tm-sidebar-section">
-              <div class="tm-section-label">Total Impact</div>
-              <div class="tm-banner">
-                <div class="tm-banner-title">Value at Termination</div>
-                <div class="tm-banner-val" id="tm-total-value">$0</div>
-                <div class="tm-banner-sub" id="tm-total-sub">All equity + cash plans</div>
-              </div>
-            </div>
-
-            <div class="tm-sidebar-section">
-              <div class="tm-section-label">Key Metrics</div>
-              <div class="tm-banner" style="background:linear-gradient(135deg,#10b981 0%,#059669 100%)">
-                <div class="tm-banner-grid">
-                  <div class="tm-stat">
-                    <div class="tm-stat-label">Vested</div>
-                    <div class="tm-stat-val" id="tm-metric-vested">0</div>
-                  </div>
-                  <div class="tm-stat">
-                    <div class="tm-stat-label">Forfeited</div>
-                    <div class="tm-stat-val" id="tm-metric-forfeited">0</div>
-                  </div>
+              <div class="tm-section-label">What This Shows</div>
+              <div class="tm-card" style="padding:14px 16px">
+                <div class="tm-muted" style="padding:0;line-height:1.55">
+                  Change any assumption on the left to instantly re-model the outcome.
+                  The highlighted row in the rules matrix is the scenario currently applied.
                 </div>
               </div>
             </div>
@@ -5749,22 +5749,26 @@
 
           <!-- RIGHT MAIN CONTENT -->
           <div class="tm-main">
-            <!-- Rules Matrix -->
+            <!-- Aggregate banner -->
+            <div class="tm-banner" id="tm-banner"></div>
+
+            <!-- Rules matrix -->
             <div>
               <div class="tm-sec-title">
-                <span class="tm-sec-icon" style="background:var(--accent)">📋</span>
-                Termination Rules by Plan
+                <span class="tm-sec-icon" style="background:var(--text2)">1</span>
+                Termination Rules Matrix
+                <span style="font-size:11.5px;font-weight:500;color:var(--textm)">— highlighted row is the applied scenario</span>
               </div>
               <div class="tm-card" style="padding:0;overflow:hidden">
                 <div style="overflow-x:auto">
                   <table class="tm-rules">
                     <thead>
                       <tr>
-                        <th style="width:160px">Scenario</th>
-                        <th>RSU / RSA</th>
-                        <th>Options</th>
-                        <th>ESPP</th>
-                        <th>Savings</th>
+                        <th style="width:170px">Termination type</th>
+                        <th>RSU / RSA / PSU</th>
+                        <th>Options / SAR</th>
+                        <th>Purchase plan (ESPP)</th>
+                        <th>Savings plan</th>
                       </tr>
                     </thead>
                     <tbody id="tm-rules-body"></tbody>
@@ -5776,35 +5780,59 @@
             <!-- Plan Impacts -->
             <div>
               <div class="tm-sec-title">
-                <span class="tm-sec-icon" style="background:#f59e0b">📊</span>
-                Impact by Award Type
+                <span class="tm-sec-icon" style="background:var(--accent)">2</span>
+                Impact by Plan
               </div>
-              <div class="tm-grid-3" id="tm-plan-impacts"></div>
+              <div class="tm-plan-grid" id="tm-plan-impacts"></div>
             </div>
 
             <!-- Grant Analysis -->
             <div>
               <div class="tm-sec-title">
-                <span class="tm-sec-icon" style="background:#ef4444">📈</span>
-                Individual Grants
+                <span class="tm-sec-icon" style="background:var(--amber)">3</span>
+                Grant-Level Impact
               </div>
-              <div class="tm-grid-2" id="tm-grants"></div>
+              <div class="tm-g2" id="tm-grants"></div>
             </div>
 
-            <!-- Visualization & Timeline -->
-            <div class="tm-grid-2">
-              <div class="tm-card">
-                <div class="tm-card-title">Share Distribution</div>
-                <div class="tm-bars" id="tm-bars"></div>
-                <div class="tm-legend">
-                  <span><span class="tm-legend-dot" style="background:var(--accent)"></span>Vested</span>
-                  <span><span class="tm-legend-dot" style="background:var(--red)"></span>Forfeited</span>
-                  <span><span class="tm-legend-dot" style="background:var(--amber)"></span>Expired</span>
+            <!-- Charts -->
+            <div>
+              <div class="tm-sec-title">
+                <span class="tm-sec-icon" style="background:var(--purple)">4</span>
+                Outcome &amp; Exercise Window
+              </div>
+              <div class="tm-g2">
+                <div class="tm-card">
+                  <div class="tm-card-title">Vested vs forfeited vs expired</div>
+                  <div class="tm-bars" id="tm-bars"></div>
+                  <div class="tm-legend">
+                    <span><span class="tm-legend-dot" style="background:var(--accent)"></span>Vested / retained</span>
+                    <span><span class="tm-legend-dot" style="background:var(--red)"></span>Forfeited</span>
+                    <span><span class="tm-legend-dot" style="background:var(--amber)"></span>Expired</span>
+                  </div>
+                </div>
+                <div class="tm-card">
+                  <div class="tm-card-title">Post-termination exercise window</div>
+                  <div id="tm-exercise"></div>
                 </div>
               </div>
-              <div class="tm-card">
-                <div class="tm-card-title">Impact Timeline</div>
-                <div class="tm-timeline" id="tm-timeline"></div>
+            </div>
+
+            <!-- Reconciliation & Timeline -->
+            <div>
+              <div class="tm-sec-title">
+                <span class="tm-sec-icon" style="background:var(--green)">5</span>
+                Reconciliation &amp; Timeline
+              </div>
+              <div class="tm-g2">
+                <div class="tm-card">
+                  <div class="tm-card-title">Share issuance reconciliation</div>
+                  <div id="tm-issuance"></div>
+                </div>
+                <div class="tm-card">
+                  <div class="tm-card-title">Impact timeline</div>
+                  <div class="tm-timeline" id="tm-timeline"></div>
+                </div>
               </div>
             </div>
           </div>
@@ -8737,9 +8765,9 @@ function openTermModel(id) {
     ? `Termination committed on ${tmDate(p.termDate)}. Change the inputs to re-model — the ledger is unaffected.`
     : 'Model only — no ledger entries are written until you commit.';
 
-  renderTermModel();
   document.getElementById('tm-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
+  renderTermModel();
 }
 
 function closeTermModel(e) {
