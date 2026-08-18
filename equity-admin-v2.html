@@ -1538,6 +1538,99 @@
       background:var(--amber-l); color:#b45309; margin-left:6px; white-space:nowrap;
     }
 
+    /* ════════════ TRADE PRE-CLEARANCE ════════════ */
+    /* Row chip showing the clearance state of a trade */
+    .pc-chip {
+      display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:700;
+      padding:2px 8px; border-radius:9px; white-space:nowrap; border:1px solid transparent;
+    }
+    .pc-chip-cleared    { background:var(--green-l); color:#047857; border-color:#a7e3c6; }
+    .pc-chip-pending    { background:var(--amber-l); color:#b45309; border-color:#f2d9b5; }
+    .pc-chip-rejected   { background:var(--red-l);   color:#b42318; border-color:#f1c1bc; }
+    .pc-chip-expired    { background:#f1f5f9;        color:#64748b; border-color:#cbd5e1; }
+    .pc-chip-none       { background:#f8fafc;        color:#94a3b8; border-color:#e2e8f0; }
+    .pc-chip-na         { background:#f8fafc;        color:#94a3b8; border-color:#e2e8f0; }
+    .pc-chip-override   { background:#fff7ed;        color:#9a3412; border-color:#fed7aa; }
+
+    /* Section 16 marker next to a participant name */
+    .pc-s16 {
+      display:inline-block; font-size:9px; font-weight:800; letter-spacing:0.04em;
+      padding:1px 5px; border-radius:5px; background:#faf5ff; color:#6d28d9;
+      border:1px solid #ddd6fe; margin-left:5px; vertical-align:middle;
+    }
+
+    /* Request status pill in the pre-clearance table */
+    .pc-st {
+      display:inline-flex; align-items:center; gap:5px; padding:3px 10px;
+      border-radius:20px; font-size:11px; font-weight:600; white-space:nowrap;
+    }
+    .pc-st::before { content:''; width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+    .pc-st-submitted { background:#eff6ff; color:#1d4ed8; border:1px solid #c7d7fb; }
+    .pc-st-submitted::before { background:#3b82f6; }
+    .pc-st-in-review { background:#fff7ed; color:#9a3412; border:1px solid #fed7aa; }
+    .pc-st-in-review::before { background:#f59e0b; }
+    .pc-st-cleared   { background:#f0fdf4; color:#166534; border:1px solid #bbf7d0; }
+    .pc-st-cleared::before   { background:#10b981; }
+    .pc-st-rejected  { background:#fef2f2; color:#991b1b; border:1px solid #fecaca; }
+    .pc-st-rejected::before  { background:#ef4444; }
+    .pc-st-expired   { background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; }
+    .pc-st-expired::before   { background:#94a3b8; }
+    .pc-st-withdrawn { background:#f8fafc; color:#64748b; border:1px solid #e2e8f0; }
+    .pc-st-withdrawn::before { background:#cbd5e1; }
+
+    /* Trading-window state pill */
+    .pc-win {
+      display:inline-block; font-size:10.5px; font-weight:600; padding:2px 8px;
+      border-radius:6px; white-space:nowrap;
+    }
+    .pc-win-open     { background:#f0fdf4; color:#166534; border:1px solid #bbf7d0; }
+    .pc-win-blackout { background:#fef2f2; color:#991b1b; border:1px solid #fecaca; }
+    .pc-win-closed   { background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; }
+
+    /* Exercise pre-clearance type badge — completes the .stxtype-* family */
+    .stxtype-exercise { background:#eff6ff; color:#1d4ed8; border:1px solid #c7d7fb; }
+
+    /* Category tab (Exercises | Pre-Clearance) reads as a different axis than a status tab */
+    .txtype-tab.tab-preclear {
+      margin-left:10px; padding-left:16px; border-left:1px solid var(--border);
+    }
+
+    /* Verdict banner in the review wizard */
+    .pc-verdict {
+      display:flex; align-items:center; gap:11px; border-radius:10px;
+      padding:12px 15px; margin-top:14px; border:1px solid;
+    }
+    .pc-verdict .vic {
+      width:30px; height:30px; border-radius:50%; flex:none; display:flex;
+      align-items:center; justify-content:center; font-size:15px; font-weight:800;
+    }
+    .pc-verdict .vt { font-size:13.5px; font-weight:700; }
+    .pc-verdict .vd { font-size:11.5px; margin-top:1px; opacity:0.9; }
+    .pc-verdict.clear  { background:var(--green-l); border-color:#a7e3c6; color:#046c4e; }
+    .pc-verdict.clear .vic  { background:#fff; color:#047857; }
+    .pc-verdict.review { background:var(--amber-l); border-color:#f2d9b5; color:#7a3e07; }
+    .pc-verdict.review .vic { background:#fff; color:#b45309; }
+    .pc-verdict.block  { background:var(--red-l); border-color:#f1c1bc; color:#8a1b10; }
+    .pc-verdict.block .vic  { background:#fff; color:#b42318; }
+
+    /* Read-only "as submitted by the participant" field grid */
+    .pc-kv { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border);
+             border:1px solid var(--border); border-radius:9px; overflow:hidden; margin-top:14px; }
+    .pc-kv > div { background:var(--card); padding:10px 13px; }
+    .pc-kv .k { font-size:10px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:var(--textm); }
+    .pc-kv .v { font-size:13px; font-weight:600; color:var(--text); margin-top:3px; }
+
+    /* Trading-window calendar strip */
+    .pc-cal { margin-top:14px; border:1px solid var(--border); border-radius:9px; overflow:hidden; }
+    .pc-cal-r { display:flex; align-items:center; gap:12px; padding:9px 13px; font-size:12px;
+                border-bottom:1px solid var(--border); background:var(--card); }
+    .pc-cal-r:last-child { border-bottom:none; }
+    .pc-cal-r.hit { background:#fffbeb; }
+    .pc-cal-r .rng { font-family:'SF Mono',monospace; font-size:10.5px; color:var(--textm);
+                     flex:none; width:150px; }
+
+    @media (max-width:900px) { .pc-kv { grid-template-columns:repeat(2,1fr); } }
+
     @media (max-width:1180px) {
       .ac-body { grid-template-columns:1fr; }
       .ac-rail { position:static; }
@@ -4366,6 +4459,10 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Export
           </button>
+          <button class="btn btn-ghost" onclick="openPreclearCreate({ requestType:'Sale' })">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9,12 11,14 15,10"/></svg>
+            Raise Pre-Clearance
+          </button>
           <button class="btn btn-primary" onclick="openIssModal()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             New Issuance
@@ -4430,6 +4527,9 @@
         <button class="txtype-tab tab-other" onclick="filterIssTab(this,'other')">
           Other  <span class="tab-count">3</span>
         </button>
+        <button class="txtype-tab tab-preclear" onclick="filterIssTab(this,'preclear')">
+          Pre-Clearance  <span class="tab-count" id="iss-preclear-count">0</span>
+        </button>
       </div>
 
       <!-- Filter / search bar -->
@@ -4455,6 +4555,15 @@
           <option value="repurchased">Repurchased</option>
           <option value="reissued">Cancelled &amp; Reissued</option>
           <option value="cancelled">Cancelled</option>
+        </select>
+        <select class="filter-select-sm" id="iss-pc-status" style="display:none" onchange="renderShareIssuanceTable()">
+          <option value="all">All Request Statuses</option>
+          <option value="submitted">Submitted</option>
+          <option value="in-review">In Review</option>
+          <option value="cleared">Cleared</option>
+          <option value="rejected">Rejected</option>
+          <option value="expired">Expired</option>
+          <option value="withdrawn">Withdrawn</option>
         </select>
         <div class="filter-right-actions">
           <button class="btn btn-ghost" style="height:36px;padding:0 12px;font-size:12.5px">
@@ -4616,6 +4725,7 @@
           <button class="modal-close" onclick="closeModal('modal-sec-txn')">×</button>
         </div>
         <div class="modal-body">
+          <div id="sec-txn-clearance"></div>
           <div class="drawer-section-title">Transaction Type</div>
           <div class="txn-type-grid">
             <div class="txn-type-option selected" onclick="selectSecTxnType(this,'Sale')">
@@ -5183,14 +5293,24 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Export
           </button>
-          <button class="btn btn-ghost" onclick="toggleExBulkMode()">
+          <button class="btn btn-ghost" onclick="openPreclearCreate({ requestType:'Exercise' })">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9,12 11,14 15,10"/></svg>
+            Raise Pre-Clearance
+          </button>
+          <button class="btn btn-ghost" id="ex-bulk-toggle" onclick="toggleExBulkMode()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="4" height="4" rx="1"/><line x1="10" y1="7" x2="21" y2="7"/><rect x="3" y="11" width="4" height="4" rx="1"/><line x1="10" y1="13" x2="21" y2="13"/><rect x="3" y="17" width="4" height="4" rx="1"/><line x1="10" y1="19" x2="21" y2="19"/></svg>
             Select
           </button>
         </div>
       </div>
 
-      <div class="summary-row-6">
+      <!-- Category tabs — exercise requests vs. the pre-clearance requests behind them -->
+      <div class="txtype-tabs" id="ex-category-tabs">
+        <button class="txtype-tab active" onclick="setExCategory(this,'exercises')">Exercise Requests <span class="tab-count" id="ex-cat-count-ex">0</span></button>
+        <button class="txtype-tab tab-preclear" onclick="setExCategory(this,'preclear')">Pre-Clearance <span class="tab-count" id="ex-cat-count-pc">0</span></button>
+      </div>
+
+      <div class="summary-row-6" id="ex-summary-row">
         <div class="summary-card-sm"><div class="s-label">Total Exercises</div><div class="s-value">47</div><div class="s-sub">All time</div></div>
         <div class="summary-card-sm"><div class="s-label">Submitted</div><div class="s-value" style="color:#2563eb">12</div><div class="s-sub">Awaiting review</div></div>
         <div class="summary-card-sm"><div class="s-label">Pending Approval</div><div class="s-value" style="color:var(--amber)">8</div><div class="s-sub">In workflow</div></div>
@@ -5226,6 +5346,16 @@
           <option>Withhold-to-Cover</option>
           <option>Sell to Cover</option>
           <option>Sell All</option>
+        </select>
+        <select class="filter-select-sm" id="ex-s16-filter" style="display:none" onchange="renderExerciseTable()">
+          <option value="">All Participants</option>
+          <option value="yes">Section 16 officers</option>
+          <option value="no">Non-insiders</option>
+        </select>
+        <select class="filter-select-sm" id="ex-window-filter" style="display:none" onchange="renderExerciseTable()">
+          <option value="">Any Window</option>
+          <option value="open">In open window</option>
+          <option value="blackout">In blackout</option>
         </select>
         <div class="filter-right-actions">
           <button class="btn btn-ghost" style="height:36px;padding:0 12px;font-size:12.5px">
@@ -5280,6 +5410,7 @@
                 <th style="text-align:right;width:110px">Gross Value</th>
                 <th style="text-align:right;width:95px">Gain</th>
                 <th style="width:110px">Method</th>
+                <th style="width:130px">Clearance</th>
                 <th style="width:105px">Submitted</th>
                 <th style="width:105px">Decided</th>
                 <th style="width:105px">Status</th>
@@ -6288,6 +6419,59 @@
       </aside>
     </div>
     <div class="ac-foot" id="ac-foot"></div>
+  </div>
+</div>
+
+<!-- TRADE PRE-CLEARANCE WIZARD (review + raise-on-behalf) -->
+<div class="ac-overlay" id="pc-overlay">
+  <div class="ac-panel">
+    <div class="ac-head">
+      <div>
+        <div class="ac-head-title" id="pc-title">Trade Pre-Clearance</div>
+        <div class="ac-head-sub" id="pc-sub"></div>
+      </div>
+      <button class="modal-close" onclick="closePreclearWizard()">&times;</button>
+    </div>
+    <div class="ac-body">
+      <nav class="ac-rail" id="pc-steps" aria-label="Pre-clearance steps"></nav>
+      <main id="pc-main"></main>
+      <aside class="ac-rail">
+        <div id="pc-sum"></div>
+        <div id="pc-checks"></div>
+      </aside>
+    </div>
+    <div class="ac-foot" id="pc-foot"></div>
+  </div>
+</div>
+
+<!-- PRE-CLEARANCE OVERRIDE MODAL -->
+<div class="modal-overlay" id="modal-pc-override">
+  <div class="modal-box" style="width:560px">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title">Record Without Pre-Clearance</div>
+        <div class="modal-sub" id="pc-ovr-sub" style="font-size:12px;color:var(--text2);margin-top:3px"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modal-pc-override')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="ac-note danger" id="pc-ovr-reason" style="margin-top:0"></div>
+      <div class="form-grid" style="margin-top:16px">
+        <div class="form-group full">
+          <label class="form-label">Override justification <span class="req">*</span></label>
+          <textarea class="form-textarea" id="pc-ovr-note" rows="3"
+            placeholder="Why is this trade being recorded without an approved pre-clearance? This is written to the permanent audit trail."></textarea>
+        </div>
+      </div>
+      <label class="ac-toggle">
+        <input type="checkbox" id="pc-ovr-ack">
+        I confirm this override has been authorised by the General Counsel or Compliance Officer.
+      </label>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('modal-pc-override')">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmPreclearOverride()">Override &amp; Continue</button>
+    </div>
   </div>
 </div>
 
@@ -8048,6 +8232,7 @@ function renderLongShareTable() {
 }
 
 function filterIssTab(btn, tab) {
+  closeAllKebabs();
   issActiveTab = tab;
   document.querySelectorAll('#iss-type-tabs .txtype-tab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
@@ -8060,6 +8245,29 @@ function renderShareIssuanceTable() {
   const search = (document.getElementById('iss-search')?.value || '').toLowerCase();
   const secClass = document.getElementById('iss-sec-class')?.value || '';
   const statusF = document.getElementById('iss-status-filter')?.value || '';
+
+  // Keep the Pre-Clearance tab count live regardless of which tab is showing
+  const pcCountEl = document.getElementById('iss-preclear-count');
+  if (pcCountEl) pcCountEl.textContent =
+    preclearData.filter(r => r.requestType === 'Sale' || r.requestType === 'Transfer').length;
+
+  // The issuance-specific selects make no sense against request records, so the
+  // Pre-Clearance tab swaps in a request-status select in their place.
+  const isPreclear = issActiveTab === 'preclear';
+  const secSel = document.getElementById('iss-sec-class');
+  const stSel  = document.getElementById('iss-status-filter');
+  const pcSel  = document.getElementById('iss-pc-status');
+  if (secSel) secSel.style.display = isPreclear ? 'none' : '';
+  if (stSel)  stSel.style.display  = isPreclear ? 'none' : '';
+  if (pcSel)  pcSel.style.display  = isPreclear ? '' : 'none';
+
+  if (isPreclear) {
+    renderPreclearRows('share-issuance-table', 'share-issuance-body', 'iss-result-count',
+      ['Sale', 'Transfer'],
+      { status: pcSel?.value || 'all', search });
+    return;
+  }
+  pcSwapHeader('share-issuance-table', false);
 
   const secTxnTypes = {
     sale: ['Sale'], transfer: ['Transfer'], exchange: ['Exchange'],
@@ -8147,6 +8355,8 @@ function renderShareIssuanceTable() {
     const stCls = statusMap[iss.status] || 'iss-active';
     const stLbl = statusLabel[iss.status] || iss.status;
     const hasSecTxns = iss.secondaryTxns.length > 0;
+    const saleGate = clearanceFor(iss.participant, 'Sale', iss.id);
+    const xferGate = clearanceFor(iss.participant, 'Transfer', iss.id);
 
     const isPolicy = tx => tx.type === 'Debit Policy' || tx.type === 'Cancel & Reissue';
     const secTxnRows = iss.secondaryTxns.map(tx => {
@@ -8227,14 +8437,22 @@ function renderShareIssuanceTable() {
                 Edit Issuance
               </button>
               <div class="kebab-divider"></div>
-              <div class="kebab-menu-label">Record Transaction</div>
-              <button class="kebab-menu-item" onclick="event.stopPropagation(); closeAllKebabs(); openSecTxnModalFor('${iss.id}','Sale')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                Record Sale
+              <div class="kebab-menu-label">Compliance</div>
+              <button class="kebab-menu-item" onclick="event.stopPropagation(); closeAllKebabs(); openPreclearCreate({ requestType:'Sale', participant:'${iss.participant}', dept:'${iss.dept}', sourceId:'${iss.id}', sourceLabel:'${iss.certId} · ${iss.securityClass}' })">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9,12 11,14 15,10"/></svg>
+                Raise Pre-Clearance
               </button>
-              <button class="kebab-menu-item" onclick="event.stopPropagation(); closeAllKebabs(); openSecTxnModalFor('${iss.id}','Transfer')">
+              <div class="kebab-divider"></div>
+              <div class="kebab-menu-label">Record Transaction${saleGate.required && !saleGate.ok ? ' — clearance required' : ''}</div>
+              <button class="kebab-menu-item" ${saleGate.ok ? '' : 'style="opacity:.45"'} title="${saleGate.ok ? '' : saleGate.reason}"
+                onclick="event.stopPropagation(); closeAllKebabs(); if (pcGate({ kind:'sale', participant:'${iss.participant}', type:'Sale', sourceId:'${iss.id}' })) openSecTxnModalFor('${iss.id}','Sale')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                Record Sale${saleGate.ok ? '' : ' 🔒'}
+              </button>
+              <button class="kebab-menu-item" ${xferGate.ok ? '' : 'style="opacity:.45"'} title="${xferGate.ok ? '' : xferGate.reason}"
+                onclick="event.stopPropagation(); closeAllKebabs(); if (pcGate({ kind:'transfer', participant:'${iss.participant}', type:'Transfer', sourceId:'${iss.id}' })) openSecTxnModalFor('${iss.id}','Transfer')">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                Record Transfer
+                Record Transfer${xferGate.ok ? '' : ' 🔒'}
               </button>
               <button class="kebab-menu-item" onclick="event.stopPropagation(); closeAllKebabs(); openSecTxnModalFor('${iss.id}','Exchange')">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17,1 21,5 17,9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7,23 3,19 7,15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
@@ -8271,8 +8489,9 @@ function renderShareIssuanceTable() {
       </td>
       <td><span class="cert-id">${iss.certId}</span></td>
       <td>
-        <div class="participant-name">${iss.participant}</div>
+        <div class="participant-name">${iss.participant}${SECTION_16.has(iss.participant) ? '<span class="pc-s16">S16</span>' : ''}</div>
         <div class="participant-dept">${iss.dept}</div>
+        <div style="margin-top:3px">${pcClearanceChip(iss.participant, 'Sale', iss.id, iss._pcOverride)}</div>
       </td>
       <td><span class="sec-class-badge ${secCls}">${iss.securityClass}</span></td>
       <td class="mono" style="text-align:right;font-weight:600">${iss.sharesIssued.toLocaleString()}</td>
@@ -8446,7 +8665,7 @@ function openSecTxnModal() {
   document.getElementById('modal-sec-txn').classList.add('open');
 }
 
-function openSecTxnModalFor(issId, type) {
+function openSecTxnModalFor(issId, type, overridden) {
   const subEl = document.getElementById('sec-txn-modal-sub');
   if (subEl) subEl.textContent = 'Issuance ' + issId;
   document.querySelectorAll('.txn-type-option').forEach(function(el) {
@@ -8454,6 +8673,22 @@ function openSecTxnModalFor(issId, type) {
     var lbl = el.querySelector('.txn-type-option-label');
     if (lbl && lbl.textContent === type) el.classList.add('selected');
   });
+
+  // Surface the clearance position for the trade being recorded
+  const banner = document.getElementById('sec-txn-clearance');
+  const iss = shareIssuanceData.find(i => i.id === issId);
+  if (banner) {
+    if (!iss || (type !== 'Sale' && type !== 'Transfer')) {
+      banner.innerHTML = '';
+    } else if (overridden) {
+      banner.innerHTML = `<div class="ac-note danger" style="margin-top:0"><b>Recorded without pre-clearance.</b> ${iss._pcOverride ? iss._pcOverride.note : ''} This override is on the permanent audit trail.</div>`;
+    } else {
+      const c = clearanceFor(iss.participant, type, issId);
+      banner.innerHTML = !c.required
+        ? `<div class="ac-note info" style="margin-top:0">${iss.participant} is not on the designated-insider register — no pre-clearance is required for this ${type.toLowerCase()}.</div>`
+        : `<div class="ac-note ok" style="margin-top:0"><b>Pre-clearance ${c.req.id}</b> is live to ${pcFmtD(c.req.clearTo)} for ${pcFmtSh(c.req.shares)} shares. Recording this ${type.toLowerCase()} will consume it.</div>`;
+    }
+  }
   document.getElementById('modal-sec-txn').classList.add('open');
 }
 
@@ -9180,6 +9415,1138 @@ function accelStepDone() {
       ${chain.map((a, i) => `<div class="ac-audit-r"><span class="ts">pending</span><span><b>Awaiting</b> ${a.who} (step ${i + 1} of ${chain.length}) — ${a.why}</span></div>`).join('')}
       ${accelState.notify ? `<div class="ac-audit-r"><span class="ts">on approval</span><span><b>Participant notice</b> — statement &amp; tax summary queued</span></div>` : ''}
     </div>`;
+}
+
+// ═════════════════════════════════════════════
+// TRADE PRE-CLEARANCE — requests, rules engine, review wizard
+// ═════════════════════════════════════════════
+//
+// Participants raise pre-clearance requests on the participant portal; this admin
+// portal reviews, decides and enforces them. A cleared request carries a dated
+// validity window and is consumed by the trade it authorised.
+
+const PC_FMV                = 42.50;      // current fair market value
+const PC_VALIDITY_DAYS      = 5;          // trading days a clearance stays valid
+const PC_SHARES_OUTSTANDING = 1240000;    // for the Rule 144 1% test
+const PC_RULE144_ADV        = 12400;      // 4-week average daily volume
+const PC_SHORT_SWING_MONTHS = 6;
+
+// Insiders subject to the pre-clearance policy. Section 16 officers additionally
+// carry Form 4 obligations and route through the General Counsel — SECTION_16 is
+// declared with the acceleration engine and shared here.
+const PC_DESIGNATED_INSIDERS = new Set([
+  'Sarah Chen', 'Amanda Foster', 'Marcus Johnson', 'Emma Davis',
+  'James Park', 'Lisa Wong', 'David Miller', 'Priya Sharma', 'Wei Zhang'
+]);
+
+// Open trading windows and the earnings blackouts between them.
+const PC_TRADING_WINDOWS = [
+  { label:'Q2 2026 Window', opens:'2026-05-12', closes:'2026-06-19' },
+  { label:'Q3 2026 Window', opens:'2026-08-11', closes:'2026-09-09' },
+  { label:'Q4 2026 Window', opens:'2026-11-10', closes:'2026-12-09' },
+];
+const PC_BLACKOUTS = [
+  { label:'Q2 Earnings Blackout', from:'2026-06-20', to:'2026-08-10', reason:'Q2 FY26 results — quiet period' },
+  { label:'Q3 Earnings Blackout', from:'2026-09-10', to:'2026-11-09', reason:'Q3 FY26 results — quiet period' },
+];
+
+// 10b5-1 plans on file, by participant
+const PC_PLANS_10B5_1 = {
+  'Emma Davis':    { id:'10B5-1-0007', adopted:'2026-01-15' },
+  'Wei Zhang':     { id:'10B5-1-0011', adopted:'2026-07-28' },  // cooling-off not yet satisfied
+  'Sarah Chen':    { id:'10B5-1-0004', adopted:'2025-11-03' },
+};
+
+const PC_PERMITTED_TRANSFEREE = /trust|estate|family|spouse|charitable|foundation|gift/i;
+
+const pcFmt$  = n => '$' + Math.round(n).toLocaleString();
+const pcFmtSh = n => Math.round(n).toLocaleString();
+const pcToday = () => new Date().toISOString().slice(0, 10);
+const pcDate  = d => new Date(d + 'T00:00:00');
+const pcFmtD  = d => d ? pcDate(d).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) : '—';
+
+function pcMonthsBetween(a, b) {
+  return Math.abs((pcDate(b) - pcDate(a)) / (1000 * 60 * 60 * 24 * 30.44));
+}
+function pcDaysBetween(a, b) {
+  return Math.round((pcDate(b) - pcDate(a)) / 86400000);
+}
+// Adds N trading days (weekdays) to a date — the clearance window is quoted in trading days
+function pcAddTradingDays(dateStr, n) {
+  const d = pcDate(dateStr);
+  let added = 0;
+  while (added < n) {
+    d.setDate(d.getDate() + 1);
+    const wd = d.getDay();
+    if (wd !== 0 && wd !== 6) added++;
+  }
+  return d.toISOString().slice(0, 10);
+}
+
+// Where does a date sit relative to the trading calendar?
+function pcWindowState(dateStr) {
+  if (!dateStr) return { state:'closed', label:'No date' };
+  const bl = PC_BLACKOUTS.find(b => dateStr >= b.from && dateStr <= b.to);
+  if (bl) return { state:'blackout', label:bl.label, detail:bl.reason, from:bl.from, to:bl.to };
+  const w = PC_TRADING_WINDOWS.find(x => dateStr >= x.opens && dateStr <= x.closes);
+  if (w) return { state:'open', label:w.label, from:w.opens, to:w.closes };
+  return { state:'closed', label:'Outside any open window' };
+}
+
+const PC_STATUS_LABEL = {
+  submitted:'Submitted', 'in-review':'In Review', cleared:'Cleared',
+  rejected:'Rejected', expired:'Expired', withdrawn:'Withdrawn'
+};
+
+// ── seed requests (as they arrived from the participant portal) ──
+const preclearData = [
+  { id:'PCR-2026-0031', requestType:'Sale', participant:'Sarah Chen', dept:'Engineering',
+    sourceId:'ISS-2025-0001', sourceLabel:'CERT-0042 · Common Stock',
+    shares:300, estPrice:72.50, counterparty:'Open Market', brokerAccount:'Fidelity ••4821',
+    intendedDate:'2026-09-22', plan10b51:null, channel:'Participant Portal',
+    submitted:'2026-08-14', status:'submitted' },
+
+  { id:'PCR-2026-0030', requestType:'Exercise', participant:'Marcus Johnson', dept:'Product',
+    sourceId:'GRT-2024-002', sourceLabel:'ISO · Sell All',
+    shares:5000, estPrice:42.50, counterparty:'Sell All — market order', brokerAccount:'Schwab ••1190',
+    intendedDate:'2026-08-26', plan10b51:null, channel:'Participant Portal',
+    submitted:'2026-08-13', status:'submitted' },
+
+  { id:'PCR-2026-0029', requestType:'Transfer', participant:'Amanda Foster', dept:'Operations',
+    sourceId:'ISS-2025-0003', sourceLabel:'CERT-0044 · Common Stock',
+    shares:1200, estPrice:0, counterparty:'Foster Family Trust', brokerAccount:'—',
+    intendedDate:'2026-08-25', plan10b51:null, channel:'Participant Portal',
+    submitted:'2026-08-12', status:'in-review' },
+
+  { id:'PCR-2026-0028', requestType:'Sale', participant:'Wei Zhang', dept:'Engineering',
+    sourceId:'ISS-2025-0006', sourceLabel:'CERT-0047 · Common Stock',
+    shares:18000, estPrice:72.50, counterparty:'Open Market', brokerAccount:'Morgan Stanley ••7702',
+    intendedDate:'2026-09-15', plan10b51:{ id:'10B5-1-0011', adopted:'2026-07-28' },
+    channel:'Participant Portal', submitted:'2026-08-11', status:'submitted' },
+
+  { id:'PCR-2026-0027', requestType:'Sale', participant:'Emma Davis', dept:'Sales',
+    sourceId:'ISS-2025-0002', sourceLabel:'CERT-0043 · Common Stock',
+    shares:900, estPrice:72.50, counterparty:'Open Market', brokerAccount:'Fidelity ••3355',
+    intendedDate:'2026-09-18', plan10b51:{ id:'10B5-1-0007', adopted:'2026-01-15' },
+    channel:'Participant Portal', submitted:'2026-08-10', status:'cleared',
+    decidedBy:'Plan Administrator', decided:'2026-08-11',
+    decisionNote:'Plan-directed sale under 10b5-1-0007; cooling-off satisfied.',
+    clearFrom:'2026-08-11', clearTo:'2026-08-18' },
+
+  { id:'PCR-2026-0026', requestType:'Transfer', participant:'James Park', dept:'Engineering',
+    sourceId:'ISS-2025-0004', sourceLabel:'CERT-0045 · Common Stock',
+    shares:500, estPrice:0, counterparty:'Park Living Trust', brokerAccount:'—',
+    intendedDate:'2026-08-28', plan10b51:null, channel:'Participant Portal',
+    submitted:'2026-08-06', status:'cleared',
+    decidedBy:'Plan Administrator', decided:'2026-08-07',
+    decisionNote:'Permitted transferee — estate planning vehicle.',
+    clearFrom:'2026-08-07', clearTo:'2026-08-14' },   // window has lapsed
+
+  { id:'PCR-2026-0025', requestType:'Exercise', participant:'Lisa Wong', dept:'Engineering',
+    sourceId:'GRT-2023-005', sourceLabel:'ISO · Sell All',
+    shares:6000, estPrice:42.50, counterparty:'Sell All — market order', brokerAccount:'Schwab ••4410',
+    intendedDate:'2026-08-24', plan10b51:null, channel:'Admin — on behalf',
+    submitted:'2026-08-05', status:'cleared',
+    decidedBy:'Plan Administrator', decided:'2026-08-12',
+    decisionNote:'In-window exercise; §409A deferral noted on the grant.',
+    clearFrom:'2026-08-12', clearTo:'2026-08-19' },
+
+  { id:'PCR-2026-0024', requestType:'Sale', participant:'Amanda Foster', dept:'Operations',
+    sourceId:'ISS-2025-0003', sourceLabel:'CERT-0044 · Common Stock',
+    shares:2400, estPrice:70.10, counterparty:'Open Market', brokerAccount:'Fidelity ••2287',
+    intendedDate:'2026-07-14', plan10b51:null, channel:'Participant Portal',
+    submitted:'2026-07-08', status:'rejected',
+    decidedBy:'General Counsel', decided:'2026-07-09',
+    decisionNote:'Section 16 officer, intended trade date falls inside the Q2 earnings blackout and is not plan-directed. Resubmit for the Q3 window.' },
+
+  { id:'PCR-2026-0023', requestType:'Exercise', participant:'David Miller', dept:'Legal',
+    sourceId:'GRT-2023-006', sourceLabel:'NSO · Hold – Payroll',
+    shares:1800, estPrice:42.50, counterparty:'Hold — payroll deduction', brokerAccount:'—',
+    intendedDate:'2026-06-15', plan10b51:null, channel:'Participant Portal',
+    submitted:'2026-06-10', status:'expired',
+    decidedBy:'Plan Administrator', decided:'2026-06-11',
+    decisionNote:'Cleared for the Q2 window.', clearFrom:'2026-06-11', clearTo:'2026-06-18' },
+
+  { id:'PCR-2026-0022', requestType:'Sale', participant:'Priya Sharma', dept:'Finance',
+    sourceId:'ISS-2025-0005', sourceLabel:'CERT-0046 · Common Stock',
+    shares:600, estPrice:68.90, counterparty:'Open Market', brokerAccount:'Schwab ••9014',
+    intendedDate:'2026-06-02', plan10b51:null, channel:'Participant Portal',
+    submitted:'2026-05-28', status:'cleared',
+    decidedBy:'Plan Administrator', decided:'2026-05-29',
+    decisionNote:'Cleared in the Q2 window.', clearFrom:'2026-05-29', clearTo:'2026-06-05',
+    consumedBy:'STX-2026-0021' },
+
+  { id:'PCR-2026-0021', requestType:'Transfer', participant:'Robert Chen', dept:'Product',
+    sourceId:'ISS-2025-0007', sourceLabel:'CERT-0048 · Common Stock',
+    shares:400, estPrice:0, counterparty:'Nathan Chen (brother)', brokerAccount:'—',
+    intendedDate:'2026-08-20', plan10b51:null, channel:'Participant Portal',
+    submitted:'2026-08-08', status:'in-review' },
+
+  { id:'PCR-2026-0020', requestType:'Sale', participant:'Marcus Johnson', dept:'Product',
+    sourceId:'ISS-2025-0008', sourceLabel:'CERT-0049 · Common Stock',
+    shares:750, estPrice:71.40, counterparty:'Open Market', brokerAccount:'Fidelity ••5566',
+    intendedDate:'2026-08-19', plan10b51:null, channel:'Participant Portal',
+    submitted:'2026-08-04', status:'withdrawn',
+    decisionNote:'Withdrawn by the participant before review.' },
+].map(r => Object.assign(r, {
+  section16: SECTION_16.has(r.participant),
+  estValue:  r.shares * (r.estPrice || 0),
+  decidedBy: r.decidedBy || null, decided: r.decided || null,
+  decisionNote: r.decisionNote || null,
+  clearFrom: r.clearFrom || null, clearTo: r.clearTo || null,
+  consumedBy: r.consumedBy || null,
+  audit: [{ ts: r.submitted, who: r.channel === 'Participant Portal' ? r.participant : 'Plan Administrator',
+            what: 'Request raised via ' + r.channel }]
+}));
+
+// A cleared request whose validity window has passed reads as expired, without
+// needing a scheduled job to rewrite the record.
+function pcEffectiveStatus(r) {
+  if (r.status === 'cleared' && r.clearTo && pcToday() > r.clearTo) return 'expired';
+  return r.status;
+}
+
+function pcRequiresClearance(participant) {
+  return PC_DESIGNATED_INSIDERS.has(participant);
+}
+
+// ── the rules engine ──
+// Returns { verdict, rows } — any danger blocks, any warn needs a documented decision.
+function preclearChecks(r) {
+  const rows = [];
+  if (!r || !r.intendedDate) return { verdict:'review', rows:[{ cls:'info', ic:'i', html:'Enter an intended trade date to run the compliance checks.' }] };
+
+  const win        = pcWindowState(r.intendedDate);
+  const isDisposal = r.requestType === 'Sale' || r.requestType === 'Transfer';
+  const plan       = r.plan10b51;
+
+  // 10b5-1 cooling-off — 90 days for Section 16 officers, 30 otherwise; a valid
+  // plan makes the trade plan-directed and survives a blackout.
+  let planDirected = false;
+  if (plan) {
+    const need    = r.section16 ? 90 : 30;
+    const elapsed = pcDaysBetween(plan.adopted, r.intendedDate);
+    planDirected  = elapsed >= need;
+    rows.push(planDirected
+      ? { cls:'ok', ic:'✓', html:`<b>10b5-1 plan ${plan.id}</b> — adopted ${pcFmtD(plan.adopted)}, ${elapsed} days before the intended trade. ${need}-day cooling-off satisfied; trade is plan-directed.` }
+      : { cls:'danger', ic:'!', html:`<b>10b5-1 cooling-off not satisfied</b> — ${plan.id} adopted ${pcFmtD(plan.adopted)} is only ${elapsed} days before the intended trade; ${need} days are required${r.section16 ? ' for a Section 16 officer' : ''}. The plan gives no affirmative defence yet.` });
+  }
+
+  // 1. Trading window
+  if (win.state === 'blackout') {
+    rows.push(planDirected
+      ? { cls:'info', ic:'i', html:`<b>${win.label}</b> (${pcFmtD(win.from)} – ${pcFmtD(win.to)}) covers the intended date, but the trade is directed by ${plan.id} — blackout does not bar a plan-directed trade.` }
+      : { cls:'danger', ic:'!', html:`<b>${win.label}</b> — ${pcFmtD(r.intendedDate)} falls inside the blackout (${pcFmtD(win.from)} – ${pcFmtD(win.to)}). ${win.detail}. Discretionary trading is barred.` });
+  } else if (win.state === 'open') {
+    rows.push({ cls:'ok', ic:'✓', html:`<b>${win.label}</b> is open ${pcFmtD(win.from)} – ${pcFmtD(win.to)} — the intended date sits inside the window.` });
+  } else {
+    rows.push(planDirected
+      ? { cls:'info', ic:'i', html:`Intended date is outside any open window, but the trade is directed by ${plan.id}.` }
+      : { cls:'danger', ic:'!', html:`<b>No open trading window</b> on ${pcFmtD(r.intendedDate)}. The next window opens ${pcFmtD((PC_TRADING_WINDOWS.find(w => w.opens > r.intendedDate) || {}).opens)}.` });
+  }
+
+  // 2. Section 16 status
+  if (r.section16) {
+    rows.push({ cls:'warn', ic:'!', html:`<b>Section 16 officer</b> — Form 4 due within 2 business days of execution. Clearance routes through the General Counsel.` });
+  } else if (pcRequiresClearance(r.participant)) {
+    rows.push({ cls:'info', ic:'i', html:`<b>Designated insider</b> — subject to the pre-clearance policy but not to Section 16 reporting.` });
+  } else {
+    rows.push({ cls:'ok', ic:'✓', html:`<b>Not a designated insider</b> — pre-clearance is courtesy rather than mandatory for this participant.` });
+  }
+
+  // 3. Short-swing profit (Section 16(b)) — an opposite-way trade inside six months
+  if (r.section16) {
+    const opp = pcOppositeTrades(r);
+    if (opp.length) {
+      const worst = opp[0];
+      const spread = Math.abs((r.estPrice || PC_FMV) - worst.price);
+      const matched = Math.min(r.shares, worst.shares);
+      rows.push({ cls:'danger', ic:'!', html:`<b>Short-swing exposure</b> — ${worst.label} on ${pcFmtD(worst.date)} (${pcFmtSh(worst.shares)} sh @ $${worst.price.toFixed(2)}) is an opposite-way trade within ${PC_SHORT_SWING_MONTHS} months. Matching ${pcFmtSh(matched)} sh implies roughly <b>${pcFmt$(matched * spread)}</b> of §16(b) disgorgement.` });
+    } else {
+      rows.push({ cls:'ok', ic:'✓', html:`<b>Short-swing check</b> — no opposite-way transaction in the ${PC_SHORT_SWING_MONTHS} months either side of the intended date.` });
+    }
+  }
+
+  // 4. Retention / holding period on the source issuance
+  if (isDisposal) {
+    const iss = (typeof shareIssuanceData !== 'undefined') ? shareIssuanceData.find(i => i.id === r.sourceId) : null;
+    if (iss && iss.retentionMonths) {
+      const end = pcDate(iss.issueDate);
+      end.setMonth(end.getMonth() + iss.retentionMonths);
+      const endStr = end.toISOString().slice(0, 10);
+      rows.push(r.intendedDate >= endStr
+        ? { cls:'ok', ic:'✓', html:`<b>Retention met</b> — ${iss.retentionMonths}-month hold on ${iss.id} ran to ${pcFmtD(endStr)}.` }
+        : { cls:'danger', ic:'!', html:`<b>Retention not met</b> — ${iss.id} carries a ${iss.retentionMonths}-month hold running to ${pcFmtD(endStr)}; the intended date is ${pcDaysBetween(r.intendedDate, endStr)} days early.` });
+    }
+    // 5. Rule 144 volume limitation
+    const cap = Math.max(Math.round(PC_SHARES_OUTSTANDING * 0.01), PC_RULE144_ADV);
+    if (r.shares > cap) {
+      rows.push({ cls:'warn', ic:'!', html:`<b>Rule 144 volume</b> — ${pcFmtSh(r.shares)} sh exceeds the greater of 1% of outstanding (${pcFmtSh(Math.round(PC_SHARES_OUTSTANDING * 0.01))} sh) and 4-week ADV (${pcFmtSh(PC_RULE144_ADV)} sh). Trade must be spread across trailing 3-month periods or filed on Form 144.` });
+    } else {
+      rows.push({ cls:'ok', ic:'✓', html:`<b>Rule 144 volume</b> — ${pcFmtSh(r.shares)} sh is within the ${pcFmtSh(cap)} sh 3-month allowance.` });
+    }
+  }
+
+  // 6. Permitted transferee
+  if (r.requestType === 'Transfer') {
+    rows.push(PC_PERMITTED_TRANSFEREE.test(r.counterparty || '')
+      ? { cls:'ok', ic:'✓', html:`<b>Permitted transferee</b> — “${r.counterparty}” is an estate-planning vehicle under Plan §11.2; no change in beneficial ownership.` }
+      : { cls:'warn', ic:'!', html:`<b>Transferee not on the permitted list</b> — “${r.counterparty}” requires express Plan Administrator consent under Plan §11.2 and is reportable as a change in beneficial ownership.` });
+  }
+
+  // 7. Exercise-specific
+  if (r.requestType === 'Exercise') {
+    const g = (typeof grantsData !== 'undefined') ? grantsData.find(x => x.id === r.sourceId) : null;
+    const sellSide = /sell/i.test(r.counterparty || '');
+    if (sellSide) {
+      rows.push({ cls:'info', ic:'i', html:`<b>Sell-side settlement</b> — the market leg is itself a disposition, so the clearance must still be live on the execution date, not only on the exercise date.` });
+    } else {
+      rows.push({ cls:'ok', ic:'✓', html:`<b>Exercise-and-hold</b> — no market disposition, so no open trading window is strictly required.` });
+    }
+    if (g && g.type === 'ISO') {
+      rows.push({ cls:'info', ic:'i', html:`<b>ISO</b> — a same-day sale is a disqualifying disposition; the spread becomes ordinary income and Form 3921 is required for the calendar year.` });
+    }
+  }
+
+  const verdict = rows.some(x => x.cls === 'danger') ? 'block'
+                : rows.some(x => x.cls === 'warn')   ? 'review'
+                : 'clear';
+  return { verdict, rows };
+}
+
+// Prior trades in the opposite direction, most recent first.
+// A Sale/Transfer is a disposition; an Exercise is an acquisition.
+function pcOppositeTrades(r) {
+  const isDisposal = r.requestType === 'Sale' || r.requestType === 'Transfer';
+  const hits = [];
+
+  if (isDisposal && typeof exerciseData !== 'undefined') {
+    exerciseData.forEach(e => {
+      if (e.participant !== r.participant || e.status !== 'approved' || !e.decided) return;
+      if (pcMonthsBetween(e.decided, r.intendedDate) > PC_SHORT_SWING_MONTHS) return;
+      hits.push({ label:`Option exercise ${e.id}`, date:e.decided, shares:e.shares, price:e.strike });
+    });
+  }
+  if (!isDisposal && typeof shareIssuanceData !== 'undefined') {
+    shareIssuanceData.forEach(iss => {
+      if (iss.participant !== r.participant) return;
+      iss.secondaryTxns.forEach(tx => {
+        if (tx.type !== 'Sale') return;
+        if (pcMonthsBetween(tx.date, r.intendedDate) > PC_SHORT_SWING_MONTHS) return;
+        hits.push({ label:`Open-market sale ${tx.id}`, date:tx.date, shares:tx.shares, price:tx.price });
+      });
+    });
+  }
+  return hits.sort((a, b) => b.date.localeCompare(a.date));
+}
+
+// Routing is derived from policy, never chosen by the reviewer
+function preclearApprovalChain(r, verdict) {
+  const chain = [{ who:'Plan Administrator', why:'Initiator review' }];
+  if (r.section16)       chain.push({ who:'General Counsel',      why:'Section 16 officer — Form 4' });
+  if (r.estValue > 500000) chain.push({ who:'CFO',                why:'Value > $500K' });
+  if (verdict === 'block') chain.push({ who:'Compliance Committee', why:'Policy exception required' });
+  return chain;
+}
+
+// ── clearance lookup used by the enforcement gates ──
+// Returns { required, ok, reason, req }
+function clearanceFor(participant, type, sourceId) {
+  if (!pcRequiresClearance(participant)) {
+    return { required:false, ok:true, reason:'Not a designated insider', req:null };
+  }
+  const today = pcToday();
+  const matches = preclearData
+    .filter(r => r.participant === participant && r.requestType === type &&
+                 (!sourceId || r.sourceId === sourceId))
+    .sort((a, b) => (b.decided || b.submitted).localeCompare(a.decided || a.submitted));
+
+  const live = matches.find(r => r.status === 'cleared' && !r.consumedBy &&
+                                 r.clearTo && today <= r.clearTo);
+  if (live) return { required:true, ok:true, reason:'Cleared to ' + pcFmtD(live.clearTo), req:live };
+
+  const lapsed = matches.find(r => r.status === 'cleared' && !r.consumedBy);
+  if (lapsed) return { required:true, ok:false, reason:`Clearance ${lapsed.id} expired ${pcFmtD(lapsed.clearTo)}`, req:lapsed };
+
+  const open = matches.find(r => r.status === 'submitted' || r.status === 'in-review');
+  if (open) return { required:true, ok:false, reason:`Request ${open.id} is still ${PC_STATUS_LABEL[open.status].toLowerCase()}`, req:open };
+
+  const used = matches.find(r => r.consumedBy);
+  if (used) return { required:true, ok:false, reason:`Clearance ${used.id} already consumed by ${used.consumedBy}`, req:used };
+
+  const refused = matches.find(r => r.status === 'rejected');
+  if (refused) return { required:true, ok:false, reason:`Request ${refused.id} was rejected`, req:refused };
+
+  return { required:true, ok:false, reason:'No pre-clearance request on file', req:null };
+}
+
+// Compact chip for a transaction row
+function pcClearanceChip(participant, type, sourceId, overridden) {
+  if (overridden) return `<span class="pc-chip pc-chip-override" title="${overridden.note.replace(/"/g,'&quot;')}">OVERRIDDEN</span>`;
+  const c = clearanceFor(participant, type, sourceId);
+  if (!c.required) return `<span class="pc-chip pc-chip-na">NOT REQUIRED</span>`;
+  if (c.ok)        return `<span class="pc-chip pc-chip-cleared" title="${c.req.id}">CLEARED · exp ${pcFmtD(c.req.clearTo)}</span>`;
+  const cls = !c.req ? 'none'
+            : c.req.status === 'rejected' ? 'rejected'
+            : (c.req.status === 'cleared') ? 'expired' : 'pending';
+  const lbl = !c.req ? 'NONE'
+            : c.req.status === 'rejected' ? 'REJECTED'
+            : (c.req.status === 'cleared') ? 'EXPIRED' : 'PENDING';
+  return `<span class="pc-chip pc-chip-${cls}" title="${c.reason.replace(/"/g,'&quot;')}">${lbl}</span>`;
+}
+
+// ═════════ shared pre-clearance table ═════════
+
+const PC_TYPE_CLS = { Sale:'stxtype-sale', Transfer:'stxtype-transfer', Exercise:'stxtype-exercise' };
+
+const PC_HEADER = `
+  <th style="width:44px">Actions</th>
+  <th style="width:140px">Request ID</th>
+  <th style="width:190px">Participant</th>
+  <th style="width:90px">Type</th>
+  <th style="width:170px">Source</th>
+  <th style="text-align:right;width:100px">Shares</th>
+  <th style="text-align:right;width:110px">Est. Value</th>
+  <th style="width:115px">Intended Date</th>
+  <th style="width:180px">Trading Window</th>
+  <th style="width:105px">Submitted</th>
+  <th style="width:115px">Status</th>`;
+
+// Renders pre-clearance rows into an existing .ag-table, swapping its header.
+// `types` limits which request types this surface shows.
+function renderPreclearRows(tableId, tbodyId, countId, types, filters) {
+  const tbody = document.getElementById(tbodyId);
+  if (!tbody) return;
+  pcSwapHeader(tableId, true);
+
+  const f = filters || {};
+  const rows = preclearData.filter(r => {
+    if (!types.includes(r.requestType)) return false;
+    const eff = pcEffectiveStatus(r);
+    if (f.status && f.status !== 'all' && eff !== f.status) return false;
+    if (f.s16 === 'yes' && !r.section16) return false;
+    if (f.s16 === 'no'  &&  r.section16) return false;
+    if (f.window && pcWindowState(r.intendedDate).state !== f.window) return false;
+    if (f.search) {
+      const s = f.search.toLowerCase();
+      if (!r.id.toLowerCase().includes(s) &&
+          !r.participant.toLowerCase().includes(s) &&
+          !r.sourceId.toLowerCase().includes(s)) return false;
+    }
+    return true;
+  }).sort((a, b) => b.submitted.localeCompare(a.submitted));
+
+  const countEl = document.getElementById(countId);
+  if (countEl) countEl.innerHTML = `Showing <strong>${rows.length}</strong> pre-clearance request${rows.length !== 1 ? 's' : ''}`;
+
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:40px;color:var(--textm);font-size:13px">No pre-clearance requests match the current filters.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = rows.map(r => {
+    const eff  = pcEffectiveStatus(r);
+    const win  = pcWindowState(r.intendedDate);
+    const open = eff === 'submitted' || eff === 'in-review';
+    const winCls = win.state === 'open' ? 'pc-win-open' : win.state === 'blackout' ? 'pc-win-blackout' : 'pc-win-closed';
+    const srcOpen = r.requestType === 'Exercise'
+      ? `openLedgerDrawer('${r.sourceId}')`
+      : `openIssLedger('${r.sourceId}')`;
+
+    return `<tr>
+      <td onclick="event.stopPropagation()">
+        <div class="kebab-wrap">
+          <button class="kebab-btn" onclick="event.stopPropagation();toggleKebab(this)" title="More actions">&#8942;</button>
+          <div class="kebab-menu">
+            <div class="kebab-menu-label">Request</div>
+            <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();openPreclearReview('${r.id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9,12 11,14 15,10"/></svg>${open ? 'Review Request' : 'View Request'}
+            </button>
+            <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();${srcOpen}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>View Source ${r.requestType === 'Exercise' ? 'Grant' : 'Issuance'}
+            </button>
+            ${open ? `
+            <div class="kebab-divider"></div>
+            <div class="kebab-menu-label">Decision</div>
+            <button class="kebab-menu-item" style="color:var(--green)" onclick="event.stopPropagation();closeAllKebabs();openPreclearReview('${r.id}',3)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>Approve…
+            </button>
+            <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();preclearRequestInfo('${r.id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Request Information
+            </button>
+            <button class="kebab-menu-item danger" onclick="event.stopPropagation();closeAllKebabs();openPreclearReview('${r.id}',3)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Reject…
+            </button>
+            <button class="kebab-menu-item danger" onclick="event.stopPropagation();closeAllKebabs();preclearWithdraw('${r.id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14H6L5 6"/></svg>Withdraw Request
+            </button>` : ''}
+          </div>
+        </div>
+      </td>
+      <td>
+        <button onclick="openPreclearReview('${r.id}')" style="background:none;border:none;padding:0;cursor:pointer;text-align:left">
+          <span style="font-family:'SF Mono',monospace;font-size:12px;font-weight:700;color:var(--accent-dark);border-bottom:1px dashed var(--accent)">${r.id}</span>
+        </button>
+        ${r.channel !== 'Participant Portal' ? `<div style="font-size:10px;color:var(--textm);margin-top:2px">on behalf</div>` : ''}
+      </td>
+      <td>
+        <div class="participant-name">${r.participant}${r.section16 ? '<span class="pc-s16">S16</span>' : ''}</div>
+        <div class="participant-dept">${r.dept}</div>
+      </td>
+      <td><span class="txtype-badge ${PC_TYPE_CLS[r.requestType] || ''}" style="font-size:11px">${r.requestType}</span></td>
+      <td>
+        <span class="mono" style="font-size:11.5px;color:var(--text2)">${r.sourceId}</span>
+        <div style="font-size:10.5px;color:var(--textm)">${r.sourceLabel}</div>
+      </td>
+      <td class="mono" style="text-align:right;font-weight:600">${pcFmtSh(r.shares)}</td>
+      <td class="mono" style="text-align:right;font-weight:600">${r.estValue ? pcFmt$(r.estValue) : '<span style="color:var(--textm)">—</span>'}</td>
+      <td style="font-size:12.5px;color:var(--text2)">${pcFmtD(r.intendedDate)}</td>
+      <td>
+        <span class="pc-win ${winCls}">${win.state === 'open' ? 'Open · ' : win.state === 'blackout' ? 'Blackout · ' : ''}${win.label}</span>
+        ${r.plan10b51 ? `<div style="font-size:10px;color:var(--textm);margin-top:2px">10b5-1 ${r.plan10b51.id}</div>` : ''}
+      </td>
+      <td style="font-size:12px;color:var(--text2)">${r.submitted}</td>
+      <td>
+        <span class="pc-st pc-st-${eff}">${PC_STATUS_LABEL[eff]}</span>
+        ${eff === 'cleared' ? `<div style="font-size:10px;color:var(--textm);margin-top:2px">to ${pcFmtD(r.clearTo)}</div>` : ''}
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// Swaps a table's header between its original columns and the pre-clearance columns.
+const _pcOrigHeaders = {};
+function pcSwapHeader(tableId, preclear) {
+  const hr = document.querySelector('#' + tableId + ' thead tr');
+  if (!hr) return;
+  if (_pcOrigHeaders[tableId] === undefined) _pcOrigHeaders[tableId] = hr.innerHTML;
+  const want = preclear ? PC_HEADER : _pcOrigHeaders[tableId];
+  if (hr.innerHTML !== want) hr.innerHTML = want;
+}
+
+// ═════════ review / raise wizard ═════════
+
+const PC_STEPS_REVIEW = [
+  { n:1, t:'Request',   d:'As submitted by the participant' },
+  { n:2, t:'Compliance',d:'Windows, insider status, §16(b)' },
+  { n:3, t:'Decision',  d:'Clearance window and routing' }
+];
+const PC_STEPS_CREATE = [
+  { n:1, t:'Details',    d:'Participant, source and size' },
+  { n:2, t:'Compliance', d:'Windows, insider status, §16(b)' },
+  { n:3, t:'Submit',     d:'Routing and confirmation' }
+];
+
+const pcState = {
+  mode:'review', step:1, reqId:null, draft:null,
+  decision:null, note:'', validDays:PC_VALIDITY_DAYS, submitted:false
+};
+
+function pcReq() {
+  return pcState.mode === 'create' ? pcState.draft : preclearData.find(r => r.id === pcState.reqId);
+}
+
+function openPreclearReview(id, step) {
+  const r = preclearData.find(x => x.id === id);
+  if (!r) return;
+  pcState.mode = 'review';
+  pcState.reqId = id;
+  pcState.draft = null;
+  pcState.step = step || 1;
+  pcState.decision = null;
+  pcState.note = '';
+  pcState.validDays = PC_VALIDITY_DAYS;
+  pcState.submitted = false;
+
+  document.getElementById('pc-title').textContent = 'Trade Pre-Clearance — ' + r.id;
+  document.getElementById('pc-sub').textContent =
+    `${r.participant} · ${r.dept} · ${r.requestType} · ${pcFmtSh(r.shares)} sh · intended ${pcFmtD(r.intendedDate)}`;
+  document.getElementById('pc-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderPreclear();
+}
+
+function openPreclearCreate(prefill) {
+  const p = prefill || {};
+  const type = p.requestType || 'Sale';
+  const participant = p.participant || '';
+  pcState.mode = 'create';
+  pcState.reqId = null;
+  pcState.step = 1;
+  pcState.decision = null;
+  pcState.note = '';
+  pcState.submitted = false;
+  pcState.draft = {
+    id: pcNextId(), requestType: type,
+    participant, dept: p.dept || '',
+    section16: SECTION_16.has(participant),
+    sourceId: p.sourceId || '', sourceLabel: p.sourceLabel || '',
+    shares: p.shares || 0, estPrice: type === 'Transfer' ? 0 : PC_FMV,
+    estValue: 0, counterparty: p.counterparty || (type === 'Sale' ? 'Open Market' : ''),
+    brokerAccount: p.brokerAccount || '',
+    intendedDate: pcToday(), plan10b51: null,
+    channel: 'Admin — on behalf', submitted: pcToday(), status: 'submitted',
+    decidedBy: null, decided: null, decisionNote: null,
+    clearFrom: null, clearTo: null, consumedBy: null, audit: []
+  };
+  pcRecalcDraft();
+
+  document.getElementById('pc-title').textContent = 'Raise Pre-Clearance — on behalf';
+  document.getElementById('pc-sub').textContent = 'Recording a request received outside the participant portal';
+  document.getElementById('pc-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderPreclear();
+}
+
+function pcNextId() {
+  const nums = preclearData.map(r => parseInt(r.id.slice(-4), 10)).filter(n => !isNaN(n));
+  return 'PCR-2026-' + String(Math.max(0, ...nums) + 1).padStart(4, '0');
+}
+
+function closePreclearWizard() {
+  document.getElementById('pc-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function pcGo(n) { pcState.step = n; renderPreclear(); document.querySelector('#pc-overlay .ac-body').scrollTop = 0; }
+function pcSet(k, v) { pcState[k] = v; renderPreclear(); }
+
+// Edits in create mode write straight onto the draft record the engine reads
+function pcSetDraft(k, v) {
+  const d = pcState.draft;
+  if (!d) return;
+  if (k === 'shares' || k === 'estPrice') v = Number(v) || 0;
+  if (k === 'plan10b51') v = v ? PC_PLANS_10B5_1[d.participant] || null : null;
+  d[k] = v;
+  if (k === 'participant') {
+    d.section16 = SECTION_16.has(v);
+    const pt = (typeof participantsData !== 'undefined')
+      ? participantsData.find(p => p.name === v) : null;
+    d.dept = (pt && (pt.dept || pt.department)) || d.dept;
+    d.plan10b51 = null;
+  }
+  if (k === 'requestType') {
+    d.sourceId = ''; d.sourceLabel = '';
+    d.estPrice = v === 'Transfer' ? 0 : PC_FMV;
+    d.counterparty = v === 'Sale' ? 'Open Market' : '';
+  }
+  if (k === 'sourceId') {
+    const iss = (typeof shareIssuanceData !== 'undefined') ? shareIssuanceData.find(i => i.id === v) : null;
+    const g   = (typeof grantsData !== 'undefined')        ? grantsData.find(x => x.id === v)        : null;
+    d.sourceLabel = iss ? `${iss.certId} · ${iss.securityClass}` : g ? `${g.type} · ${g.vesting}` : '';
+  }
+  pcRecalcDraft();
+  renderPreclear();
+}
+
+function pcRecalcDraft() {
+  const d = pcState.draft;
+  if (d) d.estValue = d.shares * (d.estPrice || 0);
+}
+
+function renderPreclear() {
+  const steps = pcState.mode === 'create' ? PC_STEPS_CREATE : PC_STEPS_REVIEW;
+  document.getElementById('pc-steps').innerHTML = steps.map(s => {
+    const cls = s.n === pcState.step ? 'active' : (s.n < pcState.step ? 'done' : '');
+    return `<div class="ac-step ${cls}"><div class="n">0${s.n}</div>
+      <div><div class="t">${s.t}</div><div class="d">${s.d}</div></div></div>`;
+  }).join('');
+
+  renderPreclearMain();
+  renderPreclearSummary();
+  renderPreclearChecks();
+  renderPreclearFoot();
+}
+
+function renderPreclearSummary() {
+  const r = pcReq();
+  const el = document.getElementById('pc-sum');
+  if (!r) { el.innerHTML = ''; return; }
+  const { verdict } = preclearChecks(r);
+  const win = pcWindowState(r.intendedDate);
+  const vLabel = { clear:'Clear to trade', review:'Needs judgement', block:'Blocked by policy' }[verdict];
+  const vColor = { clear:'#4ade80', review:'#fbbf24', block:'#f87171' }[verdict];
+  el.innerHTML = `
+    <div class="ac-sum">
+      <h3>Request</h3>
+      <div class="ac-sum-big">${pcFmtSh(r.shares)} <small>shares · ${r.requestType}</small></div>
+      <div class="ac-sum-row"><span class="k">Est. value</span><span class="v">${r.estValue ? pcFmt$(r.estValue) : '—'}</span></div>
+      <div class="ac-sum-row"><span class="k">Intended date</span><span class="v">${pcFmtD(r.intendedDate)}</span></div>
+      <div class="ac-sum-row"><span class="k">Trading window</span><span class="v" style="color:${win.state === 'open' ? '#4ade80' : win.state === 'blackout' ? '#f87171' : '#94a3b8'}">${win.state}</span></div>
+      <div class="ac-sum-row"><span class="k">Insider status</span><span class="v">${r.section16 ? 'Section 16' : pcRequiresClearance(r.participant) ? 'Designated' : 'None'}</span></div>
+      <div class="ac-sum-row"><span class="k">Engine verdict</span><span class="v" style="color:${vColor}">${vLabel}</span></div>
+    </div>`;
+}
+
+function renderPreclearChecks() {
+  const r = pcReq();
+  const el = document.getElementById('pc-checks');
+  if (!r) { el.innerHTML = ''; return; }
+  el.innerHTML = `
+    <div class="ac-checks">
+      <h3>Compliance checks</h3>
+      ${preclearChecks(r).rows.map(c =>
+        `<div class="ac-chk ${c.cls}"><div class="ic">${c.ic}</div><div>${c.html}</div></div>`).join('')}
+    </div>`;
+}
+
+function renderPreclearFoot() {
+  const foot = document.getElementById('pc-foot');
+  const r = pcReq();
+  const total = 3;
+
+  if (pcState.submitted) {
+    foot.innerHTML = `<button class="btn btn-ghost" onclick="closePreclearWizard()">Close</button>
+      <span class="ac-stepct">${pcState.mode === 'create' ? 'SUBMITTED' : 'DECIDED'}</span>`;
+    return;
+  }
+
+  const decided = r && !['submitted', 'in-review'].includes(r.status);
+  let primary;
+  if (pcState.step < total) {
+    const canNext = pcState.mode !== 'create' || pcCreateValid();
+    primary = `<button class="btn btn-primary" ${canNext ? '' : 'disabled style="opacity:.5;cursor:not-allowed"'} onclick="pcGo(${pcState.step + 1})">Continue</button>`;
+  } else if (pcState.mode === 'create') {
+    primary = `<button class="btn btn-primary" ${pcCreateValid() ? '' : 'disabled style="opacity:.5;cursor:not-allowed"'} onclick="preclearSubmitNew()">Submit Request</button>`;
+  } else if (decided) {
+    primary = '';
+  } else {
+    const needNote = pcNoteRequired() && !pcState.note.trim();
+    primary = `
+      <button class="btn btn-danger" onclick="preclearDecide('rejected')">Reject</button>
+      <button class="btn btn-success" ${pcState.decision === 'approve' && needNote ? 'disabled style="opacity:.5;cursor:not-allowed"' : ''}
+        onclick="preclearDecide('cleared')">Approve &amp; Issue Clearance</button>`;
+  }
+
+  foot.innerHTML = `
+    ${pcState.step > 1 ? `<button class="btn btn-ghost" onclick="pcGo(${pcState.step - 1})">Back</button>` : ''}
+    <button class="btn btn-ghost" onclick="closePreclearWizard()">${pcState.step === total && !primary ? 'Close' : 'Cancel'}</button>
+    ${primary}
+    <span class="ac-stepct">STEP ${pcState.step} / ${total}</span>`;
+}
+
+// Approving against a warn/block verdict has to be explained on the record
+function pcNoteRequired() {
+  const r = pcReq();
+  return r ? preclearChecks(r).verdict !== 'clear' : false;
+}
+
+function pcCreateValid() {
+  const d = pcState.draft;
+  return !!(d && d.participant && d.sourceId && d.shares > 0 && d.intendedDate);
+}
+
+function renderPreclearMain() {
+  const el = document.getElementById('pc-main');
+  if (pcState.submitted) { el.innerHTML = pcStepDone(); return; }
+  el.innerHTML = pcState.step === 1 ? (pcState.mode === 'create' ? pcCreateStep1() : pcReviewStep1())
+               : pcState.step === 2 ? pcStep2Compliance()
+               : (pcState.mode === 'create' ? pcCreateStep3() : pcReviewStep3());
+}
+
+function pcReviewStep1() {
+  const r = pcReq();
+  if (!r) return '';
+  const eff = pcEffectiveStatus(r);
+  const holdings = pcHoldingsContext(r);
+  return `
+    <div class="ac-eyebrow">Step 01 — as submitted</div>
+    <div class="ac-sec-title">${r.requestType} pre-clearance request</div>
+    <div class="ac-sec-sub">Raised via ${r.channel} on ${pcFmtD(r.submitted)}. Nothing below is editable — this is the participant's request exactly as received.</div>
+
+    <div class="pc-kv">
+      <div><div class="k">Participant</div><div class="v">${r.participant}${r.section16 ? '<span class="pc-s16">S16</span>' : ''}</div></div>
+      <div><div class="k">Department</div><div class="v">${r.dept}</div></div>
+      <div><div class="k">Current status</div><div class="v"><span class="pc-st pc-st-${eff}">${PC_STATUS_LABEL[eff]}</span></div></div>
+      <div><div class="k">Source</div><div class="v">${r.sourceId}<div style="font-size:11px;font-weight:400;color:var(--textm)">${r.sourceLabel}</div></div></div>
+      <div><div class="k">Shares</div><div class="v">${pcFmtSh(r.shares)}</div></div>
+      <div><div class="k">Est. price / value</div><div class="v">${r.estPrice ? '$' + r.estPrice.toFixed(2) : '—'}<div style="font-size:11px;font-weight:400;color:var(--textm)">${r.estValue ? pcFmt$(r.estValue) : 'no consideration'}</div></div></div>
+      <div><div class="k">Intended trade date</div><div class="v">${pcFmtD(r.intendedDate)}</div></div>
+      <div><div class="k">${r.requestType === 'Transfer' ? 'Transferee' : 'Counterparty'}</div><div class="v">${r.counterparty || '—'}</div></div>
+      <div><div class="k">Broker account</div><div class="v">${r.brokerAccount || '—'}</div></div>
+      <div><div class="k">10b5-1 plan</div><div class="v">${r.plan10b51 ? r.plan10b51.id : 'None'}<div style="font-size:11px;font-weight:400;color:var(--textm)">${r.plan10b51 ? 'adopted ' + pcFmtD(r.plan10b51.adopted) : 'discretionary trade'}</div></div></div>
+      <div><div class="k">Submitted</div><div class="v">${pcFmtD(r.submitted)}</div></div>
+      <div><div class="k">Channel</div><div class="v">${r.channel}</div></div>
+    </div>
+
+    <div style="font-size:13px;font-weight:700;margin-top:22px;color:var(--text)">Participant holdings context</div>
+    ${holdings}
+
+    ${r.decisionNote ? `<div class="ac-note ${eff === 'rejected' ? 'danger' : 'info'}"><b>Decision on file (${r.decidedBy} · ${pcFmtD(r.decided)}):</b> ${r.decisionNote}</div>` : ''}
+    ${pcAuditBlock(r)}`;
+}
+
+function pcHoldingsContext(r) {
+  const rows = [];
+  if (typeof shareIssuanceData !== 'undefined') {
+    shareIssuanceData.filter(i => i.participant === r.participant).forEach(i => {
+      const disposed = i.secondaryTxns.reduce((s, t) => s + t.shares, 0);
+      rows.push({ k:i.id, d:`${i.certId} · ${i.securityClass}`, v:`${pcFmtSh(i.sharesIssued - disposed)} held of ${pcFmtSh(i.sharesIssued)}` });
+    });
+  }
+  if (typeof grantsData !== 'undefined') {
+    grantsData.filter(g => g.participant === r.participant).forEach(g => {
+      rows.push({ k:g.id, d:`${g.type} · ${g.vesting}`, v:`${pcFmtSh(g.vested)} vested · ${pcFmtSh(g.unvested)} unvested` });
+    });
+  }
+  if (!rows.length) return `<div class="ac-note info">No issuances or grants on file for ${r.participant} in this environment.</div>`;
+  return `<div class="pc-cal">${rows.map(x => `
+    <div class="pc-cal-r"><span class="rng">${x.k}</span>
+      <span style="flex:1;color:var(--text2)">${x.d}</span>
+      <span style="font-family:'SF Mono',monospace;font-size:11.5px;font-weight:600">${x.v}</span></div>`).join('')}</div>`;
+}
+
+function pcStep2Compliance() {
+  const r = pcReq();
+  if (!r) return '';
+  const { verdict, rows } = preclearChecks(r);
+  const win = pcWindowState(r.intendedDate);
+  const opp = r.section16 ? pcOppositeTrades(r) : [];
+  const vCfg = {
+    clear:  { ic:'✓', t:'Clear to trade',   d:'Every check passed. The clearance can be issued without a documented exception.' },
+    review: { ic:'!', t:'Needs judgement',  d:'One or more checks raised a flag. Approving requires a decision note that goes on the permanent record.' },
+    block:  { ic:'✕', t:'Blocked by policy',d:'A hard policy bar applies. Approving overrides company policy and routes to the Compliance Committee.' }
+  }[verdict];
+
+  return `
+    <div class="ac-eyebrow">Step 02 — rules engine</div>
+    <div class="ac-sec-title">Compliance evaluation</div>
+    <div class="ac-sec-sub">Evaluated against the trading calendar, insider register, §16(b) history and the plan's transfer rules.</div>
+
+    <div class="pc-verdict ${verdict}">
+      <div class="vic">${vCfg.ic}</div>
+      <div><div class="vt">${vCfg.t}</div><div class="vd">${vCfg.d}</div></div>
+    </div>
+
+    <div style="font-size:13px;font-weight:700;margin-top:22px;color:var(--text)">Checks
+      <span style="font-weight:400;color:var(--textm)">— ${rows.length} evaluated</span></div>
+    <div style="margin-top:6px">
+      ${rows.map(c => `<div class="ac-chk ${c.cls}"><div class="ic">${c.ic}</div><div>${c.html}</div></div>`).join('')}
+    </div>
+
+    <div style="font-size:13px;font-weight:700;margin-top:22px;color:var(--text)">Trading calendar
+      <span style="font-weight:400;color:var(--textm)">— intended date ${pcFmtD(r.intendedDate)}</span></div>
+    <div class="pc-cal">
+      ${[...PC_TRADING_WINDOWS.map(w => ({ from:w.opens, to:w.closes, label:w.label, kind:'Open window' })),
+         ...PC_BLACKOUTS.map(b => ({ from:b.from, to:b.to, label:b.label, kind:'Blackout' }))]
+        .sort((a, b) => a.from.localeCompare(b.from))
+        .map(x => {
+          const hit = r.intendedDate >= x.from && r.intendedDate <= x.to;
+          return `<div class="pc-cal-r ${hit ? 'hit' : ''}">
+            <span class="rng">${pcFmtD(x.from)} – ${pcFmtD(x.to)}</span>
+            <span style="flex:1"><b>${x.label}</b> <span style="color:var(--textm)">· ${x.kind}</span></span>
+            ${hit ? `<span class="pc-win ${x.kind === 'Blackout' ? 'pc-win-blackout' : 'pc-win-open'}">intended date</span>` : ''}
+          </div>`;
+        }).join('')}
+    </div>
+    ${win.state === 'closed' ? `<div class="ac-note warn">The intended date falls between a blackout and the next open window — no discretionary trading is permitted on that date.</div>` : ''}
+
+    ${r.section16 ? `
+      <div style="font-size:13px;font-weight:700;margin-top:22px;color:var(--text)">Section 16(b) lookback
+        <span style="font-weight:400;color:var(--textm)">— ${PC_SHORT_SWING_MONTHS} months either side</span></div>
+      ${opp.length ? `<div class="pc-cal">${opp.map(o => `
+        <div class="pc-cal-r hit"><span class="rng">${pcFmtD(o.date)}</span>
+          <span style="flex:1"><b>${o.label}</b></span>
+          <span style="font-family:'SF Mono',monospace;font-size:11.5px">${pcFmtSh(o.shares)} sh @ $${o.price.toFixed(2)}</span></div>`).join('')}</div>`
+        : `<div class="ac-note ok">No opposite-way transactions found in the lookback period.</div>`}` : ''}`;
+}
+
+function pcReviewStep3() {
+  const r = pcReq();
+  if (!r) return '';
+  const { verdict } = preclearChecks(r);
+  const chain = preclearApprovalChain(r, verdict);
+  const eff = pcEffectiveStatus(r);
+  const decided = !['submitted', 'in-review'].includes(r.status);
+
+  if (decided) {
+    return `
+      <div class="ac-eyebrow">Step 03 — decision</div>
+      <div class="ac-sec-title">Already decided</div>
+      <div class="ac-sec-sub">${r.id} was ${PC_STATUS_LABEL[eff].toLowerCase()} by ${r.decidedBy || '—'} on ${pcFmtD(r.decided)}.</div>
+      ${r.decisionNote ? `<div class="ac-note ${eff === 'rejected' ? 'danger' : 'info'}">${r.decisionNote}</div>` : ''}
+      ${r.clearTo ? `<div class="ac-note ${eff === 'expired' ? 'warn' : 'ok'}">Clearance window ${pcFmtD(r.clearFrom)} – ${pcFmtD(r.clearTo)}${eff === 'expired' ? ' — <b>lapsed</b>, a fresh request is required.' : ' — currently live.'}${r.consumedBy ? ` Consumed by <b>${r.consumedBy}</b>.` : ''}</div>` : ''}
+      ${pcAuditBlock(r)}`;
+  }
+
+  const from = pcToday();
+  const to   = pcAddTradingDays(from, pcState.validDays);
+  const needNote = verdict !== 'clear';
+
+  return `
+    <div class="ac-eyebrow">Step 03 — decision</div>
+    <div class="ac-sec-title">Issue or refuse the clearance</div>
+    <div class="ac-sec-sub">A clearance authorises the trade for a fixed window only. If the participant does not trade inside it, they must re-request.</div>
+
+    <div class="ac-ctl-row" style="margin-top:18px">
+      <div class="ac-ctl"><label>Clearance validity</label>
+        <select onchange="pcSet('validDays', Number(this.value))">
+          <option value="3"  ${pcState.validDays === 3  ? 'selected' : ''}>3 trading days</option>
+          <option value="5"  ${pcState.validDays === 5  ? 'selected' : ''}>5 trading days (standard)</option>
+          <option value="10" ${pcState.validDays === 10 ? 'selected' : ''}>10 trading days</option>
+        </select></div>
+      <div class="ac-ctl"><label>Window if approved</label>
+        <input type="text" readonly value="${pcFmtD(from)} → ${pcFmtD(to)}" style="min-width:230px;background:var(--bg)"></div>
+    </div>
+
+    <div style="margin-top:18px">
+      <label style="font-size:10.5px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.05em">
+        Decision note ${needNote ? '<span style="color:var(--red)">— required, the engine did not return a clean verdict</span>' : '(optional)'}
+      </label>
+      <textarea class="form-textarea" rows="3" style="margin-top:6px;width:100%"
+        oninput="pcState.note=this.value; renderPreclearFoot()"
+        placeholder="${needNote ? 'Explain why the flagged checks do not bar this trade, or why it is being refused.' : 'Any context for the participant and the audit record.'}">${pcState.note}</textarea>
+    </div>
+
+    ${needNote ? `<div class="ac-note ${verdict === 'block' ? 'danger' : 'warn'}">
+      The engine returned <b>${verdict === 'block' ? 'Blocked by policy' : 'Needs judgement'}</b>. Approving anyway is permitted but is recorded as a documented exception against ${chain[chain.length - 1].who}.
+    </div>` : `<div class="ac-note ok">All checks passed — this clearance can be issued as a routine approval.</div>`}
+
+    <div style="font-size:13px;font-weight:700;margin-top:22px;color:var(--text)">Approval routing
+      <span style="font-weight:400;color:var(--textm)">— determined by policy, not editable</span></div>
+    ${chain.map((a, i) => `<div class="ac-appr"><div class="n">${i + 1}</div><div>${a.who}</div><div class="why">${a.why}</div></div>`).join('')}
+    ${pcAuditBlock(r)}`;
+}
+
+function pcCreateStep1() {
+  const d = pcState.draft;
+  const people = (typeof participantsData !== 'undefined' && participantsData.length)
+    ? [...new Set(participantsData.map(p => p.name))]
+    : [...new Set([...(typeof grantsData !== 'undefined' ? grantsData.map(g => g.participant) : []),
+                   ...(typeof shareIssuanceData !== 'undefined' ? shareIssuanceData.map(i => i.participant) : [])])];
+  const sources = d.requestType === 'Exercise'
+    ? (typeof grantsData !== 'undefined' ? grantsData.filter(g => !d.participant || g.participant === d.participant) : []).map(g => ({ id:g.id, label:`${g.id} · ${g.type}` }))
+    : (typeof shareIssuanceData !== 'undefined' ? shareIssuanceData.filter(i => !d.participant || i.participant === d.participant) : []).map(i => ({ id:i.id, label:`${i.id} · ${i.certId}` }));
+  const hasPlan = !!PC_PLANS_10B5_1[d.participant];
+
+  return `
+    <div class="ac-eyebrow">Step 01 — request details</div>
+    <div class="ac-sec-title">Raise a request on the participant's behalf</div>
+    <div class="ac-sec-sub">For requests received by phone or email rather than through the participant portal. The record is flagged as admin-initiated.</div>
+
+    <div class="ac-ctl-row" style="margin-top:18px">
+      <div class="ac-ctl"><label>Participant</label>
+        <select onchange="pcSetDraft('participant',this.value)">
+          <option value="">Select…</option>
+          ${people.sort().map(p => `<option ${d.participant === p ? 'selected' : ''}>${p}</option>`).join('')}
+        </select></div>
+      <div class="ac-ctl"><label>Request type</label>
+        <select onchange="pcSetDraft('requestType',this.value)">
+          ${['Sale', 'Transfer', 'Exercise'].map(t => `<option ${d.requestType === t ? 'selected' : ''}>${t}</option>`).join('')}
+        </select></div>
+      <div class="ac-ctl"><label>Source ${d.requestType === 'Exercise' ? 'grant' : 'issuance'}</label>
+        <select onchange="pcSetDraft('sourceId',this.value)" style="min-width:210px">
+          <option value="">Select…</option>
+          ${sources.map(s => `<option value="${s.id}" ${d.sourceId === s.id ? 'selected' : ''}>${s.label}</option>`).join('')}
+        </select></div>
+    </div>
+
+    <div class="ac-ctl-row" style="margin-top:14px">
+      <div class="ac-ctl"><label>Shares</label>
+        <input type="number" min="1" value="${d.shares || ''}" oninput="pcSetDraft('shares',this.value)"></div>
+      <div class="ac-ctl"><label>Est. price / share</label>
+        <input type="number" step="0.01" min="0" value="${d.estPrice}" oninput="pcSetDraft('estPrice',this.value)"></div>
+      <div class="ac-ctl"><label>Intended trade date</label>
+        <input type="date" value="${d.intendedDate}" onchange="pcSetDraft('intendedDate',this.value)"></div>
+    </div>
+
+    <div class="ac-ctl-row" style="margin-top:14px">
+      <div class="ac-ctl"><label>${d.requestType === 'Transfer' ? 'Transferee' : 'Counterparty'}</label>
+        <input type="text" style="min-width:240px" value="${d.counterparty}" oninput="pcSetDraft('counterparty',this.value)"
+          placeholder="${d.requestType === 'Transfer' ? 'e.g. Foster Family Trust' : 'Open Market'}"></div>
+      <div class="ac-ctl"><label>Broker account</label>
+        <input type="text" value="${d.brokerAccount}" oninput="pcSetDraft('brokerAccount',this.value)" placeholder="Optional"></div>
+    </div>
+
+    ${hasPlan ? `<label class="ac-toggle">
+      <input type="checkbox" ${d.plan10b51 ? 'checked' : ''} onchange="pcSetDraft('plan10b51', this.checked)">
+      Trade is directed by ${PC_PLANS_10B5_1[d.participant].id} (adopted ${pcFmtD(PC_PLANS_10B5_1[d.participant].adopted)})
+    </label>` : d.participant ? `<div class="ac-note info">No 10b5-1 plan on file for ${d.participant} — this will be assessed as a discretionary trade.</div>` : ''}
+
+    ${d.participant && !pcRequiresClearance(d.participant)
+      ? `<div class="ac-note info"><b>${d.participant}</b> is not on the designated-insider register, so pre-clearance is not mandatory. The request will still be evaluated and recorded.</div>` : ''}
+    ${!pcCreateValid() ? `<div class="ac-note warn">Participant, source, share count and intended date are all required before continuing.</div>` : ''}`;
+}
+
+function pcCreateStep3() {
+  const d = pcState.draft;
+  const { verdict } = preclearChecks(d);
+  const chain = preclearApprovalChain(d, verdict);
+  return `
+    <div class="ac-eyebrow">Step 03 — submit</div>
+    <div class="ac-sec-title">Submit for review</div>
+    <div class="ac-sec-sub">The request enters the pre-clearance queue as ${d.requestType === 'Exercise' ? 'an Exercise' : 'a ' + d.requestType} request. Submitting does not clear the trade — a reviewer still has to decide it.</div>
+
+    <div class="pc-kv">
+      <div><div class="k">Request ID</div><div class="v">${d.id}</div></div>
+      <div><div class="k">Participant</div><div class="v">${d.participant}${d.section16 ? '<span class="pc-s16">S16</span>' : ''}</div></div>
+      <div><div class="k">Type</div><div class="v">${d.requestType}</div></div>
+      <div><div class="k">Source</div><div class="v">${d.sourceId}</div></div>
+      <div><div class="k">Shares</div><div class="v">${pcFmtSh(d.shares)}</div></div>
+      <div><div class="k">Est. value</div><div class="v">${d.estValue ? pcFmt$(d.estValue) : '—'}</div></div>
+      <div><div class="k">Intended date</div><div class="v">${pcFmtD(d.intendedDate)}</div></div>
+      <div><div class="k">Engine verdict</div><div class="v">${{ clear:'Clear', review:'Needs judgement', block:'Blocked' }[verdict]}</div></div>
+      <div><div class="k">Channel</div><div class="v">Admin — on behalf</div></div>
+    </div>
+
+    <div style="font-size:13px;font-weight:700;margin-top:22px;color:var(--text)">Approval routing</div>
+    ${chain.map((a, i) => `<div class="ac-appr"><div class="n">${i + 1}</div><div>${a.who}</div><div class="why">${a.why}</div></div>`).join('')}
+
+    <div class="ac-note info">Because this request did not come through the participant portal, the audit trail records the administrator as the originator and names the participant as the beneficial requester.</div>`;
+}
+
+function pcAuditBlock(r) {
+  if (!r.audit || !r.audit.length) return '';
+  return `
+    <div style="font-size:13px;font-weight:700;margin-top:22px;color:var(--text)">Audit trail</div>
+    <div class="ac-audit">
+      ${r.audit.map(a => `<div class="ac-audit-r"><span class="ts">${a.ts}</span><span><b>${a.who}</b> — ${a.what}</span></div>`).join('')}
+    </div>`;
+}
+
+function pcStepDone() {
+  const r = pcReq();
+  const eff = pcEffectiveStatus(r);
+  const ok = eff === 'cleared';
+  return `
+    <div class="ac-done-badge" style="${ok ? '' : 'background:var(--amber-l);color:#b45309'}">${ok ? '✓' : '•'} ${r.id} — ${PC_STATUS_LABEL[eff]}</div>
+    <div class="ac-sec-title" style="margin-top:14px">${pcState.mode === 'create' ? 'Request submitted' : ok ? 'Clearance issued' : 'Decision recorded'}</div>
+    <div class="ac-sec-sub">${
+      pcState.mode === 'create'
+        ? `${r.participant}'s ${r.requestType.toLowerCase()} request is now in the pre-clearance queue awaiting review.`
+        : ok
+          ? `${r.participant} is cleared to ${r.requestType.toLowerCase()} ${pcFmtSh(r.shares)} shares between ${pcFmtD(r.clearFrom)} and ${pcFmtD(r.clearTo)}. The clearance is consumed by the first matching trade and cannot be reused.`
+          : `${r.participant} has been notified that the request was refused. No trade may be recorded against it.`
+    }</div>
+    ${pcAuditBlock(r)}`;
+}
+
+// ── mutations ──
+function preclearDecide(outcome) {
+  const r = pcReq();
+  if (!r) return;
+  const { verdict } = preclearChecks(r);
+  const note = pcState.note.trim();
+  if (outcome === 'cleared' && verdict !== 'clear' && !note) {
+    ptToast('A decision note is required when the engine flags a check', 'warn');
+    return;
+  }
+  if (outcome === 'rejected' && !note) {
+    ptToast('A decision note is required to reject a request', 'warn');
+    return;
+  }
+
+  const today = pcToday();
+  const stamp = new Date().toLocaleString('en-US', { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
+  const chain = preclearApprovalChain(r, verdict);
+
+  r.status       = outcome;
+  r.decidedBy    = chain[chain.length - 1].who;
+  r.decided      = today;
+  r.decisionNote = note || (outcome === 'cleared' ? 'Routine approval — all checks passed.' : '');
+  if (outcome === 'cleared') {
+    r.clearFrom = today;
+    r.clearTo   = pcAddTradingDays(today, pcState.validDays);
+  } else {
+    r.clearFrom = null; r.clearTo = null;
+  }
+  r.audit.push({ ts:stamp, who:'Plan Administrator',
+    what:`Compliance engine evaluated ${preclearChecks(r).rows.length} checks — verdict ${verdict}` });
+  r.audit.push({ ts:stamp, who:r.decidedBy,
+    what: outcome === 'cleared'
+      ? `<b>Cleared</b> for ${pcState.validDays} trading days (${pcFmtD(r.clearFrom)} – ${pcFmtD(r.clearTo)})${verdict !== 'clear' ? ' — documented exception' : ''}. ${r.decisionNote}`
+      : `<b>Rejected</b>. ${r.decisionNote}` });
+
+  pcState.submitted = true;
+  renderPreclear();
+  pcRefreshHosts();
+  showExToast(outcome === 'cleared' ? `✓ ${r.id} cleared to ${pcFmtD(r.clearTo)}` : `✗ ${r.id} rejected`,
+              outcome === 'cleared' ? 'approved' : 'rejected');
+}
+
+function preclearSubmitNew() {
+  const d = pcState.draft;
+  if (!pcCreateValid()) return;
+  const stamp = new Date().toLocaleString('en-US', { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
+  d.audit.push({ ts:stamp, who:'Plan Administrator',
+    what:`Request raised on behalf of <b>${d.participant}</b> (received outside the participant portal)` });
+  preclearData.unshift(d);
+  pcState.mode = 'review';
+  pcState.reqId = d.id;
+  pcState.submitted = true;
+  renderPreclear();
+  pcRefreshHosts();
+  ptToast(`✓ ${d.id} submitted for review`, 'ok');
+}
+
+function preclearRequestInfo(id) {
+  const r = preclearData.find(x => x.id === id);
+  if (!r) return;
+  const stamp = new Date().toLocaleString('en-US', { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
+  r.status = 'in-review';
+  r.audit.push({ ts:stamp, who:'Plan Administrator', what:'Information requested from the participant — request held in review' });
+  pcRefreshHosts();
+  ptToast(`Information requested — ${id} held in review`, 'ok');
+}
+
+function preclearWithdraw(id) {
+  const r = preclearData.find(x => x.id === id);
+  if (!r) return;
+  const stamp = new Date().toLocaleString('en-US', { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
+  r.status = 'withdrawn';
+  r.decisionNote = 'Withdrawn by the plan administrator.';
+  r.audit.push({ ts:stamp, who:'Plan Administrator', what:'Request withdrawn' });
+  pcRefreshHosts();
+  ptToast(`${id} withdrawn`, 'warn');
+}
+
+// Re-render whichever host table is currently showing
+function pcRefreshHosts() {
+  if (typeof renderShareIssuanceTable === 'function') renderShareIssuanceTable();
+  if (typeof renderExerciseTable === 'function') renderExerciseTable();
+}
+
+// ═════════ enforcement ═════════
+
+let _pcOverrideCtx = null;
+
+// Called by the gated actions. Returns true when the caller may proceed.
+function pcGate(ctx) {
+  const c = clearanceFor(ctx.participant, ctx.type, ctx.sourceId);
+  if (c.ok) return true;
+  _pcOverrideCtx = Object.assign({}, ctx, { reason:c.reason });
+  document.getElementById('pc-ovr-sub').textContent =
+    `${ctx.type} · ${ctx.participant} · ${ctx.sourceId}`;
+  document.getElementById('pc-ovr-reason').innerHTML =
+    `<b>Pre-clearance not satisfied</b> — ${c.reason}. ${ctx.participant} is on the designated-insider register, so this trade requires a live clearance before it can be recorded.`;
+  document.getElementById('pc-ovr-note').value = '';
+  document.getElementById('pc-ovr-ack').checked = false;
+  openModal('modal-pc-override');
+  return false;
+}
+
+function confirmPreclearOverride() {
+  const note = document.getElementById('pc-ovr-note').value.trim();
+  const ack  = document.getElementById('pc-ovr-ack').checked;
+  if (!note) { ptToast('An override justification is required', 'warn'); return; }
+  if (!ack)  { ptToast('Confirm the override has been authorised', 'warn'); return; }
+
+  const ctx = _pcOverrideCtx;
+  const stamp = new Date().toLocaleString('en-US', { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
+  const record = { ts:stamp, who:'Plan Administrator', note, reason:ctx.reason };
+
+  const target = ctx.kind === 'exercise'
+    ? exerciseData.find(e => e.id === ctx.targetId)
+    : shareIssuanceData.find(i => i.id === ctx.sourceId);
+  if (target) target._pcOverride = record;
+
+  closeModal('modal-pc-override');
+  ptToast(`Override recorded — ${ctx.type} proceeding without clearance`, 'warn');
+
+  // Carry on with the action the gate interrupted
+  if (ctx.kind === 'exercise')  singleExAction(ctx.targetId, ctx.action, true);
+  else                          openSecTxnModalFor(ctx.sourceId, ctx.type, true);
+  _pcOverrideCtx = null;
 }
 
 // ═════════════════════════════════════════════
@@ -9914,29 +11281,56 @@ function clearExSelection() {
 function bulkExerciseAction(action) {
   if (!exSelected.size) return;
   const today = new Date().toISOString().slice(0,10);
-  let changed = 0;
+  let changed = 0, blocked = 0;
   exSelected.forEach(id => {
     const ex = exerciseData.find(e => e.id === id);
-    if (ex && (ex.status === 'submitted' || ex.status === 'pending')) {
-      ex.status = action; ex.decided = today; changed++;
+    if (!ex || (ex.status !== 'submitted' && ex.status !== 'pending')) return;
+    // Bulk approval skips anything without a live clearance rather than prompting
+    // for an override per row — those are decided one at a time.
+    if (action === 'approved' && !ex._pcOverride) {
+      const c = clearanceFor(ex.participant, 'Exercise', ex.grantId);
+      if (!c.ok) { blocked++; return; }
     }
+    ex.status = action; ex.decided = today; changed++;
+    if (action === 'approved') pcConsumeClearance(ex.participant, 'Exercise', ex.grantId, id);
   });
   exSelected.clear();
   exBulkMode = false;
   updateExBulkBar();
   renderExerciseTable();
+  const skipped = blocked ? ` · ${blocked} skipped, no pre-clearance` : '';
   showExToast(action === 'approved'
-    ? `✓ ${changed} exercise${changed !== 1 ? 's' : ''} approved`
+    ? `✓ ${changed} exercise${changed !== 1 ? 's' : ''} approved${skipped}`
     : `✗ ${changed} exercise${changed !== 1 ? 's' : ''} rejected`, action);
 }
 
-function singleExAction(id, action) {
+function singleExAction(id, action, bypassGate) {
   const ex = exerciseData.find(e => e.id === id);
   if (!ex) return;
+  // Approving an exercise releases the trade, so it needs a live pre-clearance.
+  // Rejection is never gated — refusing a request can't create exposure.
+  if (action === 'approved' && !bypassGate && !ex._pcOverride) {
+    if (!pcGate({ kind:'exercise', participant:ex.participant, type:'Exercise',
+                  sourceId:ex.grantId, targetId:id, action:'approved' })) return;
+  }
   ex.status = action;
   ex.decided = new Date().toISOString().slice(0,10);
+  if (action === 'approved') pcConsumeClearance(ex.participant, 'Exercise', ex.grantId, id);
   renderExerciseTable();
   showExToast(action === 'approved' ? `✓ ${id} approved` : `✗ ${id} rejected`, action);
+}
+
+// A clearance authorises one trade — mark it spent so it can't be reused
+function pcConsumeClearance(participant, type, sourceId, txnId) {
+  const c = clearanceFor(participant, type, sourceId);
+  if (c.required && c.ok && c.req && !c.req.consumedBy) {
+    c.req.consumedBy = txnId;
+    c.req.audit.push({
+      ts: new Date().toLocaleString('en-US', { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' }),
+      who: 'Plan Administrator',
+      what: `Clearance consumed by <b>${txnId}</b> — no further trades may be recorded against it`
+    });
+  }
 }
 
 function openExEditModal(id) {
@@ -10050,12 +11444,116 @@ function filterExTab(btn, status) {
   renderExerciseTable();
 }
 
+// ── category switch: exercise requests vs. the pre-clearance requests behind them ──
+let exCategory = 'exercises';
+
+const EX_STATUS_TABS = {
+  exercises: [
+    ['all','All'], ['submitted','Submitted'], ['pending','Pending'],
+    ['approved','Approved'], ['rejected','Rejected'], ['expired','Expired']
+  ],
+  preclear: [
+    ['all','All'], ['submitted','Submitted'], ['in-review','In Review'],
+    ['cleared','Cleared'], ['rejected','Rejected'], ['expired','Expired']
+  ]
+};
+
+function setExCategory(btn, cat) {
+  closeAllKebabs();
+  document.querySelectorAll('#ex-category-tabs .txtype-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  exCategory = cat;
+  exStatusFilter = 'all';
+  // Bulk selection is an exercise-only affordance
+  if (cat === 'preclear') { exSelected.clear(); exBulkMode = false; updateExBulkBar(); }
+  renderExerciseTable();
+}
+
+// The status tabs, filters and summary cards all belong to the active category
+function renderExCategoryChrome() {
+  const pcRows = preclearData.filter(r => r.requestType === 'Exercise');
+  const isPc = exCategory === 'preclear';
+
+  const cEx = document.getElementById('ex-cat-count-ex');
+  const cPc = document.getElementById('ex-cat-count-pc');
+  if (cEx) cEx.textContent = exerciseData.length;
+  if (cPc) cPc.textContent = pcRows.length;
+
+  // Status tabs
+  const tabs = document.getElementById('ex-status-tabs');
+  if (tabs) {
+    const counts = isPc
+      ? pcRows.reduce((m, r) => (m[pcEffectiveStatus(r)] = (m[pcEffectiveStatus(r)] || 0) + 1, m), { all: pcRows.length })
+      : exerciseData.reduce((m, e) => (m[e.status] = (m[e.status] || 0) + 1, m), { all: exerciseData.length });
+    tabs.innerHTML = EX_STATUS_TABS[isPc ? 'preclear' : 'exercises'].map(([k, label]) =>
+      `<button class="txtype-tab ${exStatusFilter === k ? 'active' : ''}" onclick="filterExTab(this,'${k}')">${label} <span class="tab-count">${counts[k] || 0}</span></button>`
+    ).join('');
+  }
+
+  // Filter selects
+  const show = (id, on) => { const el = document.getElementById(id); if (el) el.style.display = on ? '' : 'none'; };
+  show('ex-type-filter',   !isPc);
+  show('ex-method-filter', !isPc);
+  show('ex-s16-filter',     isPc);
+  show('ex-window-filter',  isPc);
+  const bulkBtn = document.getElementById('ex-bulk-toggle');
+  if (bulkBtn) bulkBtn.style.display = isPc ? 'none' : '';
+  const searchEl = document.getElementById('ex-search');
+  if (searchEl) searchEl.placeholder = isPc
+    ? 'Search by Request ID, Participant or Grant ID…'
+    : 'Search by Exercise ID, Participant or Grant ID…';
+
+  // Summary cards
+  const row = document.getElementById('ex-summary-row');
+  if (row) {
+    const card = (label, value, color, sub) =>
+      `<div class="summary-card-sm"><div class="s-label">${label}</div><div class="s-value"${color ? ` style="color:${color}"` : ''}>${value}</div><div class="s-sub">${sub}</div></div>`;
+    if (isPc) {
+      const n = s => pcRows.filter(r => pcEffectiveStatus(r) === s).length;
+      const turned = pcRows.filter(r => r.decided);
+      const avg = turned.length
+        ? (turned.reduce((s, r) => s + pcDaysBetween(r.submitted, r.decided), 0) / turned.length).toFixed(1)
+        : '—';
+      row.innerHTML =
+        card('Total Requests', pcRows.length, '', 'Exercise pre-clearance') +
+        card('Submitted', n('submitted'), '#2563eb', 'Awaiting review') +
+        card('In Review', n('in-review'), 'var(--amber)', 'Information requested') +
+        card('Cleared', n('cleared'), 'var(--green)', 'Live clearance window') +
+        card('Rejected', n('rejected'), 'var(--red)', 'Refused on policy') +
+        card('Avg. Turnaround', avg === '—' ? '—' : avg + 'd', 'var(--textm)', 'Submission to decision');
+    } else {
+      const n = s => exerciseData.filter(e => e.status === s).length;
+      row.innerHTML =
+        card('Total Exercises', exerciseData.length, '', 'All time') +
+        card('Submitted', n('submitted'), '#2563eb', 'Awaiting review') +
+        card('Pending Approval', n('pending'), 'var(--amber)', 'In workflow') +
+        card('Approved', n('approved'), 'var(--green)', 'Decided') +
+        card('Rejected', n('rejected'), 'var(--red)', 'Cancelled / declined') +
+        card('Expired', n('expired'), 'var(--textm)', 'Window lapsed');
+    }
+  }
+}
+
 function renderExerciseTable(forceStatus) {
   if (forceStatus) exStatusFilter = forceStatus;
   const tbody = document.getElementById('exercise-body');
   if (!tbody) return;
 
+  renderExCategoryChrome();
+
   const search  = (document.getElementById('ex-search')?.value || '').toLowerCase();
+
+  if (exCategory === 'preclear') {
+    renderPreclearRows('exercise-table', 'exercise-body', 'ex-result-count', ['Exercise'], {
+      status: exStatusFilter,
+      search,
+      s16:    document.getElementById('ex-s16-filter')?.value || '',
+      window: document.getElementById('ex-window-filter')?.value || ''
+    });
+    return;
+  }
+  pcSwapHeader('exercise-table', false);
+
   const typeVal = document.getElementById('ex-type-filter')?.value || '';
   const methVal = document.getElementById('ex-method-filter')?.value || '';
 
@@ -10108,6 +11606,7 @@ function renderExerciseTable(forceStatus) {
     const gainPct    = (((e.fmv - e.strike) / e.strike) * 100).toFixed(1);
     const sc         = statusCfg[e.status] || statusCfg.submitted;
     const isChecked  = exSelected.has(e.id);
+    const exGate     = e._pcOverride ? { ok:true } : clearanceFor(e.participant, 'Exercise', e.grantId);
 
     return `<tr style="${isChecked ? 'background:#eff6ff' : ''}">
       ${exBulkMode ? `<td style="text-align:center;width:36px" onclick="event.stopPropagation()">
@@ -10128,9 +11627,13 @@ function renderExerciseTable(forceStatus) {
             <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();openExEditModal('${e.id}')">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>Edit FMV / Tax Cost FMV
             </button>
-            <button class="kebab-menu-item" style="color:var(--green)" onclick="event.stopPropagation();closeAllKebabs();singleExAction('${e.id}','approved')">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>Approve Exercise
+            <button class="kebab-menu-item" style="color:var(--green)${exGate.ok ? '' : ';opacity:.45'}" title="${exGate.ok ? '' : exGate.reason}"
+              onclick="event.stopPropagation();closeAllKebabs();singleExAction('${e.id}','approved')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>Approve Exercise${exGate.ok ? '' : ' 🔒'}
             </button>
+            ${exGate.ok ? '' : `<button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();openPreclearCreate({ requestType:'Exercise', participant:'${e.participant}', dept:'${e.dept}', sourceId:'${e.grantId}', sourceLabel:'${e.type} · ${e.method}', shares:${e.shares} })">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9,12 11,14 15,10"/></svg>Raise Pre-Clearance
+            </button>`}
             <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Request Information
             </button>
@@ -10160,11 +11663,12 @@ function renderExerciseTable(forceStatus) {
       <td style="text-align:right;font-weight:600">${grossValue}</td>
       <td style="text-align:right;font-weight:700;color:var(--green)">${gain}<div style="font-size:10px;color:var(--textm);font-weight:400">+${gainPct}%</div></td>
       <td>${methodBadge(e.method)}</td>
+      <td>${pcClearanceChip(e.participant, 'Exercise', e.grantId, e._pcOverride)}</td>
       <td style="font-size:12px;color:var(--text2)">${e.submitted}</td>
       <td style="font-size:12px;color:var(--text2)">${e.decided||'<span style="color:var(--textm)">—</span>'}</td>
       <td><span class="sdot ${sc.dot}" style="color:${sc.color};font-size:12px">${sc.label}</span></td>
     </tr>`;
-  }).join('') || `<tr><td colspan="15" style="text-align:center;padding:32px;color:var(--textm)">No exercises found</td></tr>`;
+  }).join('') || `<tr><td colspan="16" style="text-align:center;padding:32px;color:var(--textm)">No exercises found</td></tr>`;
 }
 
 function openEditModal(grantId) {
@@ -10193,6 +11697,13 @@ document.addEventListener('keydown', e => {
     closeLedgerDrawer();
     closeReleaseDrawer();
     closeTermModel();
+    // Full-screen wizards use their own overlay class, so they need closing explicitly
+    if (document.getElementById('modal-pc-override')?.classList.contains('open')) {
+      closeModal('modal-pc-override');
+    } else {
+      closePreclearWizard();
+      closeAccelWizard();
+    }
     document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
     closeAllKebabs();
   }
