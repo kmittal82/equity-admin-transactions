@@ -1631,6 +1631,111 @@
 
     @media (max-width:900px) { .pc-kv { grid-template-columns:repeat(2,1fr); } }
 
+    /* ════════════ RETIREMENT ELIGIBILITY ════════════ */
+    /* Row chip — eligibility state of a participant */
+    .ret-chip {
+      display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:700;
+      padding:2px 8px; border-radius:9px; white-space:nowrap; border:1px solid transparent;
+    }
+    .ret-chip-eligible { background:var(--green-l); color:#047857; border-color:#a7e3c6; }
+    .ret-chip-future   { background:#eff6ff;       color:#1d4ed8; border-color:#c7d7fb; }
+    .ret-chip-never    { background:#f8fafc;       color:#94a3b8; border-color:#e2e8f0; }
+    .ret-fica-count {
+      display:inline-block; font-size:9.5px; font-weight:700; padding:1px 6px; border-radius:7px;
+      background:#f5f3ff; color:#6d28d9; border:1px solid #ddd6fe; margin-left:4px;
+    }
+
+    /* Grant retirement provision badge */
+    .ret-prov {
+      display:inline-block; font-size:10px; font-weight:700; padding:2px 7px; border-radius:6px;
+      white-space:nowrap; border:1px solid;
+    }
+    .ret-prov-std     { background:#f0fdf4; color:#166534; border-color:#bbf7d0; }
+    .ret-prov-none    { background:#f1f5f9; color:#475569; border-color:#cbd5e1; }
+    .ret-prov-exec    { background:#faf5ff; color:#6d28d9; border-color:#ddd6fe; }
+    .ret-prov-prorata { background:#fff7ed; color:#9a3412; border-color:#fed7aa; }
+
+    /* Termination treatment badge */
+    .ret-treat {
+      display:inline-block; font-size:10px; font-weight:700; padding:2px 7px; border-radius:6px;
+      white-space:nowrap; border:1px solid;
+    }
+    .ret-treat-accelerate { background:#f0fdf4; color:#166534; border-color:#bbf7d0; }
+    .ret-treat-continue   { background:#eff6ff; color:#1d4ed8; border-color:#c7d7fb; }
+    .ret-treat-prorata    { background:#fff7ed; color:#9a3412; border-color:#fed7aa; }
+    .ret-treat-forfeit    { background:#fef2f2; color:#991b1b; border-color:#fecaca; }
+
+    /* FICA status pill on a tranche */
+    .ret-fica {
+      display:inline-block; font-size:10px; font-weight:700; padding:2px 7px; border-radius:6px;
+      white-space:nowrap; border:1px solid;
+    }
+    .ret-fica-collected { background:#f5f3ff; color:#6d28d9; border-color:#ddd6fe; }
+    .ret-fica-due       { background:var(--amber-l); color:#b45309; border-color:#f2d9b5; }
+    .ret-fica-deferred  { background:#ecfeff; color:#155e75; border-color:#a5f3fc; }
+    .ret-fica-na        { background:#f8fafc; color:#94a3b8; border-color:#e2e8f0; }
+
+    /* Settings page section card */
+    .ret-card {
+      background:var(--card); border:1px solid var(--border); border-radius:12px;
+      padding:18px 20px; margin-bottom:16px;
+    }
+    .ret-card-head { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:4px; }
+    .ret-card-title { font-size:14.5px; font-weight:700; color:var(--text); }
+    .ret-card-sub { font-size:12px; color:var(--text2); margin-top:3px; line-height:1.5; }
+
+    /* Two mutually-exclusive policy position cards (PBRSU fork) */
+    .ret-pos-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:14px; }
+    .ret-pos {
+      border:1.5px solid var(--border); border-radius:10px; padding:13px 15px; background:var(--card);
+      text-align:left; cursor:pointer; font-family:inherit; width:100%; transition:border-color 0.15s;
+    }
+    .ret-pos:hover { border-color:#cbd5e1; }
+    .ret-pos.sel { border-color:var(--accent); background:#eff6ff; }
+    .ret-pos .t { font-weight:700; font-size:13px; color:var(--text); }
+    .ret-pos .ref { font-family:'SF Mono',monospace; font-size:10px; color:var(--textm); margin-top:2px; }
+    .ret-pos .d { font-size:11.5px; color:var(--text2); margin-top:7px; line-height:1.5; }
+    .ret-pos .csq {
+      font-size:11px; margin-top:8px; background:var(--bg); border-radius:6px;
+      padding:5px 9px; display:inline-block; color:var(--text2);
+    }
+    .ret-pos.sel .csq { background:#fff; }
+
+    /* Inline toggle row for the remaining policy switches */
+    .ret-tog { display:flex; align-items:center; gap:11px; padding:10px 0; border-top:1px solid var(--border); }
+    .ret-tog:first-of-type { border-top:none; }
+    .ret-tog input[type=checkbox] { accent-color:var(--accent); width:16px; height:16px; flex:none; }
+    .ret-tog .tt { font-size:12.5px; font-weight:600; color:var(--text); }
+    .ret-tog .td { font-size:11.5px; color:var(--textm); margin-top:1px; line-height:1.45; }
+    .ret-tog select, .ret-tog input[type=text] {
+      font-family:inherit; font-size:12.5px; padding:6px 9px; border:1px solid var(--border);
+      border-radius:7px; background:#fff; color:var(--text); margin-left:auto; outline:none;
+    }
+
+    /* Tranche child rows on the participants register */
+    .ret-tr-row > td { background:#fbfcfe; }
+    .ret-tr-row:hover > td { background:#f5f8fd; }
+    .ret-tr-grantline {
+      background:#f1f5f9; font-size:11px; font-weight:700; color:var(--text2);
+      letter-spacing:0.03em; text-transform:uppercase;
+    }
+
+    /* Retirement modeller — reuses .tm-* internals */
+    .rm-tr-table { width:100%; border-collapse:collapse; margin-top:10px; }
+    .rm-tr-table th {
+      font-size:9.5px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;
+      color:var(--textm); text-align:left; padding:6px 8px; border-bottom:1px solid var(--border);
+      white-space:nowrap;
+    }
+    .rm-tr-table td { font-size:11.5px; padding:7px 8px; border-bottom:1px solid var(--border); }
+    .rm-tr-table tr:last-child td { border-bottom:none; }
+    .rm-tr-table tr.out td { opacity:0.55; }
+    .rm-sec { margin-top:20px; }
+    .rm-sec-h { font-size:13px; font-weight:700; color:var(--text); margin-bottom:2px; }
+    .rm-sec-s { font-size:11.5px; color:var(--textm); line-height:1.5; }
+
+    @media (max-width:900px) { .ret-pos-grid { grid-template-columns:1fr; } }
+
     @media (max-width:1180px) {
       .ac-body { grid-template-columns:1fr; }
       .ac-rail { position:static; }
@@ -3125,9 +3230,16 @@
 
   <div class="nav-section">
     <div class="nav-label">Administration</div>
-    <div class="nav-item" onclick="setActive(this)">
+    <div class="nav-item open" id="nav-settings" onclick="event.stopPropagation(); toggleSub(this,'sub-settings')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
       Company Settings
+      <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    <div class="nav-sub open" id="sub-settings">
+      <div class="nav-sub-item" onclick="setActive(this); switchView('retirement-eligibility')">Retirement Eligibility</div>
+      <div class="nav-sub-item" onclick="setActive(this)">Company Profile</div>
+      <div class="nav-sub-item" onclick="setActive(this)">Plan Configuration</div>
+      <div class="nav-sub-item" onclick="setActive(this)">Share Price / FMV</div>
     </div>
     <div class="nav-item" id="nav-tax" onclick="event.stopPropagation(); toggleSub(this,'sub-tax')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
@@ -4021,6 +4133,15 @@
         <select class="filter-select-sm" id="pt-country-filter" onchange="renderParticipantsTable()">
           <option value="">All Jurisdictions</option>
         </select>
+        <select class="filter-select-sm" id="pt-ret-filter" onchange="renderParticipantsTable()">
+          <option value="">All Retirement Statuses</option>
+          <option value="eligible">Eligible now</option>
+          <option value="future">Eligible in future</option>
+          <option value="never">Never eligible</option>
+        </select>
+        <select class="filter-select-sm" id="pt-prov-filter" onchange="renderParticipantsTable()">
+          <option value="">All Provisions</option>
+        </select>
         <div class="filter-right-actions">
           <div class="table-result-count" id="pt-result-count"></div>
         </div>
@@ -4042,6 +4163,7 @@
                 <th style="width:130px">Department</th>
                 <th style="width:120px">Jurisdiction</th>
                 <th style="width:100px">Hire Date</th>
+                <th style="width:165px">Retirement</th>
                 <th style="text-align:right;width:70px">Grants</th>
                 <th style="text-align:right;width:100px">Granted</th>
                 <th style="text-align:right;width:100px">Vested</th>
@@ -4055,6 +4177,190 @@
         </div>
       </div>
     </div><!-- /view-participants -->
+
+    <!-- ════ RETIREMENT ELIGIBILITY (Company Settings) ════ -->
+    <div class="view-section" id="view-retirement-eligibility">
+      <div class="page-head">
+        <div>
+          <div class="page-title">Retirement Eligibility</div>
+          <div class="page-sub">Determination rules, grant-level provisions and the consequences that follow — FICA timing, expense acceleration and termination outcome</div>
+        </div>
+        <div class="head-actions">
+          <button class="btn btn-ghost" onclick="downloadFicaFeed()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download FICA Feed
+          </button>
+          <button class="btn btn-primary" onclick="openRetDefModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Definition
+          </button>
+        </div>
+      </div>
+
+      <div class="summary-row-6" id="ret-summary"></div>
+
+      <!-- Engine 1 — determination -->
+      <div class="ret-card">
+        <div class="ret-card-head">
+          <div>
+            <div class="ret-card-title">Retirement definitions <span style="font-weight:400;color:var(--textm);font-size:12px">— Engine 1, determination</span></div>
+            <div class="ret-card-sub">A participant becomes retirement-eligible on the <b>earliest</b> date any active definition is satisfied. The resulting date is then mapped onto every grant and every tranche.</div>
+          </div>
+        </div>
+        <div style="overflow-x:auto"><table class="ag-table" id="ret-def-table">
+          <thead><tr>
+            <th style="width:64px">Actions</th><th style="width:130px">ID</th><th>Definition</th>
+            <th style="width:150px">Type</th><th style="width:230px">Test</th>
+            <th style="text-align:right;width:130px">Participants met</th><th style="width:90px">Active</th>
+          </tr></thead>
+          <tbody id="ret-def-body"></tbody>
+        </table></div>
+      </div>
+
+      <!-- Grant-level provisions — the exclusion mechanism -->
+      <div class="ret-card">
+        <div class="ret-card-head">
+          <div>
+            <div class="ret-card-title">Grant retirement provisions <span style="font-weight:400;color:var(--textm);font-size:12px">— the exclusion mechanism</span></div>
+            <div class="ret-card-sub">A <b>grant-level attribute, not a plan setting</b>. Retention and new-hire grants carry no retirement provision, and bespoke executive grants carry their own — so the engine can answer “does this provision apply here?” before it calculates anything.</div>
+          </div>
+        </div>
+        <div style="overflow-x:auto"><table class="ag-table" id="ret-prov-table">
+          <thead><tr>
+            <th style="width:130px">ID</th><th style="width:230px">Provision</th>
+            <th style="width:110px">Applies</th><th style="width:210px">Termination treatment</th>
+            <th style="width:150px">FICA at eligibility</th><th>Basis</th>
+            <th style="text-align:right;width:110px">Grants using</th>
+          </tr></thead>
+          <tbody id="ret-prov-body"></tbody>
+        </table></div>
+      </div>
+
+      <!-- PBRSU position + policy -->
+      <div class="ret-card">
+        <div class="ret-card-head">
+          <div>
+            <div class="ret-card-title">Performance award position <span style="font-weight:400;color:var(--textm);font-size:12px">— PSU / PBRSU</span></div>
+            <div class="ret-card-sub">A multi-year performance condition arguably keeps the substantial risk of forfeiture in place even after retirement eligibility. Companies take different positions, so this is configurable rather than hard-coded.</div>
+          </div>
+        </div>
+        <div class="ret-pos-grid" id="ret-pos-grid"></div>
+      </div>
+
+      <div class="ret-card">
+        <div class="ret-card-head">
+          <div>
+            <div class="ret-card-title">Collection &amp; policy</div>
+            <div class="ret-card-sub">How the accelerated FICA liability is collected, and which secondary rulesets apply.</div>
+          </div>
+        </div>
+        <div id="ret-policy-rows"></div>
+      </div>
+
+      <!-- Impact preview -->
+      <div class="ret-card">
+        <div class="ret-card-head">
+          <div>
+            <div class="ret-card-title">Impact preview</div>
+            <div class="ret-card-sub">Every participant the current configuration touches. Open a row to model the full chain.</div>
+          </div>
+        </div>
+        <div style="overflow-x:auto"><table class="ag-table" id="ret-impact-table">
+          <thead><tr>
+            <th style="width:44px">Actions</th><th style="width:190px">Participant</th>
+            <th style="width:130px">Jurisdiction</th><th style="width:130px">Eligibility date</th>
+            <th style="width:150px">Definition met</th>
+            <th style="text-align:right;width:110px">Grants in scope</th>
+            <th style="text-align:right;width:110px">Excluded</th>
+            <th style="text-align:right;width:130px">Tranches eligible</th>
+            <th style="text-align:right;width:130px">FICA accelerating</th>
+          </tr></thead>
+          <tbody id="ret-impact-body"></tbody>
+        </table></div>
+      </div>
+
+      <!-- FICA collection feed -->
+      <div class="ret-card">
+        <div class="ret-card-head">
+          <div>
+            <div class="ret-card-title">FICA collection feed <span style="font-weight:400;color:var(--textm);font-size:12px">— payroll integration</span></div>
+            <div class="ret-card-sub">No shares are delivered at eligibility, so there is nothing to net. The deliverable is a payroll feed carrying the taxable value and the OASDI / Medicare split, with YTD wage-base awareness, plus reconciliation back.</div>
+          </div>
+          <div class="head-actions">
+            <select class="filter-select-sm" id="ret-feed-year" onchange="renderRetirementSettings()"></select>
+          </div>
+        </div>
+        <div style="overflow-x:auto"><table class="ag-table" id="ret-feed-table">
+          <thead><tr>
+            <th style="width:190px">Participant</th><th style="width:120px">Employee ID</th>
+            <th style="width:130px">Collection date</th><th style="text-align:right;width:110px">Tranches</th>
+            <th style="text-align:right;width:130px">Taxable value</th>
+            <th style="text-align:right;width:120px">OASDI</th>
+            <th style="text-align:right;width:120px">Medicare</th>
+            <th style="text-align:right;width:120px">Total FICA</th>
+            <th style="text-align:right;width:150px">Wage base remaining</th>
+          </tr></thead>
+          <tbody id="ret-feed-body"></tbody>
+          <tfoot id="ret-feed-foot"></tfoot>
+        </table></div>
+        <div id="ret-feed-recon"></div>
+      </div>
+    </div><!-- /view-retirement-eligibility -->
+
+    <!-- RETIREMENT DEFINITION MODAL -->
+    <div class="modal-overlay" id="modal-ret-def">
+      <div class="modal-box" style="width:600px">
+        <div class="modal-head">
+          <div>
+            <div class="modal-title" id="ret-def-modal-title">Retirement Definition</div>
+            <div style="font-size:12px;color:var(--textm);margin-top:2px">Satisfied on the earliest date the test passes</div>
+          </div>
+          <button class="modal-close" onclick="closeModal('modal-ret-def')">×</button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="ret-def-id">
+          <div class="form-grid">
+            <div class="form-group full">
+              <label class="form-label">Name <span class="req">*</span></label>
+              <input class="form-input" id="ret-def-name" placeholder="e.g. Rule of 70">
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Definition type <span class="req">*</span></label>
+              <select class="form-select" id="ret-def-type" onchange="retDefTypeChanged()">
+                <option value="age">Age only</option>
+                <option value="age_service">Age + years of service</option>
+                <option value="rule_of_x">Rule of X — age + service ≥ X</option>
+                <option value="service">Years of service only</option>
+              </select>
+            </div>
+            <div class="form-group" id="ret-def-x-wrap">
+              <label class="form-label">X (age + service)</label>
+              <input class="form-input" type="number" id="ret-def-x" value="70">
+            </div>
+            <div class="form-group" id="ret-def-age-wrap">
+              <label class="form-label">Minimum age</label>
+              <input class="form-input" type="number" id="ret-def-age" value="55">
+            </div>
+            <div class="form-group" id="ret-def-svc-wrap">
+              <label class="form-label">Minimum years of service</label>
+              <input class="form-input" type="number" id="ret-def-service" value="5">
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Plan reference / note</label>
+              <input class="form-input" id="ret-def-note" placeholder="e.g. Plan §9.3">
+            </div>
+          </div>
+          <label class="ac-toggle">
+            <input type="checkbox" id="ret-def-active" checked>
+            Active — include this definition when determining eligibility
+          </label>
+        </div>
+        <div class="modal-foot">
+          <button class="btn btn-ghost" onclick="closeModal('modal-ret-def')">Cancel</button>
+          <button class="btn btn-primary" onclick="saveRetDef()">Save Definition</button>
+        </div>
+      </div>
+    </div>
 
     <!-- GRANT TRANSACTIONS VIEW -->
     <div class="view-section" id="view-grant-txns">
@@ -4280,6 +4586,7 @@
                 <input type="text" class="form-input" id="rel-total-rate" value="39.88%" readonly style="background:var(--amber-l);font-weight:700;font-size:15px">
               </div>
             </div>
+            <div id="rel-fica-suppression"></div>
 
             <div class="wh-summary-card">
               <div style="font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">Withholding Summary</div>
@@ -6164,6 +6471,115 @@
       </div>
     </div>
 
+    <!-- ════ RETIREMENT MODELLER ════ -->
+    <div class="tm-overlay" id="rm-overlay" onclick="closeRetModel(event)">
+      <div class="tm-panel" onclick="event.stopPropagation()">
+        <div class="tm-head">
+          <div class="tm-head-info">
+            <div class="tm-head-title" id="rm-title">Retirement Modeller</div>
+            <div class="tm-head-sub" id="rm-sub">Eligibility determination and everything that follows from it</div>
+            <div class="tm-head-meta">
+              <span class="tm-head-id" id="rm-emp-id">—</span>
+              <span class="tm-badge tmb-neutral" id="rm-mode-badge">Simulation — nothing committed</span>
+            </div>
+          </div>
+          <button class="modal-close" onclick="closeRetModel()">×</button>
+        </div>
+
+        <div class="tm-body">
+          <!-- LEFT: assumptions -->
+          <div class="tm-sidebar">
+            <div class="tm-sidebar-section">
+              <div class="tm-section-label">Determination</div>
+              <div class="tm-inputs">
+                <div class="tm-field">
+                  <label>Definitions in force</label>
+                  <select id="rm-def" onchange="renderRetModel()">
+                    <option value="all">All active definitions</option>
+                  </select>
+                </div>
+                <div class="tm-field">
+                  <label>FMV ($)</label>
+                  <input type="number" id="rm-fmv" step="0.25" value="42.50" oninput="renderRetModel()">
+                </div>
+                <div class="tm-field">
+                  <label>YTD wages (for wage base)</label>
+                  <input type="number" id="rm-ytd" step="1000" value="185000" oninput="renderRetModel()">
+                </div>
+              </div>
+            </div>
+
+            <div class="tm-sidebar-section">
+              <div class="tm-section-label">Consequences</div>
+              <div class="tm-inputs">
+                <div class="tm-field">
+                  <label>Performance award position</label>
+                  <select id="rm-psu" onchange="renderRetModel()">
+                    <option value="sustain">Performance condition sustains SRF</option>
+                    <option value="accelerate">FICA accelerates at eligibility</option>
+                  </select>
+                </div>
+                <div class="tm-field">
+                  <label>FICA collection</label>
+                  <select id="rm-collect" onchange="renderRetModel()">
+                    <option value="year_end">Single year-end event</option>
+                    <option value="at_eligibility">On the eligibility date</option>
+                  </select>
+                </div>
+                <div class="tm-field">
+                  <label>EU / UK ruleset</label>
+                  <select id="rm-euuk" onchange="renderRetModel()">
+                    <option value="on">Apply separate EU/UK rules</option>
+                    <option value="off">Single global ruleset</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="tm-sidebar-section">
+              <div class="tm-section-label">Termination Scenario</div>
+              <div class="tm-inputs">
+                <div class="tm-field">
+                  <label>Retirement / termination date</label>
+                  <input type="date" id="rm-date" onchange="renderRetModel()">
+                </div>
+                <div class="tm-field">
+                  <label>Termination type</label>
+                  <select id="rm-type" onchange="renderRetModel()">
+                    <option value="retirement">Qualifying retirement</option>
+                    <option value="voluntary">Voluntary resignation</option>
+                    <option value="involuntary">Involuntary (without cause)</option>
+                    <option value="cause">Involuntary (with cause)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT: results -->
+          <div class="tm-main">
+            <div id="rm-banner"></div>
+            <div id="rm-grants"></div>
+            <div id="rm-tranches"></div>
+            <div id="rm-timing"></div>
+            <div id="rm-expense"></div>
+            <div id="rm-term"></div>
+          </div>
+        </div>
+
+        <div class="tm-foot">
+          <div class="tm-foot-note" id="rm-foot-note">Model only — no ledger entries or payroll records are written.</div>
+          <div style="display:flex;gap:10px">
+            <button class="btn btn-ghost" onclick="closeRetModel()">Close</button>
+            <button class="btn btn-ghost" onclick="exportRetModel()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Export Tranche Detail
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div><!-- /content -->
 </div><!-- /main -->
 
@@ -7677,6 +8093,9 @@ function switchView(viewId) {
   if (['tax-rates','tax-codes','rate-library','rules-engine'].includes(viewId)) {
     document.getElementById('nav-tax')?.classList.add('active');
   }
+  if (viewId === 'retirement-eligibility') {
+    document.getElementById('nav-settings')?.classList.add('active');
+  }
 
   if (viewId === 'grant-txns') renderGrantsTable();
   else if (viewId === 'long-share-txns') renderLongShareTable();
@@ -7689,6 +8108,7 @@ function switchView(viewId) {
   else if (viewId === 'rate-library') renderRateLibrary();
   else if (viewId === 'rules-engine') renderRulesEngine();
   else if (viewId === 'participants') renderParticipantsView();
+  else if (viewId === 'retirement-eligibility') renderRetirementSettings();
 }
 
 // ── Equity Plans ──
@@ -8116,6 +8536,8 @@ function openReleaseDrawer(grantId) {
     <div class="release-info-item"><em>Vested: </em><span style="color:var(--green)">${grant.vested.toLocaleString()}</span></div>
     <div class="release-info-item"><em>FMV: </em><span>$${currentFMV.toFixed(2)}</span></div>
   `;
+
+  renderRelFicaSuppression(grant.participant);
 
   // Reset form
   document.getElementById('rel-shares').value = '';
@@ -10698,6 +11120,1111 @@ const TERM_WINDOWS   = { voluntary:90, involuntary:90, cause:0, retirement:365, 
 const TM_OPTION_TYPES = ['ISO','NSO','NQSO','SAR'];
 const PT_AVATAR_COLORS = ['#3b82f6','#8b5cf6','#10b981','#f59e0b','#ef4444','#06b6d4','#ec4899','#6366f1'];
 
+// ═════════════════════════════════════════════
+// RETIREMENT ELIGIBILITY — two chained engines
+//
+// Engine 1 determines WHEN a participant satisfies the retirement definition and
+// which grants/tranches that date reaches. Engine 2 works out what follows:
+// FICA timing, ASC 718 expense acceleration and the termination outcome.
+// ═════════════════════════════════════════════
+
+// ── Engine 1 configuration ──
+
+// A participant qualifies on the EARLIEST date any active definition is satisfied.
+let RET_DEFINITIONS = [
+  { id:'RD-01', name:'Rule of 70',        type:'rule_of_x',   x:70, minAge:55, minService:5, active:true,
+    note:'Plan §9.3 — age plus years of service, with a floor on each' },
+  { id:'RD-02', name:'Age 65',            type:'age',         age:65,                        active:true,
+    note:'Plan §9.1 — normal retirement age' },
+  { id:'RD-03', name:'Age 55 + 10 years', type:'age_service', age:55, service:10,            active:true,
+    note:'Plan §9.2 — early retirement' },
+];
+
+// Grant-level retirement provisions. This is the exclusion mechanism and it lives on
+// the GRANT, not on the plan — retention and new-hire awards deliberately carry none,
+// and negotiated executive awards carry their own.
+const RET_PROVISIONS = [
+  { id:'RP-STD',     name:'Standard retirement provision', applies:true,  treatment:'continue',
+    ficaOnEligibility:true,  cls:'std',
+    note:'Plan default (§9.3) — unvested units keep vesting on the original schedule after a qualifying retirement' },
+  { id:'RP-NONE',    name:'No retirement provision',       applies:false, treatment:'forfeit',
+    ficaOnEligibility:false, cls:'none',
+    note:'Retention and new-hire awards — continued service IS the point of the award, so retirement treatment is deliberately withheld' },
+  { id:'RP-EXEC',    name:'Executive bespoke (§9.7)',      applies:true,  treatment:'accelerate',
+    ficaOnEligibility:true,  cls:'exec',
+    note:'Individually negotiated provisions — unvested units vest in full on a qualifying retirement' },
+  { id:'RP-PRORATA', name:'Pro-rata on retirement',        applies:true,  treatment:'prorata',
+    ficaOnEligibility:true,  cls:'prorata',
+    note:'Each tranche is pro-rated by the share of its accrual period actually served' },
+];
+
+const RET_TREATMENTS = [
+  { id:'accelerate', label:'Accelerate — vest in full at retirement' },
+  { id:'continue',   label:'Continue vesting on the original schedule' },
+  { id:'prorata',    label:'Pro-rata by service completed' },
+  { id:'forfeit',    label:'Forfeit unvested' },
+];
+
+// Company policy. The PBRSU position is the one that matters most — see retTrancheState.
+const RET_POLICY = {
+  psuSustainsSRF:      true,        // performance condition keeps the risk of forfeiture
+                                    // substantial until certification → FICA does NOT accelerate
+  ficaCollection:      'year_end',  // 'year_end' (rule of administrative convenience) | 'at_eligibility'
+  collectionDate:      '12-15',     // MM-DD of the single annual collection event
+  euUkSeparateRules:   true,
+  expenseAcceleration: true,
+};
+
+// EU/UK age-discrimination law makes retirement-conditioned forfeiture hard to sustain,
+// so a forfeiting provision is overridden to continued vesting in these jurisdictions.
+const RET_EU_UK = {
+  countries: new Set(['United Kingdom','Germany','France','Ireland','Netherlands','Spain','Italy','Belgium','Sweden','Denmark','Poland']),
+  override: 'continue',
+  note: 'EU/UK age-discrimination exposure — retirement-conditioned forfeiture overridden to continued vesting'
+};
+
+const RET_FMV = 42.50;
+
+// ── Seed: dates of birth, grant provisions, performance cliffs and custom schedules ──
+// Kept as a lookup rather than inlined so the participant records stay readable.
+const RET_SEED = {
+  'EMP-20481': { birth:'1968-06-12', grants:{                      // Sarah Chen — eligible ~2030
+    'GRT-2023-052':{ provision:'RP-STD',     perfCliff:'2026-01-10' },   // PSU, already certified
+    'GRT-2023-088':{ provision:'RP-NONE' } } },                          // new-hire style retention
+  'EMP-20517': { birth:'1961-03-22', grants:{                      // Marcus Johnson — eligible ~2026
+    'GRT-2022-031':{ provision:'RP-PRORATA' },
+    'GRT-2024-019':{ provision:'RP-STD',     perfCliff:'2027-02-01' } } }, // PSU cliff still ahead
+  'EMP-20620': { birth:'1990-04-02', grants:{} },                  // Emma Davis (UK) — far off
+  'EMP-20388': { birth:'1962-01-18', grants:{                      // James Park — ALREADY eligible
+    'GRT-2025-007':{ provision:'RP-NONE' } } },                          // retention grant, excluded
+  'EMP-20744': { birth:'1988-08-09', grants:{} },                  // Priya Sharma — far off
+  'EMP-20105': { birth:'1964-09-30', grants:{                      // Lisa Wong — eligible ~2026
+    'GRT-2024-061':{ provision:'RP-PRORATA' } } },
+  'EMP-20899': { birth:'1985-05-19', grants:{} },                  // Carlos Rivera (Spain)
+  'EMP-20233': { birth:'1959-11-11', grants:{                      // Nina Hartley (UK) — EU/UK demo
+    'GRT-2021-058':{ provision:'RP-EXEC' },
+    'GRT-2023-066':{ provision:'RP-NONE',    perfCliff:'2026-09-01' } } }, // forfeiting + UK override
+  'EMP-20455': { birth:'1987-02-27', grants:{} },                  // Wei Zhang (Singapore)
+  'EMP-20678': { birth:'1960-12-05', grants:{                      // Amanda Foster — eligible ~2025-07
+    'GRT-2020-011':{ provision:'RP-EXEC' },
+    'GRT-2024-028':{ provision:'RP-STD',     weights:[0.3,0.3,0.4] },    // the 30/30/40 case
+    'GRT-2025-045':{ provision:'RP-STD',     perfCliff:'2028-03-01' } } }, // PSU cliff well ahead
+  'EMP-20811': { birth:'1975-10-03', grants:{} },                  // Tom Bradley — eligible ~2034
+  'EMP-20044': { birth:'1961-03-15', grants:{                      // Rachel Green — retired 2026-01
+    'GRT-2019-002':{ provision:'RP-EXEC' } } },
+};
+
+participantsData.forEach(p => {
+  const seed = RET_SEED[p.id] || { grants:{} };
+  p.birth = seed.birth || null;
+  p.grants.forEach(g => {
+    const gs = seed.grants[g.id] || {};
+    g.provision = gs.provision || 'RP-STD';
+    g.perfCliff = gs.perfCliff || null;
+    g.weights   = gs.weights   || null;
+  });
+});
+
+// Tranches already collected through a prior year's payroll event, keyed
+// `${employeeId}|${grantId}|${vestDate}`. Drives the non-duplication rule.
+const RET_FICA_COLLECTED = {};
+
+// ── date helpers ──
+const retToday  = () => new Date().toISOString().slice(0, 10);
+const retD      = s => new Date(s + 'T00:00:00');
+const retFmtD   = s => s ? retD(s).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) : '—';
+const retFmt$   = n => '$' + Math.round(n).toLocaleString();
+const retFmtSh  = n => Math.round(n).toLocaleString();
+
+// Whole years between two ISO dates
+function retYearsBetween(fromISO, toISO) {
+  if (!fromISO || !toISO) return 0;
+  const a = retD(fromISO), b = retD(toISO);
+  let y = b.getFullYear() - a.getFullYear();
+  const m = b.getMonth() - a.getMonth();
+  if (m < 0 || (m === 0 && b.getDate() < a.getDate())) y--;
+  return y;
+}
+// Fractional years — used for the Rule-of-X sum and pro-rata service
+function retYearsFrac(fromISO, toISO) {
+  if (!fromISO || !toISO) return 0;
+  return (retD(toISO) - retD(fromISO)) / (365.2425 * 864e5);
+}
+
+const retAge     = (p, onISO) => p.birth ? retYearsBetween(p.birth, onISO) : null;
+const retService = (p, onISO) => retYearsBetween(p.hired, onISO);
+
+// ═════════ Engine 1 — determination ═════════
+
+// Does a single definition hold on a given date?
+function retDefMet(def, p, onISO) {
+  if (!def.active || !p.birth) return false;
+  const age = retYearsFrac(p.birth, onISO);
+  const svc = retYearsFrac(p.hired, onISO);
+  switch (def.type) {
+    case 'age':         return age >= def.age;
+    case 'service':     return svc >= def.service;
+    case 'age_service': return age >= def.age && svc >= def.service;
+    case 'rule_of_x':   return (age + svc) >= def.x &&
+                               age >= (def.minAge || 0) && svc >= (def.minService || 0);
+    default: return false;
+  }
+}
+
+// The earliest date any active definition is satisfied. Both age and service advance
+// monotonically with time, so every test here is monotone — a month-by-month forward
+// scan from the hire date to age 75 finds the true earliest date without per-rule algebra.
+function retEligibilityDate(p, defs) {
+  const list = (defs || RET_DEFINITIONS).filter(d => d.active);
+  if (!p.birth || !list.length) return null;
+
+  const limit = retD(p.birth);
+  limit.setFullYear(limit.getFullYear() + 75);
+  const cur = retD(p.hired);
+  let best = null;
+
+  while (cur <= limit) {
+    const iso = cur.toISOString().slice(0, 10);
+    const hit = list.find(d => retDefMet(d, p, iso));
+    if (hit) { best = { date: iso, definition: hit }; break; }
+    cur.setMonth(cur.getMonth() + 1);
+  }
+  if (!best) return null;
+  return Object.assign(best, {
+    age:     retAge(p, best.date),
+    service: retService(p, best.date),
+    basis:   best.definition.type === 'rule_of_x'
+               ? `Age ${retAge(p, best.date)} + ${retService(p, best.date)} years service ≥ ${best.definition.x}`
+               : best.definition.name
+  });
+}
+
+function retGrantProvision(g) {
+  return RET_PROVISIONS.find(x => x.id === g.provision) || RET_PROVISIONS[0];
+}
+
+// Vesting schedule for a grant — honours a custom weighting (e.g. 30/30/40) when present,
+// otherwise falls back to the even annual schedule ptVest already produces.
+function retSchedule(g) {
+  if (!g.weights) return ptSchedule(g);
+  if (g._retSched) return g._retSched;
+  const [y, m, d] = g.granted.split('-').map(Number);
+  let allocated = 0;
+  g._retSched = g.weights.map((w, i) => {
+    const last   = i === g.weights.length - 1;
+    const shares = last ? g.shares - allocated : Math.round(g.shares * w);
+    allocated += shares;
+    return { date:`${y + i + 1}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`, shares };
+  });
+  return g._retSched;
+}
+
+// ═════════ Engine 2 — consequences ═════════
+
+// OASDI / Medicare split, read from the bands already configured in the Rate Library
+// rather than hard-coded, so the wage base and the additional-Medicare threshold
+// both come from one place.
+function retFicaSplit(taxableValue, ytdWages) {
+  const ss  = taxRatesData.find(r => r.id === 'TXR-003');
+  const med = taxRatesData.find(r => r.id === 'TXR-004');
+  const ytd = ytdWages || 0;
+
+  // Social Security stops at the wage base — the band whose rate drops to zero
+  const ssBand   = ss ? ss.bands[0] : { to:160200, rate:6.2 };
+  const wageBase = ssBand.to || 160200;
+  const ssRoom   = Math.max(0, wageBase - ytd);
+  const ssTaxed  = Math.min(taxableValue, ssRoom);
+  const oasdi    = ssTaxed * (ssBand.rate / 100);
+
+  // Medicare has no cap; the rate steps up above the additional-Medicare threshold
+  const medBands  = med ? med.bands : [{ from:0, to:200000, rate:1.45 }, { from:200001, to:null, rate:2.35 }];
+  const threshold = medBands[0].to || 200000;
+  const lowRate   = medBands[0].rate / 100;
+  const highRate  = (medBands[1] ? medBands[1].rate : 2.35) / 100;
+  const lowRoom   = Math.max(0, threshold - ytd);
+  const medLow    = Math.min(taxableValue, lowRoom);
+  const medHigh   = taxableValue - medLow;
+  const medicare  = medLow * lowRate + medHigh * highRate;
+
+  return {
+    oasdi, medicare, total: oasdi + medicare,
+    wageBase, wageBaseRemaining: Math.max(0, ssRoom - ssTaxed),
+    ssCapped: ssTaxed < taxableValue,
+    ssRate: ssBand.rate, medRate: medHigh > 0 ? highRate * 100 : lowRate * 100
+  };
+}
+
+// When is the accelerated FICA actually collected?
+// The special timing rule fixes the liability at the SRF lapse, but the rule of
+// administrative convenience lets the employer treat it as taxable on any date in
+// the SAME calendar year — which is what makes a single year-end event possible.
+function retCollectionDate(srfLapseISO, policy) {
+  const pol = policy || RET_POLICY;
+  if (pol.ficaCollection !== 'year_end') return srfLapseISO;
+  return srfLapseISO.slice(0, 4) + '-' + pol.collectionDate;
+}
+
+// The core of the feature — one verdict per tranche.
+// `opts` lets the modeller override company policy without mutating it.
+function retTrancheState(p, g, t, opts) {
+  const o        = opts || {};
+  const policy   = Object.assign({}, RET_POLICY, o.policy || {});
+  const fmv      = o.fmv != null ? o.fmv : RET_FMV;
+  const elig     = o.eligibility !== undefined ? o.eligibility : retEligibilityDate(p, o.defs);
+  const prov     = retGrantProvision(g);
+  const key      = `${p.id}|${g.id}|${t.date}`;
+
+  const st = {
+    grantId:g.id, grantType:g.type, vestDate:t.date, shares:t.shares,
+    provisionId:prov.id, provisionName:prov.name, provisionApplies:prov.applies,
+    eligible:false, eligibleOn:null, srfLapses:null,
+    ficaAccelerates:false, ficaReason:'', ficaTaxYear:null, ficaCollectionDate:null,
+    taxableValue:0, oasdi:0, medicare:0, ficaTotal:0, ficaSplit:null,
+    ficaCollected: !!RET_FICA_COLLECTED[key],
+    expenseAccelerated:false, expenseAmount:0,
+    termTreatment:'forfeit', termReason:'', euUkOverride:false,
+  };
+
+  // Engine 1 gate — a grant with no retirement provision never reaches Engine 2
+  if (!prov.applies) {
+    st.ficaReason   = 'Grant carries no retirement provision — retirement treatment does not apply';
+    st.termTreatment = prov.treatment;
+    st.termReason    = prov.note;
+    st.euUkOverride  = retApplyEuUk(p, st, policy);
+    return st;
+  }
+  if (!elig) {
+    st.ficaReason    = 'Participant does not reach retirement eligibility';
+    st.termTreatment = 'forfeit';
+    st.termReason    = 'Not retirement-eligible — standard leaver treatment applies';
+    return st;
+  }
+
+  // A tranche gets retirement treatment when eligibility lands on or before its vest date
+  st.eligible   = elig.date <= t.date;
+  st.eligibleOn = elig.date;
+  st.termTreatment = prov.treatment;
+  st.termReason    = prov.note;
+  st.euUkOverride  = retApplyEuUk(p, st, policy);
+
+  if (!st.eligible) {
+    st.ficaReason = `Tranche vests ${retFmtD(t.date)}, before eligibility on ${retFmtD(elig.date)} — no acceleration`;
+    return st;
+  }
+
+  // The substantial risk of forfeiture normally lapses at eligibility, because
+  // continued service is no longer required to keep the award.
+  st.srfLapses       = elig.date;
+  st.ficaAccelerates = prov.ficaOnEligibility;
+  st.ficaReason      = 'Substantial risk of forfeiture lapses at retirement eligibility — §3121(v)(2) special timing rule';
+
+  // ── the PBRSU fork ──
+  // A multi-year performance condition arguably keeps the risk of forfeiture substantial
+  // past retirement eligibility, because the units can still be lost on failed performance.
+  // Companies take different positions, so this reads from policy and never from a constant.
+  const isPerf = g.type === 'PSU' || g.type === 'PBRSU' || g.type === 'PRSU';
+  if (isPerf && g.perfCliff) {
+    if (policy.psuSustainsSRF && g.perfCliff > elig.date) {
+      st.srfLapses       = g.perfCliff;
+      st.ficaAccelerates = true;
+      st.ficaDeferred    = true;
+      st.ficaReason      = `Performance condition sustains the substantial risk of forfeiture until certification on ${retFmtD(g.perfCliff)} — FICA does not accelerate to the eligibility date`;
+    } else if (!policy.psuSustainsSRF) {
+      st.ficaReason = 'Performance condition treated as non-substantive once retirement-eligible — FICA accelerates at eligibility';
+    }
+  }
+
+  if (!prov.ficaOnEligibility) {
+    st.ficaReason = 'Provision excludes FICA acceleration — tax follows the ordinary vest';
+  }
+
+  if (st.ficaAccelerates) {
+    st.ficaTaxYear         = Number(st.srfLapses.slice(0, 4));
+    st.ficaCollectionDate  = retCollectionDate(st.srfLapses, policy);
+    st.taxableValue        = t.shares * fmv;
+    const split            = retFicaSplit(st.taxableValue, o.ytdWages);
+    st.ficaSplit  = split;
+    st.oasdi      = split.oasdi;
+    st.medicare   = split.medicare;
+    st.ficaTotal  = split.total;
+  }
+
+  // ASC 718 — eligibility makes the remaining service condition non-substantive,
+  // so unrecognised expense on the tranche accelerates to the eligibility date.
+  if (policy.expenseAcceleration && t.date > retToday()) {
+    st.expenseAccelerated = true;
+    st.expenseAmount      = t.shares * (['ISO','NSO','NQSO','SAR'].includes(g.type) ? fmv * 0.40 : fmv);
+  }
+
+  return st;
+}
+
+// EU/UK ruleset — mutates the treatment on the state and reports whether it fired
+function retApplyEuUk(p, st, policy) {
+  if (!policy.euUkSeparateRules) return false;
+  if (!RET_EU_UK.countries.has(p.country)) return false;
+  if (st.termTreatment !== 'forfeit') return false;
+  st.termTreatment = RET_EU_UK.override;
+  st.termReason    = RET_EU_UK.note;
+  return true;
+}
+
+// Every tranche across every grant for a participant
+function retAllTranches(p, opts) {
+  const o = Object.assign({}, opts);
+  if (o.eligibility === undefined) o.eligibility = retEligibilityDate(p, o.defs);
+  const out = [];
+  p.grants.forEach(g => retSchedule(g).forEach(t => out.push(retTrancheState(p, g, t, o))));
+  return out;
+}
+
+// Non-duplication — FICA must be suppressed at the eventual vest once collected
+function retFicaSuppressed(p, g, t) {
+  return !!RET_FICA_COLLECTED[`${p.id}|${g.id}|${t.date}`];
+}
+
+// Participant-level rollup used by the register, the settings page and the modeller
+function retSummary(p, opts) {
+  const o    = Object.assign({}, opts);
+  const elig = o.eligibility !== undefined ? o.eligibility : retEligibilityDate(p, o.defs);
+  o.eligibility = elig;
+  const tr   = retAllTranches(p, o);
+  const today = retToday();
+
+  return {
+    eligibility: elig,
+    isEligibleNow: !!elig && elig.date <= today,
+    tranches: tr,
+    eligibleCount:  tr.filter(x => x.eligible).length,
+    ficaCount:      tr.filter(x => x.ficaAccelerates).length,
+    collectedCount: tr.filter(x => x.ficaCollected).length,
+    grantsInScope:  p.grants.filter(g => retGrantProvision(g).applies).length,
+    grantsExcluded: p.grants.filter(g => !retGrantProvision(g).applies).length,
+    taxableValue:   tr.reduce((a, x) => a + x.taxableValue, 0),
+    ficaTotal:      tr.reduce((a, x) => a + x.ficaTotal, 0),
+    expenseTotal:   tr.reduce((a, x) => a + x.expenseAmount, 0),
+  };
+}
+
+// Chip for the participants register.
+// A date alone is not the story — a definition every employee eventually satisfies is
+// meaningless if it lands after the last tranche has already vested, because no tranche
+// ever receives retirement treatment. So "never" means "no tranche is ever reached".
+function retChipKind(p) {
+  const e = retEligibilityDate(p);
+  if (!e) return 'never';
+  // Does eligibility actually land on any tranche that is still open at that date?
+  const reachable = g => retSchedule(g).some(t => t.date >= e.date);
+  if (!p.grants.some(reachable)) return 'never';
+  // It does — but every such grant may be excluded by its retirement provision
+  if (!p.grants.some(g => retGrantProvision(g).applies && reachable(g))) return 'excluded';
+  return e.date <= retToday() ? 'eligible' : 'future';
+}
+
+function retChip(p) {
+  const s    = retSummary(p);
+  const kind = retChipKind(p);
+  const collected = s.collectedCount
+    ? `<span class="ret-fica-count" title="Tranches with FICA already collected">FICA ${s.collectedCount}/${s.tranches.length}</span>` : '';
+
+  if (kind === 'never') {
+    const why = !s.eligibility
+      ? 'No active definition is ever satisfied'
+      : `Eligible ${retFmtD(s.eligibility.date)}, after every tranche has vested — no tranche receives retirement treatment`;
+    return `<span class="ret-chip ret-chip-never" title="${why}">NOT ELIGIBLE</span>`;
+  }
+  if (kind === 'excluded') {
+    return `<span class="ret-chip ret-chip-never" title="Retirement-eligible ${retFmtD(s.eligibility.date)}, but every grant still open at that date carries no retirement provision">ELIGIBLE · ALL EXCLUDED</span>`;
+  }
+  return kind === 'eligible'
+    ? `<span class="ret-chip ret-chip-eligible" title="${s.eligibility.basis}">ELIGIBLE</span>${collected}`
+    : `<span class="ret-chip ret-chip-future" title="${s.eligibility.basis}">ELIGIBLE ${retFmtD(s.eligibility.date)}</span>${collected}`;
+}
+
+// Seed the tranches already collected through a previous payroll event. Amanda Foster's
+// 30/30/40 grant is the worked example: the first tranche vested before she became
+// eligible and was taxed the ordinary way, while the later tranches had their FICA
+// collected at the year-end event — one grant, part-taxed and part-not.
+(function seedCollectedFica() {
+  const amanda = participantsData.find(p => p.id === 'EMP-20678');
+  if (!amanda) return;
+  const g = amanda.grants.find(x => x.id === 'GRT-2024-028');
+  if (!g) return;
+  const sched = retSchedule(g);
+  if (sched[1]) {
+    const st = retTrancheState(amanda, g, sched[1]);
+    RET_FICA_COLLECTED[`${amanda.id}|${g.id}|${sched[1].date}`] = {
+      collectedOn: st.ficaCollectionDate || '2025-12-15',
+      taxableValue: st.taxableValue, oasdi: st.oasdi, medicare: st.medicare, total: st.ficaTotal
+    };
+  }
+})();
+
+// ═════════ Settings page ═════════
+
+function renderRetirementSettings() {
+  renderRetSummaryCards();
+  renderRetDefinitions();
+  renderRetProvisions();
+  renderRetPolicy();
+  renderRetImpact();
+  renderRetFeed();
+}
+
+function renderRetSummaryCards() {
+  const el = document.getElementById('ret-summary');
+  if (!el) return;
+  const today = retToday();
+  let now = 0, soon = 0, never = 0, excluded = 0, ficaValue = 0;
+  const horizon = new Date(); horizon.setFullYear(horizon.getFullYear() + 1);
+  const horizonISO = horizon.toISOString().slice(0, 10);
+
+  participantsData.forEach(p => {
+    const s    = retSummary(p);
+    const kind = retChipKind(p);   // same test the register uses, so the counts agree
+    if (kind === 'never' || kind === 'excluded') never++;
+    else if (kind === 'eligible') now++;
+    else if (s.eligibility.date <= horizonISO) soon++;
+    excluded  += s.grantsExcluded;
+    ficaValue += s.ficaTotal;
+  });
+
+  const card = (label, value, color, sub) =>
+    `<div class="summary-card-sm"><div class="s-label">${label}</div><div class="s-value"${color ? ` style="color:${color}"` : ''}>${value}</div><div class="s-sub">${sub}</div></div>`;
+
+  el.innerHTML =
+    card('Eligible Now', now, 'var(--green)', 'Retirement treatment live') +
+    card('Eligible ≤ 12 Months', soon, 'var(--amber)', 'Approaching eligibility') +
+    card('Never Eligible', never, 'var(--textm)', 'No definition reached') +
+    card('Grants Excluded', excluded, '#2563eb', 'No retirement provision') +
+    card('FICA Accelerating', retFmt$(ficaValue), '#6d28d9', 'Across all eligible tranches') +
+    card('Next Collection', RET_POLICY.ficaCollection === 'year_end'
+      ? retFmtD(new Date().getFullYear() + '-' + RET_POLICY.collectionDate)
+      : 'At eligibility', '', RET_POLICY.ficaCollection === 'year_end' ? 'Single annual event' : 'Per-participant');
+}
+
+const RET_DEF_TYPE_LABEL = {
+  age:'Age only', service:'Service only', age_service:'Age + service', rule_of_x:'Rule of X'
+};
+
+function retDefTest(d) {
+  switch (d.type) {
+    case 'age':         return `Age ≥ ${d.age}`;
+    case 'service':     return `Service ≥ ${d.service} years`;
+    case 'age_service': return `Age ≥ ${d.age} <span style="color:var(--textm)">and</span> service ≥ ${d.service} years`;
+    case 'rule_of_x':   return `Age + service ≥ ${d.x} <span style="color:var(--textm)">(min age ${d.minAge}, min service ${d.minService})</span>`;
+    default: return '—';
+  }
+}
+
+function renderRetDefinitions() {
+  const tb = document.getElementById('ret-def-body');
+  if (!tb) return;
+  tb.innerHTML = RET_DEFINITIONS.map(d => {
+    const met = participantsData.filter(p => retDefMet(d, p, retToday())).length;
+    return `<tr${d.active ? '' : ' style="opacity:.5"'}>
+      <td onclick="event.stopPropagation()">
+        <div class="kebab-wrap">
+          <button class="kebab-btn" onclick="event.stopPropagation();toggleKebab(this)">&#8942;</button>
+          <div class="kebab-menu">
+            <div class="kebab-menu-label">Definition</div>
+            <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();openRetDefModal('${d.id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>Edit Definition
+            </button>
+            <button class="kebab-menu-item danger" onclick="event.stopPropagation();closeAllKebabs();deleteRetDef('${d.id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14H6L5 6"/></svg>Delete
+            </button>
+          </div>
+        </div>
+      </td>
+      <td class="mono" style="font-size:11.5px;font-weight:700;color:var(--accent-dark)">${d.id}</td>
+      <td><div style="font-weight:600">${d.name}</div>
+        <div style="font-size:11px;color:var(--textm)">${d.note || ''}</div></td>
+      <td><span class="type-badge">${RET_DEF_TYPE_LABEL[d.type] || d.type}</span></td>
+      <td style="font-size:12px;color:var(--text2)">${retDefTest(d)}</td>
+      <td style="text-align:right;font-weight:700">${met}</td>
+      <td><label class="ac-toggle" style="margin:0">
+        <input type="checkbox" ${d.active ? 'checked' : ''} onchange="toggleRetDef('${d.id}', this.checked)">
+      </label></td>
+    </tr>`;
+  }).join('') || `<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--textm)">No definitions configured — nobody can become retirement-eligible.</td></tr>`;
+}
+
+function toggleRetDef(id, on) {
+  const d = RET_DEFINITIONS.find(x => x.id === id);
+  if (d) { d.active = on; renderRetirementSettings(); renderParticipantsTable(); }
+}
+
+function deleteRetDef(id) {
+  RET_DEFINITIONS = RET_DEFINITIONS.filter(x => x.id !== id);
+  renderRetirementSettings(); renderParticipantsTable();
+  ptToast(`${id} removed`, 'warn');
+}
+
+function renderRetProvisions() {
+  const tb = document.getElementById('ret-prov-body');
+  if (!tb) return;
+  tb.innerHTML = RET_PROVISIONS.map(pr => {
+    const uses = participantsData.reduce((a, p) => a + p.grants.filter(g => g.provision === pr.id).length, 0);
+    const treat = RET_TREATMENTS.find(t => t.id === pr.treatment);
+    return `<tr>
+      <td class="mono" style="font-size:11.5px;font-weight:700;color:var(--accent-dark)">${pr.id}</td>
+      <td><span class="ret-prov ret-prov-${pr.cls}">${pr.name}</span></td>
+      <td>${pr.applies
+        ? '<span style="color:var(--green);font-weight:600;font-size:12px">✓ Applies</span>'
+        : '<span style="color:var(--textm);font-weight:600;font-size:12px">✕ Excluded</span>'}</td>
+      <td><span class="ret-treat ret-treat-${pr.treatment}">${treat ? treat.label.split(' — ')[0] : pr.treatment}</span></td>
+      <td>${pr.ficaOnEligibility
+        ? '<span class="ret-fica ret-fica-due">Accelerates</span>'
+        : '<span class="ret-fica ret-fica-na">Not accelerated</span>'}</td>
+      <td style="font-size:11.5px;color:var(--text2);line-height:1.5">${pr.note}</td>
+      <td style="text-align:right;font-weight:700">${uses}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderRetPolicy() {
+  const grid = document.getElementById('ret-pos-grid');
+  if (grid) {
+    const positions = [
+      { on:true,  t:'Performance condition sustains the risk of forfeiture', ref:'Conservative — majority position',
+        d:'Units can still be lost on failed performance, so the substantial risk of forfeiture survives retirement eligibility and lapses only on certification.',
+        csq:'FICA accelerates to the certification date, not the eligibility date' },
+      { on:false, t:'Retirement eligibility ends the risk of forfeiture', ref:'Aggressive — service-condition view',
+        d:'Once the service condition is non-substantive the award is treated as no longer subject to a substantial risk of forfeiture, regardless of the outstanding performance condition.',
+        csq:'FICA accelerates to the eligibility date for PSUs alongside RSUs' },
+    ];
+    grid.innerHTML = positions.map(pos => `
+      <button class="ret-pos ${RET_POLICY.psuSustainsSRF === pos.on ? 'sel' : ''}" onclick="setRetPolicy('psuSustainsSRF', ${pos.on})">
+        <div class="t">${pos.t}</div>
+        <div class="ref">${pos.ref}</div>
+        <div class="d">${pos.d}</div>
+        <div class="csq">${pos.csq}</div>
+      </button>`).join('');
+  }
+
+  const rows = document.getElementById('ret-policy-rows');
+  if (!rows) return;
+  rows.innerHTML = `
+    <div class="ret-tog">
+      <div>
+        <div class="tt">FICA collection convention</div>
+        <div class="td">The special timing rule fixes the liability when the risk of forfeiture lapses. The rule of administrative convenience then allows the employer to treat it as taxable on any date in the <b>same calendar year</b> — which is what enables a single collection event.</div>
+      </div>
+      <select onchange="setRetPolicy('ficaCollection', this.value)">
+        <option value="year_end"       ${RET_POLICY.ficaCollection === 'year_end' ? 'selected' : ''}>Single year-end event</option>
+        <option value="at_eligibility" ${RET_POLICY.ficaCollection === 'at_eligibility' ? 'selected' : ''}>On the SRF lapse date</option>
+      </select>
+    </div>
+    <div class="ret-tog">
+      <div>
+        <div class="tt">Annual collection date</div>
+        <div class="td">The payroll date the year's accelerated FICA is collected on. Income tax is unaffected and remains due at settlement.</div>
+      </div>
+      <input type="text" value="${RET_POLICY.collectionDate}" style="width:110px"
+        onchange="setRetPolicy('collectionDate', this.value)" placeholder="MM-DD"
+        ${RET_POLICY.ficaCollection === 'year_end' ? '' : 'disabled style="width:110px;opacity:.5"'}>
+    </div>
+    <div class="ret-tog">
+      <input type="checkbox" ${RET_POLICY.euUkSeparateRules ? 'checked' : ''} onchange="setRetPolicy('euUkSeparateRules', this.checked)">
+      <div>
+        <div class="tt">Separate EU / UK termination ruleset</div>
+        <div class="td">Age-discrimination law makes retirement-conditioned forfeiture hard to sustain in the EU and UK, so a forfeiting provision is overridden to continued vesting in those jurisdictions.</div>
+      </div>
+    </div>
+    <div class="ret-tog">
+      <input type="checkbox" ${RET_POLICY.expenseAcceleration ? 'checked' : ''} onchange="setRetPolicy('expenseAcceleration', this.checked)">
+      <div>
+        <div class="tt">Accelerate ASC 718 expense to the eligibility date</div>
+        <div class="td">Retirement eligibility makes the remaining service condition non-substantive, so unrecognised expense on affected tranches is recognised immediately rather than over the remaining schedule.</div>
+      </div>
+    </div>`;
+}
+
+function setRetPolicy(key, value) {
+  RET_POLICY[key] = value;
+  renderRetirementSettings();
+  renderParticipantsTable();
+}
+
+function renderRetImpact() {
+  const tb = document.getElementById('ret-impact-body');
+  if (!tb) return;
+  const rows = participantsData
+    .map(p => ({ p, s: retSummary(p) }))
+    .filter(x => x.s.eligibility)
+    .sort((a, b) => a.s.eligibility.date.localeCompare(b.s.eligibility.date));
+
+  tb.innerHTML = rows.map(({ p, s }) => `<tr>
+    <td onclick="event.stopPropagation()">
+      <button class="action-icon-btn" title="Open Retirement Modeller" onclick="event.stopPropagation();openRetModel('${p.id}')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>
+      </button>
+    </td>
+    <td><div class="participant-name">${p.name}</div><div class="participant-dept">${p.title}</div></td>
+    <td style="font-size:12px;color:var(--text2)">${p.country}${RET_EU_UK.countries.has(p.country) ? ' <span class="ret-prov ret-prov-prorata" style="font-size:9px">EU/UK</span>' : ''}</td>
+    <td>${retChip(p)}</td>
+    <td style="font-size:11.5px;color:var(--text2)">${s.eligibility.definition.name}
+      <div style="font-size:10.5px;color:var(--textm)">${s.eligibility.basis}</div></td>
+    <td style="text-align:right;font-weight:600">${s.grantsInScope}</td>
+    <td style="text-align:right;font-weight:600;color:${s.grantsExcluded ? 'var(--textm)' : 'var(--border)'}">${s.grantsExcluded}</td>
+    <td style="text-align:right;font-weight:600">${s.eligibleCount} <span style="color:var(--textm);font-weight:400">/ ${s.tranches.length}</span></td>
+    <td style="text-align:right;font-weight:700;color:${s.ficaTotal ? '#6d28d9' : 'var(--textm)'}">${s.ficaTotal ? retFmt$(s.ficaTotal) : '—'}</td>
+  </tr>`).join('') || `<tr><td colspan="9" style="text-align:center;padding:32px;color:var(--textm)">No participant reaches retirement eligibility under the current definitions.</td></tr>`;
+}
+
+// ── FICA collection feed ──
+// Nothing is delivered at eligibility, so there is nothing to net against. The
+// deliverable is a payroll feed plus a reconciliation back.
+function retFeedRows(year) {
+  const out = [];
+  participantsData.forEach(p => {
+    const tr = retAllTranches(p).filter(x => x.ficaAccelerates && x.ficaTaxYear === year);
+    if (!tr.length) return;
+    const taxable = tr.reduce((a, x) => a + x.taxableValue, 0);
+    // One payroll record per participant per event — the split is recomputed on the
+    // aggregate so the wage base is applied once, not once per tranche.
+    const split = retFicaSplit(taxable, 0);
+    out.push({
+      p, tranches: tr.length,
+      collectionDate: tr[0].ficaCollectionDate,
+      taxableValue: taxable, oasdi: split.oasdi, medicare: split.medicare,
+      total: split.total, wageBaseRemaining: split.wageBaseRemaining, capped: split.ssCapped
+    });
+  });
+  return out.sort((a, b) => b.taxableValue - a.taxableValue);
+}
+
+function retFeedYears() {
+  const yrs = new Set();
+  participantsData.forEach(p => retAllTranches(p).forEach(x => { if (x.ficaTaxYear) yrs.add(x.ficaTaxYear); }));
+  return [...yrs].sort();
+}
+
+function renderRetFeed() {
+  const sel = document.getElementById('ret-feed-year');
+  const tb  = document.getElementById('ret-feed-body');
+  if (!sel || !tb) return;
+
+  const years = retFeedYears();
+  const prev  = Number(sel.value);
+  const year  = years.includes(prev) ? prev : (years.includes(new Date().getFullYear()) ? new Date().getFullYear() : years[0]);
+  sel.innerHTML = years.map(y => `<option value="${y}" ${y === year ? 'selected' : ''}>Tax year ${y}</option>`).join('')
+    || '<option>No events</option>';
+
+  const rows = year ? retFeedRows(year) : [];
+  tb.innerHTML = rows.map(r => `<tr>
+    <td><div class="participant-name">${r.p.name}</div><div class="participant-dept">${r.p.dept}</div></td>
+    <td class="mono" style="font-size:11.5px">${r.p.id}</td>
+    <td style="font-size:12px;color:var(--text2)">${retFmtD(r.collectionDate)}</td>
+    <td style="text-align:right">${r.tranches}</td>
+    <td class="mono" style="text-align:right;font-weight:600">${retFmt$(r.taxableValue)}</td>
+    <td class="mono" style="text-align:right">${retFmt$(r.oasdi)}${r.capped ? ' <span class="ret-fica ret-fica-na" style="font-size:9px">capped</span>' : ''}</td>
+    <td class="mono" style="text-align:right">${retFmt$(r.medicare)}</td>
+    <td class="mono" style="text-align:right;font-weight:700;color:#6d28d9">${retFmt$(r.total)}</td>
+    <td class="mono" style="text-align:right;color:var(--textm)">${retFmt$(r.wageBaseRemaining)}</td>
+  </tr>`).join('') || `<tr><td colspan="9" style="text-align:center;padding:32px;color:var(--textm)">No FICA collection events in this tax year.</td></tr>`;
+
+  const foot = document.getElementById('ret-feed-foot');
+  if (foot) {
+    const t = rows.reduce((a, r) => ({ tx:a.tx + r.taxableValue, o:a.o + r.oasdi, m:a.m + r.medicare, tot:a.tot + r.total }),
+                          { tx:0, o:0, m:0, tot:0 });
+    foot.innerHTML = rows.length ? `<tr style="background:#f8fafc;font-weight:700">
+      <td colspan="4" style="text-align:right">Feed total — ${rows.length} record${rows.length !== 1 ? 's' : ''}</td>
+      <td class="mono" style="text-align:right">${retFmt$(t.tx)}</td>
+      <td class="mono" style="text-align:right">${retFmt$(t.o)}</td>
+      <td class="mono" style="text-align:right">${retFmt$(t.m)}</td>
+      <td class="mono" style="text-align:right;color:#6d28d9">${retFmt$(t.tot)}</td>
+      <td></td></tr>` : '';
+  }
+
+  const recon = document.getElementById('ret-feed-recon');
+  if (recon) {
+    const trTotal = participantsData.reduce((a, p) =>
+      a + retAllTranches(p).filter(x => x.ficaAccelerates && x.ficaTaxYear === year)
+                           .reduce((s, x) => s + x.ficaTotal, 0), 0);
+    const feedTotal = rows.reduce((a, r) => a + r.total, 0);
+    const delta = feedTotal - trTotal;
+    recon.innerHTML = `<div class="ac-note ${Math.abs(delta) < 1 ? 'ok' : 'info'}" style="margin-top:14px">
+      <b>Reconciliation</b> — ${rows.length} payroll record${rows.length !== 1 ? 's' : ''} covering
+      ${rows.reduce((a, r) => a + r.tranches, 0)} tranches. Feed total ${retFmt$(feedTotal)} against
+      ${retFmt$(trTotal)} computed per tranche${Math.abs(delta) >= 1
+        ? ` — a ${retFmt$(Math.abs(delta))} difference, which is the wage base being applied once per participant rather than once per tranche.`
+        : ' — matched.'}
+      Income tax is <b>not</b> included: it remains due at settlement.
+    </div>`;
+  }
+}
+
+function downloadFicaFeed() {
+  const sel  = document.getElementById('ret-feed-year');
+  const year = Number(sel?.value) || new Date().getFullYear();
+  const rows = retFeedRows(year);
+  if (!rows.length) { ptToast('No FICA collection events to export for this year', 'warn'); return; }
+
+  const head = ['Employee ID','Participant','Department','Country','Collection Date','Tranches',
+                'Taxable Value','OASDI','Medicare','Total FICA','Wage Base Remaining'];
+  const esc  = v => `"${String(v).replace(/"/g, '""')}"`;
+  const body = rows.map(r => [r.p.id, r.p.name, r.p.dept, r.p.country, r.collectionDate, r.tranches,
+                              r.taxableValue.toFixed(2), r.oasdi.toFixed(2), r.medicare.toFixed(2),
+                              r.total.toFixed(2), r.wageBaseRemaining.toFixed(2)].map(esc).join(','));
+  const csv  = [head.map(esc).join(','), ...body].join('\n');
+
+  const url = URL.createObjectURL(new Blob([csv], { type:'text/csv;charset=utf-8;' }));
+  const a = document.createElement('a');
+  a.href = url; a.download = `fica-collection-feed-${year}.csv`;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+  ptToast(`✓ Feed exported — ${rows.length} payroll record${rows.length !== 1 ? 's' : ''}`, 'ok');
+}
+
+// ── definition editor ──
+function openRetDefModal(id) {
+  const d = RET_DEFINITIONS.find(x => x.id === id);
+  document.getElementById('ret-def-modal-title').textContent = d ? 'Edit Definition' : 'Add Definition';
+  document.getElementById('ret-def-id').value      = d ? d.id : '';
+  document.getElementById('ret-def-name').value    = d ? d.name : '';
+  document.getElementById('ret-def-type').value    = d ? d.type : 'rule_of_x';
+  document.getElementById('ret-def-x').value       = d && d.x != null ? d.x : 70;
+  document.getElementById('ret-def-age').value     = d && d.age != null ? d.age : (d && d.minAge != null ? d.minAge : 55);
+  document.getElementById('ret-def-service').value = d && d.service != null ? d.service : (d && d.minService != null ? d.minService : 5);
+  document.getElementById('ret-def-note').value    = d ? (d.note || '') : '';
+  document.getElementById('ret-def-active').checked = d ? d.active : true;
+  retDefTypeChanged();
+  openModal('modal-ret-def');
+}
+
+// Only the fields the chosen definition type actually uses stay visible
+function retDefTypeChanged() {
+  const t = document.getElementById('ret-def-type').value;
+  const show = (id, on) => { const el = document.getElementById(id); if (el) el.style.display = on ? '' : 'none'; };
+  show('ret-def-x-wrap',   t === 'rule_of_x');
+  show('ret-def-age-wrap', t !== 'service');
+  show('ret-def-svc-wrap', t !== 'age');
+  const ageLbl = document.querySelector('#ret-def-age-wrap .form-label');
+  const svcLbl = document.querySelector('#ret-def-svc-wrap .form-label');
+  if (ageLbl) ageLbl.textContent = t === 'rule_of_x' ? 'Minimum age (floor)' : 'Minimum age';
+  if (svcLbl) svcLbl.textContent = t === 'rule_of_x' ? 'Minimum years of service (floor)' : 'Minimum years of service';
+}
+
+function saveRetDef() {
+  const id   = document.getElementById('ret-def-id').value;
+  const name = document.getElementById('ret-def-name').value.trim();
+  const type = document.getElementById('ret-def-type').value;
+  if (!name) { ptToast('A definition name is required', 'warn'); return; }
+
+  const num = id => Number(document.getElementById(id).value) || 0;
+  const rec = { name, type, note: document.getElementById('ret-def-note').value.trim(),
+                active: document.getElementById('ret-def-active').checked };
+  if (type === 'rule_of_x') { rec.x = num('ret-def-x'); rec.minAge = num('ret-def-age'); rec.minService = num('ret-def-service'); }
+  if (type === 'age' || type === 'age_service') rec.age = num('ret-def-age');
+  if (type === 'service' || type === 'age_service') rec.service = num('ret-def-service');
+
+  const existing = RET_DEFINITIONS.find(x => x.id === id);
+  if (existing) Object.assign(existing, rec);
+  else {
+    const n = RET_DEFINITIONS.reduce((a, d) => Math.max(a, parseInt(d.id.slice(-2), 10) || 0), 0) + 1;
+    RET_DEFINITIONS.push(Object.assign({ id: 'RD-' + String(n).padStart(2, '0') }, rec));
+  }
+  closeModal('modal-ret-def');
+  renderRetirementSettings();
+  renderParticipantsTable();
+  ptToast(`✓ ${name} saved`, 'ok');
+}
+
+// ═════════ Retirement Modeller ═════════
+
+let rmParticipant = null;
+
+function openRetModel(id) {
+  const p = participantsData.find(x => x.id === id);
+  if (!p) return;
+  rmParticipant = p;
+
+  document.getElementById('rm-title').textContent  = 'Retirement Modeller — ' + p.name;
+  document.getElementById('rm-emp-id').textContent = p.id;
+  const elig = retEligibilityDate(p);
+  document.getElementById('rm-sub').textContent =
+    `${p.title} · ${p.dept} · ${p.region}, ${p.country} · Hired ${retFmtD(p.hired)}` +
+    (p.birth ? ` · Born ${retFmtD(p.birth)} (age ${retAge(p, retToday())})` : '');
+
+  const badge = document.getElementById('rm-mode-badge');
+  badge.className = 'tm-badge ' + (elig && elig.date <= retToday() ? 'tmb-retained' : 'tmb-neutral');
+  badge.textContent = !elig ? 'Never reaches eligibility'
+    : elig.date <= retToday() ? 'Retirement-eligible since ' + retFmtD(elig.date)
+    : 'Eligible from ' + retFmtD(elig.date);
+
+  document.getElementById('rm-date').value    = p.termDate || (elig ? elig.date : retToday());
+  document.getElementById('rm-type').value    = p.termType || 'retirement';
+  document.getElementById('rm-psu').value     = RET_POLICY.psuSustainsSRF ? 'sustain' : 'accelerate';
+  document.getElementById('rm-collect').value = RET_POLICY.ficaCollection;
+  document.getElementById('rm-euuk').value    = RET_POLICY.euUkSeparateRules ? 'on' : 'off';
+
+  const defSel = document.getElementById('rm-def');
+  defSel.innerHTML = '<option value="all">All active definitions</option>' +
+    RET_DEFINITIONS.map(d => `<option value="${d.id}">${d.name} only</option>`).join('');
+
+  document.getElementById('rm-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderRetModel();
+}
+
+function closeRetModel(e) {
+  if (e && e.target && !e.target.classList.contains('tm-overlay')) return;
+  document.getElementById('rm-overlay')?.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Reads the modeller's own controls so scenarios never mutate company policy
+function rmOpts() {
+  const defVal = document.getElementById('rm-def')?.value || 'all';
+  const defs = defVal === 'all' ? RET_DEFINITIONS : RET_DEFINITIONS.filter(d => d.id === defVal);
+  return {
+    defs,
+    fmv: parseFloat(document.getElementById('rm-fmv')?.value) || RET_FMV,
+    ytdWages: parseFloat(document.getElementById('rm-ytd')?.value) || 0,
+    policy: {
+      psuSustainsSRF: document.getElementById('rm-psu')?.value === 'sustain',
+      ficaCollection: document.getElementById('rm-collect')?.value || 'year_end',
+      euUkSeparateRules: document.getElementById('rm-euuk')?.value === 'on',
+    }
+  };
+}
+
+function renderRetModel() {
+  const p = rmParticipant;
+  if (!p) return;
+  const o = rmOpts();
+  o.eligibility = retEligibilityDate(p, o.defs);
+  const elig = o.eligibility;
+  const termISO = document.getElementById('rm-date').value || retToday();
+  const termType = document.getElementById('rm-type').value;
+
+  const tranches = [];
+  p.grants.forEach(g => retSchedule(g).forEach(t =>
+    tranches.push(Object.assign(retTrancheState(p, g, t, o), { _g: g }))));
+
+  // ── 1. determination banner ──
+  const totFica = tranches.reduce((a, x) => a + x.ficaTotal, 0);
+  const totExp  = tranches.reduce((a, x) => a + x.expenseAmount, 0);
+  document.getElementById('rm-banner').innerHTML = `
+    <div class="tm-banner-title">Retirement eligibility — ${p.name} · ${elig ? retFmtD(elig.date) : 'not reached'}</div>
+    <div class="tm-banner-grid">
+      <div class="tm-stat"><div class="tm-stat-label">Eligibility Date</div>
+        <div class="tm-stat-val ${elig ? (elig.date <= retToday() ? 'v-green' : 'v-blue') : 'v-red'} sm">${elig ? retFmtD(elig.date) : 'Never'}</div>
+        <div class="tm-stat-sub">${elig ? elig.definition.name : 'No active definition is reached'}</div></div>
+      <div class="tm-stat"><div class="tm-stat-label">Age / Service at Eligibility</div>
+        <div class="tm-stat-val v-blue">${elig ? elig.age + ' / ' + elig.service : '—'}</div>
+        <div class="tm-stat-sub">${elig ? elig.basis : '—'}</div></div>
+      <div class="tm-stat"><div class="tm-stat-label">Tranches Eligible</div>
+        <div class="tm-stat-val v-purple">${tranches.filter(x => x.eligible).length}<span style="font-size:15px;color:var(--textm)"> / ${tranches.length}</span></div>
+        <div class="tm-stat-sub">${p.grants.filter(g => !retGrantProvision(g).applies).length} grant(s) excluded by provision</div></div>
+      <div class="tm-stat"><div class="tm-stat-label">FICA Accelerating</div>
+        <div class="tm-stat-val v-amber">${retFmt$(totFica)}</div>
+        <div class="tm-stat-sub">${tranches.filter(x => x.ficaAccelerates).length} tranches · income tax unaffected</div></div>
+      <div class="tm-stat"><div class="tm-stat-label">Expense Acceleration</div>
+        <div class="tm-stat-val v-green">${retFmt$(totExp)}</div>
+        <div class="tm-stat-sub">ASC 718 catch-up at eligibility</div></div>
+    </div>`;
+
+  // ── 2. per-grant scope ──
+  document.getElementById('rm-grants').innerHTML = `
+    <div class="rm-sec">
+      <div class="rm-sec-h">Grant scope — Engine 1</div>
+      <div class="rm-sec-s">Whether each grant's retirement provision applies at all. This is decided before any calculation happens.</div>
+      <div style="margin-top:10px">
+      ${p.grants.map(g => {
+        const pr = retGrantProvision(g);
+        const gt = tranches.filter(x => x.grantId === g.id);
+        const perf = (g.type === 'PSU' || g.type === 'PBRSU') && g.perfCliff;
+        const deferred = gt.some(x => x.ficaDeferred);
+        const cls = !pr.applies ? 'info' : deferred ? 'warn' : 'ok';
+        const ic  = !pr.applies ? 'i' : deferred ? '!' : '✓';
+        return `<div class="ac-chk ${cls}"><div class="ic">${ic}</div><div>
+          <b>${g.id}</b> · ${g.type} · ${retFmtSh(g.shares)} sh
+          <span class="ret-prov ret-prov-${pr.cls}" style="margin-left:6px">${pr.name}</span>
+          ${g.weights ? `<span class="ret-prov ret-prov-prorata" style="margin-left:4px">${g.weights.map(w => Math.round(w * 100)).join('/')}</span>` : ''}
+          <div style="margin-top:3px;color:var(--text2)">${
+            !pr.applies ? pr.note
+            : deferred ? `Performance condition certifies ${retFmtD(g.perfCliff)} — FICA acceleration deferred to that date, not the eligibility date.`
+            : perf ? `Performance condition certified ${retFmtD(g.perfCliff)}; retirement treatment applies normally.`
+            : pr.note}</div>
+        </div></div>`;
+      }).join('')}
+      </div>
+    </div>`;
+
+  // ── 3. tranche table — the centrepiece ──
+  document.getElementById('rm-tranches').innerHTML = `
+    <div class="rm-sec">
+      <div class="rm-sec-h">Tranche detail — Engine 2</div>
+      <div class="rm-sec-s">Eligibility, FICA timing, expense and termination outcome all resolve at the tranche, so one grant can be part-taxed and part-not.</div>
+      <table class="rm-tr-table">
+        <thead><tr>
+          <th>Grant</th><th>Vest date</th><th style="text-align:right">Shares</th>
+          <th>Eligible</th><th>SRF lapses</th><th>FICA</th>
+          <th style="text-align:right">Taxable value</th><th style="text-align:right">OASDI</th>
+          <th style="text-align:right">Medicare</th><th style="text-align:right">Expense</th><th>Termination</th>
+        </tr></thead>
+        <tbody>
+        ${tranches.map(x => {
+          const ficaPill = x.ficaCollected ? '<span class="ret-fica ret-fica-collected">Collected</span>'
+            : x.ficaDeferred ? '<span class="ret-fica ret-fica-deferred">Deferred</span>'
+            : x.ficaAccelerates ? '<span class="ret-fica ret-fica-due">Accelerated</span>'
+            : '<span class="ret-fica ret-fica-na">At vest</span>';
+          return `<tr class="${x.eligible ? '' : 'out'}" title="${x.ficaReason.replace(/"/g, '&quot;')}">
+            <td class="mono" style="font-size:11px">${x.grantId}<div style="color:var(--textm);font-size:10px">${x.grantType}</div></td>
+            <td>${retFmtD(x.vestDate)}</td>
+            <td style="text-align:right;font-weight:600">${retFmtSh(x.shares)}</td>
+            <td>${x.eligible ? '<span style="color:var(--green);font-weight:700">✓</span>' : '<span style="color:var(--textm)">—</span>'}</td>
+            <td style="font-size:11px">${x.srfLapses ? retFmtD(x.srfLapses) : '<span style="color:var(--textm)">at vest</span>'}</td>
+            <td>${ficaPill}</td>
+            <td class="mono" style="text-align:right">${x.taxableValue ? retFmt$(x.taxableValue) : '—'}</td>
+            <td class="mono" style="text-align:right">${
+              !x.ficaAccelerates ? '—'
+              : x.oasdi ? retFmt$(x.oasdi)
+              : `<span title="Social Security wage base of ${retFmt$(x.ficaSplit ? x.ficaSplit.wageBase : 0)} already met by YTD wages">$0 <span class="ret-fica ret-fica-na" style="font-size:9px">capped</span></span>`}</td>
+            <td class="mono" style="text-align:right">${x.medicare ? retFmt$(x.medicare) : '—'}</td>
+            <td class="mono" style="text-align:right">${x.expenseAmount ? retFmt$(x.expenseAmount) : '—'}</td>
+            <td><span class="ret-treat ret-treat-${x.termTreatment}">${x.termTreatment}</span>${x.euUkOverride ? '<span class="ret-prov ret-prov-prorata" style="margin-left:4px;font-size:9px">EU/UK</span>' : ''}</td>
+          </tr>`;
+        }).join('')}
+        </tbody>
+      </table>
+    </div>`;
+
+  // ── 4. FICA timing strip ──
+  const accel = tranches.filter(x => x.ficaAccelerates);
+  const first = accel[0];
+  document.getElementById('rm-timing').innerHTML = `
+    <div class="rm-sec">
+      <div class="rm-sec-h">FICA timing</div>
+      <div class="rm-sec-s">Income tax is unaffected and stays at settlement. Only FICA moves — and once collected it must be suppressed at the eventual vest.</div>
+      ${!first ? `<div class="ac-note info">No FICA acceleration under the current configuration.</div>` : `
+      <div class="tm-timeline">
+        <div class="tm-tl-item"><div class="tm-tl-dot"></div>
+          <div class="tm-tl-title">Retirement eligibility — ${retFmtD(elig.date)}</div>
+          <div class="tm-tl-sub">${elig.basis}. Continued service is no longer required to keep the award.</div></div>
+        <div class="tm-tl-item"><div class="tm-tl-dot"></div>
+          <div class="tm-tl-title">Substantial risk of forfeiture lapses — ${retFmtD(first.srfLapses)}</div>
+          <div class="tm-tl-sub">${first.ficaReason}</div></div>
+        <div class="tm-tl-item"><div class="tm-tl-dot"></div>
+          <div class="tm-tl-title">FICA collected — ${retFmtD(first.ficaCollectionDate)}</div>
+          <div class="tm-tl-sub">${o.policy.ficaCollection === 'year_end'
+            ? `Rule of administrative convenience — the liability may be treated as taxable on any date in ${first.ficaTaxYear}, so it is collected in a single payroll event. ${retFmt$(totFica)} across ${accel.length} tranches, collected in cash: no shares are delivered at eligibility, so there is nothing to net.`
+            : 'Collected on the SRF lapse date itself.'}</div></div>
+        <div class="tm-tl-item"><div class="tm-tl-dot"></div>
+          <div class="tm-tl-title">Tranche vests — income tax only</div>
+          <div class="tm-tl-sub">Non-duplication rule: FICA is <b>suppressed</b> at vest because it has already been collected. Only income tax is withheld at settlement.</div></div>
+      </div>`}
+    </div>`;
+
+  // ── 5. expense acceleration ──
+  const expTranches = tranches.filter(x => x.expenseAccelerated);
+  document.getElementById('rm-expense').innerHTML = `
+    <div class="rm-sec">
+      <div class="rm-sec-h">ASC 718 expense acceleration</div>
+      <div class="rm-sec-s">Retirement eligibility makes the remaining service condition non-substantive, so unrecognised expense is recognised immediately rather than over the remaining schedule.</div>
+      ${!RET_POLICY.expenseAcceleration
+        ? `<div class="ac-note info">Expense acceleration is switched off in company policy.</div>`
+        : !expTranches.length
+          ? `<div class="ac-note info">No unrecognised expense to accelerate — every eligible tranche has already vested.</div>`
+          : `<div class="ac-note warn"><b>${retFmt$(totExp)}</b> of unrecognised expense across ${expTranches.length} tranches becomes recognisable at
+             ${retFmtD(elig.date)} rather than spreading over the remaining schedule. Indicative only — definitive ASC 718
+             treatment and attribution are determined by Financial Reporting.</div>`}
+    </div>`;
+
+  // ── 6. termination outcome ──
+  const byTreat = {};
+  tranches.forEach(x => {
+    if (retD(x.vestDate) <= retD(termISO)) return;   // already vested by the termination date
+    byTreat[x.termTreatment] = byTreat[x.termTreatment] || { shares:0, n:0, euuk:false };
+    byTreat[x.termTreatment].shares += x.shares;
+    byTreat[x.termTreatment].n++;
+    if (x.euUkOverride) byTreat[x.termTreatment].euuk = true;
+  });
+  const anyEu = tranches.some(x => x.euUkOverride);
+  document.getElementById('rm-term').innerHTML = `
+    <div class="rm-sec">
+      <div class="rm-sec-h">Termination outcome — ${termType === 'retirement' ? 'qualifying retirement' : termType} on ${retFmtD(termISO)}</div>
+      <div class="rm-sec-s">Resolved per tranche from the grant's retirement provision${RET_EU_UK.countries.has(p.country) && o.policy.euUkSeparateRules ? ', then overridden where EU/UK rules apply' : ''}.</div>
+      ${!Object.keys(byTreat).length
+        ? `<div class="ac-note ok">Nothing unvested remains at ${retFmtD(termISO)} — no termination treatment to apply.</div>`
+        : `<div style="margin-top:10px">${Object.entries(byTreat).map(([k, v]) => {
+            const t = RET_TREATMENTS.find(x => x.id === k);
+            return `<div class="ac-chk ${k === 'forfeit' ? 'danger' : k === 'accelerate' ? 'ok' : 'info'}">
+              <div class="ic">${k === 'forfeit' ? '!' : k === 'accelerate' ? '✓' : 'i'}</div>
+              <div><b>${t ? t.label : k}</b> — ${retFmtSh(v.shares)} unvested shares across ${v.n} tranche${v.n !== 1 ? 's' : ''}
+              ${v.euuk ? '<br><span style="color:#9a3412">' + RET_EU_UK.note + '</span>' : ''}</div></div>`;
+          }).join('')}</div>`}
+      ${anyEu && o.policy.euUkSeparateRules
+        ? `<div class="ac-note warn"><b>${p.country}</b> — the EU/UK ruleset is in force for this participant. Switch it off in the left rail to see the unmodified plan outcome.</div>` : ''}
+    </div>`;
+}
+
+// Non-duplication rule — FICA already collected at eligibility must NOT be
+// withheld again at release, or the participant is taxed twice on the same value.
+function renderRelFicaSuppression(participantName) {
+  const el = document.getElementById('rel-fica-suppression');
+  if (!el) return;
+  const p = participantsData.find(x => x.name === participantName);
+  if (!p) { el.innerHTML = ''; return; }
+
+  const collected = [];
+  p.grants.forEach(g => retSchedule(g).forEach(t => {
+    const rec = RET_FICA_COLLECTED[`${p.id}|${g.id}|${t.date}`];
+    if (rec) collected.push({ g, t, rec });
+  }));
+
+  if (!collected.length) {
+    const s = retSummary(p);
+    el.innerHTML = s.isEligibleNow
+      ? `<div class="ac-note info" style="margin-top:12px"><b>Retirement-eligible</b> since ${retFmtD(s.eligibility.date)} —
+         FICA on eligible tranches accelerates to the eligibility date and is collected through payroll, not withheld in shares here.</div>`
+      : '';
+    return;
+  }
+
+  const total = collected.reduce((a, x) => a + x.rec.total, 0);
+  el.innerHTML = `<div class="ac-note ok" style="margin-top:12px">
+    <b>FICA suppressed — non-duplication rule.</b> ${collected.length} tranche${collected.length !== 1 ? 's' : ''}
+    on this participant already had FICA collected at retirement eligibility
+    (${retFmt$(total)} on ${retFmt$(collected.reduce((a, x) => a + x.rec.taxableValue, 0))} of taxable value,
+    collected ${retFmtD(collected[0].rec.collectedOn)}). Social Security and Medicare must <b>not</b> be
+    withheld again at release — only income tax is due at settlement.
+    <div style="margin-top:6px">${collected.map(x =>
+      `<span class="ret-fica ret-fica-collected" style="margin-right:5px">${x.g.id} · ${retFmtD(x.t.date)}</span>`).join('')}</div>
+  </div>`;
+}
+
+function exportRetModel() {
+  const p = rmParticipant;
+  if (!p) return;
+  const o = rmOpts();
+  o.eligibility = retEligibilityDate(p, o.defs);
+  const rows = [];
+  p.grants.forEach(g => retSchedule(g).forEach(t => rows.push(retTrancheState(p, g, t, o))));
+
+  const head = ['Employee ID','Participant','Grant','Grant Type','Provision','Provision Applies',
+                'Vest Date','Shares','Eligible','Eligible On','SRF Lapses','FICA Accelerates',
+                'FICA Collected','Taxable Value','OASDI','Medicare','Total FICA',
+                'Expense Accelerated','Termination Treatment','Reason'];
+  const esc = v => `"${String(v).replace(/"/g, '""')}"`;
+  const csv = [head.map(esc).join(','), ...rows.map(x => [
+    p.id, p.name, x.grantId, x.grantType, x.provisionName, x.provisionApplies,
+    x.vestDate, x.shares, x.eligible, x.eligibleOn || '', x.srfLapses || '', x.ficaAccelerates,
+    x.ficaCollected, x.taxableValue.toFixed(2), x.oasdi.toFixed(2), x.medicare.toFixed(2),
+    x.ficaTotal.toFixed(2), x.expenseAmount.toFixed(2), x.termTreatment, x.ficaReason
+  ].map(esc).join(','))].join('\n');
+
+  const url = URL.createObjectURL(new Blob([csv], { type:'text/csv;charset=utf-8;' }));
+  const a = document.createElement('a');
+  a.href = url; a.download = `retirement-tranches-${p.id}.csv`;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+  ptToast(`✓ ${rows.length} tranches exported`, 'ok');
+}
+
 let ptStatusFilter = 'all';
 let tmParticipant  = null;
 
@@ -10845,10 +12372,21 @@ function renderParticipantsTable() {
     <div class="summary-card-sm"><div class="s-label">Terminated</div><div class="s-value" style="color:var(--red)">${counts.terminated}</div><div class="s-sub">Processed</div></div>
     <div class="summary-card-sm"><div class="s-label">Unvested at Risk</div><div class="s-value">${tmNum(unvestedTotal)}</div><div class="s-sub">${tmMoney(atRiskValue)} @ $42.50</div></div>`;
 
+  // Provision filter options are derived so a new provision shows up without edits here
+  const provSel = document.getElementById('pt-prov-filter');
+  if (provSel && provSel.options.length <= 1) {
+    provSel.innerHTML = '<option value="">All Provisions</option>' +
+      RET_PROVISIONS.map(pr => `<option value="${pr.id}">${pr.name}</option>`).join('');
+  }
+  const retF  = document.getElementById('pt-ret-filter')?.value || '';
+  const provF = document.getElementById('pt-prov-filter')?.value || '';
+
   const filtered = participantsData.filter(p => {
     if (ptStatusFilter !== 'all' && p.status !== ptStatusFilter) return false;
     if (dept && p.dept !== dept) return false;
     if (ctry && p.country !== ctry) return false;
+    if (retF && retChipKind(p) !== retF) return false;
+    if (provF && !p.grants.some(g => g.provision === provF)) return false;
     if (search && !p.name.toLowerCase().includes(search) && !p.id.toLowerCase().includes(search)
         && !p.email.toLowerCase().includes(search) && !p.dept.toLowerCase().includes(search)) return false;
     return true;
@@ -10873,12 +12411,20 @@ function renderParticipantsTable() {
 
     return `<tr>
       <td onclick="event.stopPropagation()">
+        <div class="action-cell">
+        <button class="row-expand-btn" id="pt-expand-${p.id}" title="Show tranche detail"
+          onclick="event.stopPropagation(); togglePtTranches('${p.id}')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
         <div class="kebab-wrap">
           <button class="kebab-btn" onclick="event.stopPropagation();toggleKebab(this)" title="More actions">⋮</button>
           <div class="kebab-menu">
             <div class="kebab-menu-label">Participant</div>
-            <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();alert('Participant profile — ${p.name} (${p.id})')">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>View Profile
+            <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();togglePtTranches('${p.id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Tranche Detail
+            </button>
+            <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();openRetModel('${p.id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>Retirement Modeller
             </button>
             <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();openLedgerDrawer('${p.grants[0].id}')">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>View Grants (${p.grants.length})
@@ -10901,6 +12447,7 @@ function renderParticipantsTable() {
             </button>
           </div>
         </div>
+        </div>
       </td>
       <td>
         <div class="pt-name-cell">
@@ -10915,6 +12462,7 @@ function renderParticipantsTable() {
       <td style="font-size:12.5px">${p.dept}</td>
       <td style="font-size:12px;color:var(--text2)">${p.country}<div style="font-size:11px;color:var(--textm)">${p.region}</div></td>
       <td style="font-size:12px;color:var(--text2)">${tmDate(p.hired)}</td>
+      <td>${retChip(p)}</td>
       <td style="text-align:right;font-weight:600">${p.grants.length}</td>
       <td style="text-align:right;font-weight:600">${tmNum(t.granted)}</td>
       <td style="text-align:right;font-weight:600;color:var(--accent-dark)">${tmNum(t.vested)}</td>
@@ -10930,8 +12478,78 @@ function renderParticipantsTable() {
             : '<span style="color:var(--textm);font-size:12px">—</span>'}</td>
       <td><span class="sdot ${sc.dot}" style="color:${sc.color};font-size:12px">${sc.label}</span>
         ${isTerm ? `<div style="font-size:10.5px;color:var(--textm)">${tmDate(p.termDate)}</div>` : ''}</td>
+    </tr>
+    <tr id="pt-tranches-${p.id}" style="display:${ptExpanded.has(p.id) ? '' : 'none'}">
+      <td colspan="13" style="padding:0;border:none">${ptExpanded.has(p.id) ? ptTrancheRows(p) : ''}</td>
     </tr>`;
-  }).join('') || `<tr><td colspan="12" style="text-align:center;padding:32px;color:var(--textm)">No participants found</td></tr>`;
+  }).join('') || `<tr><td colspan="13" style="text-align:center;padding:32px;color:var(--textm)">No participants found</td></tr>`;
+}
+
+// ── Tranche detail on the participant register ──
+// Eligibility, FICA status, taxable value and termination rule all sit at the tranche,
+// so a single grant can be part-taxed and part-not.
+const ptExpanded = new Set();
+
+function togglePtTranches(id) {
+  if (ptExpanded.has(id)) ptExpanded.delete(id); else ptExpanded.add(id);
+  renderParticipantsTable();
+}
+
+function ptTrancheRows(p) {
+  const elig = retEligibilityDate(p);
+  const blocks = p.grants.map(g => {
+    const pr = retGrantProvision(g);
+    const rows = retSchedule(g).map(t => {
+      const x = retTrancheState(p, g, t);
+      const ficaPill = x.ficaCollected ? '<span class="ret-fica ret-fica-collected">FICA collected</span>'
+        : x.ficaDeferred ? '<span class="ret-fica ret-fica-deferred">Deferred to certification</span>'
+        : x.ficaAccelerates ? '<span class="ret-fica ret-fica-due">FICA accelerated</span>'
+        : '<span class="ret-fica ret-fica-na">FICA at vest</span>';
+      return `<tr class="ret-tr-row">
+        <td style="padding-left:34px;font-size:11.5px;color:var(--text2)">${retFmtD(t.date)}</td>
+        <td style="text-align:right;font-weight:600;font-size:11.5px">${retFmtSh(t.shares)}</td>
+        <td>${x.eligible
+          ? '<span class="ret-chip ret-chip-eligible">ELIGIBLE</span>'
+          : '<span class="ret-chip ret-chip-never">—</span>'}</td>
+        <td style="font-size:11px;color:var(--text2)">${x.srfLapses ? retFmtD(x.srfLapses) : 'at vest'}</td>
+        <td>${ficaPill}</td>
+        <td style="text-align:right;font-size:11.5px" class="mono">${x.taxableValue ? retFmt$(x.taxableValue) : '—'}</td>
+        <td style="text-align:right;font-size:11.5px" class="mono">${x.ficaTotal ? retFmt$(x.ficaTotal) : '—'}</td>
+        <td><span class="ret-treat ret-treat-${x.termTreatment}">${x.termTreatment}</span>${x.euUkOverride ? ' <span class="ret-prov ret-prov-prorata" style="font-size:9px">EU/UK</span>' : ''}</td>
+      </tr>`;
+    }).join('');
+
+    return `<tr class="ret-tr-grantline"><td colspan="8" style="padding:7px 14px 7px 24px">
+        ${g.id} · ${g.type} · ${retFmtSh(g.shares)} sh
+        <span class="ret-prov ret-prov-${pr.cls}" style="margin-left:8px">${pr.name}</span>
+        ${g.weights ? `<span class="ret-prov ret-prov-prorata" style="margin-left:4px">${g.weights.map(w => Math.round(w * 100)).join('/')}</span>` : ''}
+        ${g.perfCliff ? `<span style="margin-left:8px;text-transform:none;font-weight:400;color:var(--textm)">performance certifies ${retFmtD(g.perfCliff)}</span>` : ''}
+      </td></tr>${rows}`;
+  }).join('');
+
+  return `<div style="background:#fbfcfe;border-top:1px solid var(--border)">
+    <div style="padding:10px 24px 4px;font-size:11.5px;color:var(--text2)">
+      ${elig ? `Retirement-eligible <b>${retFmtD(elig.date)}</b> — ${elig.basis}.`
+             : 'Does not reach retirement eligibility under the active definitions.'}
+      <button class="btn btn-ghost" style="height:26px;padding:0 10px;font-size:11px;margin-left:10px"
+        onclick="openRetModel('${p.id}')">Open modeller</button>
+    </div>
+    <div style="overflow-x:auto">
+    <table style="width:100%;min-width:1020px;border-collapse:collapse">
+      <thead><tr>
+        <th style="padding:6px 8px 6px 34px;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--textm);text-align:left">Vest date</th>
+        <th style="padding:6px 8px;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--textm);text-align:right">Shares</th>
+        <th style="padding:6px 8px;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--textm);text-align:left">Eligible</th>
+        <th style="padding:6px 8px;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--textm);text-align:left">SRF lapses</th>
+        <th style="padding:6px 8px;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--textm);text-align:left">FICA</th>
+        <th style="padding:6px 8px;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--textm);text-align:right">Taxable value</th>
+        <th style="padding:6px 8px;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--textm);text-align:right">FICA due</th>
+        <th style="padding:6px 8px;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--textm);text-align:left">Termination</th>
+      </tr></thead>
+      <tbody>${blocks}</tbody>
+    </table>
+    </div>
+  </div>`;
 }
 
 function setPtStatus(id, status) {
@@ -11697,6 +13315,7 @@ document.addEventListener('keydown', e => {
     closeLedgerDrawer();
     closeReleaseDrawer();
     closeTermModel();
+    closeRetModel();
     // Full-screen wizards use their own overlay class, so they need closing explicitly
     if (document.getElementById('modal-pc-override')?.classList.contains('open')) {
       closeModal('modal-pc-override');
